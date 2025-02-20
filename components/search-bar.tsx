@@ -40,32 +40,35 @@ export function SearchBar() {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto space-y-4">
-      <form onSubmit={handleSearch} className="relative">
-        <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
-        <Input
-          type="search"
-          placeholder="Search records..."
-          className="pl-10"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </form>
-      <nav className="flex border-b">
-        {categories.map((category) => (
-          <Button
-            key={category.id}
-            variant="ghost"
-            className={cn(
-              "relative h-9 rounded-none border-b-2 border-transparent px-4",
-              category.id === currentCategory && "border-primary",
-            )}
-            onClick={() => handleCategoryChange(category.id)}
-          >
-            {category.label}
-          </Button>
-        ))}
-      </nav>
+    <div className="w-full max-w-3xl mx-auto">
+      <div className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 rounded-lg shadow-lg p-4">
+        <form onSubmit={handleSearch} className="relative mb-4">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            type="search"
+            placeholder="Search records..."
+            className="pl-10 bg-background"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </form>
+        <nav className="flex flex-wrap gap-2">
+          {categories.map((category) => (
+            <Button
+              key={category.id}
+              variant={category.id === currentCategory ? "default" : "ghost"}
+              size="sm"
+              onClick={() => handleCategoryChange(category.id)}
+              className={cn(
+                "transition-colors",
+                category.id === currentCategory && "bg-primary text-primary-foreground",
+              )}
+            >
+              {category.label}
+            </Button>
+          ))}
+        </nav>
+      </div>
     </div>
   )
 }
