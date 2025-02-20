@@ -8,75 +8,12 @@ export interface DiscogsRecord {
   status: string
   label: string
   release: string
+  genres: string[]
   styles: string[]
   format: string[]
   country?: string
   released?: string
   date_added: string
-}
-
-function inferStyles(record: any): string[] {
-  const inferredStyles: string[] = []
-
-  // Infer styles based on genre if available
-  if (record.genre) {
-    inferredStyles.push(...record.genre)
-  }
-
-  // Parse format string into components
-  const formatStr = Array.isArray(record.format)
-    ? record.format.join(" ")
-    : typeof record.format === "string"
-      ? record.format
-      : ""
-  const formatParts = formatStr.split(",").map((p) => p.trim().toLowerCase())
-
-  // Map format parts to styles
-  if (formatParts.includes("ep")) inferredStyles.push("EP")
-  if (formatParts.includes("lp")) inferredStyles.push("LP")
-  if (formatParts.includes("album")) inferredStyles.push("Album")
-  if (formatParts.includes("single")) inferredStyles.push("Single")
-  if (formatParts.includes("maxi")) inferredStyles.push("Maxi-Single")
-
-  // Infer styles based on title or artist
-  const titleLower = record.title.toLowerCase()
-  const artistLower = record.artist.toLowerCase()
-
-  if (titleLower.includes("remix") || artistLower.includes("remix")) inferredStyles.push("Remix")
-  if (titleLower.includes("live") || artistLower.includes("live")) inferredStyles.push("Live")
-  if (titleLower.includes("acoustic") || artistLower.includes("acoustic")) inferredStyles.push("Acoustic")
-
-  // Infer electronic music styles
-  if (titleLower.includes("techno") || artistLower.includes("techno")) inferredStyles.push("Techno")
-  if (titleLower.includes("house") || artistLower.includes("house")) inferredStyles.push("House")
-  if (titleLower.includes("trance") || artistLower.includes("trance")) inferredStyles.push("Trance")
-  if (
-    titleLower.includes("drum and bass") ||
-    artistLower.includes("drum and bass") ||
-    titleLower.includes("dnb") ||
-    artistLower.includes("dnb")
-  )
-    inferredStyles.push("Drum and Bass")
-
-  // Infer other music genres
-  if (titleLower.includes("rock") || artistLower.includes("rock")) inferredStyles.push("Rock")
-  if (titleLower.includes("jazz") || artistLower.includes("jazz")) inferredStyles.push("Jazz")
-  if (
-    titleLower.includes("hip hop") ||
-    artistLower.includes("hip hop") ||
-    titleLower.includes("rap") ||
-    artistLower.includes("rap")
-  )
-    inferredStyles.push("Hip Hop")
-
-  // Add a default style if none were inferred
-  if (inferredStyles.length === 0) {
-    if (formatStr.toLowerCase().includes('12"')) {
-      inferredStyles.push('12"')
-    }
-  }
-
-  return [...new Set(inferredStyles)] // Remove duplicates
 }
 
 export async function getDiscogsInventory(
@@ -104,47 +41,65 @@ export async function getDiscogsInventory(
 
     const data = await response.json()
 
+    console.log("Full API response:", JSON.stringify(data, null, 2))
+
     if (!data || !data.listings) {
       console.error("Invalid data structure received from Discogs API:", data)
       return { records: [], totalPages: 0 }
     }
 
-    let records = data.listings
-      .map((listing: any) => {
+    const getFullReleaseData = async (listing: any) => {
+      try {
+        const response = await fetch(listing.release.resource_url, {
+          headers: {
+            Authorization: `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
+            "User-Agent": "YourAppName/1.0",
+          },
+        })
+        const fullRelease = await response.json()
+        console.log("Full release data:", JSON.stringify(fullRelease, null, 2))
+        return fullRelease
+      } catch (error) {
+        console.error("Error fetching full release data:", error)
+        return listing.release
+      }
+    }
+
+    let records = await Promise.all(
+      data.listings.map(async (listing: any) => {
         try {
-          console.log("Full release data:", JSON.stringify(listing.release, null, 2))
+          const fullRelease = await getFullReleaseData(listing)
           const record = {
             id: listing.id,
-            title: listing.release.title || "Untitled",
-            artist: Array.isArray(listing.release.artist)
-              ? listing.release.artist.join(", ")
-              : listing.release.artist || "Unknown Artist",
+            title: fullRelease.title || "Untitled",
+            artist: Array.isArray(fullRelease.artists)
+              ? fullRelease.artists.map((a: any) => a.name).join(", ")
+              : fullRelease.artist || "Unknown Artist",
             price: Number.parseFloat(listing.price.value) || 0,
-            cover_image: listing.release.images?.[0]?.uri ?? listing.release.thumb ?? "/placeholder.svg",
+            cover_image: fullRelease.images?.[0]?.uri ?? fullRelease.thumb ?? "/placeholder.svg",
             condition: listing.condition || "Unknown",
             status: listing.status || "Unknown",
-            label: Array.isArray(listing.release.label)
-              ? listing.release.label[0]
-              : listing.release.label || "Unknown Label",
-            release: listing.release.catalog_number || "",
-            styles:
-              listing.release.style && listing.release.style.length > 0
-                ? listing.release.style
-                : inferStyles(listing.release),
-            format: Array.isArray(listing.release.format) ? listing.release.format : [listing.release.format],
-            country: listing.release.country,
-            released: listing.release.released,
+            label: Array.isArray(fullRelease.labels)
+              ? fullRelease.labels[0].name
+              : fullRelease.label || "Unknown Label",
+            release: fullRelease.catalog_number || "",
+            genres: fullRelease.genres || [],
+            styles: fullRelease.styles || [],
+            format: Array.isArray(fullRelease.formats)
+              ? fullRelease.formats.map((f: any) => f.name)
+              : [fullRelease.format],
+            country: fullRelease.country,
+            released: fullRelease.released_formatted || fullRelease.released,
             date_added: listing.posted || new Date().toISOString(),
           }
-
           console.log("Mapped record:", record)
           return record
         } catch (error) {
           console.error("Error mapping record:", error, listing)
           return null
         }
-      })
-      .filter(Boolean) as DiscogsRecord[]
+      }),
+    )
 
     // Filter records if search is provided
     if (search) {
@@ -239,6 +194,8 @@ export async function getDiscogsRecord(
 
     const data = await response.json()
 
+    console.log("Full API response:", JSON.stringify(data, null, 2))
+
     const record: DiscogsRecord = {
       id: data.id,
       title: data.release.title || "Untitled",
@@ -251,10 +208,11 @@ export async function getDiscogsRecord(
       status: data.status || "Unknown",
       label: Array.isArray(data.release.label) ? data.release.label[0] : data.release.label || "Unknown Label",
       release: data.release.catalog_number || "",
-      styles: data.release.style && data.release.style.length > 0 ? data.release.style : inferStyles(data.release),
+      genres: Array.isArray(data.release.genre) ? data.release.genre : [],
+      styles: Array.isArray(data.release.style) ? data.release.style : [],
       format: Array.isArray(data.release.format) ? data.release.format : [data.release.format],
       country: data.release.country,
-      released: data.release.released,
+      released: data.release.released_formatted || data.release.released,
       date_added: data.posted || new Date().toISOString(),
     }
 

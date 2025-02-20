@@ -57,9 +57,16 @@ export function RecordCard({ record }: RecordCardProps) {
           <div className="mt-2 text-sm">
             <span className="font-semibold">Format:</span> {record.format.join(", ")}
           </div>
-          <div className="mt-1 text-sm">
-            <span className="font-semibold">Styles:</span> {record.styles?.join(", ") || "N/A"}
-          </div>
+          {record.styles && record.styles.length > 0 && (
+            <div className="mt-1 text-sm">
+              <span className="font-semibold">Styles:</span> {record.styles.join(", ")}
+            </div>
+          )}
+          {record.genres && record.genres.length > 0 && (
+            <div className="mt-1 text-sm">
+              <span className="font-semibold">Genres:</span> {record.genres.join(", ")}
+            </div>
+          )}
         </CardContent>
       </Link>
       <CardFooter>
