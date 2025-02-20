@@ -1,15 +1,21 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Toaster } from "@/components/ui/toaster"
+import { Inter } from "next/font/google"
+import { getServerSession } from "next-auth"
 import { ThemeProvider } from "@/components/theme-provider"
 import { NavBar } from "@/components/nav-bar"
 import { Footer } from "@/components/footer"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/lib/auth"
+import { Toaster } from "@/components/ui/toaster"
 import NextAuthProvider from "@/components/next-auth-provider"
-import baseMetadata from "./config/metadata"
+import { authOptions } from "@/lib/auth"
+import "./globals.css"
 
-export const metadata: Metadata = baseMetadata
+const inter = Inter({ subsets: ["latin"] })
+
+export const metadata: Metadata = {
+  title: "Plastik Records",
+  description: "Discover rare vinyl records",
+}
 
 export default async function RootLayout({
   children,
@@ -20,9 +26,9 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-h-screen flex flex-col">
+      <body className={`${inter.className} min-h-screen flex flex-col dark`}>
         <NextAuthProvider session={session}>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+          <ThemeProvider>
             <NavBar />
             <main className="flex-1">{children}</main>
             <Footer />
