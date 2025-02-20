@@ -20,6 +20,8 @@ export function RecordDetails({ record }: RecordDetailsProps) {
     dispatch({ type: "TOGGLE_CART" })
   }
 
+  const labelDisplay = record.catalogNumber ? `${record.label} [${record.catalogNumber}]` : record.label
+
   return (
     <div className="grid md:grid-cols-2 gap-8 mb-12">
       <div className="relative aspect-square">
@@ -38,9 +40,7 @@ export function RecordDetails({ record }: RecordDetailsProps) {
         <div className="space-y-2 mb-6">
           <p className="text-2xl font-bold">${price.toFixed(2)}</p>
           <p>Condition: {record.condition}</p>
-          <p>
-            Label: {record.label} [{record.release}]
-          </p>
+          <p>Label: {labelDisplay}</p>
           <p>Format: {record.format.join(", ")}</p>
           {record.styles && record.styles.length > 0 && <p>Styles: {record.styles.join(", ")}</p>}
           {record.country && <p>Country: {record.country}</p>}

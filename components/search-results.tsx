@@ -39,8 +39,16 @@ export function SearchResults({ results, isLoading, query, category, onClose }: 
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-medium text-base truncate">{record.title}</h3>
-                  <p className="text-sm text-muted-foreground truncate">{record.artist}</p>
+                  <div className="flex grid-align-items-center col-gap-s">
+                    <h3 className="font-medium text-base truncate">{record.title}</h3>
+                    <p className="text-sm truncate">- {record.artist}</p>
+                  </div>
+                 
+                  <div className="flex">
+                    <div className="text-muted-foreground truncate text-xs ">{record.label}</div>
+                    <div className="text-muted-foreground text-xs">&nbsp; [{record.catalogNumber}]</div>
+                  </div>
+                  
                 </div>
                 <div className="text-right">
                   <div className="font-medium">${record.price.toFixed(2)}</div>

@@ -73,3 +73,20 @@
   }
 }
 
+/* Utility Classes */
+.grid-1 {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+}
+
+.col-gap-m {
+  column-gap: 16px;
+}
+
+.col-gap-s {
+  column-gap: 8px;
+}
+
+.grid-align-items-center { 
+  align-items: center; 
+}

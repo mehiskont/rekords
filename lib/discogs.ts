@@ -1,3 +1,5 @@
+import { LRUCache } from "lru-cache"
+
 export interface DiscogsRecord {
   id: number
   title: string
@@ -14,6 +16,85 @@ export interface DiscogsRecord {
   country?: string
   released?: string
   date_added: string
+  catalogNumber?: string
+}
+
+const releaseCache = new LRUCache<string, any>({ max: 100 })
+
+async function fetchWithRetry(url: string, options: RequestInit, retries = 3): Promise<Response> {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const response = await fetch(url, options)
+      if (response.ok) return response
+    } catch (error) {
+      if (i === retries - 1) throw error
+    }
+    await new Promise((resolve) => setTimeout(resolve, 1000 * Math.pow(2, i)))
+  }
+  throw new Error(`Failed to fetch ${url} after ${retries} retries`)
+}
+
+async function fetchFullReleaseData(releaseId: string): Promise<any> {
+  const cachedData = releaseCache.get(releaseId)
+  if (cachedData) return cachedData
+
+  const response = await fetchWithRetry(`https://api.discogs.com/releases/${releaseId}`, {
+    headers: {
+      Authorization: `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
+      "User-Agent": "YourAppName/1.0",
+    },
+  })
+  const data = await response.json()
+  releaseCache.set(releaseId, data)
+  return data
+}
+
+function extractCatalogNumber(fullRelease: any): string {
+  // First try to get it from the labels array
+  if (Array.isArray(fullRelease.labels) && fullRelease.labels.length > 0) {
+    const label = fullRelease.labels[0]
+    if (label.catno) {
+      return label.catno
+    }
+  }
+
+  // Fallback to catalog_number if available
+  return fullRelease.catalog_number || ""
+}
+
+function mapReleaseToRecord(listing: any, fullRelease: any): DiscogsRecord {
+  // Extract the pure label name and catalog number
+  let labelName = ""
+  const catalogNumber = extractCatalogNumber(fullRelease)
+
+  if (Array.isArray(fullRelease.labels) && fullRelease.labels.length > 0) {
+    labelName = fullRelease.labels[0].name
+  } else {
+    labelName = fullRelease.label || "Unknown Label"
+  }
+
+  return {
+    id: listing.id,
+    title: fullRelease.title || "Untitled",
+    artist: Array.isArray(fullRelease.artists)
+      ? fullRelease.artists.map((a: any) => a.name).join(", ")
+      : fullRelease.artist || "Unknown Artist",
+    price: Number.parseFloat(listing.price.value) || 0,
+    cover_image: fullRelease.images?.[0]?.uri ?? fullRelease.thumb ?? "/placeholder.svg",
+    condition: listing.condition || "Unknown",
+    status: listing.status || "Unknown",
+    label: labelName,
+    catalogNumber: catalogNumber,
+    release: fullRelease.catalog_number || "",
+    genres: fullRelease.genres || [],
+    styles: fullRelease.styles || [],
+    format: Array.isArray(fullRelease.formats)
+      ? fullRelease.formats.flatMap((f: any) => [f.name, ...(f.descriptions || [])])
+      : [fullRelease.format],
+    country: fullRelease.country,
+    released: fullRelease.released_formatted || fullRelease.released,
+    date_added: listing.posted || new Date().toISOString(),
+  }
 }
 
 export async function getDiscogsInventory(
@@ -24,82 +105,34 @@ export async function getDiscogsInventory(
   searchParams?: { category?: string },
 ): Promise<{ records: DiscogsRecord[]; totalPages: number }> {
   try {
-    const response = await fetch(
-      `https://api.discogs.com/users/${process.env.DISCOGS_USERNAME}/inventory?token=${process.env.DISCOGS_API_TOKEN}`,
+    const response = await fetchWithRetry(
+      `https://api.discogs.com/users/${process.env.DISCOGS_USERNAME}/inventory?token=${process.env.DISCOGS_API_TOKEN}&page=${page}&per_page=${perPage}`,
       {
         headers: {
           Authorization: `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
           "User-Agent": "YourAppName/1.0",
         },
-        next: { revalidate: 60 },
       },
     )
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch inventory")
-    }
-
     const data = await response.json()
-
-    console.log("Full API response:", JSON.stringify(data, null, 2))
 
     if (!data || !data.listings) {
       console.error("Invalid data structure received from Discogs API:", data)
       return { records: [], totalPages: 0 }
     }
 
-    const getFullReleaseData = async (listing: any) => {
-      try {
-        const response = await fetch(listing.release.resource_url, {
-          headers: {
-            Authorization: `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
-            "User-Agent": "YourAppName/1.0",
-          },
-        })
-        const fullRelease = await response.json()
-        console.log("Full release data:", JSON.stringify(fullRelease, null, 2))
-        return fullRelease
-      } catch (error) {
-        console.error("Error fetching full release data:", error)
-        return listing.release
-      }
-    }
+    const releaseIds = data.listings.map((listing: any) => listing.release.id)
+    const uniqueReleaseIds = [...new Set(releaseIds)]
 
-    let records = await Promise.all(
-      data.listings.map(async (listing: any) => {
-        try {
-          const fullRelease = await getFullReleaseData(listing)
-          const record = {
-            id: listing.id,
-            title: fullRelease.title || "Untitled",
-            artist: Array.isArray(fullRelease.artists)
-              ? fullRelease.artists.map((a: any) => a.name).join(", ")
-              : fullRelease.artist || "Unknown Artist",
-            price: Number.parseFloat(listing.price.value) || 0,
-            cover_image: fullRelease.images?.[0]?.uri ?? fullRelease.thumb ?? "/placeholder.svg",
-            condition: listing.condition || "Unknown",
-            status: listing.status || "Unknown",
-            label: Array.isArray(fullRelease.labels)
-              ? fullRelease.labels[0].name
-              : fullRelease.label || "Unknown Label",
-            release: fullRelease.catalog_number || "",
-            genres: fullRelease.genres || [],
-            styles: fullRelease.styles || [],
-            format: Array.isArray(fullRelease.formats)
-              ? fullRelease.formats.map((f: any) => f.name)
-              : [fullRelease.format],
-            country: fullRelease.country,
-            released: fullRelease.released_formatted || fullRelease.released,
-            date_added: listing.posted || new Date().toISOString(),
-          }
-          console.log("Mapped record:", record)
-          return record
-        } catch (error) {
-          console.error("Error mapping record:", error, listing)
-          return null
-        }
-      }),
-    )
+    const fullReleases = await Promise.all(uniqueReleaseIds.map((id) => fetchFullReleaseData(id.toString())))
+
+    const releaseMap = new Map(fullReleases.map((release) => [release.id, release]))
+
+    let records = data.listings.map((listing: any) => {
+      const fullRelease = releaseMap.get(listing.release.id)
+      return mapReleaseToRecord(listing, fullRelease)
+    })
 
     // Filter records if search is provided
     if (search) {
@@ -164,8 +197,8 @@ export async function getDiscogsInventory(
     }
 
     return {
-      records: records.slice((page - 1) * perPage, page * perPage),
-      totalPages: Math.ceil(records.length / perPage),
+      records,
+      totalPages: Math.ceil(data.pagination.items / perPage),
     }
   } catch (error) {
     console.error("Error fetching inventory:", error)
@@ -177,46 +210,21 @@ export async function getDiscogsRecord(
   id: string,
 ): Promise<{ record: DiscogsRecord | null; relatedRecords: DiscogsRecord[] }> {
   try {
-    const response = await fetch(
+    const response = await fetchWithRetry(
       `https://api.discogs.com/marketplace/listings/${id}?token=${process.env.DISCOGS_API_TOKEN}`,
       {
         headers: {
           Authorization: `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
           "User-Agent": "YourAppName/1.0",
         },
-        next: { revalidate: 60 },
       },
     )
 
-    if (!response.ok) {
-      throw new Error("Failed to fetch record")
-    }
-
     const data = await response.json()
+    const fullRelease = await fetchFullReleaseData(data.release.id.toString())
+    const record = mapReleaseToRecord(data, fullRelease)
 
-    console.log("Full API response:", JSON.stringify(data, null, 2))
-
-    const record: DiscogsRecord = {
-      id: data.id,
-      title: data.release.title || "Untitled",
-      artist: Array.isArray(data.release.artist)
-        ? data.release.artist.join(", ")
-        : data.release.artist || "Unknown Artist",
-      price: Number.parseFloat(data.price.value) || 0,
-      cover_image: data.release.images?.[0]?.uri ?? data.release.thumb ?? "/placeholder.svg",
-      condition: data.condition || "Unknown",
-      status: data.status || "Unknown",
-      label: Array.isArray(data.release.label) ? data.release.label[0] : data.release.label || "Unknown Label",
-      release: data.release.catalog_number || "",
-      genres: Array.isArray(data.release.genre) ? data.release.genre : [],
-      styles: Array.isArray(data.release.style) ? data.release.style : [],
-      format: Array.isArray(data.release.format) ? data.release.format : [data.release.format],
-      country: data.release.country,
-      released: data.release.released_formatted || data.release.released,
-      date_added: data.posted || new Date().toISOString(),
-    }
-
-    // Fetch related records (you may need to adjust this based on your requirements)
+    // Fetch related records
     const { records: relatedRecords } = await getDiscogsInventory(undefined, undefined, 1, 3)
 
     return { record, relatedRecords }

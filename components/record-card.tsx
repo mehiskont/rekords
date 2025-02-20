@@ -22,7 +22,7 @@ export function RecordCard({ record }: RecordCardProps) {
     dispatch({ type: "TOGGLE_CART" })
   }
 
-  console.log("Record in RecordCard:", record) // Log the record data
+  const labelDisplay = record.catalogNumber ? `${record.label} [${record.catalogNumber}]` : record.label
 
   return (
     <Card>
@@ -30,10 +30,7 @@ export function RecordCard({ record }: RecordCardProps) {
         <CardHeader className="space-y-1">
           <CardTitle className="text-lg line-clamp-2">{record.title}</CardTitle>
           <p className="text-sm text-muted-foreground line-clamp-1">{record.artist}</p>
-          <p className="text-xs text-muted-foreground line-clamp-1">
-            {record.label}
-            {record.release && record.release.trim() !== "" && ` - [${record.release}]`}
-          </p>
+          <p className="text-xs text-muted-foreground line-clamp-1">{labelDisplay}</p>
         </CardHeader>
         <CardContent>
           <div className="aspect-square relative mb-4 bg-muted">
