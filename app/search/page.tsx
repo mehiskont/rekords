@@ -2,6 +2,7 @@ import { Suspense } from "react"
 import { SearchBar } from "@/components/search-bar"
 import { RecordGrid } from "@/components/record-grid"
 import { RecordGridSkeleton } from "@/components/record-grid-skeleton"
+import { SearchCategories } from "@/components/search-categories"
 
 interface SearchPageProps {
   searchParams: { [key: string]: string | string[] | undefined }
@@ -15,6 +16,9 @@ export default function SearchPage({ searchParams }: SearchPageProps) {
     <div className="container max-w-6xl mx-auto px-4 py-12">
       <div className="mb-8">
         <SearchBar initialQuery={query} initialCategory={category} />
+        <div className="mt-4">
+          <SearchCategories activeCategory={category} query={query} />
+        </div>
       </div>
       <div>
         <h1 className="text-2xl font-bold mb-6">

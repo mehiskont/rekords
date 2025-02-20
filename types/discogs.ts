@@ -7,10 +7,10 @@ export interface DiscogsRecord {
   condition: string
   status: string
   label: string
-  catalogNumber: string // Added this field
+  catalogNumber: string
   release: string
   styles?: string[]
-  format: string[]
+  format: string | string[]
   country?: string
   released?: string
   date_added: string

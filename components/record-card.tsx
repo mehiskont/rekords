@@ -24,6 +24,8 @@ export function RecordCard({ record }: RecordCardProps) {
 
   const labelDisplay = record.catalogNumber ? `${record.label} [${record.catalogNumber}]` : record.label
 
+  const formatDisplay = Array.isArray(record.format) ? record.format.join(", ") : record.format
+
   return (
     <Card>
       <Link href={`/records/${record.id}`}>
@@ -52,7 +54,7 @@ export function RecordCard({ record }: RecordCardProps) {
             <div className="text-sm text-muted-foreground line-through">${record.price.toFixed(2)}</div>
           </div>
           <div className="mt-2 text-sm">
-            <span className="font-semibold">Format:</span> {record.format.join(", ")}
+            <span className="font-semibold">Format:</span> {formatDisplay}
           </div>
           {record.styles && record.styles.length > 0 && (
             <div className="mt-1 text-sm">

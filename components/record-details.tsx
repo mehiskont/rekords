@@ -21,6 +21,7 @@ export function RecordDetails({ record }: RecordDetailsProps) {
   }
 
   const labelDisplay = record.catalogNumber ? `${record.label} [${record.catalogNumber}]` : record.label
+  const formatDisplay = Array.isArray(record.format) ? record.format.join(", ") : record.format
 
   return (
     <div className="grid md:grid-cols-2 gap-8 mb-12">
@@ -41,7 +42,7 @@ export function RecordDetails({ record }: RecordDetailsProps) {
           <p className="text-2xl font-bold">${price.toFixed(2)}</p>
           <p>Condition: {record.condition}</p>
           <p>Label: {labelDisplay}</p>
-          <p>Format: {record.format.join(", ")}</p>
+          <p>Format: {formatDisplay}</p>
           {record.styles && record.styles.length > 0 && <p>Styles: {record.styles.join(", ")}</p>}
           {record.country && <p>Country: {record.country}</p>}
           {record.released && <p>Released: {record.released}</p>}
