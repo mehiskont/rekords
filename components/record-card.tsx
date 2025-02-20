@@ -29,7 +29,7 @@ export function RecordCard({ record }: RecordCardProps) {
       <Link href={`/records/${record.id}`}>
         <CardHeader className="space-y-1">
           <CardTitle className="text-lg line-clamp-2">{record.title}</CardTitle>
-          <p className="text-l text-muted-foreground line-clamp-1">{record.artist}</p>
+          <p className="text-sm text-muted-foreground line-clamp-1">{record.artist}</p>
           <p className="text-xs text-muted-foreground line-clamp-1">
             {record.label}
             {record.release && record.release.trim() !== "" && ` - [${record.release}]`}
@@ -54,6 +54,12 @@ export function RecordCard({ record }: RecordCardProps) {
             <div className="text-lg font-semibold">${price.toFixed(2)}</div>
             <div className="text-sm text-muted-foreground line-through">${record.price.toFixed(2)}</div>
           </div>
+          <div className="mt-2 text-sm">
+            <span className="font-semibold">Format:</span> {record.format.join(", ")}
+          </div>
+          <div className="mt-1 text-sm">
+            <span className="font-semibold">Styles:</span> {record.styles?.join(", ") || "N/A"}
+          </div>
         </CardContent>
       </Link>
       <CardFooter>
@@ -64,7 +70,5 @@ export function RecordCard({ record }: RecordCardProps) {
       </CardFooter>
     </Card>
   )
-
-  console.log("Record data in RecordCard:", record)
 }
 
