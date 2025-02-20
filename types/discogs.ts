@@ -6,5 +6,9 @@ export interface DiscogsRecord {
   cover_image: string
   condition: string
   status: string
+  label?: string
+  release: string
+  genres: string[]
+  date_added: string
 }
 

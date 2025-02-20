@@ -22,19 +22,32 @@ export function RecordCard({ record }: RecordCardProps) {
     dispatch({ type: "TOGGLE_CART" })
   }
 
+  console.log("Record in RecordCard:", record) // Log the record data
+
   return (
     <Card>
       <Link href={`/records/${record.id}`}>
-        <CardHeader>
-          <CardTitle className="line-clamp-1">{record.title}</CardTitle>
+        <CardHeader className="space-y-1">
+          <CardTitle className="text-lg line-clamp-2">{record.title}</CardTitle>
+          <p className="text-l text-muted-foreground line-clamp-1">{record.artist}</p>
+          <p className="text-xs text-muted-foreground line-clamp-1">
+            {record.label}
+            {record.release && record.release.trim() !== "" && ` - [${record.release}]`}
+          </p>
         </CardHeader>
         <CardContent>
-          <div className="aspect-square relative mb-4">
+          <div className="aspect-square relative mb-4 bg-muted">
             <Image
               src={record.cover_image || "/placeholder.svg"}
               alt={record.title}
               fill
               className="object-cover rounded-md"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              priority={false}
+              onError={(e) => {
+                const target = e.target as HTMLImageElement
+                target.src = "/placeholder.svg"
+              }}
             />
           </div>
           <div className="flex justify-between items-center">
@@ -51,5 +64,7 @@ export function RecordCard({ record }: RecordCardProps) {
       </CardFooter>
     </Card>
   )
+
+  console.log("Record data in RecordCard:", record)
 }
 

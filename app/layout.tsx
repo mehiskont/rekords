@@ -7,6 +7,7 @@ import { NavBar } from "@/components/nav-bar"
 import { Footer } from "@/components/footer"
 import { Toaster } from "@/components/ui/toaster"
 import NextAuthProvider from "@/components/next-auth-provider"
+import { CartProvider } from "@/contexts/cart-context"
 import { authOptions } from "@/lib/auth"
 import "./globals.css"
 
@@ -29,10 +30,12 @@ export default async function RootLayout({
       <body className={`${inter.className} min-h-screen flex flex-col dark`}>
         <NextAuthProvider session={session}>
           <ThemeProvider>
-            <NavBar />
-            <main className="flex-1">{children}</main>
-            <Footer />
-            <Toaster />
+            <CartProvider>
+              <NavBar />
+              <main className="flex-1">{children}</main>
+              <Footer />
+              <Toaster />
+            </CartProvider>
           </ThemeProvider>
         </NextAuthProvider>
       </body>

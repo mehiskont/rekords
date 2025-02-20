@@ -2,12 +2,14 @@
 
 import type React from "react"
 
-import { useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
-import { Search } from "lucide-react"
-import { Input } from "@/components/ui/input"
+import { useEffect, useRef, useState } from "react"
+import { useRouter } from "next/navigation"
+import { Search, X } from "lucide-react"
+import { useDebounce } from "@/hooks/use-debounce"
 import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { Input } from "@/components/ui/input"
+import { SearchResults } from "@/components/search-results"
+import type { DiscogsRecord } from "@/types/discogs"
 
 const categories = [
   { id: "everything", label: "Everything" },
@@ -16,59 +18,126 @@ const categories = [
   { id: "labels", label: "Labels" },
 ]
 
-export function SearchBar() {
+interface SearchBarProps {
+  initialQuery?: string
+  initialCategory?: string
+}
+
+export function SearchBar({ initialQuery = "", initialCategory = "everything" }: SearchBarProps) {
   const router = useRouter()
-  const searchParams = useSearchParams()
-  const [search, setSearch] = useState(searchParams.get("search") || "")
-  const currentCategory = searchParams.get("category") || "everything"
+  const [query, setQuery] = useState(initialQuery)
+  const [category, setCategory] = useState(initialCategory)
+  const [isLoading, setIsLoading] = useState(false)
+  const [results, setResults] = useState<DiscogsRecord[]>([])
+  const [showResults, setShowResults] = useState(false)
+  const searchRef = useRef<HTMLDivElement>(null)
+  const debouncedQuery = useDebounce(query, 300)
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault()
-    const params = new URLSearchParams(searchParams)
-    if (search) {
-      params.set("search", search)
-    } else {
-      params.delete("search")
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowResults(false)
+      }
     }
-    router.push(`/?${params.toString()}`)
-  }
 
-  const handleCategoryChange = (category: string) => {
-    const params = new URLSearchParams(searchParams)
-    params.set("category", category)
-    router.push(`/?${params.toString()}`)
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
+
+  useEffect(() => {
+    const fetchResults = async () => {
+      if (!debouncedQuery) {
+        setResults([])
+        return
+      }
+
+      setIsLoading(true)
+      try {
+        const params = new URLSearchParams({
+          q: debouncedQuery,
+          category,
+          per_page: "5",
+        })
+
+        const response = await fetch(`/api/search?${params}`)
+        if (!response.ok) throw new Error("Failed to fetch results")
+
+        const data = await response.json()
+        setResults(data.records)
+      } catch (error) {
+        console.error("Search error:", error)
+        setResults([])
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchResults()
+  }, [debouncedQuery, category])
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!query) return
+
+    setShowResults(false)
+    router.push(`/search?q=${encodeURIComponent(query)}&category=${category}`)
   }
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div ref={searchRef} className="relative w-full max-w-3xl mx-auto">
       <div className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 rounded-lg shadow-lg p-4">
-        <form onSubmit={handleSearch} className="relative mb-4">
+        <form onSubmit={handleSubmit} className="relative mb-4">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
             type="search"
             placeholder="Search records..."
-            className="pl-10 bg-background"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value)
+              setShowResults(true)
+            }}
+            className="pl-10 pr-10 bg-background"
           />
+          {query && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              className="absolute right-0 top-0 h-full px-3 hover:bg-transparent"
+              onClick={() => {
+                setQuery("")
+                setResults([])
+              }}
+            >
+              <X className="h-4 w-4" />
+              <span className="sr-only">Clear search</span>
+            </Button>
+          )}
         </form>
         <nav className="flex flex-wrap gap-2">
-          {categories.map((category) => (
+          {categories.map((cat) => (
             <Button
-              key={category.id}
-              variant={category.id === currentCategory ? "default" : "ghost"}
+              key={cat.id}
+              type="button"
+              variant={cat.id === category ? "default" : "ghost"}
               size="sm"
-              onClick={() => handleCategoryChange(category.id)}
-              className={cn(
-                "transition-colors",
-                category.id === currentCategory && "bg-primary text-primary-foreground",
-              )}
+              onClick={() => setCategory(cat.id)}
+              className="transition-colors"
             >
-              {category.label}
+              {cat.label}
             </Button>
           ))}
         </nav>
       </div>
+      {showResults && (
+        <SearchResults
+          results={results}
+          isLoading={isLoading}
+          query={query}
+          category={category}
+          onClose={() => setShowResults(false)}
+        />
+      )}
     </div>
   )
 }
