@@ -5,6 +5,7 @@ import { Minus, Plus, X } from "lucide-react"
 import { useCart } from "@/contexts/cart-context"
 import { Button } from "@/components/ui/button"
 import { calculatePriceWithoutFees } from "@/lib/price-calculator"
+import { toast } from "@/components/ui/use-toast"
 import type { CartItem as CartItemType } from "@/types/cart"
 
 interface CartItemProps {
@@ -14,6 +15,26 @@ interface CartItemProps {
 export function CartItem({ item }: CartItemProps) {
   const { dispatch } = useCart()
   const price = calculatePriceWithoutFees(item.price)
+
+  const handleQuantityChange = (newQuantity: number) => {
+    if (newQuantity > item.quantity_available) {
+      toast({
+        title: "Maximum quantity reached",
+        description: `Only ${item.quantity_available} units available`,
+        variant: "destructive",
+      })
+      return
+    }
+
+    if (newQuantity < 1) {
+      dispatch({ type: "REMOVE_ITEM", payload: item.id })
+    } else {
+      dispatch({
+        type: "UPDATE_QUANTITY",
+        payload: { id: item.id, quantity: newQuantity },
+      })
+    }
+  }
 
   return (
     <div className="flex gap-4">
@@ -28,16 +49,7 @@ export function CartItem({ item }: CartItemProps) {
             variant="outline"
             size="icon"
             className="h-8 w-8"
-            onClick={() => {
-              if (item.quantity > 1) {
-                dispatch({
-                  type: "UPDATE_QUANTITY",
-                  payload: { id: item.id, quantity: item.quantity - 1 },
-                })
-              } else {
-                dispatch({ type: "REMOVE_ITEM", payload: item.id })
-              }
-            }}
+            onClick={() => handleQuantityChange(item.quantity - 1)}
           >
             <Minus className="h-4 w-4" />
           </Button>
@@ -46,12 +58,8 @@ export function CartItem({ item }: CartItemProps) {
             variant="outline"
             size="icon"
             className="h-8 w-8"
-            onClick={() =>
-              dispatch({
-                type: "UPDATE_QUANTITY",
-                payload: { id: item.id, quantity: item.quantity + 1 },
-              })
-            }
+            onClick={() => handleQuantityChange(item.quantity + 1)}
+            disabled={item.quantity >= item.quantity_available}
           >
             <Plus className="h-4 w-4" />
           </Button>
@@ -64,6 +72,9 @@ export function CartItem({ item }: CartItemProps) {
             <X className="h-4 w-4" />
           </Button>
         </div>
+        {item.quantity === item.quantity_available && (
+          <p className="text-xs text-muted-foreground mt-1">Maximum quantity reached</p>
+        )}
       </div>
     </div>
   )

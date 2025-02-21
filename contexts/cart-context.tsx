@@ -36,10 +36,16 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       const existingItem = state.items.find((item) => item.id === action.payload.id)
 
       if (existingItem) {
+        // Check if adding one more would exceed available quantity
+        if (existingItem.quantity >= existingItem.quantity_available) {
+          return state
+        }
         return {
           ...state,
           items: state.items.map((item) =>
-            item.id === action.payload.id ? { ...item, quantity: item.quantity + 1 } : item,
+            item.id === action.payload.id
+              ? { ...item, quantity: Math.min(item.quantity + 1, item.quantity_available) }
+              : item,
           ),
         }
       }
@@ -58,7 +64,12 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       return {
         ...state,
         items: state.items.map((item) =>
-          item.id === action.payload.id ? { ...item, quantity: action.payload.quantity } : item,
+          item.id === action.payload.id
+            ? {
+                ...item,
+                quantity: Math.min(action.payload.quantity, item.quantity_available),
+              }
+            : item,
         ),
       }
     case "TOGGLE_CART":

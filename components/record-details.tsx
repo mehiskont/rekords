@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { ShoppingCart } from "lucide-react"
 import { useCart } from "@/contexts/cart-context"
 import { calculatePriceWithoutFees } from "@/lib/price-calculator"
+import { toast } from "@/components/ui/use-toast"
 import type { DiscogsRecord } from "@/types/discogs"
 
 interface RecordDetailsProps {
@@ -12,12 +13,28 @@ interface RecordDetailsProps {
 }
 
 export function RecordDetails({ record }: RecordDetailsProps) {
-  const { dispatch } = useCart()
+  const { state, dispatch } = useCart()
   const price = calculatePriceWithoutFees(record.price)
 
+  const cartItem = state.items.find((item) => item.id === record.id)
+  const currentQuantityInCart = cartItem?.quantity || 0
+  const isMaxQuantity = currentQuantityInCart >= record.quantity_available
+
   const handleAddToCart = () => {
+    if (isMaxQuantity) {
+      toast({
+        title: "Maximum quantity reached",
+        description: `Only ${record.quantity_available} unit${record.quantity_available > 1 ? "s" : ""} available`,
+        variant: "destructive",
+      })
+      return
+    }
+
     dispatch({ type: "ADD_ITEM", payload: record })
-    dispatch({ type: "TOGGLE_CART" })
+    toast({
+      title: "Added to cart",
+      description: "Item has been added to your cart",
+    })
   }
 
   const labelDisplay = record.catalogNumber ? `${record.label} [${record.catalogNumber}]` : record.label
@@ -46,10 +63,24 @@ export function RecordDetails({ record }: RecordDetailsProps) {
           {record.styles && record.styles.length > 0 && <p>Styles: {record.styles.join(", ")}</p>}
           {record.country && <p>Country: {record.country}</p>}
           {record.released && <p>Released: {record.released}</p>}
+          {record.quantity_available > 0 && (
+            <p className="text-sm text-muted-foreground">
+              {record.quantity_available} unit{record.quantity_available > 1 ? "s" : ""} available
+            </p>
+          )}
         </div>
-        <Button size="lg" className="w-full md:w-auto" onClick={handleAddToCart}>
+        <Button
+          size="lg"
+          className="w-full md:w-auto"
+          onClick={handleAddToCart}
+          disabled={isMaxQuantity || record.quantity_available === 0}
+        >
           <ShoppingCart className="mr-2 h-4 w-4" />
-          Add to Cart
+          {record.quantity_available === 0
+            ? "Out of Stock"
+            : isMaxQuantity
+              ? `Max Quantity (${record.quantity_available}) Reached`
+              : "Add to Cart"}
         </Button>
       </div>
     </div>

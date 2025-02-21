@@ -15,7 +15,7 @@ const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Plastik Records",
-  description: "Discover rare vinyl records",
+  description: "",
 }
 
 export default async function RootLayout({

@@ -12,10 +12,10 @@ export default function HomePage() {
         <div className="container max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <h1 className="text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/50">
-              Discover Rare Vinyl Records
+              
             </h1>
             <p className="text-lg text-muted-foreground mb-8">
-              Explore our curated collection of rare and collectible vinyl records
+              
             </p>
           </div>
           <SearchBar />

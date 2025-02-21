@@ -15,5 +15,6 @@ export interface DiscogsRecord {
   released?: string
   date_added: string
   genres: string[]
+  quantity_available: number // Add inventory quantity
 }
 

@@ -6,10 +6,19 @@ import { useSession } from "next-auth/react"
 import { Menu, ShoppingCart, User, X } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { useCart } from "@/contexts/cart-context"
+import { Cart } from "@/components/cart"
 
 export function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { data: session, status } = useSession()
+  const { state, dispatch } = useCart()
+
+  const cartItemCount = state.items.reduce((sum, item) => sum + item.quantity, 0)
+
+  const handleCartClick = () => {
+    dispatch({ type: "TOGGLE_CART" })
+  }
 
   return (
     <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
@@ -46,11 +55,13 @@ export function NavBar() {
 
           <div className="hidden md:flex items-center gap-4">
             <ThemeToggle />
-            <Button variant="ghost" size="icon" className="relative">
+            <Button variant="ghost" size="icon" className="relative" onClick={handleCartClick}>
               <ShoppingCart className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium flex items-center justify-center text-primary-foreground">
-                0
-              </span>
+              {cartItemCount > 0 && (
+                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium flex items-center justify-center text-primary-foreground">
+                  {cartItemCount}
+                </span>
+              )}
             </Button>
             {status === "loading" ? null : session ? (
               <Link href="/dashboard">
@@ -96,11 +107,13 @@ export function NavBar() {
             </div>
             <div className="flex items-center gap-4 mt-4 pt-4 border-t">
               <ThemeToggle />
-              <Button variant="ghost" size="icon" className="relative">
+              <Button variant="ghost" size="icon" className="relative" onClick={handleCartClick}>
                 <ShoppingCart className="h-5 w-5" />
-                <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium flex items-center justify-center text-primary-foreground">
-                  0
-                </span>
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium flex items-center justify-center text-primary-foreground">
+                    {cartItemCount}
+                  </span>
+                )}
               </Button>
               {status === "loading" ? null : session ? (
                 <Link href="/dashboard">
@@ -117,6 +130,7 @@ export function NavBar() {
           </div>
         )}
       </div>
+      <Cart />
     </nav>
   )
 }

@@ -1,6 +1,6 @@
 import { getCachedData, setCachedData } from "./redis"
 import type { DiscogsRecord } from "@/types/discogs"
-import { fetchWithRetry, mapReleaseToRecord } from "@/lib/utils"
+import { fetchWithRetry } from "@/lib/utils"
 
 const CACHE_TTL = 3600 // 1 hour
 
@@ -69,6 +69,28 @@ export async function getDiscogsInventory(
   } catch (error) {
     console.error("Error fetching inventory:", error)
     return { records: [], totalPages: 0 }
+  }
+}
+
+export function mapReleaseToRecord(data: any, fullRelease: any): DiscogsRecord {
+  return {
+    id: data.id,
+    title: data.release.title,
+    artist: data.release.artist,
+    price: data.price.value,
+    cover_image: fullRelease?.images?.[0]?.resource_url || "/placeholder.svg",
+    condition: data.condition,
+    status: data.status,
+    label: data.release.label,
+    catalogNumber: fullRelease?.labels?.[0]?.catno || "",
+    release: data.release.id.toString(),
+    styles: fullRelease?.styles || [],
+    format: Array.isArray(data.release.format) ? data.release.format : [data.release.format],
+    country: fullRelease?.country || "",
+    released: fullRelease?.released_formatted || fullRelease?.released || "",
+    date_added: data.posted,
+    genres: fullRelease?.genres || [],
+    quantity_available: data.quantity || 1, // Ensure we get the quantity from Discogs listing
   }
 }
 
