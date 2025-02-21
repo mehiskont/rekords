@@ -27,7 +27,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} min-h-screen flex flex-col dark`}>
+      <body className={inter.className}>
         <NextAuthProvider session={session}>
           <ThemeProvider>
             <CartProvider>
