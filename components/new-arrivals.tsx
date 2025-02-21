@@ -4,7 +4,10 @@ import { ApiUnavailable } from "@/components/api-unavailable"
 
 export async function NewArrivals() {
   try {
-    const { records } = await getDiscogsInventory(undefined, "date_desc", 1, 4)
+    // Explicitly request the newest listings first
+    const { records } = await getDiscogsInventory(undefined, undefined, 1, 4, { sort: "listed", sort_order: "desc" })
+
+    console.log("New Arrivals records:", JSON.stringify(records, null, 2))
 
     if (records.length === 0) {
       return <p>No new arrivals at the moment. Check back soon!</p>

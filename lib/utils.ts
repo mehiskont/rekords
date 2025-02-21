@@ -1,6 +1,5 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import type { DiscogsRecord } from "@/types/discogs"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -36,41 +35,55 @@ export async function fetchWithRetry(url: string, options: RequestInit, retries 
       }
 
       requestCount++
-      const response = await fetch(url, options)
-      if (response.ok) return response
-      if (response.status === 429) {
-        console.warn("Rate limit exceeded, retrying after delay")
-        await new Promise((resolve) => setTimeout(resolve, 1000 * Math.pow(2, i)))
-        continue
+
+      // Add default headers if not present
+      const headers = new Headers(options.headers)
+      if (!headers.has("User-Agent")) {
+        headers.set("User-Agent", "PlastikRecordStore/1.0")
       }
-      throw new Error(`HTTP error! status: ${response.status}`)
+      if (!headers.has("Accept")) {
+        headers.set("Accept", "application/json")
+      }
+
+      const response = await fetch(url, {
+        ...options,
+        headers,
+      })
+
+      // Log detailed error information for non-200 responses
+      if (!response.ok) {
+        const errorBody = await response.text()
+        console.error("API Error:", {
+          url: url.replace(process.env.DISCOGS_API_TOKEN || "", "[REDACTED]"),
+          status: response.status,
+          statusText: response.statusText,
+          headers: Object.fromEntries(response.headers.entries()),
+          body: errorBody,
+        })
+
+        // For specific error codes, handle differently
+        if (response.status === 429) {
+          console.warn("Rate limit exceeded, retrying after delay")
+          await new Promise((resolve) => setTimeout(resolve, 1000 * Math.pow(2, i)))
+          continue
+        }
+
+        // For authentication errors, log and break
+        if (response.status === 401 || response.status === 403) {
+          console.error(`Authentication error: ${response.status}. Please check your Discogs API token.`)
+          break
+        }
+
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+
+      return response
     } catch (error) {
       if (i === retries - 1) throw error
-      console.warn(`Attempt ${i + 1} failed, retrying...`)
+      console.warn(`Attempt ${i + 1} failed, retrying...`, error)
+      await new Promise((resolve) => setTimeout(resolve, 1000 * Math.pow(2, i)))
     }
-    await new Promise((resolve) => setTimeout(resolve, 1000 * Math.pow(2, i)))
   }
   throw new Error(`Failed to fetch ${url} after ${retries} retries`)
-}
-
-export function mapReleaseToRecord(data: any, fullRelease: any): DiscogsRecord {
-  return {
-    id: data.id,
-    title: data.release.title,
-    artist: data.release.artist,
-    price: data.price.value,
-    cover_image: fullRelease?.images?.[0]?.resource_url || "/placeholder.svg",
-    condition: data.condition,
-    status: data.status,
-    label: data.release.label,
-    catalogNumber: fullRelease?.labels?.[0]?.catno || "",
-    release: data.release.id.toString(),
-    styles: fullRelease?.styles || [],
-    format: Array.isArray(data.release.format) ? data.release.format : [data.release.format],
-    country: fullRelease?.country || "",
-    released: fullRelease?.released_formatted || fullRelease?.released || "",
-    date_added: data.posted,
-    genres: fullRelease?.genres || [],
-  }
 }
 

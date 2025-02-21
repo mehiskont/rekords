@@ -9,7 +9,9 @@ export async function GET(request: Request) {
   const perPage = Number(searchParams.get("per_page")) || 20
 
   try {
-    const { records } = await getDiscogsInventory(query || undefined, undefined, page, perPage)
+    const { records, totalPages } = await getDiscogsInventory(query || undefined, undefined, page, perPage, {
+      category,
+    })
 
     // Enhanced filtering based on category and query
     let filteredRecords = records
@@ -52,7 +54,10 @@ export async function GET(request: Request) {
     })
   } catch (error) {
     console.error("Search error:", error)
-    return NextResponse.json({ error: "Failed to search records" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Failed to search records", details: error instanceof Error ? error.message : String(error) },
+      { status: 500 },
+    )
   }
 }
 

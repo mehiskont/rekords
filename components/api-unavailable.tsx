@@ -7,7 +7,8 @@ export function ApiUnavailable() {
       <AlertTriangle className="h-4 w-4" />
       <AlertTitle>API Unavailable</AlertTitle>
       <AlertDescription>
-        We're currently unable to fetch data from our record database. Please try again later.
+        We're currently unable to fetch data from our record database. This could be due to a temporary issue or
+        maintenance. Please try again later or contact support if the problem persists.
       </AlertDescription>
     </Alert>
   )
