@@ -26,34 +26,35 @@ export function SearchResults({ results, isLoading, query, category, onClose }: 
       ) : displayResults.length > 0 ? (
         <>
           <div className="max-h-[400px] overflow-y-auto">
-            {displayResults.map((record) => (
-              <Link
-                key={record.id}
-                href={`/records/${record.id}`}
-                className="flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors"
-                onClick={onClose}
-              >
-                <div className="relative w-12 h-12 flex-shrink-0">
-                  <Image
-                    src={record.cover_image || "/placeholder.svg"}
-                    alt={record.title}
-                    fill
-                    className="object-cover rounded"
-                  />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-medium text-base truncate">{record.title}</h3>
-                  <p className="text-sm text-muted-foreground truncate">{record.artist}</p>
-                  <p className="text-xs text-muted-foreground truncate">
-                    {record.label} {record.catalogNumber && `[${record.catalogNumber}]`}
-                  </p>
-                </div>
-                <div className="text-right">
-                  <div className="font-medium">${record.price.toFixed(2)}</div>
-                  <div className="text-sm text-muted-foreground">{record.condition}</div>
-                </div>
-              </Link>
-            ))}
+            {displayResults.map((record) => {
+              const labelDisplay = record.label + (record.catalogNumber ? ` [${record.catalogNumber}]` : "")
+              return (
+                <Link
+                  key={record.id}
+                  href={`/records/${record.id}`}
+                  className="flex items-center gap-4 p-4 hover:bg-muted/50 transition-colors"
+                  onClick={onClose}
+                >
+                  <div className="relative w-12 h-12 flex-shrink-0">
+                    <Image
+                      src={record.cover_image || "/placeholder.svg"}
+                      alt={record.title}
+                      fill
+                      className="object-cover rounded"
+                    />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-medium text-base truncate">{record.title}</h3>
+                    <p className="text-sm text-muted-foreground truncate">{record.artist}</p>
+                    <p className="text-xs text-muted-foreground truncate">{labelDisplay}</p>
+                  </div>
+                  <div className="text-right">
+                    <div className="font-medium">${record.price.toFixed(2)}</div>
+                    <div className="text-sm text-muted-foreground">{record.condition}</div>
+                  </div>
+                </Link>
+              )
+            })}
           </div>
           {results.length > 5 && (
             <div className="p-4 border-t">

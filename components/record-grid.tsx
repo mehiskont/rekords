@@ -1,6 +1,6 @@
 import { getDiscogsInventory } from "@/lib/discogs"
-import { RecordCard } from "@/components/record-card"
 import { ApiUnavailable } from "@/components/api-unavailable"
+import { ClientRecordCard } from "@/components/client-record-card"
 
 interface RecordGridProps {
   searchParams?: { [key: string]: string | string[] | undefined }
@@ -14,7 +14,10 @@ export async function RecordGrid({ searchParams = {} }: RecordGridProps) {
   const perPage = 20
 
   try {
-    const { records } = await getDiscogsInventory(search, sort, page, perPage, { category })
+    const { records } = await getDiscogsInventory(search, sort, page, perPage, {
+      category,
+      fetchFullReleaseData: true, // Add this to ensure we get catalog numbers
+    })
 
     if (records.length === 0) {
       return <p className="text-center text-lg">No records found.</p>
@@ -23,7 +26,7 @@ export async function RecordGrid({ searchParams = {} }: RecordGridProps) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         {records.map((record) => (
-          <RecordCard key={record.id} record={record} />
+          <ClientRecordCard key={record.id} record={record} />
         ))}
       </div>
     )

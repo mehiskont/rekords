@@ -4,12 +4,21 @@ import { fetchWithRetry } from "@/lib/utils"
 
 const CACHE_TTL = 3600 // 1 hour
 
+// Add this to the options type at the top of the file
+type GetDiscogsInventoryOptions = {
+  category?: string
+  sort?: string
+  sort_order?: string
+  fetchFullReleaseData?: boolean
+}
+
+// Update the getDiscogsInventory function signature
 export async function getDiscogsInventory(
   search?: string,
   sort?: string,
   page = 1,
   perPage = 50,
-  options: { category?: string; sort?: string; sort_order?: string } = {},
+  options: GetDiscogsInventoryOptions = {},
 ): Promise<{ records: DiscogsRecord[]; totalPages: number }> {
   const cacheKey = `inventory:${search || "all"}:${sort || "default"}:${page}:${perPage}:${options.category || "all"}:${options.sort || "default"}:${options.sort_order || "default"}`
 
@@ -77,13 +86,10 @@ export async function getDiscogsInventory(
         statusText: response.statusText,
         body: errorBody,
       })
-
-      // Return empty results instead of throwing
       return { records: [], totalPages: 0 }
     }
 
     const data = await response.json()
-    console.log("Raw Discogs API response:", JSON.stringify(data, null, 2))
 
     if (!data || !data.listings) {
       console.error("Invalid data structure received from Discogs API:", data)
@@ -93,7 +99,26 @@ export async function getDiscogsInventory(
     // Filter out listings with quantity 0
     const availableListings = data.listings.filter((listing: any) => listing.quantity > 0)
 
-    const records = availableListings.map((listing: any) => mapListingToRecord(listing))
+    // Modify the records mapping section
+    const records = await Promise.all(
+      availableListings.map(async (listing: any) => {
+        // Always fetch full release data for new arrivals and when explicitly requested
+        if (options.fetchFullReleaseData || (options.sort === "listed" && options.sort_order === "desc")) {
+          try {
+            const fullRelease = await fetchFullReleaseData(listing.release.id.toString())
+            return {
+              ...mapListingToRecord(listing),
+              catalogNumber: fullRelease.labels?.[0]?.catno?.toString().trim() || "",
+              label: fullRelease.labels?.[0]?.name || listing.release.label,
+            }
+          } catch (error) {
+            console.error(`Error fetching full release data for ${listing.release.id}:`, error)
+            return mapListingToRecord(listing)
+          }
+        }
+        return mapListingToRecord(listing)
+      }),
+    )
 
     // Apply category filtering if specified
     let filteredRecords = records
@@ -111,13 +136,11 @@ export async function getDiscogsInventory(
       await setCachedData(cacheKey, JSON.stringify(result), CACHE_TTL)
     } catch (error) {
       console.error("Cache write error:", error)
-      // Continue without cache
     }
 
     return result
   } catch (error) {
     console.error("Error fetching inventory:", error)
-    // Return empty results instead of throwing
     return { records: [], totalPages: 0 }
   }
 }
@@ -132,7 +155,7 @@ function mapListingToRecord(listing: any): DiscogsRecord {
     condition: listing.condition,
     status: listing.status,
     label: listing.release.label,
-    catalogNumber: listing.release.catno || "",
+    catalogNumber: listing.release.catno?.toString().trim() || "", // Ensure catno is converted to string and trimmed
     release: listing.release.id.toString(),
     styles: listing.release.styles || [],
     format: Array.isArray(listing.release.format) ? listing.release.format : [listing.release.format],
@@ -183,12 +206,23 @@ export async function getDiscogsRecord(
     // Fetch related records that are in stock
     const { records: allRelatedRecords } = await getDiscogsInventory(undefined, undefined, 1, 4)
 
-    // Filter out the current record and ensure all related records are in stock
-    const relatedRecords = allRelatedRecords.filter(
-      (relatedRecord) =>
-        relatedRecord.id !== record.id &&
-        relatedRecord.release !== record.release &&
-        relatedRecord.quantity_available > 0,
+    // Ensure we have full release data for related records
+    const relatedRecords = await Promise.all(
+      allRelatedRecords
+        .filter(
+          (relatedRecord) =>
+            relatedRecord.id !== record.id &&
+            relatedRecord.release !== record.release &&
+            relatedRecord.quantity_available > 0,
+        )
+        .map(async (relatedRecord) => {
+          // Fetch full release data for each related record
+          const fullRelease = await fetchFullReleaseData(relatedRecord.release)
+          return {
+            ...relatedRecord,
+            catalogNumber: fullRelease.labels?.[0]?.catno?.toString().trim() || "",
+          }
+        }),
     )
 
     const result = { record, relatedRecords }
@@ -198,7 +232,6 @@ export async function getDiscogsRecord(
       await setCachedData(cacheKey, JSON.stringify(result), CACHE_TTL)
     } catch (error) {
       console.error("Cache write error:", error)
-      // Continue without cache
     }
 
     return result

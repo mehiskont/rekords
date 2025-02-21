@@ -11,6 +11,7 @@ export async function GET(request: Request) {
   try {
     const { records, totalPages } = await getDiscogsInventory(query || undefined, undefined, page, perPage, {
       category,
+      fetchFullReleaseData: true, // Add this to ensure we get catalog numbers for search results
     })
 
     // Enhanced filtering based on category and query

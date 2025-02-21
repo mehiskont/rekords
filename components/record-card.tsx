@@ -4,22 +4,24 @@ import type React from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ShoppingCart } from "lucide-react"
-import { useCart } from "@/contexts/cart-context"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { calculatePriceWithoutFees } from "@/lib/price-calculator"
 import { toast } from "@/components/ui/use-toast"
 import type { DiscogsRecord } from "@/types/discogs"
+import type { CartState, CartAction } from "@/contexts/cart-context"
 
 interface RecordCardProps {
   record: DiscogsRecord
+  cartState: CartState
+  cartDispatch: React.Dispatch<CartAction>
 }
 
-export function RecordCard({ record }: RecordCardProps) {
-  const { state, dispatch } = useCart()
+export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps) {
   const price = calculatePriceWithoutFees(record.price)
 
-  const cartItem = state.items.find((item) => item.id === record.id)
+  // Safeguard against undefined cartState
+  const cartItem = cartState?.items?.find((item) => item.id === record.id)
   const currentQuantityInCart = cartItem?.quantity || 0
   const isMaxQuantity = currentQuantityInCart >= record.quantity_available
 
@@ -35,15 +37,17 @@ export function RecordCard({ record }: RecordCardProps) {
       return
     }
 
-    dispatch({ type: "ADD_ITEM", payload: record })
-    toast({
-      title: "Added to cart",
-      description: "Item has been added to your cart",
-    })
+    if (cartDispatch) {
+      cartDispatch({ type: "ADD_ITEM", payload: record })
+      toast({
+        title: "Added to cart",
+        description: "Item has been added to your cart",
+      })
+    }
   }
 
-  const labelDisplay = record.catalogNumber ? `${record.label} [${record.catalogNumber}]` : record.label
   const formatDisplay = Array.isArray(record.format) ? record.format.join(", ") : record.format
+  const labelDisplay = record.label + (record.catalogNumber ? ` [${record.catalogNumber}]` : "")
 
   return (
     <Card>
