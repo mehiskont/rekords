@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation"
 import { getDiscogsRecord } from "@/lib/discogs"
 import { RecordDetails } from "@/components/record-details"
-import { RecordCard } from "@/components/record-card"
+import { ClientRecordCard } from "@/components/client-record-card"
 
 export default async function RecordPage({ params }: { params: { id: string } }) {
   try {
@@ -21,7 +21,7 @@ export default async function RecordPage({ params }: { params: { id: string } })
             <h2 className="text-2xl font-bold mb-6">Related Records</h2>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {relatedRecords.map((relatedRecord) => (
-                <RecordCard key={relatedRecord.id} record={relatedRecord} />
+                <ClientRecordCard key={relatedRecord.id} record={relatedRecord} />
               ))}
             </div>
           </div>
