@@ -14,16 +14,19 @@ interface SearchResultsProps {
 export function SearchResults({ results, isLoading, query, category, onClose }: SearchResultsProps) {
   if (!query) return null
 
+  // Take only the first 5 results for the dropdown
+  const displayResults = results.slice(0, 5)
+
   return (
     <div className="absolute top-full left-0 right-0 z-50 mt-2 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border rounded-lg shadow-lg overflow-hidden">
       {isLoading ? (
         <div className="p-4 text-center">
           <Loader2 className="h-6 w-6 animate-spin mx-auto" />
         </div>
-      ) : results.length > 0 ? (
+      ) : displayResults.length > 0 ? (
         <>
           <div className="max-h-[400px] overflow-y-auto">
-            {results.map((record) => (
+            {displayResults.map((record) => (
               <Link
                 key={record.id}
                 href={`/records/${record.id}`}
@@ -39,16 +42,11 @@ export function SearchResults({ results, isLoading, query, category, onClose }: 
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex grid-align-items-center col-gap-s">
-                    <h3 className="font-medium text-base truncate">{record.title}</h3>
-                    <p className="text-sm truncate">- {record.artist}</p>
-                  </div>
-                 
-                  <div className="flex">
-                    <div className="text-muted-foreground truncate text-xs ">{record.label}</div>
-                    <div className="text-muted-foreground text-xs">&nbsp; [{record.catalogNumber}]</div>
-                  </div>
-                  
+                  <h3 className="font-medium text-base truncate">{record.title}</h3>
+                  <p className="text-sm text-muted-foreground truncate">{record.artist}</p>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {record.label} {record.catalogNumber && `[${record.catalogNumber}]`}
+                  </p>
                 </div>
                 <div className="text-right">
                   <div className="font-medium">${record.price.toFixed(2)}</div>
@@ -57,15 +55,17 @@ export function SearchResults({ results, isLoading, query, category, onClose }: 
               </Link>
             ))}
           </div>
-          <div className="p-4 border-t">
-            <Link
-              href={`/search?q=${encodeURIComponent(query)}&category=${category}`}
-              className="block w-full text-center text-sm text-muted-foreground hover:text-foreground"
-              onClick={onClose}
-            >
-              View all results
-            </Link>
-          </div>
+          {results.length > 5 && (
+            <div className="p-4 border-t">
+              <Link
+                href={`/search?q=${encodeURIComponent(query)}&category=${category}`}
+                className="block w-full text-center text-sm text-muted-foreground hover:text-foreground"
+                onClick={onClose}
+              >
+                View all {results.length} results
+              </Link>
+            </div>
+          )}
         </>
       ) : (
         <div className="p-4 text-center text-muted-foreground">No results found</div>

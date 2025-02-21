@@ -9,28 +9,46 @@ export async function GET(request: Request) {
   const perPage = Number(searchParams.get("per_page")) || 20
 
   try {
-    const { records, totalPages } = await getDiscogsInventory(query || undefined, undefined, page, perPage)
+    const { records } = await getDiscogsInventory(query || undefined, undefined, page, perPage)
 
-    // Filter records based on category if needed
+    // Enhanced filtering based on category and query
     let filteredRecords = records
-    if (category !== "everything") {
+    if (query) {
+      const searchTerm = query.toLowerCase()
       filteredRecords = records.filter((record) => {
+        const isVariousArtist =
+          record.artist.toLowerCase() === "various" ||
+          record.artist.toLowerCase() === "various artists" ||
+          record.title.toLowerCase().includes("various")
+
         switch (category) {
-          case "releases":
-            return true // All records are releases
           case "artists":
-            return record.artist.toLowerCase().includes((query || "").toLowerCase())
+            if (searchTerm === "various") {
+              return isVariousArtist
+            }
+            return record.artist.toLowerCase().includes(searchTerm)
+          case "releases":
+            return record.title.toLowerCase().includes(searchTerm)
           case "labels":
-            return record.label?.toLowerCase().includes((query || "").toLowerCase())
+            return record.label?.toLowerCase().includes(searchTerm)
           default:
-            return true
+            // "everything" - search across all fields
+            if (searchTerm === "various") {
+              return isVariousArtist
+            }
+            return (
+              record.title.toLowerCase().includes(searchTerm) ||
+              record.artist.toLowerCase().includes(searchTerm) ||
+              record.label?.toLowerCase().includes(searchTerm) ||
+              record.catalogNumber?.toLowerCase().includes(searchTerm)
+            )
         }
       })
     }
 
     return NextResponse.json({
-      records: filteredRecords,
-      totalPages,
+      records: filteredRecords.slice(0, perPage),
+      totalPages: Math.ceil(filteredRecords.length / perPage),
     })
   } catch (error) {
     console.error("Search error:", error)

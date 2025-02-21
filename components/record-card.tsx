@@ -31,7 +31,7 @@ export function RecordCard({ record }: RecordCardProps) {
       <Link href={`/records/${record.id}`}>
         <CardHeader className="space-y-1">
           <CardTitle className="text-lg line-clamp-2">{record.title}</CardTitle>
-          <p className="text-sm text-muted-foreground line-clamp-1">{record.artist}</p>
+          <p className="text-m line-clamp-1">{record.artist}</p>
           <p className="text-xs text-muted-foreground line-clamp-1">{labelDisplay}</p>
         </CardHeader>
         <CardContent>
@@ -59,11 +59,6 @@ export function RecordCard({ record }: RecordCardProps) {
           {record.styles && record.styles.length > 0 && (
             <div className="mt-1 text-sm">
               <span className="font-semibold">Styles:</span> {record.styles.join(", ")}
-            </div>
-          )}
-          {record.genres && record.genres.length > 0 && (
-            <div className="mt-1 text-sm">
-              <span className="font-semibold">Genres:</span> {record.genres.join(", ")}
             </div>
           )}
         </CardContent>
