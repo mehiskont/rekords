@@ -51,7 +51,8 @@ export function CheckoutFlow() {
     setShippingInfo(data)
 
     try {
-      const response = await fetch("/api/create-payment-intent", {
+      // First, create an order in your database
+      const orderResponse = await fetch("/api/orders", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -65,6 +66,27 @@ export function CheckoutFlow() {
         }),
       })
 
+      if (!orderResponse.ok) {
+        throw new Error("Failed to create order")
+      }
+
+      const { orderId } = await orderResponse.json()
+
+      // Then, create a payment intent with Stripe
+      const response = await fetch("/api/create-payment-intent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          orderId,
+          amount: total,
+          customer: {
+            email: session?.user?.email || data.email,
+          },
+        }),
+      })
+
       if (!response.ok) {
         throw new Error("Failed to create payment intent")
       }
@@ -73,10 +95,10 @@ export function CheckoutFlow() {
       setClientSecret(secret)
       nextStep()
     } catch (error) {
-      console.error("Error creating payment intent:", error)
+      console.error("Error creating order and payment intent:", error)
       toast({
         title: "Error",
-        description: "Failed to process payment information. Please try again.",
+        description: "Failed to process order. Please try again.",
         variant: "destructive",
       })
     }
