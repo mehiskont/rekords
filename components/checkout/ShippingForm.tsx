@@ -3,7 +3,6 @@
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import * as z from "zod"
-import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 
@@ -32,7 +31,7 @@ export function ShippingForm({ onSubmit }: ShippingFormProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-      <h2 className="text-2xl font-bold mb-4">Shipping Information</h2>
+      <h2 className="text-2xl font-bold mb-6">Shipping Information</h2>
       <div>
         <Label htmlFor="fullName">Full Name</Label>
         <Input id="fullName" {...register("fullName")} />
@@ -58,9 +57,6 @@ export function ShippingForm({ onSubmit }: ShippingFormProps) {
         <Input id="postalCode" {...register("postalCode")} />
         {errors.postalCode && <p className="text-sm text-red-500">{errors.postalCode.message}</p>}
       </div>
-      <Button type="submit" className="w-full">
-        Continue to Payment
-      </Button>
     </form>
   )
 }

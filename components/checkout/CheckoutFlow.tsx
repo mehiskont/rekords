@@ -34,14 +34,28 @@ export function CheckoutFlow() {
   }
 
   const handlePlaceOrder = async () => {
-    // Implement order placement logic here
-    // This should include creating the order in your backend
-    // and handling the payment process
-    console.log("Placing order:", { shippingInfo, paymentInfo, cartItems: cartState.items })
+    // Here, you would implement the logic to process the payment
+    // using either Apple Pay or PayPal, depending on the selected method
+    const paymentMethod = paymentInfo.method
 
-    // For now, we'll just clear the cart and redirect to a success page
-    cartDispatch({ type: "CLEAR_CART" })
-    router.push("/checkout/success")
+    try {
+      if (paymentMethod === "apple-pay") {
+        // Implement Apple Pay payment process
+        console.log("Processing Apple Pay payment")
+        // You would typically call your backend API to initiate the Apple Pay session
+      } else if (paymentMethod === "paypal") {
+        // Implement PayPal payment process
+        console.log("Processing PayPal payment")
+        // You would typically redirect to PayPal for payment or use PayPal's SDK
+      }
+
+      // If payment is successful, clear the cart and redirect to success page
+      cartDispatch({ type: "CLEAR_CART" })
+      router.push("/checkout/success")
+    } catch (error) {
+      console.error("Payment failed:", error)
+      // Handle payment failure (show error message, etc.)
+    }
   }
 
   return (
@@ -89,15 +103,19 @@ export function CheckoutFlow() {
         />
       )}
 
-      <div className="mt-8 flex justify-between">
+      <div className="mt-8 flex justify-end gap-4">
         {currentStep > 0 && (
           <Button onClick={prevStep} variant="outline">
             Back
           </Button>
         )}
-        {currentStep < steps.length - 1 && (
-          <Button onClick={nextStep} className="ml-auto">
+        {currentStep < steps.length - 1 ? (
+          <Button onClick={nextStep} className="bg-primary">
             Next
+          </Button>
+        ) : (
+          <Button onClick={handlePlaceOrder} className="bg-primary">
+            Place Order
           </Button>
         )}
       </div>
