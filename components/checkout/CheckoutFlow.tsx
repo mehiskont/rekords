@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { useCart } from "@/contexts/cart-context"
@@ -8,54 +8,87 @@ import { Button } from "@/components/ui/button"
 import { CartReview } from "@/components/checkout/CartReview"
 import { ShippingForm } from "@/components/checkout/ShippingForm"
 import { PaymentForm } from "@/components/checkout/PaymentForm"
-import { OrderSummary } from "@/components/checkout/OrderSummary"
+import { calculatePriceWithoutFees } from "@/lib/price-calculator"
+import { toast } from "@/components/ui/use-toast"
 
 const steps = ["Cart Review", "Shipping", "Payment", "Summary"]
+const STORAGE_KEY = "checkout_current_step"
 
 export function CheckoutFlow() {
   const [currentStep, setCurrentStep] = useState(0)
-  const [shippingInfo, setShippingInfo] = useState({})
-  const [paymentInfo, setPaymentInfo] = useState({})
+  const [shippingInfo, setShippingInfo] = useState<any>(null)
+  const [clientSecret, setClientSecret] = useState<string | null>(null)
   const router = useRouter()
   const { data: session } = useSession()
   const { state: cartState, dispatch: cartDispatch } = useCart()
 
-  const nextStep = () => setCurrentStep((prev) => Math.min(prev + 1, steps.length - 1))
-  const prevStep = () => setCurrentStep((prev) => Math.max(prev - 1, 0))
+  const total = cartState.items.reduce((sum, item) => sum + calculatePriceWithoutFees(item.price) * item.quantity, 0)
 
-  const handleShippingSubmit = (data: any) => {
+  // Load saved step on mount
+  useEffect(() => {
+    const savedStep = localStorage.getItem(STORAGE_KEY)
+    if (savedStep) {
+      setCurrentStep(Number.parseInt(savedStep))
+    }
+  }, [])
+
+  // Save current step whenever it changes
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, currentStep.toString())
+  }, [currentStep])
+
+  const nextStep = () => {
+    const nextStepIndex = Math.min(currentStep + 1, steps.length - 1)
+    setCurrentStep(nextStepIndex)
+  }
+
+  const prevStep = () => {
+    const prevStepIndex = Math.max(currentStep - 1, 0)
+    setCurrentStep(prevStepIndex)
+  }
+
+  const handleShippingSubmit = async (data: any) => {
     setShippingInfo(data)
-    nextStep()
-  }
-
-  const handlePaymentSubmit = (data: any) => {
-    setPaymentInfo(data)
-    nextStep()
-  }
-
-  const handlePlaceOrder = async () => {
-    // Here, you would implement the logic to process the payment
-    // using either Apple Pay or PayPal, depending on the selected method
-    const paymentMethod = paymentInfo.method
 
     try {
-      if (paymentMethod === "apple-pay") {
-        // Implement Apple Pay payment process
-        console.log("Processing Apple Pay payment")
-        // You would typically call your backend API to initiate the Apple Pay session
-      } else if (paymentMethod === "paypal") {
-        // Implement PayPal payment process
-        console.log("Processing PayPal payment")
-        // You would typically redirect to PayPal for payment or use PayPal's SDK
+      const response = await fetch("/api/create-payment-intent", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          items: cartState.items,
+          customer: {
+            ...data,
+            email: session?.user?.email,
+          },
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to create payment intent")
       }
 
-      // If payment is successful, clear the cart and redirect to success page
-      cartDispatch({ type: "CLEAR_CART" })
-      router.push("/checkout/success")
+      const { clientSecret: secret } = await response.json()
+      setClientSecret(secret)
+      nextStep()
     } catch (error) {
-      console.error("Payment failed:", error)
-      // Handle payment failure (show error message, etc.)
+      console.error("Error creating payment intent:", error)
+      toast({
+        title: "Error",
+        description: "Failed to process payment information. Please try again.",
+        variant: "destructive",
+      })
     }
+  }
+
+  const handlePaymentSuccess = () => {
+    // Clear checkout-related storage when payment is successful
+    localStorage.removeItem(STORAGE_KEY)
+    localStorage.removeItem("checkout_shipping_info")
+
+    cartDispatch({ type: "CLEAR_CART" })
+    router.push("/checkout/success")
   }
 
   return (
@@ -91,32 +124,19 @@ export function CheckoutFlow() {
         </div>
       </div>
 
-      {currentStep === 0 && <CartReview onNext={nextStep} />}
-      {currentStep === 1 && <ShippingForm onSubmit={handleShippingSubmit} />}
-      {currentStep === 2 && <PaymentForm onSubmit={handlePaymentSubmit} />}
-      {currentStep === 3 && (
-        <OrderSummary
-          shippingInfo={shippingInfo}
-          paymentInfo={paymentInfo}
-          cartItems={cartState.items}
-          onPlaceOrder={handlePlaceOrder}
-        />
-      )}
-
-      <div className="mt-8 flex justify-end gap-4">
-        {currentStep > 0 && (
-          <Button onClick={prevStep} variant="outline">
-            Back
-          </Button>
+      <div className="space-y-6">
+        {currentStep === 0 && <CartReview onNext={nextStep} />}
+        {currentStep === 1 && <ShippingForm onSubmit={handleShippingSubmit} />}
+        {currentStep === 2 && clientSecret && (
+          <PaymentForm clientSecret={clientSecret} total={total} onSuccess={handlePaymentSuccess} />
         )}
-        {currentStep < steps.length - 1 ? (
-          <Button onClick={nextStep} className="bg-primary">
-            Next
-          </Button>
-        ) : (
-          <Button onClick={handlePlaceOrder} className="bg-primary">
-            Place Order
-          </Button>
+
+        {currentStep > 0 && currentStep < steps.length - 1 && (
+          <div className="flex justify-start">
+            <Button onClick={prevStep} variant="outline">
+              Back
+            </Button>
+          </div>
         )}
       </div>
     </div>

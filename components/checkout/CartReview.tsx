@@ -2,6 +2,7 @@
 
 import { useCart } from "@/contexts/cart-context"
 import { CartItem } from "@/components/cart-item"
+import { Button } from "@/components/ui/button"
 import { calculatePriceWithoutFees } from "@/lib/price-calculator"
 
 interface CartReviewProps {
@@ -26,6 +27,11 @@ export function CartReview({ onNext }: CartReviewProps) {
           <div className="flex justify-between items-center text-lg">
             <span className="font-medium">Total:</span>
             <span className="font-bold">${total.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-end mt-6">
+            <Button onClick={onNext} disabled={state.items.length === 0}>
+              Next
+            </Button>
           </div>
         </div>
       )}
