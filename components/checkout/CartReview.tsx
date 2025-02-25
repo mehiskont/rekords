@@ -7,7 +7,9 @@ import { calculatePriceWithoutFees } from "@/lib/price-calculator"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
-import { useState } from "react"
+import { useState, useMemo } from "react"
+import Select from "react-select"
+import countryList from "react-select-country-list"
 
 interface CartReviewProps {
   onNext: () => void
@@ -18,10 +20,31 @@ export function CartReview({ onNext }: CartReviewProps) {
   const [shippingAddressSameAsBilling, setShippingAddressSameAsBilling] = useState(true)
   const [acceptTerms, setAcceptTerms] = useState(false)
   const [subscribe, setSubscribe] = useState(false)
+  const [billingCountry, setBillingCountry] = useState("")
+  const [shippingCountry, setShippingCountry] = useState("")
+
+  const countryOptions = useMemo(() => countryList().getData(), [])
 
   const subtotal = state.items.reduce((sum, item) => sum + calculatePriceWithoutFees(item.price) * item.quantity, 0)
   const vat = subtotal * 0.2 // 20% VAT
   const total = subtotal + vat
+
+  const customStyles = {
+    control: (provided: any) => ({
+      ...provided,
+      backgroundColor: "var(--background)",
+      borderColor: "var(--border)",
+    }),
+    menu: (provided: any) => ({
+      ...provided,
+      backgroundColor: "var(--background)",
+    }),
+    option: (provided: any, state: { isSelected: any; isFocused: any }) => ({
+      ...provided,
+      backgroundColor: state.isSelected ? "var(--primary)" : state.isFocused ? "var(--accent)" : "transparent",
+      color: state.isSelected ? "var(--primary-foreground)" : "var(--foreground)",
+    }),
+  }
 
   return (
     <div className="grid md:grid-cols-2 gap-8">
@@ -85,7 +108,14 @@ export function CartReview({ onNext }: CartReviewProps) {
               </div>
               <div>
                 <Label htmlFor="country">Country</Label>
-                <Input id="country" />
+                <Select
+                  options={countryOptions}
+                  value={countryOptions.find((option) => option.value === billingCountry)}
+                  onChange={(option: any) => setBillingCountry(option?.value)}
+                  styles={customStyles}
+                  className="react-select-container"
+                  classNamePrefix="react-select"
+                />
               </div>
             </div>
           </div>
@@ -120,7 +150,14 @@ export function CartReview({ onNext }: CartReviewProps) {
                 </div>
                 <div>
                   <Label htmlFor="shippingCountry">Country</Label>
-                  <Input id="shippingCountry" />
+                  <Select
+                    options={countryOptions}
+                    value={countryOptions.find((option) => option.value === shippingCountry)}
+                    onChange={(option: any) => setShippingCountry(option?.value)}
+                    styles={customStyles}
+                    className="react-select-container"
+                    classNamePrefix="react-select"
+                  />
                 </div>
               </div>
             </div>

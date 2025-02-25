@@ -87,6 +87,23 @@
   column-gap: 8px;
 }
 
-.grid-align-items-center { 
-  align-items: center; 
+.grid-align-items-center {
+  align-items: center;
 }
+
+.react-select-container .react-select__control {
+  @apply border-input bg-background hover:bg-accent;
+}
+
+.react-select-container .react-select__menu {
+  @apply bg-popover text-popover-foreground;
+}
+
+.react-select-container .react-select__option {
+  @apply hover:bg-accent hover:text-accent-foreground;
+}
+
+.react-select-container .react-select__single-value {
+  @apply text-foreground;
+}
+
