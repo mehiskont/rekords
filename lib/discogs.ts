@@ -5,6 +5,11 @@ import type { DiscogsRecord, DiscogsApiResponse, DiscogsInventoryOptions } from 
 const CACHE_TTL = 3600 // 1 hour
 const BASE_URL = "https://api.discogs.com"
 
+// Add this function near the top of the file
+function normalizeSearchTerm(term: string): string {
+  return term.toLowerCase().trim()
+}
+
 // Create a batch processor for shipping price requests
 const shippingPriceProcessor = new BatchProcessor<string, number>(
   async (listingIds) => {
@@ -149,7 +154,9 @@ export async function getDiscogsInventory(
 ): Promise<{ records: DiscogsRecord[]; totalPages: number }> {
   console.log("getDiscogsInventory called with:", { search, sort, page, perPage, options })
 
-  const cacheKey = `inventory:${search || "all"}:${sort || "default"}:${page}:${perPage}:${options.category || "all"}:${
+  const searchTerm = search ? normalizeSearchTerm(search) : undefined
+
+  const cacheKey = `inventory:${searchTerm || "all"}:${sort || "default"}:${page}:${perPage}:${options.category || "all"}:${
     options.sort || "default"
   }:${options.sort_order || "default"}`
 
@@ -169,6 +176,10 @@ export async function getDiscogsInventory(
       status: "For Sale",
     })
 
+    if (searchTerm) {
+      params.append("q", searchTerm)
+    }
+
     if (options.sort) {
       params.append("sort", options.sort)
     } else if (sort) {
@@ -186,10 +197,6 @@ export async function getDiscogsInventory(
       params.append("sort_order", options.sort_order)
     } else if (sort?.includes("desc")) {
       params.append("sort_order", "desc")
-    }
-
-    if (search) {
-      params.append("q", search)
     }
 
     const url = `${BASE_URL}/users/${process.env.DISCOGS_USERNAME}/inventory?${params.toString()}`
@@ -239,13 +246,29 @@ export async function getDiscogsInventory(
     )
 
     let filteredRecords = records
+    if (searchTerm) {
+      filteredRecords = records.filter((record) => {
+        const title = record.title.toLowerCase()
+        const artist = record.artist.toLowerCase()
+        const label = (record.label || "").toLowerCase()
+        const catalogNumber = (record.catalogNumber || "").toLowerCase()
+
+        return (
+          title.includes(searchTerm) ||
+          artist.includes(searchTerm) ||
+          label.includes(searchTerm) ||
+          catalogNumber.includes(searchTerm)
+        )
+      })
+    }
+
     if (options.category && options.category !== "everything") {
-      filteredRecords = filterRecordsByCategory(records, search || "", options.category)
+      filteredRecords = filterRecordsByCategory(filteredRecords, searchTerm || "", options.category)
     }
 
     const result = {
       records: filteredRecords,
-      totalPages: Math.ceil(data.pagination.items / perPage),
+      totalPages: Math.ceil(filteredRecords.length / perPage),
     }
 
     try {

@@ -15,8 +15,6 @@ interface SearchBarProps {
   initialCategory?: string
 }
 
-const CACHE_DURATION = 5 * 60 * 1000 // 5 minutes
-
 export function SearchBar({ initialQuery = "", initialCategory = "everything" }: SearchBarProps) {
   const router = useRouter()
   const [query, setQuery] = useState(initialQuery)
@@ -26,7 +24,6 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything" }:
   const [showResults, setShowResults] = useState(false)
   const searchRef = useRef<HTMLDivElement>(null)
   const debouncedQuery = useDebounce(query, 300)
-  const cacheRef = useRef<{ [key: string]: { data: DiscogsRecord[]; timestamp: number } }>({})
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -40,16 +37,9 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything" }:
   }, [])
 
   const fetchResults = useCallback(async () => {
-    if (!debouncedQuery) {
+    // Don't fetch if query is empty or too short
+    if (!debouncedQuery || debouncedQuery.length < 2) {
       setResults([])
-      return
-    }
-
-    const cacheKey = `${debouncedQuery}:${category}`
-    const cachedResult = cacheRef.current[cacheKey]
-
-    if (cachedResult && Date.now() - cachedResult.timestamp < CACHE_DURATION) {
-      setResults(cachedResult.data)
       return
     }
 
@@ -61,14 +51,21 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything" }:
         per_page: "20",
       })
 
-      const response = await fetch(`/api/search?${params}`)
-      if (!response.ok) throw new Error("Failed to fetch results")
+      console.log("Fetching search results:", `/api/search?${params.toString()}`)
+      const response = await fetch(`/api/search?${params.toString()}`)
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch results")
+      }
 
       const data = await response.json()
-      setResults(data.records)
+      console.log("Search results:", data)
 
-      // Update cache
-      cacheRef.current[cacheKey] = { data: data.records, timestamp: Date.now() }
+      if (data.error) {
+        throw new Error(data.error)
+      }
+
+      setResults(data.records)
     } catch (error) {
       console.error("Search error:", error)
       setResults([])
