@@ -12,13 +12,10 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { orderId, amount, customer } = await req.json()
+    const { amount, customer, items } = await req.json()
 
-    if (!orderId || !amount || !customer) {
-      return NextResponse.json(
-        { error: "Missing required fields: orderId, amount, or customer information" },
-        { status: 400 },
-      )
+    if (!amount || !customer) {
+      return NextResponse.json({ error: "Missing required fields: amount or customer information" }, { status: 400 })
     }
 
     // Create payment intent with the pre-calculated amount
@@ -29,8 +26,10 @@ export async function POST(req: Request) {
         enabled: true,
       },
       metadata: {
-        orderId,
         customerEmail: customer.email,
+        customerName: `${customer.firstName} ${customer.lastName}`,
+        customerAddress: `${customer.address}, ${customer.city}, ${customer.state} ${customer.postalCode}, ${customer.country}`,
+        items: JSON.stringify(items),
       },
     })
 

@@ -12,9 +12,22 @@ import { toast } from "@/components/ui/use-toast"
 const steps = ["DETAILS", "PAYMENT"]
 const STORAGE_KEY = "checkout_current_step"
 
+interface CustomerInfo {
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+  address: string
+  apartment?: string
+  city: string
+  state: string
+  postalCode: string
+  country: string
+}
+
 export function CheckoutFlow() {
   const [currentStep, setCurrentStep] = useState(0)
-  const [customerInfo, setCustomerInfo] = useState<any>(null)
+  const [customerInfo, setCustomerInfo] = useState<CustomerInfo | null>(null)
   const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
@@ -39,11 +52,25 @@ export function CheckoutFlow() {
     localStorage.setItem(STORAGE_KEY, currentStep.toString())
   }, [currentStep])
 
-  const handleDetailsSubmit = async (data: any) => {
+  const handleDetailsSubmit = async (data: CustomerInfo) => {
     setIsLoading(true)
     setCustomerInfo(data)
 
     try {
+      // Create a clean customer object for the API
+      const customerData = {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        email: session?.user?.email || data.email,
+        phone: data.phone,
+        address: data.address,
+        apartment: data.apartment,
+        city: data.city,
+        state: data.state,
+        postalCode: data.postalCode,
+        country: data.country,
+      }
+
       // Create payment intent
       const response = await fetch("/api/create-payment-intent", {
         method: "POST",
@@ -52,13 +79,13 @@ export function CheckoutFlow() {
         },
         body: JSON.stringify({
           amount: total,
-          customer: {
-            email: session?.user?.email || data.email,
-          },
-          metadata: {
-            items: JSON.stringify(cartState.items),
-            customer: JSON.stringify(data),
-          },
+          customer: customerData,
+          items: cartState.items.map((item) => ({
+            id: item.id,
+            title: item.title,
+            price: item.price,
+            quantity: item.quantity,
+          })),
         }),
       })
 
