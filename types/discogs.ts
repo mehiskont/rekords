@@ -3,6 +3,7 @@ export interface DiscogsRecord {
   title: string
   artist: string
   price: number
+  shipping_price?: number
   cover_image: string
   condition: string
   status: string
@@ -10,11 +11,32 @@ export interface DiscogsRecord {
   catalogNumber: string
   release: string
   styles?: string[]
-  format: string | string[]
+  format: string[]
   country?: string
   released?: string
   date_added: string
   genres: string[]
-  quantity_available: number // Add inventory quantity
+  quantity_available: number
+}
+
+export interface DiscogsApiResponse {
+  pagination: {
+    page: number
+    pages: number
+    per_page: number
+    items: number
+    urls: {
+      last?: string
+      next?: string
+    }
+  }
+  listings: any[]
+}
+
+export interface DiscogsInventoryOptions {
+  category?: string
+  sort?: string
+  sort_order?: string
+  fetchFullReleaseData?: boolean
 }
 

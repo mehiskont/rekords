@@ -11,7 +11,7 @@ import { PaymentForm } from "@/components/checkout/PaymentForm"
 import { calculatePriceWithoutFees } from "@/lib/price-calculator"
 import { toast } from "@/components/ui/use-toast"
 
-const steps = ["Cart Review", "Shipping", "Payment", "Summary"]
+const steps = ["Cart Review", "Shipping", "Payment"]
 const STORAGE_KEY = "checkout_current_step"
 
 export function CheckoutFlow() {
@@ -23,7 +23,10 @@ export function CheckoutFlow() {
   const { data: session } = useSession()
   const { state: cartState, dispatch: cartDispatch } = useCart()
 
-  const total = cartState.items.reduce((sum, item) => sum + calculatePriceWithoutFees(item.price) * item.quantity, 0)
+  // Calculate totals including shipping
+  const subtotal = cartState.items.reduce((sum, item) => sum + calculatePriceWithoutFees(item.price) * item.quantity, 0)
+  const shippingTotal = cartState.items.reduce((sum, item) => sum + (item.shipping_price || 0) * item.quantity, 0)
+  const total = subtotal + shippingTotal
 
   // Load saved step on mount
   useEffect(() => {
@@ -65,6 +68,9 @@ export function CheckoutFlow() {
             ...data,
             email: session?.user?.email || data.email,
           },
+          subtotal,
+          shippingTotal,
+          total,
         }),
       })
 
@@ -85,6 +91,10 @@ export function CheckoutFlow() {
           amount: total,
           customer: {
             email: session?.user?.email || data.email,
+          },
+          metadata: {
+            subtotal: subtotal.toFixed(2),
+            shipping: shippingTotal.toFixed(2),
           },
         }),
       })
@@ -113,12 +123,23 @@ export function CheckoutFlow() {
     localStorage.removeItem(STORAGE_KEY)
     localStorage.removeItem("checkout_shipping_info")
 
+    // Clear the cart
     cartDispatch({ type: "CLEAR_CART" })
+
+    // Redirect to success page
     router.push("/checkout/success")
   }
 
+  // If cart is empty and not in payment step, redirect to cart
+  useEffect(() => {
+    if (cartState.items.length === 0 && currentStep !== 2) {
+      router.push("/cart")
+    }
+  }, [cartState.items.length, currentStep, router])
+
   return (
     <div className="max-w-3xl mx-auto">
+      {/* Progress Steps */}
       <div className="mb-8">
         <div className="flex justify-between items-center">
           {steps.map((step, index) => (
@@ -150,15 +171,25 @@ export function CheckoutFlow() {
         </div>
       </div>
 
+      {/* Step Content */}
       <div className="space-y-6">
         {currentStep === 0 && <CartReview onNext={nextStep} />}
+
         {currentStep === 1 && (
           <ShippingForm onSubmit={handleShippingSubmit} isLoading={isLoading} initialData={shippingInfo} />
         )}
+
         {currentStep === 2 && clientSecret && (
-          <PaymentForm clientSecret={clientSecret} total={total} onSuccess={handlePaymentSuccess} />
+          <PaymentForm
+            clientSecret={clientSecret}
+            total={total}
+            subtotal={subtotal}
+            shipping={shippingTotal}
+            onSuccess={handlePaymentSuccess}
+          />
         )}
 
+        {/* Back Button */}
         {currentStep > 0 && currentStep < steps.length - 1 && (
           <div className="flex justify-start">
             <Button onClick={prevStep} variant="outline" disabled={isLoading}>
@@ -166,6 +197,25 @@ export function CheckoutFlow() {
             </Button>
           </div>
         )}
+      </div>
+
+      {/* Order Summary */}
+      <div className="mt-8 p-4 border rounded-lg bg-muted/50">
+        <h3 className="font-semibold mb-4">Order Summary</h3>
+        <div className="space-y-2">
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">Subtotal</span>
+            <span>${subtotal.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between text-sm">
+            <span className="text-muted-foreground">Shipping</span>
+            <span>${shippingTotal.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between font-semibold pt-2 border-t">
+            <span>Total</span>
+            <span>${total.toFixed(2)}</span>
+          </div>
+        </div>
       </div>
     </div>
   )

@@ -19,39 +19,56 @@ export async function GET(request: Request) {
     if (query) {
       const searchTerm = query.toLowerCase()
       filteredRecords = records.filter((record) => {
-        const isVariousArtist =
-          record.artist.toLowerCase() === "various" ||
-          record.artist.toLowerCase() === "various artists" ||
-          record.title.toLowerCase().includes("various")
+        // Safely check for undefined properties
+        const artist = record.artist?.toLowerCase() || ""
+        const title = record.title?.toLowerCase() || ""
+        const label = record.label?.toLowerCase() || ""
+        const catalogNumber = record.catalogNumber?.toLowerCase() || ""
+
+        const isVariousArtist = artist === "various" || artist === "various artists" || title.includes("various")
 
         switch (category) {
           case "artists":
             if (searchTerm === "various") {
               return isVariousArtist
             }
-            return record.artist.toLowerCase().includes(searchTerm)
+            return artist.includes(searchTerm)
           case "releases":
-            return record.title.toLowerCase().includes(searchTerm)
+            return title.includes(searchTerm)
           case "labels":
-            return record.label?.toLowerCase().includes(searchTerm)
+            return label.includes(searchTerm)
           default:
             // "everything" - search across all fields
             if (searchTerm === "various") {
               return isVariousArtist
             }
             return (
-              record.title.toLowerCase().includes(searchTerm) ||
-              record.artist.toLowerCase().includes(searchTerm) ||
-              record.label?.toLowerCase().includes(searchTerm) ||
-              record.catalogNumber?.toLowerCase().includes(searchTerm)
+              title.includes(searchTerm) ||
+              artist.includes(searchTerm) ||
+              label.includes(searchTerm) ||
+              catalogNumber.includes(searchTerm)
             )
         }
       })
     }
 
+    // After fetching records from getDiscogsInventory
+    console.log("Search results:", filteredRecords.slice(0, 3)) // Log first 3 records for debugging
+
+    // Validate records before returning
+    const validatedRecords = filteredRecords
+      .filter((record) => record && typeof record.price === "number")
+      .map((record) => ({
+        ...record,
+        price: record.price || 0,
+        condition: record.condition || "Unknown",
+        label: record.label || "Unknown Label",
+        catalogNumber: record.catalogNumber || "",
+      }))
+
     return NextResponse.json({
-      records: filteredRecords.slice(0, perPage),
-      totalPages: Math.ceil(filteredRecords.length / perPage),
+      records: validatedRecords.slice(0, perPage),
+      totalPages: Math.ceil(validatedRecords.length / perPage),
     })
   } catch (error) {
     console.error("Search error:", error)

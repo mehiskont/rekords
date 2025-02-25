@@ -18,6 +18,11 @@ interface RecordCardProps {
 }
 
 export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps) {
+  // Safeguard against undefined record.price
+  if (!record || typeof record.price !== "number") {
+    return null
+  }
+
   const price = calculatePriceWithoutFees(record.price)
 
   // Safeguard against undefined cartState

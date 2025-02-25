@@ -27,7 +27,9 @@ export function SearchResults({ results, isLoading, query, category, onClose }: 
         <>
           <div className="max-h-[400px] overflow-y-auto">
             {displayResults.map((record) => {
-              const labelDisplay = record.label + (record.catalogNumber ? ` [${record.catalogNumber}]` : "")
+              const labelDisplay = record.label
+                ? record.label + (record.catalogNumber ? ` [${record.catalogNumber}]` : "")
+                : "Unknown Label"
               return (
                 <Link
                   key={record.id}
@@ -49,8 +51,8 @@ export function SearchResults({ results, isLoading, query, category, onClose }: 
                     <p className="text-xs text-muted-foreground truncate">{labelDisplay}</p>
                   </div>
                   <div className="text-right">
-                    <div className="font-medium">${record.price.toFixed(2)}</div>
-                    <div className="text-sm text-muted-foreground">{record.condition}</div>
+                    <div className="font-medium">${(record.price || 0).toFixed(2)}</div>
+                    <div className="text-sm text-muted-foreground">{record.condition || "Unknown"}</div>
                   </div>
                 </Link>
               )

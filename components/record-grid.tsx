@@ -1,4 +1,5 @@
 import { getDiscogsInventory } from "@/lib/discogs"
+import { serializeForClient } from "@/lib/utils"
 import { ApiUnavailable } from "@/components/api-unavailable"
 import { ClientRecordCard } from "@/components/client-record-card"
 
@@ -14,18 +15,25 @@ export async function RecordGrid({ searchParams = {} }: RecordGridProps) {
   const perPage = 20
 
   try {
+    console.log("Fetching records with params:", { search, category, sort, page, perPage })
     const { records } = await getDiscogsInventory(search, sort, page, perPage, {
       category,
-      fetchFullReleaseData: true, // Add this to ensure we get catalog numbers
+      fetchFullReleaseData: true,
     })
 
-    if (records.length === 0) {
+    console.log("Received records:", records.slice(0, 2)) // Log first two records for debugging
+
+    if (!records || records.length === 0) {
       return <p className="text-center text-lg">No records found.</p>
     }
 
+    // Serialize records before passing to client component
+    const serializedRecords = records.map((record) => serializeForClient(record))
+    console.log("Serialized records:", serializedRecords.slice(0, 2)) // Log serialized records
+
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {records.map((record) => (
+        {serializedRecords.map((record) => (
           <ClientRecordCard key={record.id} record={record} />
         ))}
       </div>

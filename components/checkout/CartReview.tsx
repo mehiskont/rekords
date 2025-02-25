@@ -12,7 +12,9 @@ interface CartReviewProps {
 export function CartReview({ onNext }: CartReviewProps) {
   const { state } = useCart()
 
-  const total = state.items.reduce((sum, item) => sum + calculatePriceWithoutFees(item.price) * item.quantity, 0)
+  const subtotal = state.items.reduce((sum, item) => sum + calculatePriceWithoutFees(item.price) * item.quantity, 0)
+  const shippingTotal = state.items.reduce((sum, item) => sum + (item.shipping_price || 0) * item.quantity, 0)
+  const total = subtotal + shippingTotal
 
   return (
     <div>
@@ -24,9 +26,19 @@ export function CartReview({ onNext }: CartReviewProps) {
           {state.items.map((item) => (
             <CartItem key={item.id} item={item} />
           ))}
-          <div className="flex justify-between items-center text-lg">
-            <span className="font-medium">Total:</span>
-            <span className="font-bold">${total.toFixed(2)}</span>
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Subtotal</span>
+              <span>${subtotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between text-sm">
+              <span className="text-muted-foreground">Shipping</span>
+              <span>${shippingTotal.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between items-center text-lg font-bold pt-2 border-t">
+              <span>Total</span>
+              <span>${total.toFixed(2)}</span>
+            </div>
           </div>
           <div className="flex justify-end mt-6">
             <Button onClick={onNext} disabled={state.items.length === 0}>
