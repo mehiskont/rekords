@@ -6,7 +6,10 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test:db": "node -r dotenv/config scripts/verify-db.js",
+    "test:connections": "node -r dotenv/config scripts/test-connections.js",
+    "test:final": "node -r dotenv/config scripts/verify-final.js"
   },
   "dependencies": {
     "@auth/core": "latest",
