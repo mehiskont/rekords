@@ -3,7 +3,7 @@
 import type React from "react"
 import { useState } from "react"
 import { loadStripe } from "@stripe/stripe-js"
-import { Elements, PaymentElement, useStripe, useElements, LinkAuthenticationElement } from "@stripe/react-stripe-js"
+import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js"
 import { Button } from "@/components/ui/button"
 import { Loader2 } from "lucide-react"
 
@@ -57,7 +57,6 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <LinkAuthenticationElement />
       <PaymentElement />
       {error && <p className="text-sm text-red-500">{error}</p>}
       <div className="mt-6">
