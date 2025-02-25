@@ -4,6 +4,10 @@ resend emails
 
 
 
+
+ngrok http 3000   
+
+
 # Test all connection configurations
 npm run test:connections
 

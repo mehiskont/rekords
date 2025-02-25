@@ -13,8 +13,6 @@ export function Cart() {
   const { state, dispatch } = useCart()
 
   const subtotal = state.items.reduce((sum, item) => sum + calculatePriceWithoutFees(item.price) * item.quantity, 0)
-  const shippingTotal = state.items.reduce((sum, item) => sum + (item.shipping_price || 0) * item.quantity, 0)
-  const total = subtotal + shippingTotal
 
   const handleCheckout = () => {
     dispatch({ type: "TOGGLE_CART" })
@@ -53,11 +51,14 @@ export function Cart() {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-muted-foreground">Shipping</span>
-                  <span>${shippingTotal.toFixed(2)}</span>
+                  <span>Calculated at checkout</span>
                 </div>
                 <div className="flex justify-between font-bold">
                   <span>Total</span>
-                  <span>${total.toFixed(2)}</span>
+                  <div className="text-right">
+                    <div>${subtotal.toFixed(2)}</div>
+                    <div className="text-xs text-muted-foreground">+ Shipping</div>
+                  </div>
                 </div>
               </div>
               {session ? (

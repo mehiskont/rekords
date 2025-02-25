@@ -15,7 +15,6 @@ interface CartItemProps {
 export function CartItem({ item }: CartItemProps) {
   const { dispatch } = useCart()
   const price = calculatePriceWithoutFees(item.price)
-  const shippingPrice = item.shipping_price || 0
 
   const handleQuantityChange = (newQuantity: number) => {
     if (newQuantity > item.quantity_available) {
@@ -46,7 +45,6 @@ export function CartItem({ item }: CartItemProps) {
         <h3 className="font-medium line-clamp-1">{item.title}</h3>
         <div className="text-sm space-y-1">
           <p className="text-muted-foreground">Price: ${price.toFixed(2)}</p>
-          <p className="text-muted-foreground">Shipping: ${shippingPrice.toFixed(2)}</p>
         </div>
         <div className="flex items-center gap-2 mt-2">
           <Button

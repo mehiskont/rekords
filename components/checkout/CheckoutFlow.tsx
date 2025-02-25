@@ -5,27 +5,26 @@ import { useRouter } from "next/navigation"
 import { useSession } from "next-auth/react"
 import { useCart } from "@/contexts/cart-context"
 import { CartReview } from "@/components/checkout/CartReview"
-import { ShippingForm } from "@/components/checkout/ShippingForm"
 import { PaymentForm } from "@/components/checkout/PaymentForm"
 import { calculatePriceWithoutFees } from "@/lib/price-calculator"
 import { toast } from "@/components/ui/use-toast"
 
-const steps = ["DETAILS", "SHIPPING", "PAYMENT"]
+const steps = ["DETAILS", "PAYMENT"]
 const STORAGE_KEY = "checkout_current_step"
 
 export function CheckoutFlow() {
   const [currentStep, setCurrentStep] = useState(0)
-  const [shippingInfo, setShippingInfo] = useState<any>(null)
+  const [customerInfo, setCustomerInfo] = useState<any>(null)
   const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { data: session } = useSession()
   const { state: cartState, dispatch: cartDispatch } = useCart()
 
-  // Calculate totals including shipping
+  // Calculate totals
   const subtotal = cartState.items.reduce((sum, item) => sum + calculatePriceWithoutFees(item.price) * item.quantity, 0)
-  const shippingTotal = cartState.items.reduce((sum, item) => sum + (item.shipping_price || 0) * item.quantity, 0)
-  const total = subtotal + shippingTotal
+  const vat = subtotal * 0.2 // 20% VAT
+  const total = subtotal + vat
 
   // Load saved step on mount
   useEffect(() => {
@@ -40,19 +39,9 @@ export function CheckoutFlow() {
     localStorage.setItem(STORAGE_KEY, currentStep.toString())
   }, [currentStep])
 
-  const nextStep = () => {
-    const nextStepIndex = Math.min(currentStep + 1, steps.length - 1)
-    setCurrentStep(nextStepIndex)
-  }
-
-  const prevStep = () => {
-    const prevStepIndex = Math.max(currentStep - 1, 0)
-    setCurrentStep(prevStepIndex)
-  }
-
-  const handleShippingSubmit = async (data: any) => {
+  const handleDetailsSubmit = async (data: any) => {
     setIsLoading(true)
-    setShippingInfo(data)
+    setCustomerInfo(data)
 
     try {
       // Create payment intent
@@ -68,7 +57,7 @@ export function CheckoutFlow() {
           },
           metadata: {
             items: JSON.stringify(cartState.items),
-            shipping: JSON.stringify(data),
+            customer: JSON.stringify(data),
           },
         }),
       })
@@ -79,7 +68,7 @@ export function CheckoutFlow() {
 
       const { clientSecret } = await response.json()
       setClientSecret(clientSecret)
-      nextStep()
+      setCurrentStep(1) // Move to payment step
     } catch (error) {
       console.error("Error creating payment intent:", error)
       toast({
@@ -95,7 +84,7 @@ export function CheckoutFlow() {
   const handlePaymentSuccess = () => {
     // Clear checkout-related storage
     localStorage.removeItem(STORAGE_KEY)
-    localStorage.removeItem("checkout_shipping_info")
+    localStorage.removeItem("checkout_customer_info")
 
     // Clear the cart
     cartDispatch({ type: "CLEAR_CART" })
@@ -106,7 +95,7 @@ export function CheckoutFlow() {
 
   // If cart is empty and not in payment step, redirect to cart
   useEffect(() => {
-    if (cartState.items.length === 0 && currentStep !== 2) {
+    if (cartState.items.length === 0 && currentStep !== 1) {
       router.push("/cart")
     }
   }, [cartState.items.length, currentStep, router])
@@ -140,16 +129,15 @@ export function CheckoutFlow() {
 
       {/* Step Content */}
       <div className="mt-8">
-        {currentStep === 0 && <CartReview onNext={nextStep} />}
-        {currentStep === 1 && (
-          <ShippingForm onSubmit={handleShippingSubmit} isLoading={isLoading} initialData={shippingInfo} />
+        {currentStep === 0 && (
+          <CartReview onNext={handleDetailsSubmit} isLoading={isLoading} initialData={customerInfo} />
         )}
-        {currentStep === 2 && clientSecret && (
+        {currentStep === 1 && clientSecret && (
           <PaymentForm
             clientSecret={clientSecret}
             total={total}
             subtotal={subtotal}
-            shipping={shippingTotal}
+            vat={vat}
             onSuccess={handlePaymentSuccess}
           />
         )}
