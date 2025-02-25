@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server"
 import Stripe from "stripe"
-import { calculatePriceWithoutFees } from "@/lib/price-calculator"
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "", {
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
 })
 
@@ -13,31 +12,24 @@ export async function POST(req: Request) {
   }
 
   try {
-    const { items, customer } = await req.json()
+    const { orderId, amount, customer } = await req.json()
 
-    // Calculate total amount
-    const amount = items.reduce(
-      (sum: number, item: any) => sum + Math.round(calculatePriceWithoutFees(item.price) * 100) * item.quantity,
-      0,
-    )
+    if (!orderId || !amount || !customer) {
+      return NextResponse.json(
+        { error: "Missing required fields: orderId, amount, or customer information" },
+        { status: 400 },
+      )
+    }
 
-    // Prepare minimal metadata
-    const minimalItems = items.map((item: any) => ({
-      id: item.id,
-      title: item.title,
-      quantity: item.quantity,
-      price: item.price,
-    }))
-
-    // Create payment intent
+    // Create payment intent with the pre-calculated amount
     const paymentIntent = await stripe.paymentIntents.create({
-      amount,
+      amount: Math.round(amount * 100), // Convert to cents
       currency: "usd",
       automatic_payment_methods: {
         enabled: true,
       },
       metadata: {
-        items: JSON.stringify(minimalItems).slice(0, 500), // Limit to 500 characters
+        orderId,
         customerEmail: customer.email,
       },
     })
@@ -47,7 +39,10 @@ export async function POST(req: Request) {
     })
   } catch (error) {
     console.error("Error creating payment intent:", error)
-    return NextResponse.json({ error: "Failed to create payment intent" }, { status: 500 })
+    return NextResponse.json(
+      { error: "Failed to create payment intent", details: error instanceof Error ? error.message : String(error) },
+      { status: 500 },
+    )
   }
 }
 

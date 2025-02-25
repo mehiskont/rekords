@@ -18,6 +18,7 @@ export function CheckoutFlow() {
   const [currentStep, setCurrentStep] = useState(0)
   const [shippingInfo, setShippingInfo] = useState<any>(null)
   const [clientSecret, setClientSecret] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { data: session } = useSession()
   const { state: cartState, dispatch: cartDispatch } = useCart()
@@ -48,6 +49,7 @@ export function CheckoutFlow() {
   }
 
   const handleShippingSubmit = async (data: any) => {
+    setIsLoading(true)
     setShippingInfo(data)
 
     try {
@@ -61,7 +63,7 @@ export function CheckoutFlow() {
           items: cartState.items,
           customer: {
             ...data,
-            email: session?.user?.email,
+            email: session?.user?.email || data.email,
           },
         }),
       })
@@ -101,6 +103,8 @@ export function CheckoutFlow() {
         description: "Failed to process order. Please try again.",
         variant: "destructive",
       })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -148,14 +152,16 @@ export function CheckoutFlow() {
 
       <div className="space-y-6">
         {currentStep === 0 && <CartReview onNext={nextStep} />}
-        {currentStep === 1 && <ShippingForm onSubmit={handleShippingSubmit} />}
+        {currentStep === 1 && (
+          <ShippingForm onSubmit={handleShippingSubmit} isLoading={isLoading} initialData={shippingInfo} />
+        )}
         {currentStep === 2 && clientSecret && (
           <PaymentForm clientSecret={clientSecret} total={total} onSuccess={handlePaymentSuccess} />
         )}
 
         {currentStep > 0 && currentStep < steps.length - 1 && (
           <div className="flex justify-start">
-            <Button onClick={prevStep} variant="outline">
+            <Button onClick={prevStep} variant="outline" disabled={isLoading}>
               Back
             </Button>
           </div>

@@ -7,9 +7,11 @@ import * as z from "zod"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button"
+import { Loader2 } from "lucide-react"
 
 const shippingSchema = z.object({
   fullName: z.string().min(2, "Full name is required"),
+  email: z.string().email("Valid email is required"),
   address: z.string().min(5, "Address is required"),
   city: z.string().min(2, "City is required"),
   country: z.string().min(2, "Country is required"),
@@ -20,11 +22,13 @@ type ShippingFormValues = z.infer<typeof shippingSchema>
 
 interface ShippingFormProps {
   onSubmit: (data: ShippingFormValues) => void
+  isLoading?: boolean
+  initialData?: Partial<ShippingFormValues>
 }
 
 const STORAGE_KEY = "checkout_shipping_info"
 
-export function ShippingForm({ onSubmit }: ShippingFormProps) {
+export function ShippingForm({ onSubmit, isLoading = false, initialData }: ShippingFormProps) {
   const {
     register,
     handleSubmit,
@@ -32,16 +36,20 @@ export function ShippingForm({ onSubmit }: ShippingFormProps) {
     reset,
   } = useForm<ShippingFormValues>({
     resolver: zodResolver(shippingSchema),
-    mode: "onChange", // Enable real-time validation
+    mode: "onChange",
   })
 
   // Load saved form data on mount
   useEffect(() => {
-    const savedData = localStorage.getItem(STORAGE_KEY)
-    if (savedData) {
-      reset(JSON.parse(savedData))
+    if (initialData) {
+      reset(initialData)
+    } else {
+      const savedData = localStorage.getItem(STORAGE_KEY)
+      if (savedData) {
+        reset(JSON.parse(savedData))
+      }
     }
-  }, [reset])
+  }, [reset, initialData])
 
   const onSubmitForm = (data: ShippingFormValues) => {
     // Save form data to localStorage
@@ -57,6 +65,12 @@ export function ShippingForm({ onSubmit }: ShippingFormProps) {
         <Label htmlFor="fullName">Full Name</Label>
         <Input id="fullName" {...register("fullName")} />
         {errors.fullName && <p className="text-sm text-red-500">{errors.fullName.message}</p>}
+      </div>
+
+      <div>
+        <Label htmlFor="email">Email</Label>
+        <Input id="email" type="email" {...register("email")} />
+        {errors.email && <p className="text-sm text-red-500">{errors.email.message}</p>}
       </div>
 
       <div>
@@ -84,8 +98,15 @@ export function ShippingForm({ onSubmit }: ShippingFormProps) {
       </div>
 
       <div className="flex justify-end gap-4 mt-6">
-        <Button type="submit" disabled={!isValid}>
-          Next
+        <Button type="submit" disabled={!isValid || isLoading}>
+          {isLoading ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Processing...
+            </>
+          ) : (
+            "Next"
+          )}
         </Button>
       </div>
     </form>

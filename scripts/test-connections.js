@@ -16,20 +16,6 @@ async function testConnection() {
     console.log("✕ Basic connection failed:", error.message)
   }
 
-  // Test 2: Connection with minimal pool
-  try {
-    const prisma2 = new PrismaClient({
-      datasourceUrl: process.env.DATABASE_URL,
-      log: ["query", "info", "warn", "error"],
-      connectionLimit: 1,
-    })
-    await prisma2.$connect()
-    console.log("✓ Minimal pool connection successful")
-    await prisma2.$disconnect()
-  } catch (error) {
-    console.log("✕ Minimal pool connection failed:", error.message)
-  }
-
   // Test 3: Try direct URL with pgbouncer parameter
   try {
     const modifiedDirectUrl = process.env.DIRECT_URL + "?pgbouncer=true"
