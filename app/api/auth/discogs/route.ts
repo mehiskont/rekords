@@ -3,6 +3,15 @@ import { getRequestToken } from "@/lib/discogs-auth"
 
 export async function GET(request: Request) {
   try {
+    // Validate environment variables
+    if (!process.env.DISCOGS_CONSUMER_KEY || !process.env.DISCOGS_CONSUMER_SECRET) {
+      console.error("Missing Discogs API credentials")
+      return NextResponse.json(
+        { error: "Discogs API is not properly configured. Please check your environment variables." },
+        { status: 500 },
+      )
+    }
+
     const { searchParams } = new URL(request.url)
     const callbackUrl = searchParams.get("callbackUrl")
 
@@ -12,8 +21,7 @@ export async function GET(request: Request) {
 
     const { oauth_token, oauth_token_secret } = await getRequestToken(callbackUrl)
 
-    // Store the token secret temporarily (you should use a more secure method in production)
-    // For example, you could use a server-side session or a secure cookie
+    // Store the token secret temporarily
     const response = NextResponse.json({ oauth_token })
     response.cookies.set("oauth_token_secret", oauth_token_secret, {
       httpOnly: true,
@@ -25,7 +33,13 @@ export async function GET(request: Request) {
     return response
   } catch (error) {
     console.error("Discogs auth error:", error)
-    return NextResponse.json({ error: "Failed to initialize Discogs authentication" }, { status: 500 })
+    return NextResponse.json(
+      {
+        error: "Failed to initialize Discogs authentication",
+        details: error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 },
+    )
   }
 }
 

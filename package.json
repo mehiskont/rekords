@@ -62,6 +62,7 @@
     "next-auth": "latest",
     "next-themes": "latest",
     "nodemailer": "latest",
+    "oauth-1.0a": "^2.2.6",
     "prisma": "latest",
     "react": "^18",
     "react-day-picker": "8.10.1",
