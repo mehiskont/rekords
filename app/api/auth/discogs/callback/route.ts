@@ -11,18 +11,31 @@ export async function GET(request: Request) {
     const cookieStore = cookies()
     const oauth_token_secret = cookieStore.get("oauth_token_secret")?.value
 
+    console.log("Callback received:", {
+      oauth_token,
+      oauth_verifier,
+      hasTokenSecret: !!oauth_token_secret,
+    })
+
     if (!oauth_token || !oauth_verifier || !oauth_token_secret) {
-      return NextResponse.json({ error: "Invalid OAuth callback" }, { status: 400 })
+      console.error("Missing OAuth parameters:", {
+        oauth_token,
+        oauth_verifier,
+        hasTokenSecret: !!oauth_token_secret,
+      })
+      return NextResponse.redirect(new URL("/dashboard/settings?error=Invalid OAuth callback parameters", request.url))
     }
 
     // Get access token
+    console.log("Getting access token...")
     const { access_token, access_token_secret } = await getAccessToken(oauth_token, oauth_token_secret, oauth_verifier)
 
+    console.log("Access token received, verifying identity...")
     // Verify the identity to ensure we have the correct permissions
     const identity = await verifyIdentity(access_token, access_token_secret)
 
+    console.log("Identity verified, storing in database:", identity.username)
     // Store the access token securely
-    // In a real application, you should encrypt these tokens before storing them
     await prisma.discogsAuth.upsert({
       where: { username: identity.username },
       update: {
@@ -39,13 +52,20 @@ export async function GET(request: Request) {
     })
 
     // Clear the temporary oauth_token_secret cookie
-    const response = NextResponse.redirect(new URL("/dashboard/settings", request.url))
+    const response = NextResponse.redirect(new URL("/dashboard/settings?success=true", request.url))
     response.cookies.delete("oauth_token_secret")
 
     return response
   } catch (error) {
     console.error("Discogs callback error:", error)
-    return NextResponse.redirect(new URL("/dashboard/settings?error=Failed to authenticate with Discogs", request.url))
+    return NextResponse.redirect(
+      new URL(
+        `/dashboard/settings?error=${encodeURIComponent(
+          error instanceof Error ? error.message : "Failed to authenticate with Discogs",
+        )}`,
+        request.url,
+      ),
+    )
   }
 }
 
