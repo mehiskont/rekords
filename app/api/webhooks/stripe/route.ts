@@ -11,6 +11,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
 
 export async function POST(req: Request) {
+  log("Webhook received")
   const body = await req.text()
   const signature = headers().get("stripe-signature") as string
 
@@ -20,12 +21,11 @@ export async function POST(req: Request) {
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : "Unknown error"
-    log(`❌ Error message: ${errorMessage}`, "error")
+    log(`❌ Webhook Error: ${errorMessage}`, "error")
     return NextResponse.json({ message: `Webhook Error: ${errorMessage}` }, { status: 400 })
   }
 
-  log(`✅ Success: ${event.id}`)
-  log(`Event Type: ${event.type}`)
+  log(`✅ Webhook event received: ${event.type}`)
 
   if (event.type === "payment_intent.succeeded") {
     const paymentIntent = event.data.object as Stripe.PaymentIntent
@@ -64,6 +64,6 @@ export async function POST(req: Request) {
     }
   }
 
-  return NextResponse.json({ message: "Received" }, { status: 200 })
+  return NextResponse.json({ message: "Webhook processed successfully" }, { status: 200 })
 }
 
