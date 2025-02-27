@@ -3,6 +3,8 @@ import OAuth from "oauth-1.0a"
 import crypto from "crypto"
 
 const DISCOGS_API_URL = "https://api.discogs.com"
+const MAX_RETRIES = 3
+const RETRY_DELAY = 1000 // 1 second
 
 // Update the OAuth configuration to use new environment variable names
 const oauth = new OAuth({
@@ -16,6 +18,10 @@ const oauth = new OAuth({
   },
 })
 
+async function delay(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
+
 export async function getSellerToken(username: string = process.env.DISCOGS_USERNAME!) {
   try {
     const auth = await prisma.discogsAuth.findUnique({
@@ -26,12 +32,9 @@ export async function getSellerToken(username: string = process.env.DISCOGS_USER
       throw new Error("No Discogs authentication found")
     }
 
-    // Check if token needs to be refreshed (optional)
+    // Check if token needs to be refreshed
     if (auth.lastVerified < new Date(Date.now() - 24 * 60 * 60 * 1000)) {
-      // Token is older than 24 hours, verify it's still valid
       await verifySellerToken(auth.accessToken, auth.accessTokenSecret)
-
-      // Update lastVerified timestamp
       await prisma.discogsAuth.update({
         where: { username },
         data: { lastVerified: new Date() },
@@ -75,7 +78,7 @@ async function verifySellerToken(accessToken: string, accessTokenSecret: string)
   return true
 }
 
-export async function deleteDiscogsListing(listingId: string) {
+export async function deleteDiscogsListing(listingId: string, retryCount = 0): Promise<boolean> {
   try {
     const { accessToken, accessTokenSecret } = await getSellerToken()
 
@@ -99,26 +102,60 @@ export async function deleteDiscogsListing(listingId: string) {
       },
     })
 
+    // Log the response for debugging
+    console.log("Discogs delete response:", {
+      listingId,
+      status: response.status,
+      statusText: response.statusText,
+      timestamp: new Date().toISOString(),
+    })
+
+    if (response.status === 404) {
+      console.log(`Listing ${listingId} already deleted or not found`)
+      return true
+    }
+
     if (!response.ok) {
-      throw new Error(`Failed to delete listing: ${response.statusText}`)
+      // If we get a rate limit response, retry after delay
+      if (response.status === 429 && retryCount < MAX_RETRIES) {
+        const retryAfter = Number.parseInt(response.headers.get("Retry-After") || "1", 10)
+        await delay(retryAfter * 1000)
+        return deleteDiscogsListing(listingId, retryCount + 1)
+      }
+
+      throw new Error(`Failed to delete listing: ${response.status} ${response.statusText}`)
     }
 
     return true
   } catch (error) {
     console.error(`Error deleting Discogs listing ${listingId}:`, error)
+
+    // Retry on failure if we haven't exceeded max retries
+    if (retryCount < MAX_RETRIES) {
+      console.log(`Retrying delete for listing ${listingId} (attempt ${retryCount + 1}/${MAX_RETRIES})`)
+      await delay(RETRY_DELAY * Math.pow(2, retryCount))
+      return deleteDiscogsListing(listingId, retryCount + 1)
+    }
+
     throw error
   }
 }
 
-// Update this function to use seller token when needed
-export async function removeFromDiscogsInventory(listingId: string) {
+export async function removeFromDiscogsInventory(listingId: string): Promise<boolean> {
   try {
-    await deleteDiscogsListing(listingId)
-    console.log(`Successfully removed listing ${listingId} from Discogs inventory`)
-    return true
+    console.log(`Attempting to remove listing ${listingId} from Discogs inventory`)
+    const success = await deleteDiscogsListing(listingId)
+
+    if (success) {
+      console.log(`Successfully removed listing ${listingId} from Discogs inventory`)
+      return true
+    } else {
+      console.error(`Failed to remove listing ${listingId} from Discogs inventory`)
+      return false
+    }
   } catch (error) {
-    console.error(`Failed to remove listing ${listingId} from Discogs inventory:`, error)
-    // You might want to implement retry logic or queue failed deletions for later
+    console.error(`Error removing listing ${listingId} from Discogs inventory:`, error)
+    // You might want to implement a notification system or queue failed deletions for later
     return false
   }
 }

@@ -14,13 +14,37 @@ export async function POST(req: Request) {
   try {
     const { amount, customer, items } = await req.json()
 
-    if (!amount || !customer) {
-      return NextResponse.json({ error: "Missing required fields: amount or customer information" }, { status: 400 })
+    if (!amount || !customer || !items) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
-    // Create payment intent with the pre-calculated amount
+    console.log("Creating payment intent with items:", JSON.stringify(items))
+
+    // Create products for each item
+    const lineItems = await Promise.all(
+      items.map(async (item: any) => {
+        const product = await stripe.products.create({
+          name: item.title,
+          metadata: {
+            discogs_id: item.id.toString(),
+          },
+        })
+
+        const price = await stripe.prices.create({
+          product: product.id,
+          unit_amount: Math.round(item.price * 100),
+          currency: "usd",
+        })
+
+        return {
+          price: price.id,
+          quantity: item.quantity,
+        }
+      }),
+    )
+
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(amount * 100), // Convert to cents
+      amount: Math.round(amount * 100),
       currency: "usd",
       automatic_payment_methods: {
         enabled: true,
@@ -29,8 +53,21 @@ export async function POST(req: Request) {
         customerEmail: customer.email,
         customerName: `${customer.firstName} ${customer.lastName}`,
         customerAddress: `${customer.address}, ${customer.city}, ${customer.state} ${customer.postalCode}, ${customer.country}`,
-        items: JSON.stringify(items),
+        items: JSON.stringify(
+          items.map((item) => ({
+            id: item.id,
+            title: item.title,
+            price: item.price,
+            quantity: item.quantity,
+          })),
+        ),
       },
+    })
+
+    console.log("Payment intent created:", {
+      id: paymentIntent.id,
+      amount: paymentIntent.amount,
+      items: items.length,
     })
 
     return NextResponse.json({

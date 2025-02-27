@@ -1,0 +1,1092 @@
+[2025-02-27T15:12:53.255Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:53.905Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:53.905Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:54.022Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:54.268Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:54.369Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:54.369Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:54.398Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:54.517Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:54.617Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:54.748Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:54.758Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:54.758Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:54.782Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:54.782Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:54.873Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:54.996Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:55.092Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:55.092Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:55.118Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:55.189Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:55.189Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:55.190Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:55.190Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:55.217Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:55.245Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:55.245Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:55.307Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:55.307Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:55.322Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:55.418Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:55.495Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:55.495Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:55.520Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:55.524Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:55.524Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:55.640Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:55.716Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:55.716Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:55.733Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:55.733Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:55.744Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:55.864Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:55.866Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:55.866Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:55.961Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:55.961Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:55.988Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:56.080Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:56.081Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:56.105Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:56.200Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:56.201Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:56.226Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:56.320Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:56.321Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:56.346Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:56.447Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:56.447Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:56.476Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:56.567Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:56.567Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:56.593Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:56.685Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:56.685Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:56.712Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:56.806Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:56.806Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:56.832Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:56.924Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:56.925Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:56.950Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:57.043Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:57.043Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:57.070Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:57.163Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:57.163Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:57.190Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:57.299Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:57.300Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:57.366Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:57.372Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:57.372Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:57.396Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:57.484Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:57.491Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:57.492Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:57.588Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:57.687Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:57.687Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:57.704Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:57.704Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:57.719Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:57.804Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:57.805Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:57.831Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:57.946Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:57.946Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:57.949Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:58.048Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:58.048Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:58.074Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:58.194Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:58.194Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:58.258Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:58.275Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:58.275Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:58.287Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:58.375Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:58.375Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:58.378Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:58.480Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:58.596Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:58.596Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:58.603Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:58.603Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:58.607Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:58.706Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:58.706Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:58.734Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:58.827Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:58.827Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:58.857Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:58.950Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:58.950Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:58.979Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:59.070Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:59.070Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:59.098Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:59.174Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:59.174Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:59.202Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:59.311Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:59.311Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:59.324Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:59.421Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:59.421Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:59.449Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:59.539Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:59.539Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:59.579Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:59.657Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:59.657Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:59.685Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:59.792Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:59.792Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:59.804Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:12:59.905Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:12:59.905Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:12:59.936Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:00.024Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:00.025Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:00.054Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:00.143Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:00.144Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:00.174Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:00.277Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:00.277Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:00.291Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:00.425Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:00.427Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:00.428Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:00.515Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:00.515Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:00.553Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:00.636Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:00.636Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:00.667Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:00.757Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:00.757Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:00.787Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:00.907Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:01.007Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:01.007Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:01.035Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:01.070Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:01.071Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:01.128Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:01.128Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:01.160Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:01.230Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:01.230Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:01.272Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:01.356Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:01.356Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:01.391Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:01.501Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:01.501Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:01.566Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:01.600Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:01.606Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:01.606Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:01.727Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:01.758Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:01.758Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:01.843Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:01.918Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:01.918Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:01.919Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:01.919Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:01.947Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:02.057Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:02.058Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:02.066Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:02.176Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:02.176Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:02.192Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:02.313Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:02.339Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:02.339Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:02.410Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:02.410Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:02.438Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:02.530Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:02.530Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:02.560Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:02.667Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:02.668Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:02.675Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:02.771Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:02.772Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:02.799Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:02.903Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:02.903Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:02.916Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:03.014Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:03.055Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:03.055Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:03.135Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:03.243Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:03.364Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:03.386Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:03.386Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:03.387Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:03.387Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:03.394Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:03.394Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:03.466Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:03.471Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:03.471Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:03.570Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:03.694Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:03.706Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:03.706Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:03.818Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:03.941Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:04.105Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:04.105Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:04.106Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:04.106Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:04.106Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:04.106Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:04.106Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:04.106Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:04.118Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:04.247Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:04.372Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:04.507Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:04.627Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:04.627Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:04.627Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:04.627Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:04.628Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:04.628Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:04.635Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:04.750Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:04.876Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:05.155Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:05.155Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:05.156Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:05.156Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:05.156Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:05.156Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:05.156Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:05.156Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:05.166Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:05.266Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:05.266Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:05.292Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:05.409Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:05.535Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:05.551Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:05.552Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:05.560Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:05.560Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:05.633Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:05.633Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:05.658Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:05.776Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:05.818Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:05.818Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:05.874Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:05.875Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:05.901Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:06.001Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:06.007Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:06.007Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:06.115Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:06.115Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:06.122Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:06.220Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:06.220Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:06.247Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:06.351Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:06.351Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:06.362Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:06.485Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:06.537Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:06.537Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:06.584Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:06.585Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:06.609Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:06.711Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:06.833Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:06.854Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:06.855Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:06.855Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:06.855Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:06.956Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:07.053Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:07.053Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:07.070Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:07.071Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:07.082Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:07.172Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:07.172Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:07.198Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:07.315Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:07.364Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:07.364Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:07.415Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:07.415Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:07.441Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:07.514Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:07.514Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:07.541Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:07.633Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:07.633Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:07.659Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:07.778Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:07.798Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:07.798Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:07.902Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:07.902Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:07.953Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:07.967Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:07.968Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:08.108Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:08.108Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:08.165Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:08.303Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:08.331Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:08.331Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:08.428Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:08.479Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:08.479Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:08.553Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:08.654Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:08.674Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:08.674Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:08.754Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:08.754Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:08.780Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:08.904Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:08.906Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:08.906Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:09.001Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:09.001Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:09.028Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:09.119Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:09.119Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:09.146Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:09.236Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:09.236Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:09.260Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:09.376Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:09.387Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:09.387Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:09.476Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:09.476Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:09.502Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:09.594Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:09.594Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:09.619Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:09.711Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:09.711Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:09.738Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:09.828Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:09.828Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:09.853Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:09.947Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:09.947Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:09.953Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:10.051Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:10.051Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:10.077Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:10.186Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:10.186Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:10.191Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:10.290Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:10.290Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:10.319Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:10.406Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:10.406Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:10.434Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:10.523Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:10.524Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:10.551Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:10.665Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:10.666Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:10.666Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:10.764Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:10.765Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:10.790Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:10.906Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:10.906Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:10.907Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:10.997Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:10.997Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:11.061Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:11.084Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:11.099Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:11.099Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:11.181Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:11.209Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:11.209Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:11.296Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:11.386Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:11.386Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:11.389Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:11.389Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:11.398Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:11.488Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:11.498Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:11.498Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:11.589Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:11.687Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:11.687Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:11.703Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:11.704Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:11.714Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:11.819Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:11.819Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:11.831Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:11.907Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:11.907Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:11.932Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:12.027Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:12.027Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:12.052Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:12.170Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:12.186Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:12.186Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:12.268Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:12.268Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:12.294Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:12.409Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:12.427Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:12.427Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:12.521Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:12.522Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:12.532Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:12.630Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:12.630Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:12.654Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:12.746Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:12.746Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:12.771Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:12.890Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:12.906Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:12.907Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:12.986Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:12.986Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:13.013Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:13.102Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:13.102Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:13.128Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:13.228Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:13.233Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:13.233Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:13.326Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:13.326Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:13.354Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:13.445Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:13.445Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:13.472Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:13.562Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:13.563Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:13.589Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:13.680Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:13.680Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:13.705Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:13.798Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:13.798Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:13.824Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:13.923Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:13.923Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:13.949Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:14.042Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:14.042Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:14.070Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:14.160Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:14.160Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:14.186Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:14.279Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:14.279Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:14.305Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:14.427Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:14.428Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:14.432Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:14.553Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:14.586Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:14.587Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:14.652Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:14.652Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:14.678Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:14.753Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:14.753Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:14.787Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:14.894Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:14.902Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:14.902Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:14.990Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:14.991Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:14.998Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:15.116Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:15.146Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:15.146Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:15.225Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:15.225Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:15.253Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:15.337Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:15.415Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:15.415Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:15.440Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:15.452Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:15.452Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:15.554Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:15.564Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:15.564Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:15.679Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:15.679Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:15.683Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:15.781Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:15.781Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:15.810Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:15.898Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:15.898Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:15.925Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:16.030Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:16.031Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:16.092Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:16.114Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:16.114Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:16.118Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:16.215Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:16.239Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:16.239Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:16.337Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:16.434Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:16.434Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:16.434Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:16.434Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:16.460Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:16.551Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:16.551Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:16.580Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:16.668Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:16.668Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:16.695Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:16.799Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:16.800Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:16.812Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:16.909Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:16.909Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:16.934Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:17.054Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:17.098Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:17.099Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:17.176Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:17.252Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:17.252Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:17.253Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:17.253Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:17.298Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:17.396Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:17.511Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:17.511Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:17.536Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:17.539Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:17.539Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:17.627Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:17.627Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:17.654Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:17.746Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:17.746Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:17.775Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:17.878Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:17.878Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:17.942Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:17.966Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:17.978Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:17.978Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:18.063Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:18.188Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:18.194Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:18.195Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:18.285Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:18.285Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:18.285Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:18.285Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:18.312Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:18.402Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:18.402Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:18.429Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:18.520Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:18.520Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:18.547Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:18.653Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:18.653Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:18.659Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:18.758Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:18.759Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:18.784Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:18.900Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:18.906Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:18.906Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:18.998Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:18.998Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:19.022Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:19.141Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:19.146Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:19.146Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:19.232Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:19.232Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:19.245Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:19.355Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:19.355Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:19.411Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:19.436Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:19.461Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:19.462Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:19.539Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:19.617Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:19.617Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:19.643Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:19.735Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:19.735Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:19.762Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:19.852Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:19.852Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:19.879Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:19.899Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:19.899Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:19.994Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:19.998Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:19.998Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:20.117Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:20.120Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:20.120Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:20.240Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:20.267Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:20.268Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:20.336Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:20.337Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:20.363Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:20.458Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:20.458Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:20.483Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:20.581Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:20.581Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:20.616Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:20.704Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:20.704Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:20.731Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:20.839Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:20.839Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:20.904Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:20.930Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:20.942Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:20.942Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:21.023Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:21.052Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:21.052Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:21.124Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:21.225Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:21.229Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:21.229Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:21.259Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:21.259Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:21.352Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:21.425Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:21.425Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:21.451Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:21.461Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:21.461Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:21.547Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:21.547Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:21.572Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:21.689Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:21.706Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:21.707Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:21.786Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:21.787Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:21.819Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:21.905Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:21.905Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:21.932Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:22.027Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:22.027Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:22.051Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:22.170Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:22.187Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:22.187Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:22.268Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:22.268Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:22.301Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:22.391Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:22.391Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:22.421Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:22.512Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:22.512Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:22.542Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:22.641Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:22.641Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:22.669Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:22.759Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:22.779Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:22.779Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:22.863Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:22.936Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:22.937Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:22.966Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:22.987Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:22.987Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:23.069Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:23.069Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:23.082Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:23.161Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:23.230Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:23.231Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:23.260Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:23.275Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:23.275Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:23.373Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:23.403Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:23.403Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:23.492Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:23.492Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:23.506Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:23.604Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:23.604Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:23.637Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:23.740Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:23.740Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:23.770Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:23.815Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:23.815Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:23.917Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:23.959Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:23.959Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:24.039Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:24.114Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:24.115Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:24.142Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:24.267Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:24.268Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:24.285Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:24.383Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:24.383Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:24.417Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:24.453Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:24.453Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:24.539Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:24.676Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:24.676Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:24.691Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:24.762Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:24.762Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:24.796Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:24.886Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:24.886Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:24.921Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:25.005Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:25.005Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:25.038Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:25.111Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:25.112Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:25.148Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:25.238Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:25.238Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:25.270Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:25.361Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:25.361Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:25.393Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:25.483Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:25.483Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:25.510Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:25.628Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:25.628Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:25.637Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:25.758Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:25.759Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:25.762Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:25.811Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:25.811Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:25.896Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:25.946Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:25.946Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:26.040Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:26.059Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:26.059Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:26.142Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:26.240Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:26.266Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:26.266Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:26.368Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:26.398Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:26.399Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:26.497Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:26.506Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:26.506Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:26.595Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:26.595Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:26.621Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:26.718Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:26.718Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:26.748Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:26.857Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:26.858Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:26.886Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:26.934Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:26.934Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:27.028Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:27.061Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:27.061Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:27.165Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:27.268Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:27.268Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:27.300Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:27.391Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:27.392Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:27.424Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:27.513Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:27.513Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:27.539Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:27.633Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:27.634Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:27.664Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:27.756Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:27.756Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:27.786Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:27.879Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:27.879Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:27.910Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:27.999Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:27.999Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:28.029Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:28.121Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:28.121Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:28.152Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:28.268Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:28.275Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:28.275Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:28.368Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:28.368Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:28.396Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:28.489Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:28.490Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:28.519Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:28.639Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:28.737Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:28.737Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:28.737Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:28.737Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:28.769Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:28.887Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:28.926Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:28.926Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:29.013Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:29.016Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:29.016Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:29.088Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:29.088Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:29.115Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:29.235Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:29.235Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:29.242Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:29.338Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:29.339Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:29.374Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:29.460Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:29.460Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:29.492Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:29.580Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:29.581Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:29.606Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:29.715Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:29.715Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:29.727Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:29.827Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:29.827Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:29.857Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:29.928Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:29.928Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:29.957Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:30.080Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:30.080Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:30.090Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:30.194Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:30.194Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:30.219Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:30.265Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:30.265Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:30.376Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:30.418Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:30.419Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:30.523Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:30.538Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:30.538Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:30.654Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:30.704Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:30.704Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:30.789Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:30.878Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:30.879Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:30.908Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:31.027Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:31.027Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:31.036Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:31.135Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:31.135Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:31.166Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:31.255Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:31.255Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:31.285Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:31.375Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:31.375Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:31.400Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:31.495Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:31.495Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:31.523Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:31.627Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:31.627Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:31.690Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:31.730Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:31.802Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:31.803Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:31.811Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:31.887Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:31.887Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:31.912Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:32.027Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:32.126Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:32.126Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:32.127Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:32.127Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:32.142Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:32.142Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:32.155Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:32.266Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:32.267Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:32.270Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:32.367Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:32.367Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:32.395Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:32.511Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:32.511Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:32.515Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:32.586Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:32.586Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:13:32.612Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:32.729Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8lKLKWZZc2yek0jEs8kwL","payment_intent_client_secret":"pi_3Qx8lKLKWZZc2yek0jEs8kwL_secret_1vWCasaTPjTgQgIHdT9TY5s17","redirect_status":"succeeded"}
+[2025-02-27T15:13:32.770Z] [INFO] Payment Intent retrieved: pi_3Qx8lKLKWZZc2yek0jEs8kwL
+[2025-02-27T15:13:32.771Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"0JES8KWL"}
+[2025-02-27T15:23:05.262Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:06.596Z] [INFO] Payment Intent retrieved: pi_3Qx8uDLKWZZc2yek14DV7KyT
+[2025-02-27T15:23:06.596Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"14DV7KYT"}
+[2025-02-27T15:23:06.733Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:06.864Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:06.901Z] [INFO] Payment Intent retrieved: pi_3Qx8uDLKWZZc2yek14DV7KyT
+[2025-02-27T15:23:06.902Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"14DV7KYT"}
+[2025-02-27T15:23:06.994Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:07.152Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:07.287Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:07.418Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:07.570Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:07.693Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:07.845Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:07.972Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:08.102Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:08.230Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:08.360Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:08.494Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:08.621Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:08.751Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:08.879Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:09.010Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:09.134Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:09.263Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:09.389Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:09.523Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:09.653Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:09.810Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:09.919Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:10.029Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:10.156Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:10.284Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:10.418Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:10.545Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:10.674Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:10.806Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:10.930Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:11.050Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:11.171Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:11.297Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:11.426Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:11.549Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:11.678Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:11.802Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:11.926Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:12.050Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:12.180Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:12.302Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:12.430Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:12.552Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:12.678Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:12.807Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:12.931Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:13.070Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:13.195Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:13.319Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:13.447Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:13.575Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:13.695Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:13.821Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:13.951Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:14.078Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:14.202Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:14.331Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:14.472Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:14.587Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:14.714Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:14.839Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:14.968Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:15.094Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:15.218Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:15.340Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:15.462Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:15.599Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:15.730Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:15.857Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:15.984Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:16.114Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:16.241Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:16.365Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:16.492Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:16.619Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:16.751Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:16.878Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:17.006Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:17.134Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:17.257Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:17.385Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:17.513Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:17.639Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:17.762Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:17.903Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:18.024Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:18.148Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:23:18.279Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:40:38.850Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT","payment_intent_client_secret":"pi_3Qx8uDLKWZZc2yek14DV7KyT_secret_7dK1pPwLEm15XJWLmzBRnhXZr","redirect_status":"succeeded"}
+[2025-02-27T15:40:40.034Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT"}
+[2025-02-27T15:40:40.034Z] [ERROR] Invalid success page parameters: {"payment_intent":"pi_3Qx8uDLKWZZc2yek14DV7KyT"}
+[2025-02-27T15:40:40.692Z] [INFO] Payment Intent retrieved: pi_3Qx8uDLKWZZc2yek14DV7KyT
+[2025-02-27T15:40:40.692Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"14DV7KYT"}
+[2025-02-27T15:40:41.510Z] [INFO] Payment Intent retrieved: pi_3Qx8uDLKWZZc2yek14DV7KyT
+[2025-02-27T15:40:41.510Z] [INFO] Order details: {"customerEmail":null,"total":"132.48","orderNumber":"14DV7KYT"}
+[2025-02-27T15:42:06.347Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx9DBLKWZZc2yek0aUcLRvl","payment_intent_client_secret":"pi_3Qx9DBLKWZZc2yek0aUcLRvl_secret_XN2fRbZsnv4NjKLZasMKEYUqO","redirect_status":"succeeded"}
+[2025-02-27T15:42:08.554Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx9DBLKWZZc2yek0aUcLRvl"}
+[2025-02-27T15:42:08.554Z] [ERROR] Invalid success page parameters: {"payment_intent":"pi_3Qx9DBLKWZZc2yek0aUcLRvl"}
+[2025-02-27T15:42:08.846Z] [INFO] Payment Intent retrieved: pi_3Qx9DBLKWZZc2yek0aUcLRvl
+[2025-02-27T15:42:08.846Z] [INFO] Order details: {"customerEmail":null,"total":"5.52","orderNumber":"0AUCLRVL"}
+[2025-02-27T15:42:09.157Z] [INFO] Payment Intent retrieved: pi_3Qx9DBLKWZZc2yek0aUcLRvl
+[2025-02-27T15:42:09.157Z] [INFO] Order details: {"customerEmail":null,"total":"5.52","orderNumber":"0AUCLRVL"}
+[2025-02-27T15:44:14.299Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx9FRLKWZZc2yek0stmk1o4","payment_intent_client_secret":"pi_3Qx9FRLKWZZc2yek0stmk1o4_secret_dZDc9FVEkuaA0sIkF828m7mMP","redirect_status":"succeeded"}
+[2025-02-27T15:44:16.052Z] [INFO] Success page loaded with params: {"payment_intent":"pi_3Qx9FRLKWZZc2yek0stmk1o4"}
+[2025-02-27T15:44:16.052Z] [ERROR] Invalid success page parameters: {"payment_intent":"pi_3Qx9FRLKWZZc2yek0stmk1o4"}
+[2025-02-27T15:44:16.365Z] [INFO] Payment Intent retrieved: pi_3Qx9FRLKWZZc2yek0stmk1o4
+[2025-02-27T15:44:16.365Z] [INFO] Order details: {"customerEmail":null,"total":"5.52","orderNumber":"0STMK1O4"}
+[2025-02-27T15:44:16.674Z] [INFO] Payment Intent retrieved: pi_3Qx9FRLKWZZc2yek0stmk1o4
+[2025-02-27T15:44:16.674Z] [INFO] Order details: {"customerEmail":null,"total":"5.52","orderNumber":"0STMK1O4"}

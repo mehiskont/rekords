@@ -1,6 +1,7 @@
 import { getCachedData, setCachedData } from "./redis"
 import { fetchWithRetry, BatchProcessor } from "./utils"
 import type { DiscogsRecord, DiscogsApiResponse, DiscogsInventoryOptions } from "@/types/discogs"
+import { log } from "@/lib/logger"
 
 const CACHE_TTL = 3600 // 1 hour
 const BASE_URL = "https://api.discogs.com"
@@ -93,7 +94,6 @@ async function fetchFullReleaseData(releaseId: string): Promise<any> {
   }
 }
 
-// In the mapListingToRecord function, add code to extract weight information
 async function mapListingToRecord(listing: any): Promise<DiscogsRecord> {
   try {
     const shippingPrice = await fetchShippingPrice(listing.id?.toString() || "")
@@ -233,7 +233,9 @@ function logApiError(endpoint: string, error: any) {
   })
 }
 
-async function deleteDiscogsListing(listingId: string): Promise<void> {
+export async function removeFromDiscogsInventory(listingId: string): Promise<boolean> {
+  log(`Attempting to remove listing ${listingId} from Discogs inventory`)
+
   try {
     const response = await fetchWithRetry(`${BASE_URL}/marketplace/listings/${listingId}`, {
       method: "DELETE",
@@ -241,27 +243,33 @@ async function deleteDiscogsListing(listingId: string): Promise<void> {
         Authorization: `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
         "User-Agent": "PlastikRecordStore/1.0",
       },
+      retryOptions: {
+        maxRetries: 3,
+        baseDelay: 1000,
+        maxDelay: 5000,
+      },
     })
 
-    if (!response.ok) {
-      throw new Error(`Failed to delete listing ${listingId}: ${response.status} ${response.statusText}`)
+    log(`Discogs API response status: ${response.status}`)
+
+    if (response.ok) {
+      log(`Successfully removed listing ${listingId} from Discogs inventory`)
+      return true
+    } else {
+      const errorText = await response.text()
+      log(
+        `Failed to remove listing ${listingId} from Discogs inventory. Status: ${response.status}, Error: ${errorText}`,
+        "error",
+      )
+      return false
     }
-
-    console.log(`Successfully deleted listing ${listingId} from Discogs.`)
-  } catch (error: any) {
-    console.error(`Error deleting listing ${listingId} from Discogs:`, error)
-    throw error
-  }
-}
-
-export async function removeFromDiscogsInventory(listingId: string) {
-  try {
-    await deleteDiscogsListing(listingId)
-    console.log(`Successfully removed listing ${listingId} from Discogs inventory`)
-    return true
   } catch (error) {
-    console.error(`Failed to remove listing ${listingId} from Discogs inventory:`, error)
-    // You might want to implement retry logic or queue failed deletions for later
+    log(
+      `Error removing listing ${listingId} from Discogs inventory: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`,
+      "error",
+    )
     return false
   }
 }
