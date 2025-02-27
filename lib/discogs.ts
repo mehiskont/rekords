@@ -20,16 +20,21 @@ const shippingPriceProcessor = new BatchProcessor<string, number>(
               "User-Agent": "PlastikRecordStore/1.0",
             },
             retryOptions: {
-              maxRetries: 3,
+              maxRetries: 5,
               baseDelay: 1000,
-              maxDelay: 5000,
+              maxDelay: 10000,
             },
           },
         )
 
         if (response.status === 404) {
-          results.push(5.0) // Default shipping price for not found
+          console.warn(`Listing ${listingId} not found. Using default shipping price.`)
+          results.push(5.0)
           continue
+        }
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
         }
 
         const data = await response.json()
@@ -58,7 +63,7 @@ async function fetchShippingPrice(listingId: string): Promise<number> {
     await setCachedData(cacheKey, price.toString(), 24 * 60 * 60) // Cache for 24 hours
     return price
   } catch (error) {
-    console.error("Error fetching shipping price:", error)
+    console.error(`Error fetching shipping price for listing ${listingId}:`, error)
     return 5.0 // Default shipping price
   }
 }
@@ -220,6 +225,14 @@ async function mapListingToRecord(listing: any): Promise<DiscogsRecord> {
   }
 }
 
+function logApiError(endpoint: string, error: any) {
+  console.error(`Discogs API Error - ${endpoint}:`, {
+    message: error.message,
+    stack: error.stack,
+    timestamp: new Date().toISOString(),
+  })
+}
+
 export async function getDiscogsInventory(
   search?: string,
   sort?: string,
@@ -288,6 +301,7 @@ export async function getDiscogsInventory(
     })
 
     if (!response.ok) {
+      logApiError("getDiscogsInventory", new Error(`Discogs API error: ${response.status} ${response.statusText}`))
       throw new Error(`Discogs API error: ${response.status} ${response.statusText}`)
     }
 
@@ -341,6 +355,7 @@ export async function getDiscogsInventory(
 
     return result
   } catch (error) {
+    logApiError("getDiscogsInventory", error)
     console.error("Error fetching inventory:", error)
     return { records: [], totalPages: 0 }
   }
