@@ -233,6 +233,39 @@ function logApiError(endpoint: string, error: any) {
   })
 }
 
+async function deleteDiscogsListing(listingId: string): Promise<void> {
+  try {
+    const response = await fetchWithRetry(`${BASE_URL}/marketplace/listings/${listingId}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
+        "User-Agent": "PlastikRecordStore/1.0",
+      },
+    })
+
+    if (!response.ok) {
+      throw new Error(`Failed to delete listing ${listingId}: ${response.status} ${response.statusText}`)
+    }
+
+    console.log(`Successfully deleted listing ${listingId} from Discogs.`)
+  } catch (error: any) {
+    console.error(`Error deleting listing ${listingId} from Discogs:`, error)
+    throw error
+  }
+}
+
+export async function removeFromDiscogsInventory(listingId: string) {
+  try {
+    await deleteDiscogsListing(listingId)
+    console.log(`Successfully removed listing ${listingId} from Discogs inventory`)
+    return true
+  } catch (error) {
+    console.error(`Failed to remove listing ${listingId} from Discogs inventory:`, error)
+    // You might want to implement retry logic or queue failed deletions for later
+    return false
+  }
+}
+
 export async function getDiscogsInventory(
   search?: string,
   sort?: string,

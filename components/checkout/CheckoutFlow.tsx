@@ -24,6 +24,13 @@ interface CustomerInfo {
   state: string
   postalCode: string
   country: string
+  shippingAddress?: string
+  shippingApartment?: string
+  shippingCity?: string
+  shippingState?: string
+  shippingPostalCode?: string
+  shippingCountry?: string
+  shippingAddressSameAsBilling: boolean
 }
 
 export function CheckoutFlow() {
@@ -31,9 +38,9 @@ export function CheckoutFlow() {
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo | null>(null)
   const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [shippingCost, setShippingCost] = useState(0)
   const router = useRouter()
   const { state: cartState, dispatch: cartDispatch } = useCart()
-  const [shippingCost, setShippingCost] = useState(0)
   const { data: session } = useSession()
 
   // Calculate totals
@@ -54,48 +61,25 @@ export function CheckoutFlow() {
     localStorage.setItem(STORAGE_KEY, currentStep.toString())
   }, [currentStep])
 
-  useEffect(() => {
-    async function calculateShipping() {
-      if (session?.user?.id) {
-        try {
-          const response = await fetch(`/api/user/${session.user.id}/country`)
-          const { country } = await response.json()
-          if (country) {
-            const totalWeight = calculateTotalWeight(
-              cartState.items.map((item) => ({ weight: item.weight, quantity: item.quantity })),
-            )
-            const cost = calculateShippingCost(totalWeight, country)
-            setShippingCost(cost)
-          }
-        } catch (error) {
-          console.error("Error calculating shipping:", error)
-        }
-      }
-    }
-
-    calculateShipping()
-  }, [session, cartState.items])
-
   const handleDetailsSubmit = async (data: CustomerInfo) => {
     setIsLoading(true)
     setCustomerInfo(data)
 
     try {
-      // Create a clean customer object for the API
-      const customerData = {
-        firstName: data.firstName,
-        lastName: data.lastName,
-        email: session?.user?.email || data.email,
-        phone: data.phone,
-        address: data.address,
-        apartment: data.apartment,
-        city: data.city,
-        state: data.state,
-        postalCode: data.postalCode,
-        country: data.country,
-      }
+      // Calculate shipping cost based on the selected country and cart items
+      const totalWeight = calculateTotalWeight(
+        cartState.items.map((item) => ({
+          weight: item.weight,
+          quantity: item.quantity,
+        })),
+      )
+      const shippingCost = calculateShippingCost(
+        totalWeight,
+        data.shippingAddressSameAsBilling ? data.country : data.shippingCountry || data.country,
+      )
+      setShippingCost(shippingCost)
 
-      // Create payment intent
+      // Create payment intent with updated total including shipping
       const response = await fetch("/api/create-payment-intent", {
         method: "POST",
         headers: {
@@ -103,13 +87,17 @@ export function CheckoutFlow() {
         },
         body: JSON.stringify({
           amount: total,
-          customer: customerData,
+          customer: {
+            ...data,
+            email: session?.user?.email || data.email,
+          },
           items: cartState.items.map((item) => ({
             id: item.id,
             title: item.title,
             price: item.price,
             quantity: item.quantity,
           })),
+          shipping: shippingCost,
         }),
       })
 
@@ -181,12 +169,7 @@ export function CheckoutFlow() {
       {/* Step Content */}
       <div className="mt-8">
         {currentStep === 0 && (
-          <CartReview
-            onNext={handleDetailsSubmit}
-            isLoading={isLoading}
-            initialData={customerInfo}
-            shippingCost={shippingCost}
-          />
+          <CartReview onNext={handleDetailsSubmit} isLoading={isLoading} initialData={customerInfo} />
         )}
         {currentStep === 1 && clientSecret && (
           <PaymentForm
