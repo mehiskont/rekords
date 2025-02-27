@@ -11,11 +11,38 @@ import { useState, useMemo } from "react"
 import Select from "react-select"
 import countryList from "react-select-country-list"
 
-interface CartReviewProps {
-  onNext: () => void
+interface CustomerInfo {
+  firstName: string
+  lastName: string
+  email: string
+  phone: string
+  address: string
+  apartment: string
+  city: string
+  postalCode: string
+  state: string
+  country: string
+  shippingAddress: string
+  shippingApartment: string
+  shippingCity: string
+  shippingPostalCode: string
+  shippingState: string
+  shippingCountry: string
+  shippingAddressSameAsBilling: boolean
+  acceptTerms: boolean
+  subscribe: boolean
 }
 
-export function CartReview({ onNext }: CartReviewProps) {
+// Update the CartReviewProps interface
+interface CartReviewProps {
+  onNext: (data: CustomerInfo) => void
+  isLoading: boolean
+  initialData: CustomerInfo | null
+  shippingCost: number
+}
+
+// Update the component to accept shippingCost
+export function CartReview({ onNext, isLoading, initialData, shippingCost }: CartReviewProps) {
   const { state } = useCart()
   const [shippingAddressSameAsBilling, setShippingAddressSameAsBilling] = useState(true)
   const [acceptTerms, setAcceptTerms] = useState(false)
@@ -27,7 +54,8 @@ export function CartReview({ onNext }: CartReviewProps) {
 
   const subtotal = state.items.reduce((sum, item) => sum + calculatePriceWithoutFees(item.price) * item.quantity, 0)
   const vat = subtotal * 0.2 // 20% VAT
-  const total = subtotal + vat
+  // Update the total calculation
+  const total = subtotal + vat + shippingCost
 
   const customStyles = {
     control: (provided: any) => ({
@@ -249,15 +277,16 @@ export function CartReview({ onNext }: CartReviewProps) {
             <span>VAT</span>
             <span>${vat.toFixed(2)}</span>
           </div>
+          {/* Add this to the order summary section */}
           <div className="flex justify-between text-sm">
             <span>Shipping</span>
-            <span>Pending</span>
+            <span>${shippingCost.toFixed(2)}</span>
           </div>
+          {/* Update the total display */}
           <div className="flex justify-between font-bold text-lg pt-2 border-t">
             <span>Total</span>
             <div className="text-right">
               <div>${total.toFixed(2)}</div>
-              <div className="text-sm font-normal text-muted-foreground">+ Shipping</div>
             </div>
           </div>
         </div>

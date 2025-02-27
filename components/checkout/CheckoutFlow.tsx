@@ -8,6 +8,7 @@ import { CartReview } from "@/components/checkout/CartReview"
 import { PaymentForm } from "@/components/checkout/PaymentForm"
 import { calculatePriceWithoutFees } from "@/lib/price-calculator"
 import { toast } from "@/components/ui/use-toast"
+import { calculateShippingCost, calculateTotalWeight } from "@/lib/shipping-calculator"
 
 const steps = ["DETAILS", "PAYMENT"]
 const STORAGE_KEY = "checkout_current_step"
@@ -31,13 +32,14 @@ export function CheckoutFlow() {
   const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
-  const { data: session } = useSession()
   const { state: cartState, dispatch: cartDispatch } = useCart()
+  const [shippingCost, setShippingCost] = useState(0)
+  const { data: session } = useSession()
 
   // Calculate totals
   const subtotal = cartState.items.reduce((sum, item) => sum + calculatePriceWithoutFees(item.price) * item.quantity, 0)
   const vat = subtotal * 0.2 // 20% VAT
-  const total = subtotal + vat
+  const total = subtotal + vat + shippingCost
 
   // Load saved step on mount
   useEffect(() => {
@@ -51,6 +53,28 @@ export function CheckoutFlow() {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, currentStep.toString())
   }, [currentStep])
+
+  useEffect(() => {
+    async function calculateShipping() {
+      if (session?.user?.id) {
+        try {
+          const response = await fetch(`/api/user/${session.user.id}/country`)
+          const { country } = await response.json()
+          if (country) {
+            const totalWeight = calculateTotalWeight(
+              cartState.items.map((item) => ({ weight: item.weight, quantity: item.quantity })),
+            )
+            const cost = calculateShippingCost(totalWeight, country)
+            setShippingCost(cost)
+          }
+        } catch (error) {
+          console.error("Error calculating shipping:", error)
+        }
+      }
+    }
+
+    calculateShipping()
+  }, [session, cartState.items])
 
   const handleDetailsSubmit = async (data: CustomerInfo) => {
     setIsLoading(true)
@@ -157,7 +181,12 @@ export function CheckoutFlow() {
       {/* Step Content */}
       <div className="mt-8">
         {currentStep === 0 && (
-          <CartReview onNext={handleDetailsSubmit} isLoading={isLoading} initialData={customerInfo} />
+          <CartReview
+            onNext={handleDetailsSubmit}
+            isLoading={isLoading}
+            initialData={customerInfo}
+            shippingCost={shippingCost}
+          />
         )}
         {currentStep === 1 && clientSecret && (
           <PaymentForm
@@ -165,6 +194,7 @@ export function CheckoutFlow() {
             total={total}
             subtotal={subtotal}
             vat={vat}
+            shippingCost={shippingCost}
             onSuccess={handlePaymentSuccess}
           />
         )}

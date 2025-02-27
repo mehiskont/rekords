@@ -14,6 +14,7 @@ interface PaymentFormProps {
   total: number
   subtotal: number
   vat: number
+  shippingCost: number
   onSuccess: () => void
 }
 
@@ -75,7 +76,7 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
   )
 }
 
-export function PaymentForm({ clientSecret, total, subtotal, vat, onSuccess }: PaymentFormProps) {
+export function PaymentForm({ clientSecret, total, subtotal, vat, shippingCost, onSuccess }: PaymentFormProps) {
   const options: any = {
     clientSecret,
     appearance: {
@@ -99,6 +100,10 @@ export function PaymentForm({ clientSecret, total, subtotal, vat, onSuccess }: P
           <div className="flex justify-between">
             <span>VAT (20%)</span>
             <span>${vat.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span>Shipping</span>
+            <span>${shippingCost.toFixed(2)}</span>
           </div>
           <div className="flex justify-between font-bold pt-2 border-t">
             <span>Total</span>

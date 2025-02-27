@@ -94,36 +94,78 @@ async function mapListingToRecord(listing: any): Promise<DiscogsRecord> {
     const shippingPrice = await fetchShippingPrice(listing.id?.toString() || "")
     const price = listing.price?.value ? Number(listing.price.value) : listing.price ? Number(listing.price) : 0
 
-    // Extract weight information from the release data if available
-    // Default weight for vinyl records is approximately 180g per record
-    let weight = listing.weight || 180 // Use direct weight if available, fallback to 180g
-    const weight_unit = "g"
+    console.log("Raw listing data:", JSON.stringify(listing, null, 2))
 
-    // If no direct weight and we have release data, try to extract from formats
-    if (!listing.weight && listing.release?.formats && Array.isArray(listing.release.formats)) {
+    // Extract weight information from the listing
+    let weight = listing.weight || listing.release?.weight || 0
+    let weightSource = "direct"
+
+    console.log("Initial weight:", weight, "Source:", weightSource)
+
+    // If no direct weight is available, try to get it from the formats
+    if (!weight && listing.release?.formats && Array.isArray(listing.release.formats)) {
       for (const format of listing.release.formats) {
+        if (format.weight) {
+          weight = Number(format.weight)
+          weightSource = "format.weight"
+          break
+        }
+        // Check format descriptions for weight information
         if (format.descriptions && Array.isArray(format.descriptions)) {
           for (const desc of format.descriptions) {
             if (typeof desc === "string") {
               const weightMatch = desc.match(/(\d+)g/i)
               if (weightMatch && weightMatch[1]) {
-                weight = Number.parseInt(weightMatch[1], 10)
+                weight = Number(weightMatch[1])
+                weightSource = "format.descriptions"
                 break
               }
             }
           }
-        }
-
-        if (format.weight) {
-          weight = Number.parseInt(format.weight, 10)
-          break
+          if (weight) break
         }
       }
     }
 
+    console.log("Weight after format check:", weight, "Source:", weightSource)
+
+    // If still no weight found, use the default based on format
+    if (!weight) {
+      if (listing.format?.includes("LP") || listing.format?.includes('12"')) {
+        weight = 180 // Default weight for 12" vinyl
+        weightSource = "default-12"
+      } else if (listing.format?.includes('7"')) {
+        weight = 40 // Default weight for 7" vinyl
+        weightSource = "default-7"
+      } else if (listing.format?.includes('10"')) {
+        weight = 100 // Default weight for 10" vinyl
+        weightSource = "default-10"
+      } else {
+        weight = 180 // Default fallback weight
+        weightSource = "default-fallback"
+      }
+    }
+
+    console.log("Weight after default check:", weight, "Source:", weightSource)
+
     // For multi-disc releases, multiply the weight
     const quantity = listing.format_quantity || listing.release?.format_quantity || 1
     weight = weight * quantity
+
+    console.log("Weight calculation details:", {
+      listingId: listing.id,
+      title: listing.release?.title,
+      directWeight: listing.weight,
+      releaseWeight: listing.release?.weight,
+      formatInfo: listing.release?.formats,
+      calculatedWeight: weight,
+      format: listing.format,
+      formatQuantity: quantity,
+      weightSource: weightSource,
+      timestamp: new Date().toISOString(),
+    })
+
+    const weight_unit = "g"
 
     return {
       id: Number(listing.id) || 0,
@@ -185,6 +227,11 @@ export async function getDiscogsInventory(
   perPage = 50,
   options: DiscogsInventoryOptions = {},
 ): Promise<{ records: DiscogsRecord[]; totalPages: number }> {
+  console.log("Fetching inventory with raw listing data:", {
+    timestamp: new Date().toISOString(),
+    username: process.env.DISCOGS_USERNAME,
+    searchParams: { search, sort, page, perPage, options },
+  })
   console.log("getDiscogsInventory called with:", { search, sort, page, perPage, options })
 
   const cacheKey = `inventory:${search || "all"}:${sort || "default"}:${page}:${perPage}:${options.category || "all"}:${

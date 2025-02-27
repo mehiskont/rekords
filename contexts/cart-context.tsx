@@ -6,6 +6,7 @@ import type { DiscogsRecord } from "@/types/discogs"
 
 interface CartItem extends DiscogsRecord {
   quantity: number
+  weight: number // Add this line if it's not already present
 }
 
 interface CartState {
@@ -36,15 +37,15 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       const existingItem = state.items.find((item) => item.id === action.payload.id)
 
       if (existingItem) {
-        // Check if adding one more would exceed available quantity
-        if (existingItem.quantity >= existingItem.quantity_available) {
-          return state
-        }
         return {
           ...state,
           items: state.items.map((item) =>
             item.id === action.payload.id
-              ? { ...item, quantity: Math.min(item.quantity + 1, item.quantity_available) }
+              ? {
+                  ...item,
+                  quantity: Math.min(item.quantity + 1, item.quantity_available),
+                  weight: action.payload.weight,
+                }
               : item,
           ),
         }
@@ -52,7 +53,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
 
       return {
         ...state,
-        items: [...state.items, { ...action.payload, quantity: 1 }],
+        items: [...state.items, { ...action.payload, quantity: 1, weight: action.payload.weight }],
       }
     }
     case "REMOVE_ITEM":
@@ -65,10 +66,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         ...state,
         items: state.items.map((item) =>
           item.id === action.payload.id
-            ? {
-                ...item,
-                quantity: Math.min(action.payload.quantity, item.quantity_available),
-              }
+            ? { ...item, quantity: Math.min(action.payload.quantity, item.quantity_available) }
             : item,
         ),
       }
@@ -100,4 +98,6 @@ export function useCart() {
   }
   return context
 }
+
+export type { CartState, CartAction }
 
