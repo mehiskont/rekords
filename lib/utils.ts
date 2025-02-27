@@ -14,6 +14,7 @@ export function formatDate(date: Date) {
   }).format(new Date(date))
 }
 
+// Update the serializeForClient function to include weight information
 export function serializeForClient<T extends Record<string, any>>(obj: T): T {
   const cleanObj = {
     id: obj.id,
@@ -34,6 +35,8 @@ export function serializeForClient<T extends Record<string, any>>(obj: T): T {
     date_added: obj.date_added,
     genres: obj.genres,
     quantity_available: obj.quantity_available,
+    weight: obj.weight,
+    weight_unit: obj.weight_unit,
   }
 
   return JSON.parse(JSON.stringify(cleanObj))

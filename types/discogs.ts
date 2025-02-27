@@ -17,6 +17,9 @@ export interface DiscogsRecord {
   date_added: string
   genres: string[]
   quantity_available: number
+  format_quantity?: number // Add this field
+  weight?: number
+  weight_unit?: string
 }
 
 export interface DiscogsApiResponse {
