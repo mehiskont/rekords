@@ -1,11 +1,8 @@
 "use client"
 
-import { redirect } from "next/navigation"
-import { Suspense, useEffect, useState, useRef } from "react"
-import { SuccessContent } from "@/components/checkout/success-content"
-import { Loader2, CheckCircle } from "lucide-react"
-import { log } from "@/lib/logger"
+import { useEffect, useState, useRef } from 'react'
 import { useSearchParams } from 'next/navigation'
+import { CheckCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
@@ -15,22 +12,23 @@ export const revalidate = 0
 export default function CheckoutSuccessPage() {
   const searchParams = useSearchParams()
   const [orderStatus, setOrderStatus] = useState<'loading' | 'success' | 'error'>('loading')
-  // Use a ref to track if we've already processed this payment
   const processedRef = useRef(false)
   
   useEffect(() => {
-    const paymentIntent = searchParams.get('payment_intent')
+    // Prevent infinite loop with useRef
+    if (processedRef.current) return
+    processedRef.current = true
     
-    // Only process once to prevent infinite loops
-    if (paymentIntent && !processedRef.current) {
-      processedRef.current = true
-      
-      console.log('Success page loaded with params:', JSON.stringify(Object.fromEntries(searchParams.entries())))
-      // Here you would typically verify the payment status with your API
-      // but for now we'll just set success
+    const paymentIntent = searchParams.get('payment_intent')
+    const redirectStatus = searchParams.get('redirect_status')
+    
+    if (paymentIntent && redirectStatus === 'succeeded') {
+      console.log(`Order successful with payment intent: ${paymentIntent}`)
       setOrderStatus('success')
+    } else {
+      setOrderStatus('error')
     }
-  }, [searchParams]) // Dependency on searchParams is fine, we use the ref to prevent multiple executions
+  }, [searchParams])
   
   return (
     <div className="container max-w-md mx-auto py-12 text-center">

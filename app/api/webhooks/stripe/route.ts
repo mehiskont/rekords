@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import { headers } from "next/headers"
 import Stripe from "stripe"
-import { removeFromDiscogsInventory } from "@/lib/discogs"
+import { removeFromDiscogsInventory, updateDiscogsInventory } from "@/lib/discogs"
 import { log } from "@/lib/logger"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -46,16 +46,16 @@ export async function POST(req: Request) {
       for (const item of session.line_items?.data || []) {
         log(`Processing line item: ${JSON.stringify(item)}`)
         const discogsId = item.price?.product?.metadata?.discogsId
+        const quantity = item.quantity || 1
+        
         if (discogsId) {
-          log(`Attempting to remove Discogs item: ${discogsId}`)
-          const removed = await removeFromDiscogsInventory(discogsId)
-          if (removed) {
-            log(`✅ Removed item from Discogs: ${discogsId}`)
+          log(`Updating Discogs inventory for item: ${discogsId}, quantity: ${quantity}`)
+          const updated = await updateDiscogsInventory(discogsId, quantity)
+          if (updated) {
+            log(`✅ Updated inventory for Discogs item: ${discogsId}`)
           } else {
-            log(`❌ Failed to remove item from Discogs: ${discogsId}`, "error")
+            log(`❌ Failed to update inventory for Discogs item: ${discogsId}`, "error")
           }
-        } else {
-          log(`❌ No Discogs ID found for item: ${item.id}`)
         }
       }
     } catch (error) {

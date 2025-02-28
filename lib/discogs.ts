@@ -278,7 +278,7 @@ export async function updateDiscogsInventory(
   listingId: string, 
   quantityPurchased: number = 1
 ): Promise<boolean> {
-  console.log(`Updating inventory for listing ${listingId}, quantity: ${quantityPurchased}`)
+  log(`Updating inventory for listing ${listingId}, quantity: ${quantityPurchased}`)
   
   try {
     // First, get the current listing to check its quantity
@@ -290,7 +290,7 @@ export async function updateDiscogsInventory(
     });
     
     if (!response.ok) {
-      console.error(`Failed to fetch listing ${listingId}: ${response.status} ${response.statusText}`);
+      log(`Failed to fetch listing ${listingId}: ${response.status} ${response.statusText}`, "error")
       return false;
     }
     
@@ -299,12 +299,12 @@ export async function updateDiscogsInventory(
     
     if (currentQuantity <= quantityPurchased) {
       // If purchased all or more than available, delete the listing completely
-      console.log(`Deleting listing ${listingId} as all items were purchased`);
+      log(`Deleting listing ${listingId} as all items were purchased`)
       return removeFromDiscogsInventory(listingId);
     } else {
       // Otherwise, update the quantity
       const newQuantity = currentQuantity - quantityPurchased;
-      console.log(`Updating listing ${listingId} to quantity: ${newQuantity}`);
+      log(`Updating listing ${listingId} to quantity: ${newQuantity}`)
       
       const updateResponse = await fetch(`${BASE_URL}/marketplace/listings/${listingId}`, {
         method: 'POST',
@@ -319,14 +319,16 @@ export async function updateDiscogsInventory(
       });
       
       if (!updateResponse.ok) {
-        console.error(`Failed to update listing ${listingId}: ${updateResponse.status} ${updateResponse.statusText}`);
+        log(`Failed to update listing ${listingId}: ${updateResponse.status} ${updateResponse.statusText}`, "error")
         return false;
       }
       
       return true;
     }
   } catch (error) {
-    console.error(`Error updating inventory for listing ${listingId}:`, error);
+    log(`Error updating inventory for listing ${listingId}: ${
+      error instanceof Error ? error.message : "Unknown error"
+    }`, "error")
     return false;
   }
 }
