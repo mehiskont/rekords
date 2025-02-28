@@ -3,6 +3,7 @@ import { headers } from "next/headers"
 import Stripe from "stripe"
 import { removeFromDiscogsInventory, updateDiscogsInventory } from "@/lib/discogs"
 import { log } from "@/lib/logger"
+import { db } from "@/lib/db"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
@@ -27,6 +28,14 @@ export async function POST(req: Request) {
 
   log(`✅ Webhook event received: ${event.type}`)
 
+  // Store webhook in database for debugging
+  await db.webhookLog.create({
+    data: {
+      type: event.type,
+      payload: JSON.stringify(event.data.object)
+    }
+  })
+
   if (event.type === "payment_intent.succeeded") {
     const paymentIntent = event.data.object as Stripe.PaymentIntent
     log(`💰 PaymentIntent status: ${paymentIntent.status}`)
@@ -42,20 +51,43 @@ export async function POST(req: Request) {
       log(`Session ID: ${session.id}`)
       log(`Number of line items: ${session.line_items?.data.length || 0}`)
 
+      // Add this immediately after getting the session to check the data structure
+      log(`Complete session data: ${JSON.stringify(session, null, 2)}`)
+
       // Process each line item
       for (const item of session.line_items?.data || []) {
-        log(`Processing line item: ${JSON.stringify(item)}`)
-        const discogsId = item.price?.product?.metadata?.discogsId
-        const quantity = item.quantity || 1
-        
-        if (discogsId) {
+        try {
+          log(`Processing line item: ${JSON.stringify(item, null, 2)}`)
+          
+          // Check for metadata at different places where Stripe might put it
+          let discogsId = item.price?.product?.metadata?.discogsId
+          
+          if (!discogsId) {
+            // Try alternate locations for the discogsId
+            if (item.metadata && item.metadata.discogsId) {
+              discogsId = item.metadata.discogsId
+            } else if (item.price?.metadata?.discogsId) {
+              discogsId = item.price.metadata.discogsId
+            }
+          }
+          
+          // If still no discogsId, log and skip
+          if (!discogsId) {
+            log(`❌ No discogsId found for line item: ${item.id}`, "error")
+            continue
+          }
+          
+          const quantity = item.quantity || 1
           log(`Updating Discogs inventory for item: ${discogsId}, quantity: ${quantity}`)
+          
           const updated = await updateDiscogsInventory(discogsId, quantity)
           if (updated) {
-            log(`✅ Updated inventory for Discogs item: ${discogsId}`)
+            log(`✅ Successfully updated inventory for Discogs item: ${discogsId}`)
           } else {
             log(`❌ Failed to update inventory for Discogs item: ${discogsId}`, "error")
           }
+        } catch (error) {
+          log(`❌ Error processing line item: ${error instanceof Error ? error.message : String(error)}`, "error")
         }
       }
     } catch (error) {

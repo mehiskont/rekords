@@ -274,63 +274,118 @@ export async function removeFromDiscogsInventory(listingId: string): Promise<boo
   }
 }
 
+/**
+ * Updates the inventory for a Discogs listing by either reducing quantity or removing it
+ */
 export async function updateDiscogsInventory(
-  listingId: string, 
+  listingId: string,
   quantityPurchased: number = 1
 ): Promise<boolean> {
-  log(`Updating inventory for listing ${listingId}, quantity: ${quantityPurchased}`)
+  log(`Updating Discogs inventory for listing ${listingId}, quantity: ${quantityPurchased}`)
   
   try {
-    // First, get the current listing to check its quantity
-    const response = await fetch(`${BASE_URL}/marketplace/listings/${listingId}`, {
-      headers: {
-        'Authorization': `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
-        'User-Agent': 'PlastikRecordStore/1.0',
-      },
-    });
-    
-    if (!response.ok) {
-      log(`Failed to fetch listing ${listingId}: ${response.status} ${response.statusText}`, "error")
-      return false;
+    // STEP 1: Verify we have a valid token
+    if (!process.env.DISCOGS_API_TOKEN) {
+      log("Missing Discogs API token", "error")
+      return false
     }
     
-    const listing = await response.json();
-    const currentQuantity = Number(listing.quantity || 0);
+    // STEP 2: Get current listing details
+    const listingUrl = `${BASE_URL}/marketplace/listings/${listingId}`
+    log(`Fetching listing from: ${listingUrl}`)
+    
+    const listingResponse = await fetch(listingUrl, {
+      headers: {
+        'Authorization': `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
+        'User-Agent': 'PlastikRecordStore/1.0'
+      }
+    })
+    
+    if (!listingResponse.ok) {
+      const errorText = await listingResponse.text()
+      log(`Failed to get listing ${listingId}: ${listingResponse.status} - ${errorText}`, "error")
+      return false
+    }
+    
+    const listing = await listingResponse.json()
+    log(`Current listing data: ${JSON.stringify(listing)}`)
+    
+    // STEP 3: Determine if we need to delete or update quantity
+    const currentQuantity = parseInt(listing.quantity || "1", 10)
     
     if (currentQuantity <= quantityPurchased) {
-      // If purchased all or more than available, delete the listing completely
-      log(`Deleting listing ${listingId} as all items were purchased`)
-      return removeFromDiscogsInventory(listingId);
+      // Delete the listing
+      log(`Deleting listing ${listingId} (current qty: ${currentQuantity}, purchased: ${quantityPurchased})`)
+      
+      const deleteResponse = await fetch(listingUrl, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
+          'User-Agent': 'PlastikRecordStore/1.0'
+        }
+      })
+      
+      if (!deleteResponse.ok) {
+        const errorText = await deleteResponse.text()
+        log(`Failed to delete listing ${listingId}: ${deleteResponse.status} - ${errorText}`, "error")
+        return false
+      }
+      
+      log(`✅ Successfully deleted listing ${listingId}`)
+      return true
     } else {
-      // Otherwise, update the quantity
-      const newQuantity = currentQuantity - quantityPurchased;
+      // Update quantity
+      const newQuantity = currentQuantity - quantityPurchased
       log(`Updating listing ${listingId} to quantity: ${newQuantity}`)
       
-      const updateResponse = await fetch(`${BASE_URL}/marketplace/listings/${listingId}`, {
+      // According to Discogs API documentation
+      const updateResponse = await fetch(listingUrl, {
         method: 'POST',
         headers: {
           'Authorization': `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
           'User-Agent': 'PlastikRecordStore/1.0',
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          quantity: newQuantity,
-        }),
-      });
+          release_id: listing.release.id,
+          condition: listing.condition,
+          price: listing.price.value,
+          status: listing.status,
+          quantity: newQuantity
+        })
+      })
       
       if (!updateResponse.ok) {
-        log(`Failed to update listing ${listingId}: ${updateResponse.status} ${updateResponse.statusText}`, "error")
-        return false;
+        const errorText = await updateResponse.text()
+        log(`Failed to update listing ${listingId}: ${updateResponse.status} - ${errorText}`, "error")
+        return false
       }
       
-      return true;
+      const updateResult = await updateResponse.json()
+      log(`Update result: ${JSON.stringify(updateResult)}`)
+      log(`✅ Successfully updated listing ${listingId} quantity to ${newQuantity}`)
+      return true
     }
   } catch (error) {
-    log(`Error updating inventory for listing ${listingId}: ${
-      error instanceof Error ? error.message : "Unknown error"
-    }`, "error")
-    return false;
+    log(`Unexpected error updating inventory for ${listingId}: ${error instanceof Error ? error.message : String(error)}`, "error")
+    return false
   }
+}
+
+/**
+ * Helper function to make authenticated requests to Discogs API
+ */
+async function fetchWithAuth(url: string, options: RequestInit = {}) {
+  const headers = {
+    'Authorization': `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
+    'User-Agent': 'PlastikRecordStore/1.0',
+    ...(options.headers || {}),
+  }
+  
+  return fetch(url, {
+    ...options,
+    headers,
+  })
 }
 
 export async function getDiscogsInventory(
