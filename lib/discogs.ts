@@ -274,7 +274,62 @@ export async function removeFromDiscogsInventory(listingId: string): Promise<boo
   }
 }
 
-
+export async function updateDiscogsInventory(
+  listingId: string, 
+  quantityPurchased: number = 1
+): Promise<boolean> {
+  console.log(`Updating inventory for listing ${listingId}, quantity: ${quantityPurchased}`)
+  
+  try {
+    // First, get the current listing to check its quantity
+    const response = await fetch(`${BASE_URL}/marketplace/listings/${listingId}`, {
+      headers: {
+        'Authorization': `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
+        'User-Agent': 'PlastikRecordStore/1.0',
+      },
+    });
+    
+    if (!response.ok) {
+      console.error(`Failed to fetch listing ${listingId}: ${response.status} ${response.statusText}`);
+      return false;
+    }
+    
+    const listing = await response.json();
+    const currentQuantity = Number(listing.quantity || 0);
+    
+    if (currentQuantity <= quantityPurchased) {
+      // If purchased all or more than available, delete the listing completely
+      console.log(`Deleting listing ${listingId} as all items were purchased`);
+      return removeFromDiscogsInventory(listingId);
+    } else {
+      // Otherwise, update the quantity
+      const newQuantity = currentQuantity - quantityPurchased;
+      console.log(`Updating listing ${listingId} to quantity: ${newQuantity}`);
+      
+      const updateResponse = await fetch(`${BASE_URL}/marketplace/listings/${listingId}`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
+          'User-Agent': 'PlastikRecordStore/1.0',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          quantity: newQuantity,
+        }),
+      });
+      
+      if (!updateResponse.ok) {
+        console.error(`Failed to update listing ${listingId}: ${updateResponse.status} ${updateResponse.statusText}`);
+        return false;
+      }
+      
+      return true;
+    }
+  } catch (error) {
+    console.error(`Error updating inventory for listing ${listingId}:`, error);
+    return false;
+  }
+}
 
 export async function getDiscogsInventory(
   search?: string,
