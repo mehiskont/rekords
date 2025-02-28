@@ -2,12 +2,15 @@
 
 import { useEffect, useState, useRef } from 'react'
 import { useSearchParams } from 'next/navigation'
-import { CheckCircle } from 'lucide-react'
+import { CheckCircle, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
+// Remove these exports that are causing the error
+// Using only one of these options is better - let's use dynamic
 export const dynamic = "force-dynamic"
-export const revalidate = 0
+// The revalidate is causing the error, so remove it
+// export const revalidate = 0
 
 export default function CheckoutSuccessPage() {
   const searchParams = useSearchParams()
@@ -32,7 +35,12 @@ export default function CheckoutSuccessPage() {
   
   return (
     <div className="container max-w-md mx-auto py-12 text-center">
-      {orderStatus === 'loading' && <p>Processing your order...</p>}
+      {orderStatus === 'loading' && (
+        <div className="space-y-4">
+          <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full mx-auto"></div>
+          <p>Processing your order...</p>
+        </div>
+      )}
       
       {orderStatus === 'success' && (
         <div className="space-y-6">
@@ -47,6 +55,7 @@ export default function CheckoutSuccessPage() {
       
       {orderStatus === 'error' && (
         <div className="space-y-6">
+          <AlertCircle className="mx-auto h-16 w-16 text-red-500" />
           <h1 className="text-2xl font-bold">Something went wrong</h1>
           <p>We couldn't process your order. Please contact support.</p>
           <Button asChild>
