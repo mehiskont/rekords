@@ -5,6 +5,7 @@ import { removeFromDiscogsInventory, updateDiscogsInventory } from "@/lib/discog
 import { log } from "@/lib/logger"
 import { prisma } from "@/lib/prisma"
 import { createOrder, updateOrderStatus } from "@/lib/orders"
+import { clearCachedData } from "@/lib/redis"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
@@ -189,6 +190,15 @@ export async function POST(req: Request) {
             }
           }
           
+          // Clear Redis cache for inventory to ensure fresh data on next load
+          try {
+            log("Clearing inventory cache to refresh data...")
+            const clearedCount = await clearCachedData("inventory:*")
+            log(`Cleared ${clearedCount} inventory cache entries`)
+          } catch (error) {
+            log(`Error clearing cache: ${error instanceof Error ? error.message : "Unknown error"}`, "error")
+          }
+          
           log(`Order processing complete. All inventory updates successful: ${allUpdatesSuccessful}`)
         } catch (error) {
           log(`Failed to create or process order: ${error instanceof Error ? error.message : "Unknown error"}`, "error")
@@ -324,6 +334,14 @@ export async function POST(req: Request) {
                   log(`Error updating Discogs inventory for item ${item.id}: ${error instanceof Error ? error.message : "Unknown error"}`, "error");
                 }
               }
+              
+              // Clear Redis cache for inventory
+              try {
+                log("Clearing inventory cache after creating order from payment intent...");
+                await clearCachedData("inventory:*");
+              } catch (error) {
+                log(`Error clearing cache: ${error instanceof Error ? error.message : "Unknown error"}`, "error");
+              }
             } catch (error) {
               log(`Failed to create order from payment intent: ${error instanceof Error ? error.message : "Unknown error"}`, "error");
             }
@@ -394,6 +412,14 @@ export async function POST(req: Request) {
               } catch (error) {
                 log(`Error updating Discogs inventory: ${error instanceof Error ? error.message : "Unknown error"}`, "error");
               }
+            }
+            
+            // Clear Redis cache for inventory
+            try {
+              log("Clearing inventory cache...");
+              await clearCachedData("inventory:*");
+            } catch (error) {
+              log(`Error clearing cache: ${error instanceof Error ? error.message : "Unknown error"}`, "error");
             }
           } catch (error) {
             log(`Failed to create order from payment intent: ${error instanceof Error ? error.message : "Unknown error"}`, "error");

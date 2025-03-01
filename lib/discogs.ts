@@ -441,9 +441,10 @@ export async function getDiscogsInventory(
   })
   console.log("getDiscogsInventory called with:", { search, sort, page, perPage, options })
 
+  // Include a cacheBuster parameter in the cache key if provided
   const cacheKey = `inventory:${search || "all"}:${sort || "default"}:${page}:${perPage}:${options.category || "all"}:${
     options.sort || "default"
-  }:${options.sort_order || "default"}`
+  }:${options.sort_order || "default"}${options.cacheBuster ? `:${options.cacheBuster}` : ''}`
 
   try {
     const cachedData = await getCachedData(cacheKey)

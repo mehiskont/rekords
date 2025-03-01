@@ -48,7 +48,7 @@ export default function CheckoutSuccessPage() {
           <h1 className="text-2xl font-bold">Thank you for your order!</h1>
           <p>Your order has been confirmed and will be shipped soon.</p>
           <Button asChild>
-            <Link href="/orders">View Your Orders</Link>
+            <Link href="/dashboard/orders">View Your Orders</Link>
           </Button>
         </div>
       )}

@@ -68,3 +68,69 @@
 [2025-03-01T15:29:55.223Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3478567482
 [2025-03-01T15:29:56.244Z] [INFO] ✅ Successfully deleted listing 3478567482 using OAuth seller authentication
 [2025-03-01T15:29:56.244Z] [INFO] ✅ Updated Discogs inventory for item 3478567482
+[2025-03-01T15:30:29.210Z] [INFO] Webhook received
+[2025-03-01T15:30:29.211Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-01T15:30:49.013Z] [INFO] Webhook received
+[2025-03-01T15:30:49.015Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-01T15:30:49.352Z] [INFO] Payment intent succeeded: pi_3QxrzkLKWZZc2yek0Z15i9Tw
+[2025-03-01T15:30:49.353Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-01T15:30:49.353Z] [WARN] Payment intent has no sessionId metadata but contains items, creating order
+[2025-03-01T15:30:49.617Z] [INFO] Creating order for user cm7niharu0000pvp2o2pd9ebv, stripe session: pi_3QxrzkLKWZZc2yek0Z15i9Tw
+[2025-03-01T15:30:49.617Z] [INFO] Order total calculated: 5
+[2025-03-01T15:30:50.585Z] [INFO] Order created successfully with ID: cm7qd061n000hpvz9826sok4k
+[2025-03-01T15:30:51.100Z] [INFO] Sent order confirmation email to mehiskont@gmail.com
+[2025-03-01T15:30:51.101Z] [INFO] Created order cm7qd061n000hpvz9826sok4k from payment intent
+[2025-03-01T15:30:51.809Z] [INFO] Updating Discogs inventory for listing 3467857518, quantity: 1
+[2025-03-01T15:30:51.809Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3467857518
+[2025-03-01T15:30:52.869Z] [INFO] ✅ Successfully deleted listing 3467857518 using OAuth seller authentication
+[2025-03-01T15:30:52.869Z] [INFO] ✅ Updated Discogs inventory for item 3467857518
+[2025-03-01T15:34:53.144Z] [INFO] Webhook received
+[2025-03-01T15:34:53.146Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-01T15:34:53.488Z] [INFO] Payment intent succeeded: pi_3QxpHGLKWZZc2yek143yXcPl
+[2025-03-01T15:34:53.488Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-01T15:34:53.488Z] [WARN] Payment intent has no sessionId metadata but contains items, creating order
+[2025-03-01T15:34:53.790Z] [INFO] Creating order for user cm7niharu0000pvp2o2pd9ebv, stripe session: pi_3QxpHGLKWZZc2yek143yXcPl
+[2025-03-01T15:34:53.790Z] [INFO] Order total calculated: 5
+[2025-03-01T15:34:54.718Z] [INFO] Order created successfully with ID: cm7qd5efg000lpvz98456xi6p
+[2025-03-01T15:34:55.147Z] [INFO] Sent order confirmation email to mehiskont@gmail.com
+[2025-03-01T15:34:55.147Z] [INFO] Created order cm7qd5efg000lpvz98456xi6p from payment intent
+[2025-03-01T15:34:56.447Z] [INFO] Updating Discogs inventory for listing 3470382282, quantity: 1
+[2025-03-01T15:34:56.448Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3470382282
+[2025-03-01T15:34:57.443Z] [INFO] ✅ Successfully deleted listing 3470382282 using OAuth seller authentication
+[2025-03-01T15:34:57.444Z] [INFO] ✅ Updated Discogs inventory for item 3470382282
+[2025-03-01T15:38:50.601Z] [INFO] Webhook received
+[2025-03-01T15:38:50.602Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-01T16:23:31.873Z] [INFO] Webhook received
+[2025-03-01T16:23:31.875Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-01T16:23:48.911Z] [INFO] Webhook received
+[2025-03-01T16:23:48.911Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-01T16:23:49.211Z] [INFO] Payment intent succeeded: pi_3Qxsp5LKWZZc2yek1AolYYVy
+[2025-03-01T16:23:49.211Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-01T16:23:49.211Z] [WARN] Payment intent has no sessionId metadata but contains items, creating order
+[2025-03-01T16:23:49.518Z] [INFO] Creating order for user cm7niharu0000pvp2o2pd9ebv, stripe session: pi_3Qxsp5LKWZZc2yek1AolYYVy
+[2025-03-01T16:23:49.518Z] [INFO] Order total calculated: 150
+[2025-03-01T16:23:50.474Z] [INFO] Order created successfully with ID: cm7qewbo1000rpvz9wn6t9iiz
+[2025-03-01T16:23:50.911Z] [INFO] Sent order confirmation email to mehiskont@gmail.com
+[2025-03-01T16:23:50.911Z] [INFO] Created order cm7qewbo1000rpvz9wn6t9iiz from payment intent
+[2025-03-01T16:23:51.513Z] [INFO] Updating Discogs inventory for listing 3469300161, quantity: 1
+[2025-03-01T16:23:51.513Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3469300161
+[2025-03-01T16:23:52.239Z] [INFO] ✅ Successfully deleted listing 3469300161 using OAuth seller authentication
+[2025-03-01T16:23:52.239Z] [INFO] ✅ Updated Discogs inventory for item 3469300161
+[2025-03-01T16:23:52.239Z] [INFO] Clearing inventory cache...
+[2025-03-01T16:33:14.628Z] [INFO] Webhook received
+[2025-03-01T16:33:14.629Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-01T16:33:44.129Z] [INFO] Webhook received
+[2025-03-01T16:33:44.130Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-01T16:33:44.465Z] [INFO] Payment intent succeeded: pi_3QxsyULKWZZc2yek1SniJKap
+[2025-03-01T16:33:44.465Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-01T16:33:44.465Z] [WARN] Payment intent has no sessionId metadata but contains items, creating order
+[2025-03-01T16:33:44.723Z] [INFO] Creating order for user cm7niharu0000pvp2o2pd9ebv, stripe session: pi_3QxsyULKWZZc2yek1SniJKap
+[2025-03-01T16:33:44.724Z] [INFO] Order total calculated: 200
+[2025-03-01T16:33:46.007Z] [INFO] Order created successfully with ID: cm7qf9304000wpvz93oxj7fq8
+[2025-03-01T16:33:47.402Z] [INFO] Sent order confirmation email to mehiskont@gmail.com
+[2025-03-01T16:33:47.403Z] [INFO] Created order cm7qf9304000wpvz93oxj7fq8 from payment intent
+[2025-03-01T16:33:48.602Z] [INFO] Updating Discogs inventory for listing 3467862918, quantity: 1
+[2025-03-01T16:33:48.602Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3467862918
+[2025-03-01T16:33:49.693Z] [INFO] ✅ Successfully deleted listing 3467862918 using OAuth seller authentication
+[2025-03-01T16:33:49.694Z] [INFO] ✅ Updated Discogs inventory for item 3467862918
+[2025-03-01T16:33:49.694Z] [INFO] Clearing inventory cache...

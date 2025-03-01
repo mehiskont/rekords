@@ -34,5 +34,25 @@ export async function setCachedData(key: string, value: string, ttl: number) {
   }
 }
 
+export async function clearCachedData(pattern: string = "*") {
+  try {
+    if (!redisClient.isReady) return
+    
+    // Get all keys matching the pattern
+    const keys = await redisClient.keys(pattern)
+    
+    // Delete all matching keys
+    if (keys.length > 0) {
+      await redisClient.del(keys)
+      console.log(`Cleared ${keys.length} cache entries matching pattern: ${pattern}`)
+    }
+    
+    return keys.length
+  } catch (error) {
+    console.error("Redis clear cache error:", error)
+    return 0
+  }
+}
+
 export default redisClient
 

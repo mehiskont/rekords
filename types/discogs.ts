@@ -41,5 +41,6 @@ export interface DiscogsInventoryOptions {
   sort?: string
   sort_order?: string
   fetchFullReleaseData?: boolean
+  cacheBuster?: string  // Used to bypass cache for fresh data
 }
 
