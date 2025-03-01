@@ -3,6 +3,7 @@ import { NextResponse } from "next/server"
 import Stripe from "stripe"
 import { prisma } from "@/lib/prisma"
 import { sendOrderConfirmationEmail, sendOrderFailedEmail } from "@/lib/email"
+import { log } from "@/lib/logger"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
@@ -109,6 +110,18 @@ async function handleSuccessfulPayment(session: Stripe.Checkout.Session | Stripe
     },
   })
 
+  // Remove items from Discogs inventory
+  for (const item of items) {
+    try {
+      // Import the updateDiscogsInventory function at the top of the file
+      // This uses the more robust implementation from /lib/discogs.ts
+      const { updateDiscogsInventory } = await import("@/lib/discogs");
+      await updateDiscogsInventory(item.id.toString(), item.quantity || 1);
+    } catch (error) {
+      console.error(`Failed to update Discogs inventory for item ${item.id}:`, error);
+    }
+  }
+
   // Send confirmation email
   if (customer.email) {
     await sendOrderConfirmationEmail(customer.email, {
@@ -159,72 +172,6 @@ async function handleRefundUpdate(refund: Stripe.Refund) {
   })
 }
 
-export async function updateDiscogsInventory(
-  listingId: string, 
-  quantityPurchased: number = 1
-): Promise<boolean> {
-  log(`Updating inventory for listing ${listingId}, quantity: ${quantityPurchased}`)
-  
-  try {
-    // First, get the current listing to check its quantity
-    const response = await fetchWithRetry(`${BASE_URL}/marketplace/listings/${listingId}`, {
-      headers: {
-        Authorization: `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
-        "User-Agent": "PlastikRecordStore/1.0",
-      },
-      retryOptions: {
-        maxRetries: 3,
-        baseDelay: 1000,
-        maxDelay: 5000,
-      },
-    })
-    
-    if (!response.ok) {
-      log(`Failed to fetch listing ${listingId}: ${response.status} ${response.statusText}`, "error")
-      return false
-    }
-    
-    const listing = await response.json()
-    const currentQuantity = Number(listing.quantity || 0)
-    
-    if (currentQuantity <= quantityPurchased) {
-      // If purchased all or more than available, delete the listing completely
-      log(`Deleting listing ${listingId} as all items were purchased`)
-      return removeFromDiscogsInventory(listingId)
-    } else {
-      // Otherwise, update the quantity
-      const newQuantity = currentQuantity - quantityPurchased
-      log(`Updating listing ${listingId} to quantity: ${newQuantity}`)
-      
-      const updateResponse = await fetchWithRetry(`${BASE_URL}/marketplace/listings/${listingId}`, {
-        method: "POST",
-        headers: {
-          Authorization: `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
-          "User-Agent": "PlastikRecordStore/1.0",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          quantity: newQuantity,
-        }),
-        retryOptions: {
-          maxRetries: 3,
-          baseDelay: 1000,
-          maxDelay: 5000,
-        },
-      })
-      
-      if (!updateResponse.ok) {
-        log(`Failed to update listing ${listingId}: ${updateResponse.status} ${updateResponse.statusText}`, "error")
-        return false
-      }
-      
-      return true
-    }
-  } catch (error) {
-    log(`Error updating inventory for listing ${listingId}: ${
-      error instanceof Error ? error.message : "Unknown error"
-    }`, "error")
-    return false
-  }
-}
+// This function has been moved to /lib/discogs.ts
+// Use the import { updateDiscogsInventory } from "@/lib/discogs" instead
 

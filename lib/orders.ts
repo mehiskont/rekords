@@ -1,8 +1,9 @@
 import { prisma } from "@/lib/prisma"
-import { removeFromDiscogsInventory } from "@/lib/discogs"
+import { updateDiscogsInventory } from "@/lib/discogs"
 import { sendOrderConfirmationEmail, sendOrderShippedEmail } from "@/lib/email"
 import type { CartItem } from "@/types/cart"
 import type { OrderDetails, ShippingAddress } from "@/types/order"
+import { log } from "@/lib/logger"
 
 export async function createOrder(
   userId: string,
@@ -38,7 +39,13 @@ export async function createOrder(
 
   // Remove items from Discogs inventory
   for (const item of items) {
-    await removeFromDiscogsInventory(item.id.toString())
+    try {
+      log(`Updating Discogs inventory for item ${item.id}, quantity ${item.quantity}`)
+      await updateDiscogsInventory(item.id.toString(), item.quantity || 1)
+      log(`Successfully updated Discogs inventory for item ${item.id}`)
+    } catch (error) {
+      log(`Failed to update Discogs inventory for item ${item.id}: ${error instanceof Error ? error.message : String(error)}`, "error")
+    }
   }
 
   // Send order confirmation email
