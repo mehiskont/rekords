@@ -40,7 +40,7 @@ export async function POST(req: Request) {
           name: item.title,
           images: [item.cover_image],
           metadata: {
-            discogs_id: item.id,
+            discogsId: item.id,
           },
         },
         unit_amount: Math.round(calculatePriceWithoutFees(item.price) * 100),

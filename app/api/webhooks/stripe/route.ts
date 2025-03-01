@@ -3,7 +3,7 @@ import { headers } from "next/headers"
 import Stripe from "stripe"
 import { removeFromDiscogsInventory, updateDiscogsInventory } from "@/lib/discogs"
 import { log } from "@/lib/logger"
-import { db } from "@/lib/db"
+import { prisma } from "@/lib/prisma"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
@@ -29,7 +29,7 @@ export async function POST(req: Request) {
   log(`✅ Webhook event received: ${event.type}`)
 
   // Store webhook in database for debugging
-  await db.webhookLog.create({
+  await prisma.webhookLog.create({
     data: {
       type: event.type,
       payload: JSON.stringify(event.data.object)
