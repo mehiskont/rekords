@@ -291,32 +291,26 @@ export async function updateDiscogsInventory(
       return false
     }
     
-    // STEP 2: Get current listing details
-    const listingUrl = `${BASE_URL}/marketplace/listings/${listingId}`
-    log(`Fetching listing from: ${listingUrl}`)
-    
-    // Get seller authentication from database
-    const auth = await prisma.discogsAuth.findFirst({
-      where: { username: process.env.DISCOGS_USERNAME },
-      orderBy: { lastVerified: 'desc' }
-    });
-    
-    if (!auth) {
-      log("No Discogs authentication found in database", "error")
-      return false
+    try {
+      // First method: Try the direct OAuth seller method
+      log(`Attempting direct OAuth deletion for Discogs listing ${listingId}`)
+      const { deleteDiscogsListing } = await import('@/lib/discogs-seller');
+      
+      const oauthResult = await deleteDiscogsListing(listingId);
+      if (oauthResult) {
+        log(`✅ Successfully deleted listing ${listingId} using OAuth seller authentication`)
+        return true;
+      }
+    } catch (error) {
+      log(`OAuth deletion attempt failed: ${error instanceof Error ? error.message : String(error)}`, "error")
+      // Continue to next method
     }
     
-    // Use OAuth to authenticate the request
-    const { getSellerToken, deleteDiscogsListing } = await import('@/lib/discogs-seller');
-    
     try {
-      log(`Using seller authentication to delete Discogs listing ${listingId}`)
-      // Try the OAuth seller method
-      return await deleteDiscogsListing(listingId);
-    } catch (error) {
-      log(`OAuth delete failed, falling back to token-based method: ${error instanceof Error ? error.message : String(error)}`, "error")
+      // Second method: Try token-based listing update/delete
+      const listingUrl = `${BASE_URL}/marketplace/listings/${listingId}`
+      log(`Trying token-based approach. Fetching listing from: ${listingUrl}`)
       
-      // Fall back to token-based method
       const listingResponse = await fetch(listingUrl, {
         headers: {
           'Authorization': `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
@@ -325,13 +319,19 @@ export async function updateDiscogsInventory(
       })
       
       if (!listingResponse.ok) {
+        if (listingResponse.status === 404) {
+          // If listing is already gone, consider it a success
+          log(`Listing ${listingId} not found (404) - might already be deleted`)
+          return true
+        }
+        
         const errorText = await listingResponse.text()
         log(`Failed to get listing ${listingId}: ${listingResponse.status} - ${errorText}`, "error")
-        return false
+        throw new Error(`Failed to get listing: ${errorText}`)
       }
       
       const listing = await listingResponse.json()
-      log(`Current listing data: ${JSON.stringify(listing)}`)
+      log(`Retrieved listing data: ${JSON.stringify(listing)}`)
       
       // STEP 3: Determine if we need to delete or update quantity
       const currentQuantity = parseInt(listing.quantity || "1", 10)
@@ -351,10 +351,10 @@ export async function updateDiscogsInventory(
         if (!deleteResponse.ok) {
           const errorText = await deleteResponse.text()
           log(`Failed to delete listing ${listingId}: ${deleteResponse.status} - ${errorText}`, "error")
-          return false
+          throw new Error(`Failed to delete listing: ${errorText}`)
         }
         
-        log(`✅ Successfully deleted listing ${listingId}`)
+        log(`✅ Successfully deleted listing ${listingId} via token-based method`)
         return true
       } else {
         // Update quantity
@@ -381,7 +381,7 @@ export async function updateDiscogsInventory(
         if (!updateResponse.ok) {
           const errorText = await updateResponse.text()
           log(`Failed to update listing ${listingId}: ${updateResponse.status} - ${errorText}`, "error")
-          return false
+          throw new Error(`Failed to update listing quantity: ${errorText}`)
         }
         
         const updateResult = await updateResponse.json()
@@ -389,6 +389,21 @@ export async function updateDiscogsInventory(
         log(`✅ Successfully updated listing ${listingId} quantity to ${newQuantity}`)
         return true
       }
+    } catch (error) {
+      log(`Token-based method failed: ${error instanceof Error ? error.message : String(error)}`, "error")
+      // Try the third method
+    }
+    
+    // Last resort - try the removeFromDiscogsInventory function directly
+    log(`Trying last resort method: direct removal for listing ${listingId}`)
+    const result = await removeFromDiscogsInventory(listingId);
+    
+    if (result) {
+      log(`✅ Successfully removed listing ${listingId} using last resort method`)
+      return true
+    } else {
+      log(`❌ All methods failed to remove listing ${listingId}`, "error")
+      return false
     }
   } catch (error) {
     log(`Unexpected error updating inventory for ${listingId}: ${error instanceof Error ? error.message : String(error)}`, "error")

@@ -56,6 +56,11 @@ export async function POST(req: Request) {
       success_url: `${origin}/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${origin}/cart`,
       customer_email: session?.user?.email || customer.email,
+      payment_intent_data: {
+        metadata: {
+          sessionId: "{CHECKOUT_SESSION_ID}",  // This will be replaced by Stripe
+        },
+      },
       metadata: {
         items: JSON.stringify(items),
         userId: userId || "",

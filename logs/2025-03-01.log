@@ -1,0 +1,12 @@
+[2025-03-01T12:57:55.507Z] [INFO] Webhook received
+[2025-03-01T12:57:55.509Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-01T12:58:09.517Z] [INFO] Webhook received
+[2025-03-01T12:58:09.518Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-01T12:58:09.798Z] [INFO] Payment intent succeeded: pi_3Qxpc6LKWZZc2yek1YBaP8p8
+[2025-03-01T12:58:09.799Z] [ERROR] Payment intent has no sessionId metadata
+[2025-03-01T13:02:55.247Z] [INFO] Webhook received
+[2025-03-01T13:02:55.249Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-01T13:03:06.706Z] [INFO] Webhook received
+[2025-03-01T13:03:06.707Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-01T13:03:06.991Z] [INFO] Payment intent succeeded: pi_3QxpgwLKWZZc2yek1azh6gy5
+[2025-03-01T13:03:06.991Z] [ERROR] Payment intent has no sessionId metadata
