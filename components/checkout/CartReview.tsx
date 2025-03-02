@@ -61,14 +61,21 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
   useEffect(() => {
     const countryToUse = shippingAddressSameAsBilling ? billingCountry : shippingCountry
     if (countryToUse) {
-      const totalWeight = calculateTotalWeight(
-        state.items.map((item) => ({
-          weight: item.weight,
-          quantity: item.quantity,
-        })),
-      )
-      const cost = calculateShippingCost(totalWeight, countryToUse)
-      setShippingCost(cost)
+      // For Estonia, always use fixed rate
+      if (countryToUse.toLowerCase() === 'estonia' || countryToUse.toLowerCase() === 'eesti') {
+        console.log('Using fixed Estonian shipping rate: €2.99');
+        setShippingCost(2.99);
+      } else {
+        // Calculate based on weight for international shipping
+        const totalWeight = calculateTotalWeight(
+          state.items.map((item) => ({
+            weight: item.weight,
+            quantity: item.quantity,
+          })),
+        )
+        const cost = calculateShippingCost(totalWeight, countryToUse)
+        setShippingCost(cost)
+      }
     }
   }, [billingCountry, shippingCountry, shippingAddressSameAsBilling, state.items])
 
@@ -310,7 +317,7 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
             <span>${vat.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span>Shipping</span>
+            <span>Shipping {billingCountry ? `(to ${billingCountry})` : ''}</span>
             <span>${shippingCost.toFixed(2)}</span>
           </div>
           <div className="flex justify-between font-bold text-lg pt-2 border-t">

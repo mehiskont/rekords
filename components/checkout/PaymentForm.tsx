@@ -37,18 +37,27 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
         throw new Error(submitError.message)
       }
 
-      const { error: paymentError } = await stripe.confirmPayment({
+      const { error: paymentError, paymentIntent } = await stripe.confirmPayment({
         elements,
         confirmParams: {
           return_url: `${window.location.origin}/checkout/success`,
         },
+        redirect: 'if_required', // Only redirect if 3D Secure is required
       })
 
       if (paymentError) {
         throw new Error(paymentError.message)
       }
 
-      onSuccess()
+      if (paymentIntent && paymentIntent.status === 'succeeded') {
+        // Payment complete without redirect, manually navigate to success page
+        console.log("Payment succeeded without redirect, navigating to success page");
+        window.location.href = "/checkout/success";
+      } else if (paymentIntent) {
+        console.log(`Payment status: ${paymentIntent.status}`);
+        // For other statuses, call the success handler which might redirect
+        onSuccess();
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : "Payment failed")
     } finally {
@@ -104,6 +113,7 @@ export function PaymentForm({ clientSecret, total, subtotal, vat, shippingCost, 
           <div className="flex justify-between">
             <span>Shipping</span>
             <span>${shippingCost.toFixed(2)}</span>
+            <span className="text-xs text-muted-foreground ml-1">(based on weight & destination)</span>
           </div>
           <div className="flex justify-between font-bold pt-2 border-t">
             <span>Total</span>

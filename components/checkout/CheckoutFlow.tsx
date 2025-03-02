@@ -73,10 +73,20 @@ export function CheckoutFlow() {
           quantity: item.quantity,
         })),
       )
-      const shippingCost = calculateShippingCost(
-        totalWeight,
-        data.shippingAddressSameAsBilling ? data.country : data.shippingCountry || data.country,
-      )
+      
+      // Get destination country
+      const destinationCountry = data.shippingAddressSameAsBilling ? data.country : data.shippingCountry || data.country;
+      console.log(`Calculating shipping to: ${destinationCountry}`);
+      
+      // For Estonia, always use flat rate
+      let shippingCost;
+      if (destinationCountry.toLowerCase() === 'estonia' || destinationCountry.toLowerCase() === 'eesti') {
+        shippingCost = 2.99; // Fixed rate for Estonia
+        console.log(`Using fixed Estonian shipping rate: €${shippingCost}`);
+      } else {
+        shippingCost = calculateShippingCost(totalWeight, destinationCountry);
+        console.log(`Calculated international shipping rate: €${shippingCost}`);
+      }
       setShippingCost(shippingCost)
 
       // Create payment intent with updated total including shipping

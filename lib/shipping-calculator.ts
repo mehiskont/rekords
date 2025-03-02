@@ -23,6 +23,9 @@ const SHIPPING_RATES = {
   ],
 }
 
+// Debug shipping rates
+console.log("Shipping rates configuration:", JSON.stringify(SHIPPING_RATES, null, 2));
+
 // List of European country codes (you may need to expand this list)
 const EUROPEAN_COUNTRIES = countryList()
   .getData()
@@ -47,6 +50,7 @@ const EUROPEAN_COUNTRIES = countryList()
       "Luxembourg",
       "Malta",
       "Netherlands",
+      "Norway",
       "Poland",
       "Portugal",
       "Romania",
@@ -54,15 +58,20 @@ const EUROPEAN_COUNTRIES = countryList()
       "Slovenia",
       "Spain",
       "Sweden",
+      "Switzerland",
+      "United Kingdom",
     ].includes(country.label),
   )
   .map((country) => country.label)
+
+// Log European countries for debugging
+console.log("European countries list:", JSON.stringify(EUROPEAN_COUNTRIES, null, 2));
 
 /**
  * Calculate shipping cost based on total weight and destination country
  *
  * @param totalWeight - Total weight in grams
- * @param destinationCountry - Country code
+ * @param destinationCountry - Country code or name
  * @param shippingMethod - Shipping method (for Estonia)
  * @returns Calculated shipping cost
  */
@@ -71,24 +80,46 @@ export function calculateShippingCost(
   destinationCountry: string,
   shippingMethod: "ITELLA_SMARTPOST" | "LOCAL_PICKUP" = "ITELLA_SMARTPOST",
 ): number {
-  // Handle Estonia separately
-  if (destinationCountry.toLowerCase() === "estonia") {
-    return SHIPPING_RATES.ESTONIA[shippingMethod]
+  console.log(`Calculating shipping for weight: ${totalWeight}g to country: ${destinationCountry}`);
+  
+  // Default to a minimum weight if none is provided
+  if (!totalWeight || totalWeight <= 0) {
+    totalWeight = 180; // Default weight of one record
+    console.log(`Using default weight of ${totalWeight}g`);
   }
+  
+  // Handle Estonia separately - always use the flat rate regardless of weight
+  const countryLower = destinationCountry.toLowerCase();
+  if (countryLower === "estonia" || countryLower === "eesti") {
+    const shippingCost = SHIPPING_RATES.ESTONIA[shippingMethod];
+    console.log(`Estonia shipping cost (${shippingMethod}): €${shippingCost} (fixed rate)`);
+    return shippingCost;
+  }
+  
+  // Standardize country name for easier matching
+  const countryNormalized = destinationCountry.trim();
 
   // Determine if the destination is in Europe
-  const isEurope = EUROPEAN_COUNTRIES.includes(destinationCountry)
-  const rates = isEurope ? SHIPPING_RATES.EUROPE : SHIPPING_RATES.REST_OF_WORLD
+  const isEurope = EUROPEAN_COUNTRIES.some(country => 
+    country.toLowerCase() === countryNormalized.toLowerCase()
+  );
+  
+  console.log(`Country ${destinationCountry} is in Europe: ${isEurope}`);
+  
+  const rates = isEurope ? SHIPPING_RATES.EUROPE : SHIPPING_RATES.REST_OF_WORLD;
 
   // Find the appropriate shipping rate based on weight
   for (const rate of rates) {
     if (totalWeight <= rate.maxWeight) {
-      return rate.cost
+      console.log(`Selected shipping rate: €${rate.cost} (weight: ${totalWeight}g, max weight: ${rate.maxWeight}g)`);
+      return rate.cost;
     }
   }
 
-  // If we've reached here, use the highest rate (should never happen due to Infinity maxWeight)
-  return rates[rates.length - 1].cost
+  // If we've reached here, use the highest rate
+  const highestRate = rates[rates.length - 1].cost;
+  console.log(`Using highest shipping rate: €${highestRate}`);
+  return highestRate;
 }
 
 /**
@@ -98,11 +129,16 @@ export function calculateShippingCost(
  * @returns Total weight in grams
  */
 export function calculateTotalWeight(items: Array<{ weight?: number; quantity: number }>): number {
-  return items.reduce((total, item) => {
+  const totalWeight = items.reduce((total, item) => {
     // Default to 180g per record if weight is not specified
-    const itemWeight = item.weight || 180
-    return total + itemWeight * item.quantity
-  }, 0)
+    const itemWeight = item.weight || 180;
+    const itemTotalWeight = itemWeight * item.quantity;
+    console.log(`Item weight: ${itemWeight}g × ${item.quantity} = ${itemTotalWeight}g`);
+    return total + itemTotalWeight;
+  }, 0);
+  
+  console.log(`Total order weight: ${totalWeight}g`);
+  return totalWeight;
 }
 
 // Example usage:

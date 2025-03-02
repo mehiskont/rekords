@@ -1,0 +1,25 @@
+[2025-03-02T06:32:56.748Z] [INFO] Webhook received
+[2025-03-02T06:32:56.751Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-02T06:35:15.702Z] [INFO] Webhook received
+[2025-03-02T06:35:15.703Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-02T06:35:16.091Z] [INFO] Payment intent succeeded: pi_3Qy655LKWZZc2yek0mjxWPZX
+[2025-03-02T06:35:16.091Z] [INFO] Found 3 items in payment intent metadata
+[2025-03-02T06:35:16.091Z] [WARN] Payment intent has no sessionId metadata but contains items, creating order
+[2025-03-02T06:35:16.399Z] [INFO] Creating order for user cm7niharu0000pvp2o2pd9ebv, stripe session: pi_3Qy655LKWZZc2yek0mjxWPZX
+[2025-03-02T06:35:16.399Z] [INFO] Order total calculated: 440
+[2025-03-02T06:35:17.719Z] [INFO] Order created successfully with ID: cm7r9balo0003pvcl4u1x6ifd
+[2025-03-02T06:35:18.275Z] [INFO] Sent order confirmation email to mehiskont@gmail.com
+[2025-03-02T06:35:18.276Z] [INFO] Created order cm7r9balo0003pvcl4u1x6ifd from payment intent
+[2025-03-02T06:35:18.919Z] [INFO] Updating Discogs inventory for listing 3467857641, quantity: 1
+[2025-03-02T06:35:18.920Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3467857641
+[2025-03-02T06:35:19.778Z] [INFO] ✅ Successfully deleted listing 3467857641 using OAuth seller authentication
+[2025-03-02T06:35:19.779Z] [INFO] ✅ Updated Discogs inventory for item 3467857641
+[2025-03-02T06:35:19.779Z] [INFO] Updating Discogs inventory for listing 3467857761, quantity: 1
+[2025-03-02T06:35:19.779Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3467857761
+[2025-03-02T06:35:20.420Z] [INFO] ✅ Successfully deleted listing 3467857761 using OAuth seller authentication
+[2025-03-02T06:35:20.420Z] [INFO] ✅ Updated Discogs inventory for item 3467857761
+[2025-03-02T06:35:20.421Z] [INFO] Updating Discogs inventory for listing 3467861058, quantity: 1
+[2025-03-02T06:35:20.421Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3467861058
+[2025-03-02T06:35:21.090Z] [INFO] ✅ Successfully deleted listing 3467861058 using OAuth seller authentication
+[2025-03-02T06:35:21.090Z] [INFO] ✅ Updated Discogs inventory for item 3467861058
+[2025-03-02T06:35:21.091Z] [INFO] Clearing inventory cache...
