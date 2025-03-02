@@ -60,3 +60,49 @@ Invalid `prisma.user.findFirst()` invocation:
 Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
 
 Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-02T08:13:20.786Z] [INFO] Webhook received
+[2025-03-02T08:13:20.788Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-02T08:13:29.616Z] [INFO] Webhook received
+[2025-03-02T08:13:29.617Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-02T08:13:38.751Z] [INFO] Payment intent succeeded: pi_3Qy7eELKWZZc2yek1X0HCFEF
+[2025-03-02T08:13:38.751Z] [INFO] Found 2 items in payment intent metadata
+[2025-03-02T08:13:38.751Z] [WARN] Payment intent has no sessionId metadata but contains items, creating order
+[2025-03-02T08:13:39.094Z] [INFO] Creating order for user cm7niharu0000pvp2o2pd9ebv, stripe session: pi_3Qy7eELKWZZc2yek1X0HCFEF
+[2025-03-02T08:13:39.094Z] [INFO] Order total calculated: 382
+[2025-03-02T08:13:45.355Z] [INFO] Order created successfully with ID: cm7rctup40003pv9jumyrue0w
+[2025-03-02T08:13:47.534Z] [INFO] Sent order confirmation email to mehiskont@gmail.com
+[2025-03-02T08:13:47.534Z] [INFO] Created order cm7rctup40003pv9jumyrue0w from payment intent
+[2025-03-02T08:13:48.514Z] [INFO] Updating Discogs inventory for listing 3482690289, quantity: 1
+[2025-03-02T08:13:48.514Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3482690289
+[2025-03-02T08:13:50.193Z] [INFO] ✅ Successfully deleted listing 3482690289 using OAuth seller authentication
+[2025-03-02T08:13:50.194Z] [INFO] ✅ Updated Discogs inventory for item 3482690289
+[2025-03-02T08:13:50.194Z] [INFO] Updating Discogs inventory for listing 3482690265, quantity: 1
+[2025-03-02T08:13:50.194Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3482690265
+[2025-03-02T08:13:55.837Z] [INFO] ✅ Successfully deleted listing 3482690265 using OAuth seller authentication
+[2025-03-02T08:13:55.838Z] [INFO] ✅ Updated Discogs inventory for item 3482690265
+[2025-03-02T08:13:55.838Z] [INFO] Clearing inventory cache...
+[2025-03-02T08:14:06.742Z] [INFO] Webhook received
+[2025-03-02T08:14:06.743Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-02T08:14:07.086Z] [INFO] Payment intent succeeded: pi_3Qy7eELKWZZc2yek1X0HCFEF
+[2025-03-02T08:14:07.087Z] [INFO] Found 2 items in payment intent metadata
+[2025-03-02T08:14:07.087Z] [WARN] Payment intent has no sessionId metadata but contains items, creating order
+[2025-03-02T08:14:07.390Z] [INFO] Creating order for user cm7niharu0000pvp2o2pd9ebv, stripe session: pi_3Qy7eELKWZZc2yek1X0HCFEF
+[2025-03-02T08:14:07.390Z] [INFO] Order total calculated: 382
+[2025-03-02T08:14:07.696Z] [INFO] Order already exists for session pi_3Qy7eELKWZZc2yek1X0HCFEF, returning existing order
+[2025-03-02T08:14:07.697Z] [INFO] Created order cm7rctup40003pv9jumyrue0w from payment intent
+[2025-03-02T08:14:08.258Z] [INFO] Updating Discogs inventory for listing 3482690289, quantity: 1
+[2025-03-02T08:14:08.259Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3482690289
+[2025-03-02T08:14:09.214Z] [INFO] ✅ Successfully deleted listing 3482690289 using OAuth seller authentication
+[2025-03-02T08:14:09.214Z] [INFO] ✅ Updated Discogs inventory for item 3482690289
+[2025-03-02T08:14:09.215Z] [INFO] Updating Discogs inventory for listing 3482690265, quantity: 1
+[2025-03-02T08:14:09.215Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3482690265
+[2025-03-02T08:14:09.783Z] [INFO] ✅ Successfully deleted listing 3482690265 using OAuth seller authentication
+[2025-03-02T08:14:09.783Z] [INFO] ✅ Updated Discogs inventory for item 3482690265
+[2025-03-02T08:14:09.784Z] [INFO] Clearing inventory cache...
+[2025-03-02T08:32:46.035Z] [INFO] Webhook received
+[2025-03-02T08:32:46.036Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-02T08:32:56.042Z] [ERROR] Failed to store webhook log: 
+Invalid `prisma.webhookLog.create()` invocation:
+
+
+Timed out fetching a new connection from the connection pool. More info: http://pris.ly/d/connection-pool (Current connection pool timeout: 10, connection limit: 23)

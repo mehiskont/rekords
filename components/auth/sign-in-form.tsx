@@ -93,7 +93,20 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
         disabled={isLoading}
         onClick={() => {
           setIsLoading(true)
-          signIn("google", { callbackUrl })
+          // Add extra logging and error handling for google sign in
+          console.log("Attempting Google sign in");
+          signIn("google", { 
+            callbackUrl,
+            redirect: true // Force redirect
+          }).catch(error => {
+            console.error("Google sign in error:", error);
+            setIsLoading(false);
+            toast({
+              title: "Authentication Error",
+              description: "Error signing in with Google. Please try again.",
+              variant: "destructive",
+            });
+          });
         }}
       >
         {isLoading ? (
