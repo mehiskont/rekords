@@ -38,7 +38,7 @@ export function CheckoutFlow() {
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo | null>(null)
   const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [shippingCost, setShippingCost] = useState(0)
+  const [shippingCost, setShippingCost] = useState(2.99) // Default to Estonian rate
   const router = useRouter()
   const { state: cartState, dispatch: cartDispatch } = useCart()
   const { data: session } = useSession()
@@ -46,6 +46,12 @@ export function CheckoutFlow() {
   // Calculate totals
   const subtotal = cartState.items.reduce((sum, item) => sum + calculatePriceWithoutFees(item.price) * item.quantity, 0)
   const vat = subtotal * 0.2 // 20% VAT
+  
+  // Log current shipping cost
+  useEffect(() => {
+    console.log(`Current shipping cost in CheckoutFlow: €${shippingCost}`);
+  }, [shippingCost]);
+  
   const total = subtotal + vat + shippingCost
 
   // Load saved step on mount
@@ -76,13 +82,19 @@ export function CheckoutFlow() {
       
       // Get destination country
       const destinationCountry = data.shippingAddressSameAsBilling ? data.country : data.shippingCountry || data.country;
-      console.log(`Calculating shipping to: ${destinationCountry}`);
+      console.log(`Calculating shipping to: ${destinationCountry}, sameAddress: ${data.shippingAddressSameAsBilling}`);
       
-      // For Estonia, always use flat rate
+      // For Estonia, always use flat rate - Check for 'estonia', 'eesti', or 'ee' (country code)
       let shippingCost;
-      if (destinationCountry.toLowerCase() === 'estonia' || destinationCountry.toLowerCase() === 'eesti') {
+      const countryLower = (destinationCountry || '').toLowerCase();
+      
+      if (countryLower === 'estonia' || countryLower === 'eesti' || countryLower === 'ee') {
         shippingCost = 2.99; // Fixed rate for Estonia
         console.log(`Using fixed Estonian shipping rate: €${shippingCost}`);
+      } else if (!destinationCountry) {
+        // Default to Estonian rate if no country
+        shippingCost = 2.99;
+        console.log(`No country selected, defaulting to Estonian rate: €${shippingCost}`);
       } else {
         shippingCost = calculateShippingCost(totalWeight, destinationCountry);
         console.log(`Calculated international shipping rate: €${shippingCost}`);
@@ -96,7 +108,7 @@ export function CheckoutFlow() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: total,
+          amount: subtotal + vat + shippingCost, // Calculate total here to ensure correct amount
           customer: {
             ...data,
             email: session?.user?.email || data.email,

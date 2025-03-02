@@ -37,23 +37,35 @@ function cartReducer(state: CartState, action: CartAction): CartState {
       const existingItem = state.items.find((item) => item.id === action.payload.id)
 
       if (existingItem) {
-        return {
-          ...state,
-          items: state.items.map((item) =>
+        const updatedItems = state.items.map((item) =>
             item.id === action.payload.id
               ? {
                   ...item,
                   quantity: Math.min(item.quantity + 1, item.quantity_available),
-                  weight: action.payload.weight,
+                  weight: action.payload.weight || 180, // Ensure weight is set, default to 180g
                 }
-              : item,
-          ),
+              : item
+        );
+        
+        // Log for debugging weight issues
+        console.log(`Updated cart item: ID=${action.payload.id}, weight: ${action.payload.weight || 180}g`);
+        
+        return {
+          ...state,
+          items: updatedItems,
         }
       }
+      
+      // Log for debugging weight issues
+      console.log(`Added new cart item: ID=${action.payload.id}, weight: ${action.payload.weight || 180}g`);
 
       return {
         ...state,
-        items: [...state.items, { ...action.payload, quantity: 1, weight: action.payload.weight }],
+        items: [...state.items, { 
+          ...action.payload, 
+          quantity: 1, 
+          weight: action.payload.weight || 180  // Ensure weight is set, default to 180g
+        }],
       }
     }
     case "REMOVE_ITEM":

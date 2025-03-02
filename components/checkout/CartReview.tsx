@@ -49,7 +49,7 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
   const [subscribe, setSubscribe] = useState(false)
   const [billingCountry, setBillingCountry] = useState("")
   const [shippingCountry, setShippingCountry] = useState("")
-  const [shippingCost, setShippingCost] = useState(0)
+  const [shippingCost, setShippingCost] = useState(2.99) // Default to Estonian rate
 
   const countryOptions = useMemo(() => countryList().getData(), [])
 
@@ -58,25 +58,55 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
   const total = subtotal + vat + shippingCost
 
   // Calculate shipping cost when country changes
+  // Force Estonian rate update when the component mounts
   useEffect(() => {
-    const countryToUse = shippingAddressSameAsBilling ? billingCountry : shippingCountry
-    if (countryToUse) {
-      // For Estonia, always use fixed rate
-      if (countryToUse.toLowerCase() === 'estonia' || countryToUse.toLowerCase() === 'eesti') {
-        console.log('Using fixed Estonian shipping rate: €2.99');
-        setShippingCost(2.99);
-      } else {
-        // Calculate based on weight for international shipping
-        const totalWeight = calculateTotalWeight(
-          state.items.map((item) => ({
-            weight: item.weight,
-            quantity: item.quantity,
-          })),
-        )
-        const cost = calculateShippingCost(totalWeight, countryToUse)
-        setShippingCost(cost)
-      }
+    console.log('CartReview: Initializing shipping cost to €2.99 (Estonian rate)');
+    setShippingCost(2.99);
+  }, []);
+
+  // Calculate shipping cost when country or items change
+  useEffect(() => {
+    // Explicitly determine the actual country value from the select component
+    const countryToUse = shippingAddressSameAsBilling ? billingCountry : shippingCountry;
+    console.log(`CartReview: Country changed to: ${countryToUse || 'none'}, sameAddress: ${shippingAddressSameAsBilling}, billing: ${billingCountry}, shipping: ${shippingCountry}`);
+    
+    // Check if the countryToUse is Estonia regardless of case
+    const isEstonia = countryToUse && 
+      (countryToUse.toLowerCase() === 'estonia' || 
+       countryToUse.toLowerCase() === 'eesti' || 
+       countryToUse.toLowerCase() === 'ee');
+    
+    if (isEstonia) {
+      // Always use Estonian rate for Estonia
+      console.log('CartReview: Using fixed Estonian shipping rate: €2.99');
+      setShippingCost(2.99);
+      return;
     }
+    
+    if (!countryToUse) {
+      // Default to Estonian rate if no country is selected
+      console.log('CartReview: No country selected, defaulting to Estonian rate: €2.99');
+      setShippingCost(2.99);
+      return;
+    }
+    
+    // For all other countries, calculate based on weight
+    console.log('CartReview: Calculating international shipping rate...');
+    
+    // Log cart items to debug weight
+    console.log('CartReview: Cart items for weight calculation:', 
+      state.items.map(item => ({id: item.id, weight: item.weight, qty: item.quantity}))
+    );
+    
+    const totalWeight = calculateTotalWeight(
+      state.items.map((item) => ({
+        weight: item.weight || 180, // Ensure default weight
+        quantity: item.quantity,
+      })),
+    )
+    const cost = calculateShippingCost(totalWeight, countryToUse);
+    console.log(`CartReview: Final shipping cost for ${countryToUse}: €${cost}`);
+    setShippingCost(cost);
   }, [billingCountry, shippingCountry, shippingAddressSameAsBilling, state.items])
 
   const customStyles = {
@@ -176,7 +206,17 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
                   <Select
                     options={countryOptions}
                     value={countryOptions.find((option) => option.value === billingCountry)}
-                    onChange={(option) => setBillingCountry(option?.value || "")}
+                    onChange={(option) => {
+                      const value = option?.value || "";
+                      setBillingCountry(value);
+                      console.log(`Selected billing country: ${value}`);
+                      
+                      // For Estonia, immediately update shipping cost
+                      if (value.toLowerCase() === 'estonia' || value.toLowerCase() === 'ee') {
+                        console.log('Estonia selected, forcing shipping rate to €2.99');
+                        setShippingCost(2.99);
+                      }
+                    }}
                     styles={customStyles}
                     className="react-select-container"
                     classNamePrefix="react-select"
@@ -319,6 +359,9 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
           <div className="flex justify-between text-sm">
             <span>Shipping {billingCountry ? `(to ${billingCountry})` : ''}</span>
             <span>${shippingCost.toFixed(2)}</span>
+            {billingCountry?.toLowerCase() === 'estonia' && (
+              <span className="text-xs text-muted-foreground">(Itella SmartPost)</span>
+            )}
           </div>
           <div className="flex justify-between font-bold text-lg pt-2 border-t">
             <span>Total</span>

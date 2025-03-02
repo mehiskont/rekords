@@ -99,14 +99,31 @@ export function calculateShippingCost(
   // Standardize country name for easier matching
   const countryNormalized = destinationCountry.trim();
 
-  // Determine if the destination is in Europe
-  const isEurope = EUROPEAN_COUNTRIES.some(country => 
+  // Enhanced country detection
+  // First try direct match
+  let isEurope = EUROPEAN_COUNTRIES.some(country => 
     country.toLowerCase() === countryNormalized.toLowerCase()
   );
+  
+  // If not found by name, look for country code (assume 2-letter codes are country codes)
+  if (!isEurope && countryNormalized.length === 2) {
+    // Map of common EU country codes
+    const euCountryCodes = {
+      'at': true, 'be': true, 'bg': true, 'hr': true, 'cy': true, 'cz': true, 
+      'dk': true, 'fi': true, 'fr': true, 'de': true, 'gr': true, 'hu': true, 
+      'ie': true, 'it': true, 'lv': true, 'lt': true, 'lu': true, 'mt': true, 
+      'nl': true, 'no': true, 'pl': true, 'pt': true, 'ro': true, 'sk': true, 
+      'si': true, 'es': true, 'se': true, 'ch': true, 'gb': true, 'uk': true
+    };
+    
+    isEurope = !!euCountryCodes[countryNormalized.toLowerCase()];
+    console.log(`Checking country code ${countryNormalized} against EU codes: ${isEurope}`);
+  }
   
   console.log(`Country ${destinationCountry} is in Europe: ${isEurope}`);
   
   const rates = isEurope ? SHIPPING_RATES.EUROPE : SHIPPING_RATES.REST_OF_WORLD;
+  console.log(`Using shipping rates for ${isEurope ? 'Europe' : 'Rest of World'}`, rates);
 
   // Find the appropriate shipping rate based on weight
   for (const rate of rates) {

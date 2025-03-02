@@ -23,3 +23,40 @@
 [2025-03-02T06:35:21.090Z] [INFO] ✅ Successfully deleted listing 3467861058 using OAuth seller authentication
 [2025-03-02T06:35:21.090Z] [INFO] ✅ Updated Discogs inventory for item 3467861058
 [2025-03-02T06:35:21.091Z] [INFO] Clearing inventory cache...
+[2025-03-02T07:27:27.506Z] [INFO] Webhook received
+[2025-03-02T07:27:27.509Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-02T07:27:28.371Z] [ERROR] Failed to store webhook log: 
+Invalid `prisma.webhookLog.create()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-02T07:42:53.176Z] [INFO] Webhook received
+[2025-03-02T07:42:53.182Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-02T07:42:53.196Z] [ERROR] Failed to store webhook log: 
+Invalid `prisma.webhookLog.create()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-02T07:44:23.891Z] [INFO] Webhook received
+[2025-03-02T07:44:23.893Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-02T07:44:24.745Z] [ERROR] Failed to store webhook log: 
+Invalid `prisma.webhookLog.create()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-02T07:44:24.746Z] [INFO] Payment intent succeeded: pi_3Qy7AmLKWZZc2yek18XJnBWU
+[2025-03-02T07:44:24.746Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-02T07:44:24.746Z] [WARN] Payment intent has no sessionId metadata but contains items, creating order
+[2025-03-02T07:44:24.749Z] [ERROR] Failed to create order from payment intent: 
+Invalid `prisma.user.findFirst()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
