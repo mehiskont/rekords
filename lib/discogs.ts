@@ -254,7 +254,7 @@ export async function updateDiscogsInventory(
   listingId: string,
   quantityPurchased: number = 1
 ): Promise<boolean> {
-  log(`Updating Discogs inventory for listing ${listingId}, quantity: ${quantityPurchased}`)
+  log(`Updating Discogs inventory for listing ${listingId}, quantity purchased: ${quantityPurchased}`)
   
   try {
     // STEP 1: Verify we have valid credentials
@@ -263,31 +263,21 @@ export async function updateDiscogsInventory(
       return false
     }
     
-    try {
-      // First method: Try the direct OAuth seller method
-      log(`Attempting direct OAuth deletion for Discogs listing ${listingId}`)
-      const { deleteDiscogsListing } = await import('@/lib/discogs-seller');
-      
-      const oauthResult = await deleteDiscogsListing(listingId);
-      if (oauthResult) {
-        log(`✅ Successfully deleted listing ${listingId} using OAuth seller authentication`)
-        return true;
-      }
-    } catch (error) {
-      log(`OAuth deletion attempt failed: ${error instanceof Error ? error.message : String(error)}`, "error")
-      // Continue to next method
-    }
+    // STEP 2: Get the current listing information to check quantity
+    const listingUrl = `${BASE_URL}/marketplace/listings/${listingId}`
+    log(`Fetching current listing data from: ${listingUrl}`)
     
     try {
-      // Second method: Try token-based listing update/delete
-      const listingUrl = `${BASE_URL}/marketplace/listings/${listingId}`
-      log(`Trying token-based approach. Fetching listing from: ${listingUrl}`)
-      
-      const listingResponse = await fetch(listingUrl, {
+      const listingResponse = await fetchWithRetry(listingUrl, {
         headers: {
           'Authorization': `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
           'User-Agent': 'PlastikRecordStore/1.0'
-        }
+        },
+        retryOptions: {
+          maxRetries: 2,
+          baseDelay: 500,
+          maxDelay: 2000,
+        },
       })
       
       if (!listingResponse.ok) {
@@ -303,79 +293,150 @@ export async function updateDiscogsInventory(
       }
       
       const listing = await listingResponse.json()
-      log(`Retrieved listing data: ${JSON.stringify(listing)}`)
+      log(`Found listing ${listingId}: release_id=${listing.release.id}, current quantity=${listing.quantity}`)
       
       // STEP 3: Determine if we need to delete or update quantity
       const currentQuantity = parseInt(listing.quantity || "1", 10)
       
       if (currentQuantity <= quantityPurchased) {
-        // Delete the listing
-        log(`Deleting listing ${listingId} (current qty: ${currentQuantity}, purchased: ${quantityPurchased})`)
-        
-        const deleteResponse = await fetch(listingUrl, {
+        // Delete the listing completely
+        log(`Deleting listing ${listingId} (current qty: ${currentQuantity} <= purchased: ${quantityPurchased})`)
+        const deleteResponse = await fetchWithRetry(listingUrl, {
           method: 'DELETE',
           headers: {
             'Authorization': `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
             'User-Agent': 'PlastikRecordStore/1.0'
-          }
+          },
+          retryOptions: {
+            maxRetries: 3,
+            baseDelay: 1000,
+            maxDelay: 5000,
+          },
         })
         
         if (!deleteResponse.ok) {
           const errorText = await deleteResponse.text()
           log(`Failed to delete listing ${listingId}: ${deleteResponse.status} - ${errorText}`, "error")
-          throw new Error(`Failed to delete listing: ${errorText}`)
+          
+          // Try OAuth method as a fallback
+          try {
+            log(`Attempting OAuth deletion as fallback for ${listingId}`)
+            const { deleteDiscogsListing } = await import('@/lib/discogs-seller');
+            const oauthResult = await deleteDiscogsListing(listingId);
+            
+            if (oauthResult) {
+              log(`✅ Successfully deleted listing ${listingId} using OAuth fallback`)
+              return true
+            }
+          } catch (oauthError) {
+            log(`OAuth fallback failed: ${oauthError instanceof Error ? oauthError.message : String(oauthError)}`, "error")
+          }
+          
+          return false
         }
         
-        log(`✅ Successfully deleted listing ${listingId} via token-based method`)
+        log(`✅ Successfully deleted listing ${listingId}`)
         return true
       } else {
-        // Update quantity
+        // Update quantity - critical to get this right
         const newQuantity = currentQuantity - quantityPurchased
-        log(`Updating listing ${listingId} to quantity: ${newQuantity}`)
+        log(`Updating listing ${listingId} quantity from ${currentQuantity} to ${newQuantity}`)
         
         // According to Discogs API documentation
-        const updateResponse = await fetch(listingUrl, {
+        const updateData = {
+          release_id: listing.release.id,
+          condition: listing.condition,
+          price: listing.price.value,
+          status: listing.status || "For Sale",
+          quantity: newQuantity
+        }
+        
+        log(`Update data: ${JSON.stringify(updateData)}`)
+        
+        const updateResponse = await fetchWithRetry(listingUrl, {
           method: 'POST',
           headers: {
             'Authorization': `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
             'User-Agent': 'PlastikRecordStore/1.0',
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({
-            release_id: listing.release.id,
-            condition: listing.condition,
-            price: listing.price.value,
-            status: listing.status,
-            quantity: newQuantity
-          })
+          body: JSON.stringify(updateData),
+          retryOptions: {
+            maxRetries: 3,
+            baseDelay: 1000,
+            maxDelay: 5000,
+          },
         })
         
         if (!updateResponse.ok) {
           const errorText = await updateResponse.text()
           log(`Failed to update listing ${listingId}: ${updateResponse.status} - ${errorText}`, "error")
-          throw new Error(`Failed to update listing quantity: ${errorText}`)
+          
+          // If we can't update quantity, try OAuth update as fallback
+          try {
+            log(`Attempting OAuth update as fallback for ${listingId}`)
+            const { updateDiscogsListingQuantity } = await import('@/lib/discogs-seller');
+            const oauthResult = await updateDiscogsListingQuantity(listingId, newQuantity);
+            
+            if (oauthResult) {
+              log(`✅ Successfully updated listing ${listingId} using OAuth fallback`)
+              return true
+            }
+          } catch (oauthError) {
+            log(`OAuth update fallback failed: ${oauthError instanceof Error ? oauthError.message : String(oauthError)}`, "error")
+          }
+          
+          return false
         }
         
-        const updateResult = await updateResponse.json()
-        log(`Update result: ${JSON.stringify(updateResult)}`)
+        try {
+          const updateResult = await updateResponse.json()
+          log(`Update result: ${JSON.stringify(updateResult)}`)
+        } catch (jsonError) {
+          // Non-JSON response is okay, just log it
+          log(`Update response (non-JSON): ${await updateResponse.text()}`)
+        }
+        
         log(`✅ Successfully updated listing ${listingId} quantity to ${newQuantity}`)
         return true
       }
     } catch (error) {
-      log(`Token-based method failed: ${error instanceof Error ? error.message : String(error)}`, "error")
-      // Try the third method
-    }
-    
-    // Last resort - try the removeFromDiscogsInventory function directly
-    log(`Trying last resort method: direct removal for listing ${listingId}`)
-    const result = await removeFromDiscogsInventory(listingId);
-    
-    if (result) {
-      log(`✅ Successfully removed listing ${listingId} using last resort method`)
-      return true
-    } else {
-      log(`❌ All methods failed to remove listing ${listingId}`, "error")
-      return false
+      log(`Error updating listing ${listingId}: ${error instanceof Error ? error.message : String(error)}`, "error")
+      
+      // Try OAuth methods as a complete fallback
+      try {
+        log(`Attempting OAuth methods as complete fallback for ${listingId}`)
+        const { getDiscogsListingQuantity, updateDiscogsListingQuantity, deleteDiscogsListing } = await import('@/lib/discogs-seller');
+        
+        // First check current quantity
+        const currentQty = await getDiscogsListingQuantity(listingId);
+        log(`OAuth fallback: current quantity for ${listingId} is ${currentQty}`)
+        
+        if (currentQty === null || currentQty === 0) {
+          log(`Listing ${listingId} not found or already at zero quantity via OAuth`)
+          return true
+        }
+        
+        if (currentQty <= quantityPurchased) {
+          // Delete listing
+          log(`OAuth fallback: deleting listing ${listingId}`)
+          const deleteResult = await deleteDiscogsListing(listingId);
+          log(deleteResult ? `✅ OAuth fallback: successfully deleted listing ${listingId}` : 
+                           `❌ OAuth fallback: failed to delete listing ${listingId}`)
+          return deleteResult
+        } else {
+          // Update quantity
+          const newQty = currentQty - quantityPurchased;
+          log(`OAuth fallback: updating listing ${listingId} to quantity ${newQty}`)
+          const updateResult = await updateDiscogsListingQuantity(listingId, newQty);
+          log(updateResult ? `✅ OAuth fallback: successfully updated listing ${listingId}` : 
+                           `❌ OAuth fallback: failed to update listing ${listingId}`)
+          return updateResult
+        }
+      } catch (oauthError) {
+        log(`Complete OAuth fallback failed: ${oauthError instanceof Error ? oauthError.message : String(oauthError)}`, "error")
+        return false
+      }
     }
   } catch (error) {
     log(`Unexpected error updating inventory for ${listingId}: ${error instanceof Error ? error.message : String(error)}`, "error")
