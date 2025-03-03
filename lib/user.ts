@@ -8,6 +8,7 @@ export interface UserProfile {
   state?: string;
   country?: string;
   postalCode?: string;
+  phone?: string; // Added phone for profile completeness
 }
 
 export interface CheckoutInfo {
@@ -35,6 +36,7 @@ export async function getUserProfile(userId: string) {
         state: true,
         country: true,
         postalCode: true,
+        phone: true, // Added phone field
       },
     });
   } catch (error) {
@@ -54,6 +56,7 @@ export async function saveUserCheckoutInfo(userId: string, checkoutInfo: Checkou
           ? `${checkoutInfo.firstName} ${checkoutInfo.lastName}` 
           : undefined,
         email: checkoutInfo.email,
+        phone: checkoutInfo.phone,
         address: checkoutInfo.address,
         city: checkoutInfo.city,
         state: checkoutInfo.state,
@@ -84,6 +87,7 @@ export function profileToCheckoutInfo(profile: UserProfile | null): CheckoutInfo
     firstName,
     lastName,
     email: profile.email,
+    phone: profile.phone,
     address: profile.address,
     city: profile.city,
     state: profile.state,

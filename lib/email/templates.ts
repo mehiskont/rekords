@@ -91,7 +91,7 @@ export function getOrderConfirmationEmail(order: OrderDetails): string {
                   (item) => `
                 <div class="item-row">
                   <div class="item-image">
-                    <img src="${item.cover_image || "/placeholder.svg"}" alt="${item.title}" style="width: 100%; height: 100%; object-fit: cover;">
+                    <img src="https://plastikrecords.com${item.cover_image || "/placeholder.svg"}" alt="${item.title}" style="width: 100%; height: 100%; object-fit: cover;">
                   </div>
                   <div class="item-details">
                     <div class="item-title">${item.title}</div>

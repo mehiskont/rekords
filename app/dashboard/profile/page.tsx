@@ -36,8 +36,10 @@ export default async function ProfilePage() {
         <ProfileForm initialData={userProfile || {
           name: session.user.name || '',
           email: session.user.email || '',
+          phone: '',
           address: '',
           city: '',
+          state: '',
           country: '',
           postalCode: ''
         }} />

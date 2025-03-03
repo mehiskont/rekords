@@ -24,6 +24,7 @@ export async function PUT(req: Request) {
         state: data.state,
         country: data.country,
         postalCode: data.postalCode,
+        phone: data.phone, // Added phone field
       },
     })
 
