@@ -284,16 +284,6 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
             </div>
             <div className="flex items-center space-x-2">
               <Checkbox
-                id="subscribe"
-                checked={subscribe}
-                onCheckedChange={(checked) => setSubscribe(checked as boolean)}
-              />
-              <Label htmlFor="subscribe" className="text-sm">
-                Subscribe to our newsletter
-              </Label>
-            </div>
-            <div className="flex items-center space-x-2">
-              <Checkbox
                 id="terms"
                 checked={acceptTerms}
                 onCheckedChange={(checked) => setAcceptTerms(checked as boolean)}
