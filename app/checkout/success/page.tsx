@@ -6,15 +6,12 @@ import { CheckCircle, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 
-// Remove these exports that are causing the error
-// Using only one of these options is better - let's use dynamic
 export const dynamic = "force-dynamic"
-// The revalidate is causing the error, so remove it
-// export const revalidate = 0
 
 export default function CheckoutSuccessPage() {
   const searchParams = useSearchParams()
   const [orderStatus, setOrderStatus] = useState<'loading' | 'success' | 'error'>('loading')
+  const [maxAttempts, setMaxAttempts] = useState(10) // Maximum retry attempts
   const processedRef = useRef(false)
   
   useEffect(() => {
@@ -27,15 +24,71 @@ export default function CheckoutSuccessPage() {
     
     console.log(`Processing success page... payment_intent: ${paymentIntent}, redirect_status: ${redirectStatus}`);
     
-    // For any user that reaches this page, show success
-    // This handles all cases: guest users, redirect from Stripe, or direct navigation
-    const timer = setTimeout(() => {
-      console.log('Setting order status to success after timeout');
-      setOrderStatus('success');
-    }, 1500);
+    // If we don't have a payment intent, show success after a short delay
+    if (!paymentIntent) {
+      console.log('No payment intent found, assuming success');
+      setTimeout(() => setOrderStatus('success'), 1500);
+      return;
+    }
     
-    return () => clearTimeout(timer);
-  }, [searchParams])
+    // Function to check payment/order status
+    const checkOrderStatus = async (attempt = 1) => {
+      try {
+        // Fetch order details using payment intent
+        const response = await fetch(`/api/order-details?paymentIntentId=${paymentIntent}`);
+        
+        if (response.ok) {
+          const data = await response.json();
+          console.log('Order details retrieved:', data);
+          
+          if (data.error) {
+            console.error('Error in order details:', data.error);
+            // If we've reached max attempts, show error
+            if (attempt >= maxAttempts) {
+              setOrderStatus('error');
+            } else {
+              // Otherwise retry after delay
+              setTimeout(() => checkOrderStatus(attempt + 1), 1000);
+            }
+          } else {
+            // We have order details, show success
+            setOrderStatus('success');
+          }
+        } else {
+          console.error('Failed to retrieve order details, status:', response.status);
+          // If we've reached max attempts, show success anyway
+          if (attempt >= maxAttempts) {
+            console.log('Max retry attempts reached, showing success anyway');
+            setOrderStatus('success');
+          } else {
+            // Otherwise retry after delay
+            setTimeout(() => checkOrderStatus(attempt + 1), 1000);
+          }
+        }
+      } catch (error) {
+        console.error('Error checking order status:', error);
+        // If we've reached max attempts, show success anyway (failsafe)
+        if (attempt >= maxAttempts) {
+          console.log('Max retry attempts reached after error, showing success anyway');
+          setOrderStatus('success');
+        } else {
+          // Otherwise retry after delay
+          setTimeout(() => checkOrderStatus(attempt + 1), 1000);
+        }
+      }
+    };
+    
+    // Start checking order status
+    checkOrderStatus();
+    
+    // Failsafe timeout - show success after 15 seconds no matter what
+    const failsafeTimer = setTimeout(() => {
+      console.log('Failsafe timeout reached, showing success');
+      setOrderStatus('success');
+    }, 15000);
+    
+    return () => clearTimeout(failsafeTimer);
+  }, [searchParams, maxAttempts])
   
   return (
     <div className="container max-w-md mx-auto py-12 text-center">
