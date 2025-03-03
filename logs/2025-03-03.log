@@ -66,3 +66,20 @@
 [2025-03-03T10:00:40.583Z] [INFO] ✅ Successfully deleted listing 3482690175 using OAuth seller authentication
 [2025-03-03T10:00:40.583Z] [INFO] ✅ Updated Discogs inventory for item 3482690175
 [2025-03-03T10:00:40.583Z] [INFO] Clearing inventory cache...
+[2025-03-03T11:55:21.708Z] [INFO] Webhook received
+[2025-03-03T11:55:21.710Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-03T11:55:37.417Z] [INFO] Webhook received
+[2025-03-03T11:55:37.419Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-03T11:55:37.763Z] [INFO] Payment intent succeeded: pi_3QyXaeLKWZZc2yek0qPQVb6A
+[2025-03-03T11:55:37.763Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-03T11:55:37.763Z] [WARN] Payment intent has no sessionId metadata but contains items, creating order
+[2025-03-03T11:55:38.046Z] [INFO] Creating order for user cm7niharu0000pvp2o2pd9ebv, stripe session: pi_3QyXaeLKWZZc2yek0qPQVb6A
+[2025-03-03T11:55:38.046Z] [INFO] Order total calculated: 199
+[2025-03-03T11:55:39.113Z] [INFO] Order created successfully with ID: cm7t074rh0003pvbp1prbf60x
+[2025-03-03T11:55:39.611Z] [ERROR] Failed to send order confirmation email: Cannot read properties of undefined (reading 'success')
+[2025-03-03T11:55:39.612Z] [INFO] Created order cm7t074rh0003pvbp1prbf60x from payment intent
+[2025-03-03T11:55:40.292Z] [INFO] Updating Discogs inventory for listing 3483726924, quantity: 1
+[2025-03-03T11:55:40.293Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3483726924
+[2025-03-03T11:55:40.999Z] [INFO] ✅ Successfully deleted listing 3483726924 using OAuth seller authentication
+[2025-03-03T11:55:41.000Z] [INFO] ✅ Updated Discogs inventory for item 3483726924
+[2025-03-03T11:55:41.000Z] [INFO] Clearing inventory cache...
