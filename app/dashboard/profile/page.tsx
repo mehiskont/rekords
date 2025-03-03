@@ -14,6 +14,21 @@ export default async function ProfilePage() {
 
   try {
     userProfile = await getUserProfile(session.user.id);
+    console.log("User profile data loaded:", userProfile);
+    
+    // Make sure to provide default values for missing fields
+    if (userProfile) {
+      userProfile = {
+        name: userProfile.name || session.user.name || '',
+        email: userProfile.email || session.user.email || '',
+        phone: userProfile.phone || '',
+        address: userProfile.address || '',
+        city: userProfile.city || '',
+        state: userProfile.state || '',
+        country: userProfile.country || '',
+        postalCode: userProfile.postalCode || '',
+      };
+    }
   } catch (error) {
     console.error("Error fetching user profile:", error);
     dbError = true;

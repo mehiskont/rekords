@@ -357,3 +357,96 @@
 [2025-03-03T14:38:39.908Z] [INFO] Clearing inventory cache...
 [2025-03-03T14:38:57.291Z] [INFO] Resend client initialized with API key: re_U2Su4...
 [2025-03-03T14:39:43.362Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-03T15:01:32.765Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-03T15:01:32.769Z] [INFO] Webhook received
+[2025-03-03T15:01:32.769Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-03T15:01:48.485Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-03T15:01:48.489Z] [INFO] Webhook received
+[2025-03-03T15:01:48.490Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-03T15:01:48.870Z] [INFO] Payment intent succeeded: pi_3QyaUqLKWZZc2yek0tyUFCQb
+[2025-03-03T15:01:48.870Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-03T15:01:48.871Z] [WARN] Payment intent has no sessionId metadata but contains items, creating order
+[2025-03-03T15:01:49.209Z] [INFO] Creating order for user cm7niharu0000pvp2o2pd9ebv, stripe session: pi_3QyaUqLKWZZc2yek0tyUFCQb
+[2025-03-03T15:01:49.210Z] [INFO] Order total calculated: 211
+[2025-03-03T15:01:49.210Z] [INFO] Saving shipping address to user profile for cm7niharu0000pvp2o2pd9ebv
+[2025-03-03T15:01:49.530Z] [INFO] Successfully saved shipping address to user profile
+[2025-03-03T15:01:50.566Z] [INFO] Order created successfully with ID: cm7t6ukqv0008pv5l5oyn3fp2
+[2025-03-03T15:01:50.567Z] [INFO] Attempting to send confirmation email to user account: mehiskont@gmail.com
+[2025-03-03T15:01:50.568Z] [INFO] Sending order confirmation email to mehiskont@gmail.com for order cm7t6ukqv0008pv5l5oyn3fp2
+[2025-03-03T15:01:52.421Z] [INFO] Order confirmation email sent successfully. ID: 3ec1fa50-8905-4fd7-b464-f6315f5dc9eb
+[2025-03-03T15:01:52.422Z] [INFO] Sent order confirmation email to user account: mehiskont@gmail.com
+[2025-03-03T15:01:52.422Z] [INFO] Created order cm7t6ukqv0008pv5l5oyn3fp2 from payment intent
+[2025-03-03T15:01:52.620Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-03T15:01:53.011Z] [INFO] Updating Discogs inventory for listing 3483885045, quantity purchased: 1
+[2025-03-03T15:01:53.011Z] [INFO] Fetching current listing data from: https://api.discogs.com/marketplace/listings/3483885045
+[2025-03-03T15:01:53.289Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-03T15:01:53.830Z] [INFO] Found listing 3483885045: release_id=332045, current quantity=7
+[2025-03-03T15:01:53.830Z] [INFO] Updating listing 3483885045 quantity from 7 to 6
+[2025-03-03T15:01:53.831Z] [INFO] Update data: {"release_id":332045,"condition":"Very Good (VG)","price":211,"status":"For Sale","quantity":6}
+[2025-03-03T15:01:54.208Z] [INFO] Update response (non-JSON): 
+[2025-03-03T15:01:54.209Z] [INFO] ✅ Successfully updated listing 3483885045 quantity to 6
+[2025-03-03T15:01:54.209Z] [INFO] ✅ Updated Discogs inventory for item 3483885045
+[2025-03-03T15:01:54.209Z] [INFO] Clearing inventory cache...
+[2025-03-03T15:12:07.958Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-03T15:16:16.202Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-03T15:16:16.205Z] [INFO] Webhook received
+[2025-03-03T15:16:16.206Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-03T15:16:25.607Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-03T15:16:25.612Z] [INFO] Webhook received
+[2025-03-03T15:16:25.612Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-03T15:16:26.140Z] [INFO] Payment intent succeeded: pi_3Qyaj5LKWZZc2yek0aHRcm83
+[2025-03-03T15:16:26.141Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-03T15:16:26.141Z] [WARN] Payment intent has no sessionId metadata but contains items, creating order
+[2025-03-03T15:16:26.437Z] [INFO] Creating order for user cm7niharu0000pvp2o2pd9ebv, stripe session: pi_3Qyaj5LKWZZc2yek0aHRcm83
+[2025-03-03T15:16:26.437Z] [INFO] Order total calculated: 211
+[2025-03-03T15:16:26.437Z] [INFO] Saving shipping address to user profile for cm7niharu0000pvp2o2pd9ebv
+[2025-03-03T15:16:26.729Z] [INFO] Successfully saved shipping address to user profile
+[2025-03-03T15:16:27.774Z] [INFO] Order created successfully with ID: cm7t7ddk00003pv5qy634dgb1
+[2025-03-03T15:16:27.774Z] [INFO] Attempting to send confirmation email to user account: mehiskont@gmail.com
+[2025-03-03T15:16:27.775Z] [INFO] Sending order confirmation email to mehiskont@gmail.com for order cm7t7ddk00003pv5qy634dgb1
+[2025-03-03T15:16:29.000Z] [INFO] Order confirmation email sent successfully. ID: 999cfbb2-e65d-4012-8d20-8509fb08b19c
+[2025-03-03T15:16:29.000Z] [INFO] Sent order confirmation email to user account: mehiskont@gmail.com
+[2025-03-03T15:16:29.000Z] [INFO] Created order cm7t7ddk00003pv5qy634dgb1 from payment intent
+[2025-03-03T15:16:29.748Z] [INFO] Updating Discogs inventory for listing 3483885045, quantity purchased: 1
+[2025-03-03T15:16:29.748Z] [INFO] Fetching current listing data from: https://api.discogs.com/marketplace/listings/3483885045
+[2025-03-03T15:16:30.080Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-03T15:16:30.098Z] [INFO] Found listing 3483885045: release_id=332045, current quantity=6
+[2025-03-03T15:16:30.099Z] [INFO] Updating listing 3483885045 quantity from 6 to 5
+[2025-03-03T15:16:30.099Z] [INFO] Update data: {"release_id":332045,"condition":"Very Good (VG)","price":211,"status":"For Sale","quantity":5}
+[2025-03-03T15:16:30.400Z] [INFO] Update response (non-JSON): 
+[2025-03-03T15:16:30.400Z] [INFO] ✅ Successfully updated listing 3483885045 quantity to 5
+[2025-03-03T15:16:30.400Z] [INFO] ✅ Updated Discogs inventory for item 3483885045
+[2025-03-03T15:16:30.400Z] [INFO] Clearing inventory cache...
+[2025-03-03T15:25:31.412Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-03T15:26:07.704Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-03T15:32:59.074Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-03T15:32:59.077Z] [INFO] Webhook received
+[2025-03-03T15:32:59.077Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-03T15:33:10.416Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-03T15:33:10.419Z] [INFO] Webhook received
+[2025-03-03T15:33:10.419Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-03T15:33:10.717Z] [INFO] Payment intent succeeded: pi_3QyazGLKWZZc2yek0kBYVPti
+[2025-03-03T15:33:10.717Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-03T15:33:10.717Z] [WARN] Payment intent has no sessionId metadata but contains items, creating order
+[2025-03-03T15:33:11.010Z] [INFO] Creating order for user cm7niharu0000pvp2o2pd9ebv, stripe session: pi_3QyazGLKWZZc2yek0kBYVPti
+[2025-03-03T15:33:11.010Z] [INFO] Order total calculated: 211
+[2025-03-03T15:33:11.010Z] [INFO] Saving shipping address to user profile for cm7niharu0000pvp2o2pd9ebv
+[2025-03-03T15:33:11.302Z] [INFO] Successfully saved shipping address to user profile
+[2025-03-03T15:33:12.664Z] [INFO] Order created successfully with ID: cm7t7ywrb0003pvqggkd1qjk1
+[2025-03-03T15:33:12.666Z] [INFO] Attempting to send confirmation email to user account: mehiskont@gmail.com
+[2025-03-03T15:33:12.667Z] [INFO] Sending order confirmation email to mehiskont@gmail.com for order cm7t7ywrb0003pvqggkd1qjk1
+[2025-03-03T15:33:14.035Z] [INFO] Order confirmation email sent successfully. ID: 84d9d69c-ccdc-475f-8431-62225828cc61
+[2025-03-03T15:33:14.036Z] [INFO] Sent order confirmation email to user account: mehiskont@gmail.com
+[2025-03-03T15:33:14.036Z] [INFO] Created order cm7t7ywrb0003pvqggkd1qjk1 from payment intent
+[2025-03-03T15:33:14.655Z] [INFO] Updating Discogs inventory for listing 3483885045, quantity purchased: 1
+[2025-03-03T15:33:14.655Z] [INFO] Fetching current listing data from: https://api.discogs.com/marketplace/listings/3483885045
+[2025-03-03T15:33:15.443Z] [INFO] Found listing 3483885045: release_id=332045, current quantity=5
+[2025-03-03T15:33:15.443Z] [INFO] Updating listing 3483885045 quantity from 5 to 4
+[2025-03-03T15:33:15.444Z] [INFO] Update data: {"release_id":332045,"condition":"Very Good (VG)","price":211,"status":"For Sale","quantity":4}
+[2025-03-03T15:33:15.892Z] [INFO] Update response (non-JSON): 
+[2025-03-03T15:33:15.892Z] [INFO] ✅ Successfully updated listing 3483885045 quantity to 4
+[2025-03-03T15:33:15.892Z] [INFO] ✅ Updated Discogs inventory for item 3483885045
+[2025-03-03T15:33:15.893Z] [INFO] Clearing inventory cache...
+[2025-03-03T15:36:41.320Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-03T15:36:41.323Z] [INFO] Webhook received
+[2025-03-03T15:36:41.324Z] [INFO] ✅ Webhook event received: payment_intent.created
