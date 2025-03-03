@@ -335,8 +335,8 @@ export async function POST(req: Request) {
                     })),
                     total: paymentIntent.amount ? (paymentIntent.amount / 100) : 0,
                     shippingAddress: {
-                      name: customerName,
-                      line1: customerAddress,
+                      name: customerName || "Customer",
+                      line1: customerAddress || "Address not provided",
                       city: "",
                       postal_code: "",
                       country: ""

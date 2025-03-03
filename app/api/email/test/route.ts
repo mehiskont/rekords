@@ -5,12 +5,16 @@ import { log } from "@/lib/logger"
 
 const testEmailSchema = z.object({
   email: z.string().email(),
-  type: z.enum(["confirmation", "shipped"]),
+  type: z.enum(["confirmation", "shipped", "simple"]),
 })
 
 export async function POST(req: Request) {
   try {
     const body = await req.json()
+    
+    // Add more logging for debug
+    console.log("Email test request body:", body)
+    
     const { email, type } = testEmailSchema.parse(body)
     
     // Sample order data for test emails
@@ -43,16 +47,79 @@ export async function POST(req: Request) {
     }
     
     let result;
-    if (type === "confirmation") {
-      log(`Sending test order confirmation email to ${email}`)
-      result = await sendOrderConfirmationEmail(email, testOrderDetails)
-    } else {
-      log(`Sending test order shipped email to ${email}`)
-      result = await sendOrderShippedEmail(email, testOrderDetails)
-    }
-    
-    if (!result.success) {
-      return NextResponse.json({ success: false, error: result.error }, { status: 500 })
+    try {
+      if (type === "confirmation") {
+        log(`Sending test order confirmation email to ${email}`)
+        result = await sendOrderConfirmationEmail(email, testOrderDetails)
+      } else if (type === "shipped") {
+        log(`Sending test order shipped email to ${email}`)
+        result = await sendOrderShippedEmail(email, testOrderDetails)
+      } else if (type === "simple") {
+        // Use the direct Resend API for a simple test
+        const Resend = require('resend').Resend;
+        const apiKey = process.env.RESEND_API_KEY || "re_U2Su4RXX_E72x5WeyUvBmJq3qu6SkV53d";
+        const resend = new Resend(apiKey);
+        
+        log(`Sending simple test email to ${email} using direct Resend API`)
+        
+        try {
+          const { data, error } = await resend.emails.send({
+            from: 'Plastik Records <onboarding@resend.dev>',
+            to: [email],
+            subject: 'Simple Test Email',
+            html: '<strong>This is a test email from Plastik Records</strong>',
+            text: 'This is a test email from Plastik Records',
+          });
+          
+          if (error) {
+            log(`Direct Resend API error: ${JSON.stringify(error)}`, "error")
+            return NextResponse.json({ 
+              success: false, 
+              error: `Direct API error: ${JSON.stringify(error)}`
+            }, { status: 500 })
+          }
+          
+          log(`Direct email sent successfully, ID: ${data?.id}`)
+          return NextResponse.json({ 
+            success: true, 
+            message: `Simple test email sent to ${email}`,
+            id: data?.id
+          })
+        } catch (directError) {
+          log(`Exception in direct Resend API call: ${directError instanceof Error ? directError.message : String(directError)}`, "error")
+          return NextResponse.json({ 
+            success: false, 
+            error: `Direct API exception: ${directError instanceof Error ? directError.message : String(directError)}`
+          }, { status: 500 })
+        }
+      } else {
+        return NextResponse.json({ 
+          success: false, 
+          error: `Invalid email type: ${type}`
+        }, { status: 400 })
+      }
+      
+      // Make sure result has required properties
+      if (!result || typeof result.success === 'undefined') {
+        log("Email function returned invalid result object", "error")
+        return NextResponse.json({ 
+          success: false, 
+          error: "Invalid response from email service" 
+        }, { status: 500 })
+      }
+      
+      if (!result.success) {
+        return NextResponse.json({ 
+          success: false, 
+          error: result.error || "Unknown email error" 
+        }, { status: 500 })
+      }
+    } catch (emailError) {
+      log(`Unexpected error in email send process: ${emailError instanceof Error ? emailError.message : String(emailError)}`, "error")
+      return NextResponse.json({ 
+        success: false, 
+        error: emailError instanceof Error ? emailError.message : "Unexpected email error" 
+      }, { status: 500 })
     }
     
     return NextResponse.json({ 

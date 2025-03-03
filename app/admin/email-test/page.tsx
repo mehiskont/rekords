@@ -6,12 +6,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { toast } from "@/components/ui/use-toast"
 
 export default function EmailTestPage() {
   const [email, setEmail] = useState("")
   const [emailType, setEmailType] = useState("confirmation")
   const [isLoading, setIsLoading] = useState(false)
+  const [result, setResult] = useState<{success?: boolean; message?: string; error?: string}>({})
   
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -26,8 +28,30 @@ export default function EmailTestPage() {
     }
     
     setIsLoading(true)
+    setResult({})
     
     try {
+      // First try the simple direct endpoint
+      const simpleResponse = await fetch(`/api/email/send?to=${encodeURIComponent(email)}&subject=Test Email&text=This is a test email from Plastik Records.`)
+      const simpleData = await simpleResponse.json()
+      
+      if (!simpleResponse.ok) {
+        setResult({
+          success: false,
+          error: `Simple email test failed: ${simpleData.error || "Unknown error"}`
+        })
+        
+        toast({
+          title: "Basic Email Test Failed",
+          description: "Something is wrong with your email configuration. Check server logs for details.",
+          variant: "destructive",
+        })
+        
+        setIsLoading(false)
+        return
+      }
+      
+      // Then try the template email
       const response = await fetch("/api/email/test", {
         method: "POST",
         headers: {
@@ -41,6 +65,12 @@ export default function EmailTestPage() {
       
       const data = await response.json()
       
+      setResult({
+        success: response.ok,
+        message: data.message,
+        error: data.error,
+      })
+      
       if (response.ok) {
         toast({
           title: "Test Email Sent",
@@ -48,14 +78,19 @@ export default function EmailTestPage() {
         })
       } else {
         toast({
-          title: "Error Sending Email",
-          description: data.error || "Failed to send test email.",
+          title: "Error Sending Template Email",
+          description: data.error || "Failed to send test email with template.",
           variant: "destructive",
         })
       }
     } catch (error) {
+      setResult({
+        success: false,
+        error: error instanceof Error ? error.message : "An unknown error occurred"
+      })
+      
       toast({
-        title: "Error",
+        title: "Request Error",
         description: error instanceof Error ? error.message : "An unknown error occurred",
         variant: "destructive",
       })
@@ -100,12 +135,39 @@ export default function EmailTestPage() {
                   <RadioGroupItem value="shipped" id="shipped" />
                   <Label htmlFor="shipped">Order Shipped</Label>
                 </div>
+                <div className="flex items-center space-x-2">
+                  <RadioGroupItem value="simple" id="simple" />
+                  <Label htmlFor="simple">Simple Direct Email</Label>
+                </div>
               </RadioGroup>
             </div>
             
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? "Sending..." : "Send Test Email"}
             </Button>
+            
+            {result.success === false && (
+              <Alert variant="destructive" className="mt-4">
+                <AlertTitle>Email Error</AlertTitle>
+                <AlertDescription>{result.error}</AlertDescription>
+              </Alert>
+            )}
+            
+            {result.success === true && (
+              <Alert className="mt-4">
+                <AlertTitle>Success</AlertTitle>
+                <AlertDescription>{result.message}</AlertDescription>
+              </Alert>
+            )}
+            
+            <div className="text-xs text-muted-foreground mt-4">
+              <p>Having trouble sending emails?</p>
+              <ul className="list-disc pl-5 mt-2">
+                <li>Check that your Resend API key is properly set</li>
+                <li>Verify that the 'from' email domain is verified in Resend</li>
+                <li>Check server logs for detailed error messages</li>
+              </ul>
+            </div>
           </form>
         </CardContent>
       </Card>

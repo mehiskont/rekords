@@ -83,3 +83,103 @@
 [2025-03-03T11:55:40.999Z] [INFO] ✅ Successfully deleted listing 3483726924 using OAuth seller authentication
 [2025-03-03T11:55:41.000Z] [INFO] ✅ Updated Discogs inventory for item 3483726924
 [2025-03-03T11:55:41.000Z] [INFO] Clearing inventory cache...
+[2025-03-03T11:57:35.412Z] [INFO] Sending test order confirmation email to mehiskont@gmail.com
+[2025-03-03T11:57:35.919Z] [ERROR] Error sending test email: Cannot read properties of undefined (reading 'success')
+[2025-03-03T12:03:06.115Z] [INFO] Sending test order confirmation email to mehiskont@gmail.com
+[2025-03-03T12:03:06.904Z] [ERROR] Email function returned invalid result object
+[2025-03-03T12:04:43.399Z] [INFO] Sending test order shipped email to mehiskont@gmail.com
+[2025-03-03T12:04:43.983Z] [ERROR] Email function returned invalid result object
+[2025-03-03T12:11:08.768Z] [INFO] Direct email test: Using API key re_U2Su4...
+[2025-03-03T12:11:10.218Z] [ERROR] Direct email test failed: {"statusCode":403,"message":"The plastikrecords.com domain is not verified. Please, add and verify your domain on https://resend.com/domains","name":"validation_error"}
+[2025-03-03T12:15:04.742Z] [INFO] Direct email test: Using API key re_U2Su4...
+[2025-03-03T12:15:05.521Z] [INFO] Direct email test succeeded. ID: d9d9ed96-89d1-4f2c-ba4e-c1513d89824d
+[2025-03-03T12:15:05.778Z] [INFO] Sending simple test email to mehiskont@gmail.com using direct Resend API
+[2025-03-03T12:15:06.460Z] [INFO] Direct email sent successfully, ID: 3a3ef3c9-98af-486b-af15-daf7d160813c
+[2025-03-03T12:17:14.859Z] [INFO] Webhook received
+[2025-03-03T12:17:14.861Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-03T12:17:37.028Z] [INFO] Webhook received
+[2025-03-03T12:17:37.028Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-03T12:17:37.468Z] [INFO] Payment intent succeeded: pi_3QyXvqLKWZZc2yek0kIRn6is
+[2025-03-03T12:17:37.468Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-03T12:17:37.469Z] [WARN] Payment intent has no sessionId metadata but contains items, creating order
+[2025-03-03T12:17:37.764Z] [INFO] Creating order for user cm7niharu0000pvp2o2pd9ebv, stripe session: pi_3QyXvqLKWZZc2yek0kIRn6is
+[2025-03-03T12:17:37.764Z] [INFO] Order total calculated: 199
+[2025-03-03T12:17:39.040Z] [INFO] Order created successfully with ID: cm7t0zf4d0003pv452x7jo2lw
+[2025-03-03T12:17:39.523Z] [ERROR] Failed to send order confirmation email: Cannot read properties of undefined (reading 'success')
+[2025-03-03T12:17:39.524Z] [INFO] Created order cm7t0zf4d0003pv452x7jo2lw from payment intent
+[2025-03-03T12:17:40.179Z] [INFO] Updating Discogs inventory for listing 3483726657, quantity: 1
+[2025-03-03T12:17:40.180Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3483726657
+[2025-03-03T12:17:40.968Z] [INFO] ✅ Successfully deleted listing 3483726657 using OAuth seller authentication
+[2025-03-03T12:17:40.968Z] [INFO] ✅ Updated Discogs inventory for item 3483726657
+[2025-03-03T12:17:40.969Z] [INFO] Clearing inventory cache...
+[2025-03-03T12:23:53.978Z] [INFO] Webhook received
+[2025-03-03T12:23:53.980Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-03T12:24:07.866Z] [INFO] Webhook received
+[2025-03-03T12:24:07.866Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-03T12:24:08.204Z] [INFO] Payment intent succeeded: pi_3QyY2HLKWZZc2yek0B0l3h6Q
+[2025-03-03T12:24:08.204Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-03T12:24:08.204Z] [WARN] Payment intent has no sessionId metadata but contains items, creating order
+[2025-03-03T12:24:08.469Z] [INFO] Creating order for user cm7niharu0000pvp2o2pd9ebv, stripe session: pi_3QyY2HLKWZZc2yek0B0l3h6Q
+[2025-03-03T12:24:08.469Z] [INFO] Order total calculated: 230
+[2025-03-03T12:24:09.536Z] [INFO] Order created successfully with ID: cm7t17sis0008pv45ong4e1br
+[2025-03-03T12:24:09.996Z] [ERROR] Failed to send order confirmation email: Cannot read properties of undefined (reading 'success')
+[2025-03-03T12:24:09.997Z] [INFO] Created order cm7t17sis0008pv45ong4e1br from payment intent
+[2025-03-03T12:24:10.868Z] [INFO] Updating Discogs inventory for listing 3483726210, quantity: 1
+[2025-03-03T12:24:10.869Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3483726210
+[2025-03-03T12:24:11.563Z] [INFO] ✅ Successfully deleted listing 3483726210 using OAuth seller authentication
+[2025-03-03T12:24:11.563Z] [INFO] ✅ Updated Discogs inventory for item 3483726210
+[2025-03-03T12:24:11.563Z] [INFO] Clearing inventory cache...
+[2025-03-03T12:27:17.745Z] [INFO] Direct email test: Using API key re_U2Su4...
+[2025-03-03T12:27:18.666Z] [INFO] Direct email test succeeded. ID: 131b4a75-b32f-4bf8-ada6-57ba68d8d143
+[2025-03-03T12:27:18.964Z] [INFO] Sending test order confirmation email to mehiskont@gmail.com
+[2025-03-03T12:27:19.389Z] [ERROR] Email function returned invalid result object
+[2025-03-03T12:27:47.786Z] [INFO] Direct email test: Using API key re_U2Su4...
+[2025-03-03T12:27:48.666Z] [INFO] Direct email test succeeded. ID: 943f194f-3cdc-45c1-81bf-a2b3de42f2d6
+[2025-03-03T12:27:48.681Z] [INFO] Sending test order confirmation email to mehiskont@gmail.com
+[2025-03-03T12:27:49.143Z] [ERROR] Email function returned invalid result object
+[2025-03-03T12:32:06.502Z] [INFO] Webhook received
+[2025-03-03T12:32:06.504Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-03T12:34:31.703Z] [INFO] Webhook received
+[2025-03-03T12:34:31.704Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-03T12:34:47.636Z] [INFO] Webhook received
+[2025-03-03T12:34:47.637Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-03T12:34:48.009Z] [INFO] Payment intent succeeded: pi_3QyYCZLKWZZc2yek0qFXAOIp
+[2025-03-03T12:34:48.010Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-03T12:34:48.010Z] [WARN] Payment intent has no sessionId metadata but contains items, creating order
+[2025-03-03T12:34:48.308Z] [INFO] Creating order for user cm7niharu0000pvp2o2pd9ebv, stripe session: pi_3QyYCZLKWZZc2yek0qFXAOIp
+[2025-03-03T12:34:48.309Z] [INFO] Order total calculated: 300
+[2025-03-03T12:34:49.573Z] [INFO] Order created successfully with ID: cm7t1lict0003pvozdygo0t1g
+[2025-03-03T12:34:49.573Z] [INFO] Attempting to send confirmation email to user account: mehiskont@gmail.com
+[2025-03-03T12:34:50.214Z] [WARN] Failed to send email to user account: undefined
+[2025-03-03T12:34:50.215Z] [INFO] Attempting direct Resend API fallback to: mehiskont@gmail.com
+[2025-03-03T12:34:50.878Z] [INFO] Direct Resend API success: 4518fe04-0384-47be-b507-42592f1a5f53
+[2025-03-03T12:34:50.878Z] [INFO] Created order cm7t1lict0003pvozdygo0t1g from payment intent
+[2025-03-03T12:34:51.628Z] [INFO] Updating Discogs inventory for listing 3483726429, quantity: 1
+[2025-03-03T12:34:51.629Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3483726429
+[2025-03-03T12:34:52.740Z] [INFO] ✅ Successfully deleted listing 3483726429 using OAuth seller authentication
+[2025-03-03T12:34:52.741Z] [INFO] ✅ Updated Discogs inventory for item 3483726429
+[2025-03-03T12:34:52.741Z] [INFO] Clearing inventory cache...
+[2025-03-03T12:50:25.046Z] [INFO] Refreshing inventory: clearing caches
+[2025-03-03T12:50:25.049Z] [INFO] Cleared 2 inventory cache entries and 3 record cache entries
+[2025-03-03T12:50:25.049Z] [INFO] Fetching latest inventory data to rebuild cache
+[2025-03-03T12:50:26.263Z] [INFO] Inventory refresh complete - cache rebuilt with fresh data
+[2025-03-03T12:51:00.431Z] [INFO] Webhook received
+[2025-03-03T12:51:00.433Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-03T12:51:17.916Z] [INFO] Webhook received
+[2025-03-03T12:51:17.917Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-03T12:51:18.273Z] [INFO] Payment intent succeeded: pi_3QyYSVLKWZZc2yek0fZaBmTE
+[2025-03-03T12:51:18.274Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-03T12:51:18.274Z] [WARN] Payment intent has no sessionId metadata but contains items, creating order
+[2025-03-03T12:51:18.544Z] [INFO] Creating order for user cm7niharu0000pvp2o2pd9ebv, stripe session: pi_3QyYSVLKWZZc2yek0fZaBmTE
+[2025-03-03T12:51:18.544Z] [INFO] Order total calculated: 188
+[2025-03-03T12:51:19.699Z] [INFO] Order created successfully with ID: cm7t26qb90003pv8fv5g4run7
+[2025-03-03T12:51:19.701Z] [INFO] Attempting to send confirmation email to user account: mehiskont@gmail.com
+[2025-03-03T12:51:21.782Z] [WARN] Failed to send email to user account: undefined
+[2025-03-03T12:51:21.783Z] [INFO] Attempting direct Resend API fallback to: mehiskont@gmail.com
+[2025-03-03T12:51:22.415Z] [INFO] Direct Resend API success: 6a2a3f11-e03a-4ac0-ab8e-1f424f99f470
+[2025-03-03T12:51:22.415Z] [INFO] Created order cm7t26qb90003pv8fv5g4run7 from payment intent
+[2025-03-03T12:51:23.036Z] [INFO] Updating Discogs inventory for listing 3483823017, quantity: 1
+[2025-03-03T12:51:23.036Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3483823017
+[2025-03-03T12:51:23.739Z] [INFO] ✅ Successfully deleted listing 3483823017 using OAuth seller authentication
+[2025-03-03T12:51:23.740Z] [INFO] ✅ Updated Discogs inventory for item 3483823017
+[2025-03-03T12:51:23.740Z] [INFO] Clearing inventory cache...

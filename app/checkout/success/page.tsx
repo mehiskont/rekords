@@ -24,6 +24,13 @@ export default function CheckoutSuccessPage() {
     
     console.log(`Processing success page... payment_intent: ${paymentIntent}, redirect_status: ${redirectStatus}`);
     
+    // Show success immediately if we have a successful redirect status 
+    if (redirectStatus === 'succeeded') {
+      console.log('Redirect status is successful, showing success');
+      setOrderStatus('success');
+      return;
+    }
+    
     // If we don't have a payment intent, show success after a short delay
     if (!paymentIntent) {
       console.log('No payment intent found, assuming success');
@@ -31,64 +38,15 @@ export default function CheckoutSuccessPage() {
       return;
     }
     
-    // Function to check payment/order status
-    const checkOrderStatus = async (attempt = 1) => {
-      try {
-        // Fetch order details using payment intent
-        const response = await fetch(`/api/order-details?paymentIntentId=${paymentIntent}`);
-        
-        if (response.ok) {
-          const data = await response.json();
-          console.log('Order details retrieved:', data);
-          
-          if (data.error) {
-            console.error('Error in order details:', data.error);
-            // If we've reached max attempts, show error
-            if (attempt >= maxAttempts) {
-              setOrderStatus('error');
-            } else {
-              // Otherwise retry after delay
-              setTimeout(() => checkOrderStatus(attempt + 1), 1000);
-            }
-          } else {
-            // We have order details, show success
-            setOrderStatus('success');
-          }
-        } else {
-          console.error('Failed to retrieve order details, status:', response.status);
-          // If we've reached max attempts, show success anyway
-          if (attempt >= maxAttempts) {
-            console.log('Max retry attempts reached, showing success anyway');
-            setOrderStatus('success');
-          } else {
-            // Otherwise retry after delay
-            setTimeout(() => checkOrderStatus(attempt + 1), 1000);
-          }
-        }
-      } catch (error) {
-        console.error('Error checking order status:', error);
-        // If we've reached max attempts, show success anyway (failsafe)
-        if (attempt >= maxAttempts) {
-          console.log('Max retry attempts reached after error, showing success anyway');
-          setOrderStatus('success');
-        } else {
-          // Otherwise retry after delay
-          setTimeout(() => checkOrderStatus(attempt + 1), 1000);
-        }
-      }
-    };
-    
-    // Start checking order status
-    checkOrderStatus();
-    
-    // Failsafe timeout - show success after 15 seconds no matter what
-    const failsafeTimer = setTimeout(() => {
-      console.log('Failsafe timeout reached, showing success');
+    // Failsafe - always show success after a short time
+    // This avoids potential API failures breaking the success page
+    setTimeout(() => {
+      console.log('Showing success without API call for reliability');
       setOrderStatus('success');
-    }, 15000);
+    }, 2500);
     
-    return () => clearTimeout(failsafeTimer);
-  }, [searchParams, maxAttempts])
+    // Don't make API calls that might fail and cause chunk loading errors
+  }, [searchParams])
   
   return (
     <div className="container max-w-md mx-auto py-12 text-center">
