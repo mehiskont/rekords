@@ -16,6 +16,7 @@ export function formatDate(date: Date) {
 
 // Update the serializeForClient function to include weight information
 export function serializeForClient<T extends Record<string, any>>(obj: T): T {
+  // Create a clean object with only needed properties to avoid serialization issues
   const cleanObj = {
     id: obj.id,
     title: obj.title,
@@ -39,7 +40,8 @@ export function serializeForClient<T extends Record<string, any>>(obj: T): T {
     weight_unit: obj.weight_unit,
   }
 
-  return JSON.parse(JSON.stringify(cleanObj))
+  // Direct object return is faster than JSON.parse(JSON.stringify())
+  return cleanObj as T
 }
 
 interface RetryOptions {

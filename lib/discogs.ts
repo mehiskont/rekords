@@ -4,15 +4,14 @@ import type { DiscogsRecord, DiscogsApiResponse, DiscogsInventoryOptions } from 
 import { log } from "@/lib/logger"
 import { prisma } from "@/lib/prisma"
 
-const CACHE_TTL = 3600 // 1 hour
+const CACHE_TTL = 86400 // 24 hours
 const BASE_URL = "https://api.discogs.com"
 
-// Create a batch processor for shipping price requests
+// Create a batch processor for shipping price requests with larger batch size
 const shippingPriceProcessor = new BatchProcessor<string, number>(
   async (listingIds) => {
-    const results: number[] = []
-
-    for (const listingId of listingIds) {
+    // Create an array to store all request promises
+    const requestPromises = listingIds.map(async (listingId) => {
       try {
         const response = await fetchWithRetry(
           `${BASE_URL}/marketplace/listings/${listingId}/shipping/fee?currency=USD`,
@@ -22,34 +21,28 @@ const shippingPriceProcessor = new BatchProcessor<string, number>(
               "User-Agent": "PlastikRecordStore/1.0",
             },
             retryOptions: {
-              maxRetries: 5,
+              maxRetries: 3,
               baseDelay: 1000,
-              maxDelay: 10000,
+              maxDelay: 5000,
             },
           },
         )
 
-        if (response.status === 404) {
-          console.warn(`Listing ${listingId} not found. Using default shipping price.`)
-          results.push(5.0)
-          continue
-        }
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`)
+        if (response.status === 404 || !response.ok) {
+          return 5.0; // Default price for not found or errors
         }
 
         const data = await response.json()
-        results.push(data.fee?.value || 5.0)
+        return data.fee?.value || 5.0
       } catch (error) {
-        console.error(`Error fetching shipping price for listing ${listingId}:`, error)
-        results.push(5.0) // Default shipping price on error
+        return 5.0 // Default shipping price on error
       }
-    }
+    });
 
-    return results
+    // Execute all requests in parallel and return results
+    return Promise.all(requestPromises);
   },
-  { maxBatchSize: 5, maxWaitTime: 2000 },
+  { maxBatchSize: 20, maxWaitTime: 1000 },
 )
 
 async function fetchShippingPrice(listingId: string): Promise<number> {
@@ -62,10 +55,9 @@ async function fetchShippingPrice(listingId: string): Promise<number> {
     }
 
     const price = await shippingPriceProcessor.add(listingId)
-    await setCachedData(cacheKey, price.toString(), 24 * 60 * 60) // Cache for 24 hours
+    await setCachedData(cacheKey, price.toString(), 7 * 24 * 60 * 60) // Cache for 7 days
     return price
   } catch (error) {
-    console.error(`Error fetching shipping price for listing ${listingId}:`, error)
     return 5.0 // Default shipping price
   }
 }
@@ -87,10 +79,9 @@ async function fetchFullReleaseData(releaseId: string): Promise<any> {
     })
 
     const data = await response.json()
-    await setCachedData(cacheKey, JSON.stringify(data), CACHE_TTL)
+    await setCachedData(cacheKey, JSON.stringify(data), 30 * 24 * 60 * 60) // Cache for 30 days
     return data
   } catch (error) {
-    console.error("Error fetching release data:", error)
     return null
   }
 }
@@ -100,13 +91,11 @@ async function mapListingToRecord(listing: any): Promise<DiscogsRecord> {
     const shippingPrice = await fetchShippingPrice(listing.id?.toString() || "")
     const price = listing.price?.value ? Number(listing.price.value) : listing.price ? Number(listing.price) : 0
 
-    console.log("Raw listing data:", JSON.stringify(listing, null, 2))
+    // Process listing data
 
     // Extract weight information from the listing
     let weight = listing.weight || listing.release?.weight || 0
     let weightSource = "direct"
-
-    console.log("Initial weight:", weight, "Source:", weightSource)
 
     // If no direct weight is available, try to get it from the formats
     if (!weight && listing.release?.formats && Array.isArray(listing.release.formats)) {
@@ -133,8 +122,6 @@ async function mapListingToRecord(listing: any): Promise<DiscogsRecord> {
       }
     }
 
-    console.log("Weight after format check:", weight, "Source:", weightSource)
-
     // If still no weight found, use the default based on format
     if (!weight) {
       if (listing.format?.includes("LP") || listing.format?.includes('12"')) {
@@ -152,24 +139,9 @@ async function mapListingToRecord(listing: any): Promise<DiscogsRecord> {
       }
     }
 
-    console.log("Weight after default check:", weight, "Source:", weightSource)
-
     // For multi-disc releases, multiply the weight
     const quantity = listing.format_quantity || listing.release?.format_quantity || 1
     weight = weight * quantity
-
-    console.log("Weight calculation details:", {
-      listingId: listing.id,
-      title: listing.release?.title,
-      directWeight: listing.weight,
-      releaseWeight: listing.release?.weight,
-      formatInfo: listing.release?.formats,
-      calculatedWeight: weight,
-      format: listing.format,
-      formatQuantity: quantity,
-      weightSource: weightSource,
-      timestamp: new Date().toISOString(),
-    })
 
     const weight_unit = "g"
 
@@ -434,13 +406,6 @@ export async function getDiscogsInventory(
   perPage = 50,
   options: DiscogsInventoryOptions = {},
 ): Promise<{ records: DiscogsRecord[]; totalPages: number }> {
-  console.log("Fetching inventory with raw listing data:", {
-    timestamp: new Date().toISOString(),
-    username: process.env.DISCOGS_USERNAME,
-    searchParams: { search, sort, page, perPage, options },
-  })
-  console.log("getDiscogsInventory called with:", { search, sort, page, perPage, options })
-
   // Include a cacheBuster parameter in the cache key if provided
   const cacheKey = `inventory:${search || "all"}:${sort || "default"}:${page}:${perPage}:${options.category || "all"}:${
     options.sort || "default"
@@ -486,7 +451,7 @@ export async function getDiscogsInventory(
     }
 
     const url = `${BASE_URL}/users/${process.env.DISCOGS_USERNAME}/inventory?${params.toString()}`
-    console.log("Fetching from Discogs API:", url.replace(process.env.DISCOGS_API_TOKEN || "", "[REDACTED]"))
+    // Fetch from Discogs API
 
     const response = await fetchWithRetry(url, {
       headers: {
@@ -501,35 +466,63 @@ export async function getDiscogsInventory(
     }
 
     const data: DiscogsApiResponse = await response.json()
-    console.log("Raw Discogs API response:", {
-      pagination: data.pagination,
-      listingsCount: data.listings?.length,
-    })
+    // Process API response
 
     if (!data || !data.listings) {
       throw new Error("Invalid data structure received from Discogs API")
     }
 
-    const availableListings = data.listings.filter((listing) => listing.quantity > 0)
+    // More strict filtering for available listings - both quantity and status
+    const availableListings = data.listings.filter((listing) => 
+      listing.quantity > 0 && 
+      listing.status === "For Sale"
+    )
 
+    // Optimize by batching full release data fetches before mapping listings
+    const releaseIds = new Set<string>()
+    const releaseDataMap = new Map<string, any>()
+    
+    if (options.fetchFullReleaseData || (options.sort === "listed" && options.sort_order === "desc")) {
+      availableListings.forEach(listing => {
+        if (listing.release?.id) {
+          releaseIds.add(listing.release.id.toString())
+        }
+      })
+      
+      // Fetch all release data in parallel
+      const releaseDataPromises = Array.from(releaseIds).map(async (releaseId) => {
+        try {
+          const data = await fetchFullReleaseData(releaseId)
+          return [releaseId, data]
+        } catch (error) {
+          return [releaseId, null]
+        }
+      })
+      
+      const releaseDataResults = await Promise.all(releaseDataPromises)
+      releaseDataResults.forEach(([releaseId, data]) => {
+        if (data) releaseDataMap.set(releaseId as string, data)
+      })
+    }
+    
+    // Now map all listings using the pre-fetched release data
     const records = await Promise.all(
       availableListings.map(async (listing) => {
-        if (options.fetchFullReleaseData || (options.sort === "listed" && options.sort_order === "desc")) {
-          try {
-            const fullRelease = await fetchFullReleaseData(listing.release.id.toString())
-            const record = await mapListingToRecord(listing)
-            return {
-              ...record,
-              catalogNumber: fullRelease?.labels?.[0]?.catno?.toString().trim() || record.catalogNumber,
-              label: fullRelease?.labels?.[0]?.name || record.label,
-            }
-          } catch (error) {
-            console.error(`Error fetching full release data for ${listing.release.id}:`, error)
-            return mapListingToRecord(listing)
+        const releaseId = listing.release?.id?.toString()
+        const fullRelease = releaseId ? releaseDataMap.get(releaseId) : null
+        
+        const record = await mapListingToRecord(listing)
+        
+        if (fullRelease) {
+          return {
+            ...record,
+            catalogNumber: fullRelease?.labels?.[0]?.catno?.toString().trim() || record.catalogNumber,
+            label: fullRelease?.labels?.[0]?.name || record.label,
           }
         }
-        return mapListingToRecord(listing)
-      }),
+        
+        return record
+      })
     )
 
     let filteredRecords = records
@@ -542,10 +535,12 @@ export async function getDiscogsInventory(
       totalPages: Math.ceil(data.pagination.items / perPage),
     }
 
+    // Cache the result, but with a shorter TTL for the inventory list to maintain freshness
+    // This is especially important for availability status
     try {
-      await setCachedData(cacheKey, JSON.stringify(result), CACHE_TTL)
+      await setCachedData(cacheKey, JSON.stringify(result), options.cacheBuster ? 600 : CACHE_TTL) // 10 minutes if cacheBuster is used
     } catch (error) {
-      console.error("Cache write error:", error)
+      // Silently continue on cache error
     }
 
     return result
@@ -558,16 +553,20 @@ export async function getDiscogsInventory(
 
 export async function getDiscogsRecord(
   id: string,
+  options?: { skipCache?: boolean }
 ): Promise<{ record: DiscogsRecord | null; relatedRecords: DiscogsRecord[] }> {
   const cacheKey = `record:${id}`
 
-  try {
-    const cachedData = await getCachedData(cacheKey)
-    if (cachedData) {
-      return JSON.parse(cachedData)
+  // Allow skipping cache check for fresh data, useful after purchase
+  if (!options?.skipCache) {
+    try {
+      const cachedData = await getCachedData(cacheKey)
+      if (cachedData) {
+        return JSON.parse(cachedData)
+      }
+    } catch (error) {
+      // Continue if cache read fails
     }
-  } catch (error) {
-    console.error("Cache read error:", error)
   }
 
   try {
@@ -590,7 +589,11 @@ export async function getDiscogsRecord(
       release: { ...data.release, ...fullRelease },
     })
 
-    const { records: allRelatedRecords } = await getDiscogsInventory(undefined, undefined, 1, 4)
+    // Get related records using a simpler query with minimal fields
+    const { records: allRelatedRecords } = await getDiscogsInventory(undefined, undefined, 1, 4, {
+      fetchFullReleaseData: false // Don't fetch full release data for related records
+    })
+    
     const relatedRecords = allRelatedRecords.filter(
       (relatedRecord) =>
         relatedRecord.id !== record.id &&
@@ -600,15 +603,11 @@ export async function getDiscogsRecord(
 
     const result = { record, relatedRecords }
 
-    try {
-      await setCachedData(cacheKey, JSON.stringify(result), CACHE_TTL)
-    } catch (error) {
-      console.error("Cache write error:", error)
-    }
+    // Cache for longer duration - details view is less time-sensitive
+    await setCachedData(cacheKey, JSON.stringify(result), 7 * 24 * 60 * 60) // 7 days
 
     return result
   } catch (error) {
-    console.error("Error fetching record:", error)
     return { record: null, relatedRecords: [] }
   }
 }

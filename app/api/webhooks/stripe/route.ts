@@ -195,6 +195,24 @@ export async function POST(req: Request) {
             log("Clearing inventory cache to refresh data...")
             const clearedCount = await clearCachedData("inventory:*")
             log(`Cleared ${clearedCount} inventory cache entries`)
+            
+            // Also clear record cache for specific items that were purchased
+            for (const item of items) {
+              await clearCachedData(`record:${item.id}`)
+              log(`Cleared cache for record:${item.id}`)
+            }
+            
+            // Fetch fresh inventory data to rebuild cache
+            try {
+              // This fetch happens in the background and doesn't block the response
+              fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/refresh-inventory`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+              }).catch(err => log(`Background refresh inventory failed: ${err.message}`, "warn"))
+              log("Triggered background inventory refresh")
+            } catch (refreshError) {
+              log(`Failed to trigger inventory refresh: ${refreshError instanceof Error ? refreshError.message : "Unknown error"}`, "warn")
+            }
           } catch (error) {
             log(`Error clearing cache: ${error instanceof Error ? error.message : "Unknown error"}`, "error")
           }

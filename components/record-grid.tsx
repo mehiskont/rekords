@@ -15,13 +15,12 @@ export async function RecordGrid({ searchParams = {} }: RecordGridProps) {
   const perPage = 20
 
   try {
-    console.log("Fetching records with params:", { search, category, sort, page, perPage })
+    // Add a small cacheBuster for search views to ensure fresh availability data
     const { records } = await getDiscogsInventory(search, sort, page, perPage, {
       category,
       fetchFullReleaseData: true,
+      cacheBuster: search ? Date.now().toString() : undefined // Only add cacheBuster for searches
     })
-
-    console.log("Received records:", records.slice(0, 2)) // Log first two records for debugging
 
     if (!records || records.length === 0) {
       return <p className="text-center text-lg">No records found.</p>
@@ -29,7 +28,6 @@ export async function RecordGrid({ searchParams = {} }: RecordGridProps) {
 
     // Serialize records before passing to client component
     const serializedRecords = records.map((record) => serializeForClient(record))
-    console.log("Serialized records:", serializedRecords.slice(0, 2)) // Log serialized records
 
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
