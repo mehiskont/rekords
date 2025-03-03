@@ -17,7 +17,8 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [email, setEmail] = React.useState<string>("")
 
-  const callbackUrl = searchParams.get("callbackUrl") || "/dashboard"
+  // Forces the redirect to the dashboard page
+  const callbackUrl = "/dashboard"
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -93,11 +94,13 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
         disabled={isLoading}
         onClick={() => {
           setIsLoading(true)
-          // Add extra logging and error handling for google sign in
-          console.log("Attempting Google sign in");
+          // Add extra logging and proper error handling for Google sign in
+          console.log("Attempting Google sign in with callbackUrl:", callbackUrl);
+          
+          // Use the proper next-auth signIn method with error handling
           signIn("google", { 
             callbackUrl,
-            redirect: true // Force redirect
+            redirect: true
           }).catch(error => {
             console.error("Google sign in error:", error);
             setIsLoading(false);

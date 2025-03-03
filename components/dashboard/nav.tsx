@@ -12,12 +12,7 @@ export function DashboardNav() {
     <nav className="grid items-start gap-2">
       <Link href="/dashboard">
         <Button variant="ghost" className={cn("w-full justify-start", pathname === "/dashboard" && "bg-muted")}>
-          Overview
-        </Button>
-      </Link>
-      <Link href="/dashboard/orders">
-        <Button variant="ghost" className={cn("w-full justify-start", pathname === "/dashboard/orders" && "bg-muted")}>
-          Orders
+          Dashboard
         </Button>
       </Link>
       <Link href="/dashboard/profile">

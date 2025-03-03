@@ -9,6 +9,11 @@ const resend = new Resend(process.env.RESEND_API_KEY)
 
 export const authOptions = {
   adapter: PrismaAdapter(prisma),
+  debug: true, // Enable debug mode to help troubleshoot
+  session: {
+    strategy: "jwt", // Use JWT strategy to avoid database dependency
+    maxAge: 30 * 24 * 60 * 60, // 30 days
+  },
   providers: [
     EmailProvider({
       // Use Resend to send emails
@@ -50,12 +55,51 @@ export const authOptions = {
     error: "/auth/error",
   },
   callbacks: {
-    async session({ session, user }) {
-      if (session.user) {
-        session.user.id = user.id
+    async jwt({ token, user, account }) {
+      // Initial sign in
+      if (account && user) {
+        console.log("JWT callback - initial sign in:", { userId: user.id, email: user.email });
+        return {
+          ...token,
+          userId: user.id,
+        };
       }
-      return session
+      // Return previous token if the access token has not expired yet
+      return token;
     },
+    async session({ session, token, user }) {
+      // Log session data for debugging
+      console.log("Session callback triggered in auth.ts", { 
+        hasToken: !!token, 
+        hasUser: !!user,
+        tokenUserId: token?.userId,
+        userId: user?.id 
+      });
+      
+      if (session?.user) {
+        // Ensure we always have a user ID, preferring token-based ID for JWT strategy
+        if (token?.userId) {
+          session.user.id = token.userId;
+          console.log("Session ID set from token:", token.userId);
+        } 
+        // Fallback to database user
+        else if (user?.id) {
+          session.user.id = user.id;
+          console.log("Session ID set from user:", user.id);
+        }
+      }
+      
+      return session;
+    },
+    // Add signIn callback for debugging
+    async signIn({ user, account, profile }) {
+      console.log("Sign-in callback in auth.ts:", {
+        provider: account?.provider,
+        userId: user?.id,
+        userEmail: user?.email
+      });
+      return true;
+    }
   },
 }
 

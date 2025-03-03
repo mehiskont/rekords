@@ -140,15 +140,20 @@ export async function updateOrderStatus(orderId: string, status: string) {
 }
 
 export async function getOrdersByUserId(userId: string) {
-  return prisma.order.findMany({
-    where: { userId },
-    include: {
-      items: true,
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  })
+  try {
+    return await prisma.order.findMany({
+      where: { userId },
+      include: {
+        items: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  } catch (error) {
+    console.error("Database error in getOrdersByUserId:", error);
+    throw error; // Let the caller handle the error
+  }
 }
 
 export async function getOrderById(orderId: string) {

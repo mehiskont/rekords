@@ -31,10 +31,12 @@ export default async function RootLayout({
         <NextAuthProvider session={session}>
           <ThemeProvider>
             <CartProvider>
-              <NavBar />
-              <main className="flex-1">{children}</main>
-              <Footer />
-              <Toaster />
+              <div className="flex min-h-screen flex-col">
+                <NavBar />
+                <main className="flex-1">{children}</main>
+                <Footer />
+                <Toaster />
+              </div>
             </CartProvider>
           </ThemeProvider>
         </NextAuthProvider>
