@@ -19,7 +19,6 @@ export function OrderList({ orders }: OrderListProps) {
   const getStatusVariant = (status: string) => {
     switch (status.toLowerCase()) {
       case "completed":
-      case "shipped":
         return "success";
       case "paid":
         return "info";

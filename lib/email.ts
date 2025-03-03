@@ -1,76 +1,71 @@
-import { Resend } from "resend"
+// This file is maintained for backward compatibility
+// It redirects to the new implementation in /lib/email/ directory
 
-const resend = new Resend(process.env.RESEND_API_KEY)
+import { getOrderConfirmationEmail } from "./email/templates";
+import { log } from "./logger";
 
-export async function sendOrderConfirmationEmail(to: string, orderDetails: any) {
-  const subject = `Order Confirmation - #${orderDetails.orderId}`
-  const html = `
-    <h1>Thank you for your order!</h1>
-    <p>Your order (ID: ${orderDetails.orderId}) has been confirmed and is being processed.</p>
-    <h2>Order Details:</h2>
-    <ul>
-      ${orderDetails.items
-        .map(
-          (item: any) => `
-        <li>${item.title} - Quantity: ${item.quantity} - Price: $${item.price.toFixed(2)}</li>
-      `,
-        )
-        .join("")}
-    </ul>
-    <p><strong>Total: $${orderDetails.total.toFixed(2)}</strong></p>
-    <p>We'll send you another email when your order ships.</p>
-    <p>Thank you for shopping with us!</p>
-  `
+// Import and use Resend with improved error handling
+import { Resend } from "resend";
 
-  try {
-    await resend.emails.send({
-      from: "Plastik Record Store <orders@plastikrecords.com>",
-      to: [to],
-      subject: subject,
-      html: html,
-    })
-    console.log("Order confirmation email sent successfully")
-  } catch (error) {
-    console.error("Failed to send order confirmation email:", error)
-  }
+// Get API key from environment with a fallback for hardcoded development
+const API_KEY = process.env.RESEND_API_KEY || "re_U2Su4RXX_E72x5WeyUvBmJq3qu6SkV53d";
+
+// Initialize the Resend client
+let resend: Resend;
+try {
+  resend = new Resend(API_KEY);
+  log(`Resend client initialized with API key: ${API_KEY.substring(0, 8)}...`);
+} catch (error) {
+  log(`Failed to initialize Resend client: ${error instanceof Error ? error.message : String(error)}`, "error");
+  // Create an empty client to prevent crashes - it will handle errors properly when called
+  resend = new Resend("");
 }
 
-export async function sendOrderShippedEmail(to: string, orderDetails: any) {
-  const subject = `Your Order Has Shipped - #${orderDetails.orderId}`
-  const html = `
-    <h1>Your order is on its way!</h1>
-    <p>Great news! Your order has been shipped and is on its way to you.</p>
-    <h2>Shipping Address:</h2>
-    <p>
-      ${orderDetails.shippingAddress.name}<br>
-      ${orderDetails.shippingAddress.line1}<br>
-      ${orderDetails.shippingAddress.line2 ? `${orderDetails.shippingAddress.line2}<br>` : ""}
-      ${orderDetails.shippingAddress.city}${orderDetails.shippingAddress.state ? `, ${orderDetails.shippingAddress.state}` : ""} ${orderDetails.shippingAddress.postalCode}<br>
-      ${orderDetails.shippingAddress.country}
-    </p>
-    <h2>Order Contents:</h2>
-    <ul>
-      ${orderDetails.items
-        .map(
-          (item: any) => `
-        <li>${item.title} - Quantity: ${item.quantity}</li>
-      `,
-        )
-        .join("")}
-    </ul>
-    <p>Thank you for shopping with Plastik Record Store!</p>
-  `
-
+export async function sendOrderConfirmationEmail(to: string, orderDetails: any) {
+  log(`Sending order confirmation email to ${to} for order ${orderDetails.orderId}`);
+  
   try {
-    await resend.emails.send({
-      from: "Plastik Record Store <orders@plastikrecords.com>",
+    // Ensure we have cover_image field for all items (for email template)
+    const enhancedItems = orderDetails.items.map((item: any) => ({
+      ...item,
+      cover_image: item.cover_image || "/placeholder.svg",
+    }));
+
+    const enhancedOrderDetails = {
+      ...orderDetails,
+      items: enhancedItems
+    };
+
+    // Get the HTML from the rich template
+    const html = getOrderConfirmationEmail(enhancedOrderDetails);
+    
+    // Send the email using the verified onboarding domain from Resend
+    const response = await resend.emails.send({
+      from: "Plastik Records <onboarding@resend.dev>",
       to: [to],
-      subject: subject,
+      subject: `Your Order Confirmation - #${orderDetails.orderId}`,
       html: html,
-    })
-    console.log("Order shipped email sent successfully")
+      text: `Thank you for your order #${orderDetails.orderId}! Total: $${orderDetails.total.toFixed(2)}`,
+    });
+    
+    // Extract data and error from response
+    const { data, error } = response || { data: null, error: "No response from email service" };
+    
+    if (error) {
+      log(`Failed to send order confirmation email: ${JSON.stringify(error)}`, "error");
+      return { success: false, error };
+    }
+    
+    if (!data) {
+      log("Email service returned no data or ID", "error");
+      return { success: false, error: "No email ID returned" };
+    }
+    
+    log(`Order confirmation email sent successfully. ID: ${data.id}`);
+    return { success: true, id: data.id };
   } catch (error) {
-    console.error("Failed to send order shipped email:", error)
+    log(`Error sending order confirmation email: ${error instanceof Error ? error.message : String(error)}`, "error");
+    return { success: false, error: error instanceof Error ? error.message : String(error) };
   }
 }
 

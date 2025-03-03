@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server"
 import { z } from "zod"
-import { sendOrderConfirmationEmail, sendOrderShippedEmail } from "@/lib/email"
+import { sendOrderConfirmationEmail } from "@/lib/email"
 import { log } from "@/lib/logger"
 
 const testEmailSchema = z.object({
   email: z.string().email(),
-  type: z.enum(["confirmation", "shipped", "simple"]),
+  type: z.enum(["confirmation", "simple"]),
 })
 
 export async function POST(req: Request) {
@@ -25,13 +25,21 @@ export async function POST(req: Request) {
           title: "Test Vinyl Record - Awesome Album",
           quantity: 1,
           price: 24.99,
-          condition: "Mint (M)"
+          condition: "Mint (M)",
+          cover_image: "/placeholder.svg",
+          artist: "Test Artist",
+          label: "Test Label",
+          format: "Vinyl, LP, Album"
         },
         {
           title: "Another Great Record - Limited Edition",
           quantity: 2,
           price: 29.99,
-          condition: "Near Mint (NM)"
+          condition: "Near Mint (NM)",
+          cover_image: "/placeholder.svg",
+          artist: "Another Artist",
+          label: "Great Label",
+          format: "Vinyl, 12\", EP"
         }
       ],
       total: 84.97,
@@ -42,7 +50,7 @@ export async function POST(req: Request) {
         city: "Test City",
         state: "TS",
         postal_code: "12345",
-        country: "Test Country"
+        country: "Estonia"
       }
     }
     
@@ -51,9 +59,6 @@ export async function POST(req: Request) {
       if (type === "confirmation") {
         log(`Sending test order confirmation email to ${email}`)
         result = await sendOrderConfirmationEmail(email, testOrderDetails)
-      } else if (type === "shipped") {
-        log(`Sending test order shipped email to ${email}`)
-        result = await sendOrderShippedEmail(email, testOrderDetails)
       } else if (type === "simple") {
         // Use the direct Resend API for a simple test
         const Resend = require('resend').Resend;

@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma"
 import { updateDiscogsInventory } from "@/lib/discogs"
-import { sendOrderConfirmationEmail, sendOrderShippedEmail } from "@/lib/email"
+import { sendOrderConfirmationEmail } from "@/lib/email"
 import type { CartItem } from "@/types/cart"
 import type { OrderDetails, ShippingAddress } from "@/types/order"
 import { log } from "@/lib/logger"
@@ -93,6 +93,10 @@ export async function createOrder(
           quantity: item.quantity,
           price: item.price,
           condition: item.condition || undefined,
+          cover_image: "/placeholder.svg", // Ensure we have image for email
+          format: item.format || "",
+          artist: item.artist || "",
+          label: item.label || ""
         })),
         total: order.total,
         shippingAddress: shippingAddress as ShippingAddress,
@@ -130,40 +134,8 @@ export async function createOrder(
         }
       }
       
-      // Additional failsafe - try the direct Resend API as last resort
-      if ((order.user?.email || checkoutEmail) && orderDetails) {
-        try {
-          const emailTo = order.user?.email || checkoutEmail || '';
-          log(`Attempting direct Resend API fallback to: ${emailTo}`);
-          
-          // Use direct Resend import
-          const { Resend } = await import('resend');
-          const resend = new Resend(process.env.RESEND_API_KEY || "re_U2Su4RXX_E72x5WeyUvBmJq3qu6SkV53d");
-          
-          const { data, error } = await resend.emails.send({
-            from: 'Plastik Records <onboarding@resend.dev>',
-            to: [emailTo],
-            subject: `Your Order Confirmation - #${orderDetails.orderId}`,
-            text: `Thank you for your order #${orderDetails.orderId}. Total: $${orderDetails.total.toFixed(2)}`,
-            html: `
-              <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                <h1>Thank you for your order!</h1>
-                <p>Order #${orderDetails.orderId}</p>
-                <p>Your order has been confirmed. Total: $${orderDetails.total.toFixed(2)}</p>
-                <p>You'll receive a detailed email receipt shortly.</p>
-              </div>
-            `
-          });
-          
-          if (error) {
-            log(`Direct Resend API error: ${JSON.stringify(error)}`, "error");
-          } else {
-            log(`Direct Resend API success: ${data?.id}`);
-          }
-        } catch (directError) {
-          log(`Exception in direct Resend API: ${directError instanceof Error ? directError.message : String(directError)}`, "error");
-        }
-      }
+      // We've improved the main email sending function, so no need for this additional fallback
+      // The primary sendOrderConfirmationEmail already has proper error handling and fallbacks
       
       if (!order.user?.email && !checkoutEmail) {
         log("No email found to send order confirmation", "warn")
@@ -188,94 +160,6 @@ export async function updateOrderStatus(orderId: string, status: string) {
       user: true,
     },
   })
-
-  // Send order shipped email when status changes to "shipped"
-  if (status === "shipped") {
-    const orderDetails: OrderDetails = {
-      orderId: order.id,
-      items: order.items.map((item) => ({
-        title: item.title,
-        quantity: item.quantity,
-        price: item.price,
-        condition: item.condition || undefined,
-      })),
-      total: order.total,
-      shippingAddress: order.shippingAddress as ShippingAddress,
-    }
-
-    try {
-      // Try sending to account email if available
-      if (order.user?.email) {
-        try {
-          log(`Attempting to send shipping confirmation to user account: ${order.user.email}`);
-          const result = await sendOrderShippedEmail(order.user.email, orderDetails)
-          if (result && result.success) {
-            log(`Sent shipping confirmation to account email: ${order.user.email}`)
-          } else {
-            log(`Failed to send shipping confirmation to account: ${JSON.stringify(result)}`, "warn")
-          }
-        } catch (emailError) {
-          log(`Exception sending shipping email to account: ${emailError instanceof Error ? emailError.message : String(emailError)}`, "error")
-        }
-      }
-      
-      // Also try sending to shipping address email if different
-      const shippingEmail = order.shippingAddress?.email;
-      if (shippingEmail && (!order.user?.email || shippingEmail !== order.user.email)) {
-        try {
-          log(`Attempting to send shipping confirmation to shipping email: ${shippingEmail}`);
-          const result = await sendOrderShippedEmail(shippingEmail, orderDetails);
-          if (result && result.success) {
-            log(`Sent shipping confirmation to shipping email: ${shippingEmail}`)
-          } else {
-            log(`Failed to send shipping confirmation to shipping email: ${JSON.stringify(result)}`, "warn")
-          }
-        } catch (emailError) {
-          log(`Exception sending shipping email to shipping address: ${emailError instanceof Error ? emailError.message : String(emailError)}`, "error")
-        }
-      }
-      
-      // Additional failsafe - try the direct Resend API as last resort
-      if ((order.user?.email || shippingEmail) && orderDetails) {
-        try {
-          const emailTo = order.user?.email || shippingEmail || '';
-          log(`Attempting direct Resend API fallback for shipping email to: ${emailTo}`);
-          
-          // Use direct Resend import
-          const { Resend } = await import('resend');
-          const resend = new Resend(process.env.RESEND_API_KEY || "re_U2Su4RXX_E72x5WeyUvBmJq3qu6SkV53d");
-          
-          const { data, error } = await resend.emails.send({
-            from: 'Plastik Records <onboarding@resend.dev>',
-            to: [emailTo],
-            subject: `Your Order Has Been Shipped - #${orderDetails.orderId}`,
-            text: `Great news! Your order #${orderDetails.orderId} has been shipped and is on its way to you.`,
-            html: `
-              <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-                <h1>Your order has been shipped!</h1>
-                <p>Order #${orderDetails.orderId}</p>
-                <p>Great news! Your order has been shipped and is on its way to you.</p>
-              </div>
-            `
-          });
-          
-          if (error) {
-            log(`Direct Resend API error for shipping: ${JSON.stringify(error)}`, "error");
-          } else {
-            log(`Direct Resend API success for shipping: ${data?.id}`);
-          }
-        } catch (directError) {
-          log(`Exception in direct Resend API for shipping: ${directError instanceof Error ? directError.message : String(directError)}`, "error");
-        }
-      }
-      
-      if (!order.user?.email && !shippingEmail) {
-        log("No email found to send shipping confirmation", "warn")
-      }
-    } catch (error) {
-      log(`Error in shipping email process: ${error instanceof Error ? error.message : String(error)}`, "error")
-    }
-  }
 
   return order
 }

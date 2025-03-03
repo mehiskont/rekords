@@ -325,14 +325,18 @@ export async function POST(req: Request) {
                   // Import in a specific way to avoid circular dependencies
                   const { sendOrderConfirmationEmail } = await import("@/lib/email");
                   
-                  // Prepare order details
+                  // Prepare order details with required fields for rich email template
                   const orderDetailsForEmail = {
                     orderId: paymentIntent.id.slice(-8).toUpperCase(),
                     items: items.map(item => ({
                       title: item.title || "Unknown Item",
                       quantity: item.quantity || 1,
                       price: item.price || 0,
-                      condition: item.condition
+                      condition: item.condition || "Not specified",
+                      cover_image: item.cover_image || "/placeholder.svg",
+                      artist: item.artist || "",
+                      label: item.label || "",
+                      format: item.format || ""
                     })),
                     total: paymentIntent.amount ? (paymentIntent.amount / 100) : 0,
                     shippingAddress: {
@@ -340,7 +344,7 @@ export async function POST(req: Request) {
                       line1: customerAddress || "Address not provided",
                       city: "",
                       postal_code: "",
-                      country: ""
+                      country: "Estonia" // Default to Estonia for testing
                     }
                   };
                   

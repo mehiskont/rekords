@@ -132,10 +132,6 @@ export default function EmailTestPage() {
                   <Label htmlFor="confirmation">Order Confirmation</Label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="shipped" id="shipped" />
-                  <Label htmlFor="shipped">Order Shipped</Label>
-                </div>
-                <div className="flex items-center space-x-2">
                   <RadioGroupItem value="simple" id="simple" />
                   <Label htmlFor="simple">Simple Direct Email</Label>
                 </div>

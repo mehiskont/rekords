@@ -1,5 +1,5 @@
 import { Resend } from "resend"
-import { getOrderConfirmationEmail, getOrderShippedEmail } from "./templates"
+import { getOrderConfirmationEmail } from "./templates"
 import type { OrderDetails } from "@/types/order"
 import { log } from "@/lib/logger"
 
@@ -61,44 +61,4 @@ export async function sendOrderConfirmationEmail(to: string, orderDetails: Order
   }
 }
 
-export async function sendOrderShippedEmail(to: string, orderDetails: OrderDetails) {
-  log(`Sending order shipped email to ${to} for order ${orderDetails.orderId}`)
-  
-  try {
-    // Validate the API key is set
-    if (!process.env.RESEND_API_KEY) {
-      log("RESEND_API_KEY is not set in environment variables", "error")
-      return { success: false, error: "Email API key is not configured" }
-    }
-    
-    // Send the email using the verified onboarding domain from Resend
-    const response = await resend.emails.send({
-      from: "Plastik Records <onboarding@resend.dev>",
-      to: [to],
-      subject: `Your Order Has Been Shipped - #${orderDetails.orderId}`,
-      html: getOrderShippedEmail(orderDetails),
-      text: `Great news! Your order #${orderDetails.orderId} has been shipped and is on its way to you.`,
-    })
-    
-    // Extract data and error from response
-    const { data, error } = response || { data: null, error: "No response from email service" }
-    
-    if (error) {
-      log(`Failed to send order shipped email: ${JSON.stringify(error)}`, "error")
-      return { success: false, error }
-    }
-    
-    if (!data) {
-      log("Email service returned no data or ID", "error")
-      return { success: false, error: "No email ID returned" }
-    }
-    
-    log(`Order shipped email sent successfully. ID: ${data.id}`)
-    return { success: true, id: data.id }
-  } catch (error) {
-    log(`Error sending order shipped email: ${error instanceof Error ? error.message : String(error)}`, "error")
-    // Don't throw error - return failure status instead
-    return { success: false, error: error instanceof Error ? error.message : String(error) }
-  }
-}
 
