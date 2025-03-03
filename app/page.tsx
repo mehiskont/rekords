@@ -3,6 +3,11 @@ import { SearchBar } from "@/components/search-bar"
 import { NewArrivals } from "@/components/new-arrivals"
 import { RecordGrid } from "@/components/record-grid"
 import { RecordGridSkeleton } from "@/components/record-grid-skeleton"
+import { RefreshButton } from "@/components/refresh-button"
+
+// Force dynamic rendering to prevent stale data from being cached
+export const dynamic = 'force-dynamic'
+export const revalidate = 0 // Do not cache this page
 
 export default function HomePage() {
   return (
@@ -34,9 +39,12 @@ export default function HomePage() {
       {/* All Records Section */}
       <section className="py-16 bg-muted/50">
         <div className="container max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl font-bold mb-8 flex items-center gap-2">
-            All Records
-          </h2>
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold flex items-center gap-2">
+              All Records
+            </h2>
+            <RefreshButton />
+          </div>
           <Suspense fallback={<RecordGridSkeleton />}>
             <RecordGrid />
           </Suspense>

@@ -15,11 +15,11 @@ export async function RecordGrid({ searchParams = {} }: RecordGridProps) {
   const perPage = 20
 
   try {
-    // Add a small cacheBuster for search views to ensure fresh availability data
+    // Add a cacheBuster to ALL inventory requests to ensure fresh availability data
     const { records } = await getDiscogsInventory(search, sort, page, perPage, {
       category,
       fetchFullReleaseData: true,
-      cacheBuster: search ? Date.now().toString() : undefined // Only add cacheBuster for searches
+      cacheBuster: Date.now().toString() // Always add cacheBuster for real-time availability
     })
 
     if (!records || records.length === 0) {

@@ -538,7 +538,9 @@ export async function getDiscogsInventory(
     // Cache the result, but with a shorter TTL for the inventory list to maintain freshness
     // This is especially important for availability status
     try {
-      await setCachedData(cacheKey, JSON.stringify(result), options.cacheBuster ? 600 : CACHE_TTL) // 10 minutes if cacheBuster is used
+      // If using cacheBuster, use a very short TTL (2 minutes)
+      // Otherwise use a longer TTL but still shorter than before (2 hours instead of 24 hours)
+      await setCachedData(cacheKey, JSON.stringify(result), options.cacheBuster ? 120 : 7200) 
     } catch (error) {
       // Silently continue on cache error
     }
