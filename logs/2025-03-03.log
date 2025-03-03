@@ -183,3 +183,23 @@
 [2025-03-03T12:51:23.739Z] [INFO] ✅ Successfully deleted listing 3483823017 using OAuth seller authentication
 [2025-03-03T12:51:23.740Z] [INFO] ✅ Updated Discogs inventory for item 3483823017
 [2025-03-03T12:51:23.740Z] [INFO] Clearing inventory cache...
+[2025-03-03T13:08:16.600Z] [INFO] Webhook received
+[2025-03-03T13:08:16.601Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-03T13:08:31.462Z] [INFO] Webhook received
+[2025-03-03T13:08:31.462Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-03T13:08:31.818Z] [INFO] Payment intent succeeded: pi_3QyYjDLKWZZc2yek16M25gZg
+[2025-03-03T13:08:31.818Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-03T13:08:31.818Z] [WARN] Payment intent has no sessionId metadata but contains items, creating order
+[2025-03-03T13:08:32.193Z] [INFO] Creating order for user cm7niharu0000pvp2o2pd9ebv, stripe session: pi_3QyYjDLKWZZc2yek16M25gZg
+[2025-03-03T13:08:32.193Z] [INFO] Order total calculated: 200
+[2025-03-03T13:08:33.416Z] [INFO] Order created successfully with ID: cm7t2svxm0003pv5uwm5x0fmm
+[2025-03-03T13:08:33.418Z] [INFO] Attempting to send confirmation email to user account: mehiskont@gmail.com
+[2025-03-03T13:08:34.014Z] [WARN] Failed to send email to user account: undefined
+[2025-03-03T13:08:34.014Z] [INFO] Attempting direct Resend API fallback to: mehiskont@gmail.com
+[2025-03-03T13:08:34.794Z] [INFO] Direct Resend API success: 1fd1d15b-f6d5-42ac-840e-b9bf04f48a04
+[2025-03-03T13:08:34.794Z] [INFO] Created order cm7t2svxm0003pv5uwm5x0fmm from payment intent
+[2025-03-03T13:08:35.543Z] [INFO] Updating Discogs inventory for listing 3483822849, quantity: 1
+[2025-03-03T13:08:35.543Z] [INFO] Attempting direct OAuth deletion for Discogs listing 3483822849
+[2025-03-03T13:08:36.396Z] [INFO] ✅ Successfully deleted listing 3483822849 using OAuth seller authentication
+[2025-03-03T13:08:36.396Z] [INFO] ✅ Updated Discogs inventory for item 3483822849
+[2025-03-03T13:08:36.397Z] [INFO] Clearing inventory cache...

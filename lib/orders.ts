@@ -4,6 +4,7 @@ import { sendOrderConfirmationEmail, sendOrderShippedEmail } from "@/lib/email"
 import type { CartItem } from "@/types/cart"
 import type { OrderDetails, ShippingAddress } from "@/types/order"
 import { log } from "@/lib/logger"
+import { saveUserCheckoutInfo } from "@/lib/user"
 
 export async function createOrder(
   userId: string,
@@ -17,6 +18,29 @@ export async function createOrder(
   // Calculate total from items
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   log(`Order total calculated: ${total}`)
+  
+  // Save shipping address to user profile if this is a real user (not anonymous)
+  if (userId && userId !== "anonymous" && shippingAddress) {
+    try {
+      log(`Saving shipping address to user profile for ${userId}`)
+      const nameParts = shippingAddress.name?.split(' ') || []
+      
+      await saveUserCheckoutInfo(userId, {
+        firstName: nameParts[0] || '',
+        lastName: nameParts.slice(1).join(' ') || '',
+        email: shippingAddress.email || billingAddress?.email || '',
+        address: shippingAddress.address?.line1 || shippingAddress.line1 || '',
+        city: shippingAddress.address?.city || shippingAddress.city || '',
+        state: shippingAddress.address?.state || shippingAddress.state || '',
+        country: shippingAddress.address?.country || shippingAddress.country || '',
+        postalCode: shippingAddress.address?.postal_code || shippingAddress.postal_code || '',
+      })
+      log(`Successfully saved shipping address to user profile`)
+    } catch (profileError) {
+      log(`Error saving shipping address to user profile: ${profileError instanceof Error ? profileError.message : "Unknown error"}`, "error")
+      // Continue with order creation even if profile update fails
+    }
+  }
   
   try {
     // Check if order already exists to prevent duplicates

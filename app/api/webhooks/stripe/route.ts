@@ -6,6 +6,7 @@ import { log } from "@/lib/logger"
 import { prisma } from "@/lib/prisma"
 import { createOrder, updateOrderStatus } from "@/lib/orders"
 import { clearCachedData } from "@/lib/redis"
+import { saveUserCheckoutInfo } from "@/lib/user"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",

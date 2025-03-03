@@ -141,6 +141,22 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
     })
   }
 
+  // Set initial field values from profile when component mounts
+  useEffect(() => {
+    if (initialData) {
+      // Set form fields from initialData
+      if (initialData.country) {
+        setBillingCountry(initialData.country);
+      }
+      if (initialData.shippingCountry) {
+        setShippingCountry(initialData.shippingCountry);
+      }
+      if (initialData.shippingAddressSameAsBilling !== undefined) {
+        setShippingAddressSameAsBilling(initialData.shippingAddressSameAsBilling);
+      }
+    }
+  }, [initialData]);
+
   return (
     <div className="grid md:grid-cols-2 gap-8">
       <div className="space-y-8">
@@ -157,20 +173,42 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="firstName">First Name</Label>
-                  <Input id="firstName" name="firstName" required />
+                  <Input 
+                    id="firstName" 
+                    name="firstName" 
+                    defaultValue={initialData?.firstName || ''} 
+                    required 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="lastName">Last Name</Label>
-                  <Input id="lastName" name="lastName" required />
+                  <Input 
+                    id="lastName" 
+                    name="lastName" 
+                    defaultValue={initialData?.lastName || ''} 
+                    required 
+                  />
                 </div>
               </div>
               <div>
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" name="email" type="email" required />
+                <Input 
+                  id="email" 
+                  name="email" 
+                  type="email" 
+                  defaultValue={initialData?.email || ''} 
+                  required 
+                />
               </div>
               <div>
                 <Label htmlFor="phone">Phone</Label>
-                <Input id="phone" name="phone" type="tel" required />
+                <Input 
+                  id="phone" 
+                  name="phone" 
+                  type="tel" 
+                  defaultValue={initialData?.phone || ''} 
+                  required 
+                />
               </div>
             </div>
           </div>
@@ -180,26 +218,50 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
             <div className="space-y-4">
               <div>
                 <Label htmlFor="address">Street Address</Label>
-                <Input id="address" name="address" required />
+                <Input 
+                  id="address" 
+                  name="address" 
+                  defaultValue={initialData?.address || ''} 
+                  required 
+                />
               </div>
               <div>
                 <Label htmlFor="apartment">Apartment, suite, etc. (optional)</Label>
-                <Input id="apartment" name="apartment" />
+                <Input 
+                  id="apartment" 
+                  name="apartment" 
+                  defaultValue={initialData?.apartment || ''} 
+                />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="city">City</Label>
-                  <Input id="city" name="city" required />
+                  <Input 
+                    id="city" 
+                    name="city" 
+                    defaultValue={initialData?.city || ''} 
+                    required 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="postalCode">Postal Code</Label>
-                  <Input id="postalCode" name="postalCode" required />
+                  <Input 
+                    id="postalCode" 
+                    name="postalCode" 
+                    defaultValue={initialData?.postalCode || ''} 
+                    required 
+                  />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="state">State/Province</Label>
-                  <Input id="state" name="state" required />
+                  <Input 
+                    id="state" 
+                    name="state" 
+                    defaultValue={initialData?.state || ''} 
+                    required 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="country">Country</Label>
@@ -233,26 +295,50 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
               <div className="space-y-4">
                 <div>
                   <Label htmlFor="shippingAddress">Street Address</Label>
-                  <Input id="shippingAddress" name="shippingAddress" required />
+                  <Input 
+                    id="shippingAddress" 
+                    name="shippingAddress" 
+                    defaultValue={initialData?.shippingAddress || ''}
+                    required 
+                  />
                 </div>
                 <div>
                   <Label htmlFor="shippingApartment">Apartment, suite, etc. (optional)</Label>
-                  <Input id="shippingApartment" name="shippingApartment" />
+                  <Input 
+                    id="shippingApartment" 
+                    name="shippingApartment" 
+                    defaultValue={initialData?.shippingApartment || ''}
+                  />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="shippingCity">City</Label>
-                    <Input id="shippingCity" name="shippingCity" required />
+                    <Input 
+                      id="shippingCity" 
+                      name="shippingCity" 
+                      defaultValue={initialData?.shippingCity || ''}
+                      required 
+                    />
                   </div>
                   <div>
                     <Label htmlFor="shippingPostalCode">Postal Code</Label>
-                    <Input id="shippingPostalCode" name="shippingPostalCode" required />
+                    <Input 
+                      id="shippingPostalCode" 
+                      name="shippingPostalCode" 
+                      defaultValue={initialData?.shippingPostalCode || ''}
+                      required 
+                    />
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="shippingState">State/Province</Label>
-                    <Input id="shippingState" name="shippingState" required />
+                    <Input 
+                      id="shippingState" 
+                      name="shippingState" 
+                      defaultValue={initialData?.shippingState || ''}
+                      required 
+                    />
                   </div>
                   <div>
                     <Label htmlFor="shippingCountry">Country</Label>

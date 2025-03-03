@@ -9,11 +9,12 @@ import { PaymentForm } from "@/components/checkout/PaymentForm"
 import { calculatePriceWithoutFees } from "@/lib/price-calculator"
 import { toast } from "@/components/ui/use-toast"
 import { calculateShippingCost, calculateTotalWeight } from "@/lib/shipping-calculator"
+import { profileToCheckoutInfo, CheckoutInfo } from "@/lib/user"
 
 const steps = ["DETAILS", "PAYMENT"]
 const STORAGE_KEY = "checkout_current_step"
 
-interface CustomerInfo {
+export interface CustomerInfo {
   firstName: string
   lastName: string
   email: string
@@ -38,19 +39,15 @@ export function CheckoutFlow() {
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo | null>(null)
   const [clientSecret, setClientSecret] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [loadingProfile, setLoadingProfile] = useState(false)
   const [shippingCost, setShippingCost] = useState(2.99) // Default to Estonian rate
   const router = useRouter()
   const { state: cartState, dispatch: cartDispatch } = useCart()
-  const { data: session } = useSession()
+  const { data: session, status } = useSession()
 
   // Calculate totals
   const subtotal = cartState.items.reduce((sum, item) => sum + calculatePriceWithoutFees(item.price) * item.quantity, 0)
   const vat = subtotal * 0.2 // 20% VAT
-  
-  // Log current shipping cost
-  useEffect(() => {
-    console.log(`Current shipping cost in CheckoutFlow: €${shippingCost}`);
-  }, [shippingCost]);
   
   const total = subtotal + vat + shippingCost
 
@@ -62,6 +59,44 @@ export function CheckoutFlow() {
     }
   }, [])
 
+  // Load user profile data if logged in
+  useEffect(() => {
+    async function loadUserProfile() {
+      if (status === 'authenticated' && session.user) {
+        try {
+          setLoadingProfile(true)
+          
+          // First, try to load from localStorage (most recent)
+          const savedData = localStorage.getItem("checkout_customer_info")
+          if (savedData) {
+            const parsedData = JSON.parse(savedData)
+            setCustomerInfo(parsedData)
+            setLoadingProfile(false)
+            return
+          }
+          
+          // If no saved data, load from user profile
+          const response = await fetch("/api/user/profile")
+          if (response.ok) {
+            const profile = await response.json()
+            const checkoutInfo = profileToCheckoutInfo(profile)
+            
+            // Set the checkout form data from user profile
+            if (Object.keys(checkoutInfo).length > 0) {
+              setCustomerInfo(checkoutInfo as CustomerInfo)
+            }
+          }
+        } catch (error) {
+          console.error("Error loading user profile:", error)
+        } finally {
+          setLoadingProfile(false)
+        }
+      }
+    }
+    
+    loadUserProfile()
+  }, [status, session])
+
   // Save current step whenever it changes
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, currentStep.toString())
@@ -70,6 +105,35 @@ export function CheckoutFlow() {
   const handleDetailsSubmit = async (data: CustomerInfo) => {
     setIsLoading(true)
     setCustomerInfo(data)
+    
+    // Save checkout info to localStorage for next time
+    localStorage.setItem("checkout_customer_info", JSON.stringify(data))
+    
+    // If user is logged in, save checkout info to their profile
+    if (session?.user) {
+      try {
+        await fetch("/api/user/profile", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            email: data.email,
+            address: data.address,
+            city: data.city,
+            state: data.state,
+            country: data.country,
+            postalCode: data.postalCode,
+          }),
+        })
+        console.log("Saved checkout info to user profile")
+      } catch (error) {
+        console.error("Error saving checkout info to profile:", error)
+        // Continue with checkout even if saving to profile fails
+      }
+    }
 
     try {
       // Calculate shipping cost based on the selected country and cart items
@@ -145,7 +209,9 @@ export function CheckoutFlow() {
   const handlePaymentSuccess = () => {
     // Clear checkout-related storage
     localStorage.removeItem(STORAGE_KEY)
-    localStorage.removeItem("checkout_customer_info")
+    
+    // Don't clear customer info so it can be used next time
+    // localStorage.removeItem("checkout_customer_info")
 
     // Clear the cart
     cartDispatch({ type: "CLEAR_CART" })
@@ -191,7 +257,11 @@ export function CheckoutFlow() {
       {/* Step Content */}
       <div className="mt-8">
         {currentStep === 0 && (
-          <CartReview onNext={handleDetailsSubmit} isLoading={isLoading} initialData={customerInfo} />
+          <CartReview 
+            onNext={handleDetailsSubmit} 
+            isLoading={isLoading || loadingProfile} 
+            initialData={customerInfo} 
+          />
         )}
         {currentStep === 1 && clientSecret && (
           <PaymentForm
