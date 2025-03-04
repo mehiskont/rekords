@@ -35,7 +35,7 @@ export default async function ProfilePage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 py-8">
       <h2 className="text-3xl font-bold tracking-tight">Your Profile</h2>
       
       {dbError ? (

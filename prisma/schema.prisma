@@ -16,15 +16,14 @@ model Account {
   type              String
   provider          String
   providerAccountId String
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
@@ -41,23 +40,23 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
-  hashedPassword String?   // Added for password authentication
-  image         String?
-  phone         String?
-  address       String?
-  city          String?
-  state         String?
-  country       String?
-  postalCode    String?
-  accounts      Account[]
-  sessions      Session[]
-  orders        Order[]
-  resetToken    String?    // For password reset
+  id               String    @id @default(cuid())
+  name             String?
+  email            String?   @unique
+  emailVerified    DateTime?
+  image            String?
+  address          String?
+  city             String?
+  state            String?
+  country          String?
+  postalCode       String?
+  phone            String?
+  hashedPassword   String?
+  resetToken       String?
   resetTokenExpiry DateTime?
+  accounts         Account[]
+  orders           Order[]
+  sessions         Session[]
 
   @@map("users")
 }
@@ -72,30 +71,30 @@ model VerificationToken {
 }
 
 model Order {
-  id              String    @id @default(cuid())
+  id              String      @id @default(cuid())
   userId          String?
-  status          String    @default("pending")
+  status          String      @default("pending")
   total           Float
   shippingAddress Json
   billingAddress  Json?
-  stripeId        String?   @unique
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  stripeId        String?     @unique
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
   items           OrderItem[]
-  user            User?     @relation(fields: [userId], references: [id])
+  user            User?       @relation(fields: [userId], references: [id])
 
   @@map("orders")
 }
 
 model OrderItem {
-  id          String  @id @default(cuid())
-  orderId     String
-  discogsId   String
-  title       String
-  price       Float
-  quantity    Int
-  condition   String?
-  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  id        String  @id @default(cuid())
+  orderId   String
+  discogsId String
+  title     String
+  price     Float
+  quantity  Int
+  condition String?
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@map("order_items")
 }
@@ -115,9 +114,8 @@ model DiscogsAuth {
 model WebhookLog {
   id        String   @id @default(cuid())
   type      String
-  payload   String   @db.Text
+  payload   String
   timestamp DateTime @default(now())
 
   @@map("webhook_logs")
 }
-

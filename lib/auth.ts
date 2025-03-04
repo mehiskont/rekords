@@ -61,29 +61,6 @@ export const authOptions = {
         }
       }
     }),
-    EmailProvider({
-      // Use Resend to send emails
-      async sendVerificationRequest({ identifier, url }) {
-        try {
-          await resend.emails.send({
-            from: "Plastik Records <auth@plastikrecords.com>",
-            to: [identifier],
-            subject: "Sign in to Plastik Records",
-            html: `
-              <div>
-                <h1>Sign in to Plastik Records</h1>
-                <p>Click the link below to sign in to your account:</p>
-                <a href="${url}">Sign in</a>
-                <p>If you didn't request this email, you can safely ignore it.</p>
-              </div>
-            `,
-          })
-        } catch (error) {
-          console.error("Error sending verification email:", error)
-          throw new Error("Failed to send verification email")
-        }
-      },
-    }),
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,

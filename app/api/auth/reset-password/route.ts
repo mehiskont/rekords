@@ -4,7 +4,18 @@ import { createPasswordResetToken, resetPassword } from "@/lib/user";
 import { log } from "@/lib/logger";
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Log the API key (partially hidden for security)
+const apiKey = process.env.RESEND_API_KEY || "";
+log(`Using Resend API key: ${apiKey.substring(0, 8)}...`);
+
+// Initialize Resend with better error handling
+let resend: Resend;
+try {
+  resend = new Resend(apiKey);
+} catch (error) {
+  log(`Failed to initialize Resend: ${error instanceof Error ? error.message : String(error)}`, "error");
+  resend = new Resend(""); // Fallback to empty string to avoid crashes
+}
 
 // Validation schema for password reset request
 const requestResetSchema = z.object({
@@ -42,26 +53,36 @@ export async function POST(request: Request) {
       const resetUrl = `${baseUrl}/auth/reset-password/${resetToken}`;
       
       // Send email with reset link
-      await resend.emails.send({
-        from: "Plastik Records <auth@plastikrecords.com>",
-        to: [email],
-        subject: "Reset Your Password",
-        html: `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h1 style="color: #333; text-align: center;">Reset Your Password</h1>
-            <p>Hello,</p>
-            <p>You requested to reset your password. Click the link below to create a new password:</p>
-            <p style="text-align: center;">
-              <a href="${resetUrl}" style="display: inline-block; background-color: #0070f3; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a>
-            </p>
-            <p>If you didn't request a password reset, you can safely ignore this email.</p>
-            <p>This link will expire in 1 hour.</p>
-            <p>Thank you,<br>Plastik Records Team</p>
-          </div>
-        `,
-      });
+      try {
+        const emailResponse = await resend.emails.send({
+          from: "Plastik Records <onboarding@resend.dev>",
+          to: [email],
+          subject: "Reset Your Password",
+          html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+              <h1 style="color: #333; text-align: center;">Reset Your Password</h1>
+              <p>Hello,</p>
+              <p>You requested to reset your password. Click the link below to create a new password:</p>
+              <p style="text-align: center;">
+                <a href="${resetUrl}" style="display: inline-block; background-color: #0070f3; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Reset Password</a>
+              </p>
+              <p>If you didn't request a password reset, you can safely ignore this email.</p>
+              <p>This link will expire in 1 hour.</p>
+              <p>Thank you,<br>Plastik Records Team</p>
+            </div>
+          `,
+        });
       
-      log(`Password reset email sent to: ${email}`);
+        if (emailResponse.error) {
+          log(`Password reset email error: ${JSON.stringify(emailResponse.error)}`, "error");
+          throw new Error(`Email sending failed: ${emailResponse.error.message}`);
+        }
+      
+        log(`Password reset email sent to: ${email} (ID: ${emailResponse.data?.id})`);
+      } catch (emailError) {
+        log(`Failed to send password reset email: ${emailError instanceof Error ? emailError.message : String(emailError)}`, "error");
+        throw emailError; // Re-throw to be handled by the outer catch block
+      }
       
       // Always return success even if user doesn't exist (security best practice)
       return NextResponse.json({

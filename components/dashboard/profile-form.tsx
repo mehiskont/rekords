@@ -9,8 +9,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { toast } from "@/components/ui/use-toast"
+import { Separator } from "@/components/ui/separator"
 import Select from "react-select"
 import countryList from "react-select-country-list"
+import { useSession } from "next-auth/react"
 
 const profileSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
@@ -29,9 +31,123 @@ interface ProfileFormProps {
   initialData: ProfileFormValues
 }
 
+// Password change schema
+const passwordSchema = z.object({
+  currentPassword: z.string().min(8, "Current password must be at least 8 characters"),
+  newPassword: z.string().min(8, "New password must be at least 8 characters"),
+  confirmPassword: z.string().min(8, "Confirm password must be at least 8 characters"),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"]
+});
+
+type PasswordFormValues = z.infer<typeof passwordSchema>;
+
+// Password change form component
+function PasswordChangeForm() {
+  const [isLoading, setIsLoading] = useState(false);
+  const { data: session } = useSession();
+  
+  const passwordForm = useForm<PasswordFormValues>({
+    resolver: zodResolver(passwordSchema),
+    defaultValues: {
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: ""
+    }
+  });
+  
+  const onSubmitPassword = async (data: PasswordFormValues) => {
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch("/api/user/change-password", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          currentPassword: data.currentPassword,
+          newPassword: data.newPassword
+        }),
+      });
+      
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.message || "Failed to change password");
+      }
+      
+      toast({
+        title: "Password updated",
+        description: "Your password has been successfully changed.",
+      });
+      
+      // Reset the form
+      passwordForm.reset();
+      
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: error instanceof Error ? error.message : "There was a problem changing your password.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  
+  // Only show for users who can use password authentication
+  if (!session?.user.email) return null;
+  
+  return (
+    <form onSubmit={passwordForm.handleSubmit(onSubmitPassword)} className="space-y-4">
+      <h3 className="text-lg font-medium">Change Password</h3>
+      <div className="space-y-2">
+        <Label htmlFor="currentPassword">Current Password</Label>
+        <Input 
+          id="currentPassword" 
+          type="password"
+          {...passwordForm.register("currentPassword")} 
+        />
+        {passwordForm.formState.errors.currentPassword && (
+          <p className="text-sm text-red-500">{passwordForm.formState.errors.currentPassword.message}</p>
+        )}
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="newPassword">New Password</Label>
+        <Input 
+          id="newPassword" 
+          type="password"
+          {...passwordForm.register("newPassword")} 
+        />
+        {passwordForm.formState.errors.newPassword && (
+          <p className="text-sm text-red-500">{passwordForm.formState.errors.newPassword.message}</p>
+        )}
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="confirmPassword">Confirm New Password</Label>
+        <Input 
+          id="confirmPassword" 
+          type="password"
+          {...passwordForm.register("confirmPassword")} 
+        />
+        {passwordForm.formState.errors.confirmPassword && (
+          <p className="text-sm text-red-500">{passwordForm.formState.errors.confirmPassword.message}</p>
+        )}
+      </div>
+      <Button type="submit" disabled={isLoading}>
+        {isLoading ? "Updating..." : "Change Password"}
+      </Button>
+    </form>
+  );
+}
+
 export function ProfileForm({ initialData }: ProfileFormProps) {
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
+  const { data: session } = useSession()
   
   // Country options for the Select component
   const countryOptions = useMemo(() => countryList().getData(), [])
@@ -134,101 +250,110 @@ export function ProfileForm({ initialData }: ProfileFormProps) {
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-      <div className="space-y-2">
-        <Label htmlFor="name">Name</Label>
-        <Input 
-          id="name" 
-          defaultValue={initialData.name}
-          {...form.register("name")} 
-        />
-        {form.formState.errors.name && <p className="text-sm text-red-500">{form.formState.errors.name.message}</p>}
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="email">Email</Label>
-        <Input 
-          id="email" 
-          type="email" 
-          defaultValue={initialData.email}
-          {...form.register("email")} 
-        />
-        {form.formState.errors.email && <p className="text-sm text-red-500">{form.formState.errors.email.message}</p>}
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="phone">Phone</Label>
-        <Input 
-          id="phone" 
-          type="tel" 
-          defaultValue={initialData.phone || ''}
-          {...form.register("phone")} 
-        />
-        {form.formState.errors.phone && <p className="text-sm text-red-500">{form.formState.errors.phone.message}</p>}
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="address">Address</Label>
-        <Input 
-          id="address" 
-          defaultValue={initialData.address}
-          {...form.register("address")} 
-        />
-        {form.formState.errors.address && (
-          <p className="text-sm text-red-500">{form.formState.errors.address.message}</p>
-        )}
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="city">City</Label>
-        <Input 
-          id="city" 
-          defaultValue={initialData.city}
-          {...form.register("city")} 
-        />
-        {form.formState.errors.city && <p className="text-sm text-red-500">{form.formState.errors.city.message}</p>}
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="state">State/Province</Label>
-        <Input 
-          id="state" 
-          defaultValue={initialData.state || ''}
-          {...form.register("state")} 
-        />
-        {form.formState.errors.state && <p className="text-sm text-red-500">{form.formState.errors.state.message}</p>}
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="country">Country</Label>
-        <Controller
-          name="country"
-          control={form.control}
-          render={({ field }) => (
-            <Select
-              inputId="country"
-              options={countryOptions}
-              value={countryOptions.find((option) => option.value === field.value)}
-              onChange={(option) => field.onChange(option ? option.value : '')}
-              styles={customStyles}
-              className="react-select-container"
-              classNamePrefix="react-select"
-            />
+    <div className="space-y-12">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <h3 className="text-lg font-medium">Profile Information</h3>
+        <div className="space-y-2">
+          <Label htmlFor="name">Name</Label>
+          <Input 
+            id="name" 
+            defaultValue={initialData.name}
+            {...form.register("name")} 
+          />
+          {form.formState.errors.name && <p className="text-sm text-red-500">{form.formState.errors.name.message}</p>}
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="email">Email</Label>
+          <Input 
+            id="email" 
+            type="email" 
+            defaultValue={initialData.email}
+            {...form.register("email")} 
+          />
+          {form.formState.errors.email && <p className="text-sm text-red-500">{form.formState.errors.email.message}</p>}
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="phone">Phone</Label>
+          <Input 
+            id="phone" 
+            type="tel" 
+            defaultValue={initialData.phone || ''}
+            {...form.register("phone")} 
+          />
+          {form.formState.errors.phone && <p className="text-sm text-red-500">{form.formState.errors.phone.message}</p>}
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="address">Address</Label>
+          <Input 
+            id="address" 
+            defaultValue={initialData.address}
+            {...form.register("address")} 
+          />
+          {form.formState.errors.address && (
+            <p className="text-sm text-red-500">{form.formState.errors.address.message}</p>
           )}
-        />
-        {form.formState.errors.country && (
-          <p className="text-sm text-red-500">{form.formState.errors.country.message}</p>
-        )}
-      </div>
-      <div className="space-y-2">
-        <Label htmlFor="postalCode">Postal Code</Label>
-        <Input 
-          id="postalCode" 
-          defaultValue={initialData.postalCode}
-          {...form.register("postalCode")} 
-        />
-        {form.formState.errors.postalCode && (
-          <p className="text-sm text-red-500">{form.formState.errors.postalCode.message}</p>
-        )}
-      </div>
-      <Button type="submit" disabled={isLoading}>
-        {isLoading ? "Updating..." : "Update Profile"}
-      </Button>
-    </form>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="city">City</Label>
+          <Input 
+            id="city" 
+            defaultValue={initialData.city}
+            {...form.register("city")} 
+          />
+          {form.formState.errors.city && <p className="text-sm text-red-500">{form.formState.errors.city.message}</p>}
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="state">State/Province</Label>
+          <Input 
+            id="state" 
+            defaultValue={initialData.state || ''}
+            {...form.register("state")} 
+          />
+          {form.formState.errors.state && <p className="text-sm text-red-500">{form.formState.errors.state.message}</p>}
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="country">Country</Label>
+          <Controller
+            name="country"
+            control={form.control}
+            render={({ field }) => (
+              <Select
+                inputId="country"
+                options={countryOptions}
+                value={countryOptions.find((option) => option.value === field.value)}
+                onChange={(option) => field.onChange(option ? option.value : '')}
+                styles={customStyles}
+                className="react-select-container"
+                classNamePrefix="react-select"
+              />
+            )}
+          />
+          {form.formState.errors.country && (
+            <p className="text-sm text-red-500">{form.formState.errors.country.message}</p>
+          )}
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="postalCode">Postal Code</Label>
+          <Input 
+            id="postalCode" 
+            defaultValue={initialData.postalCode}
+            {...form.register("postalCode")} 
+          />
+          {form.formState.errors.postalCode && (
+            <p className="text-sm text-red-500">{form.formState.errors.postalCode.message}</p>
+          )}
+        </div>
+        <Button type="submit" disabled={isLoading}>
+          {isLoading ? "Updating..." : "Update Profile"}
+        </Button>
+      </form>
+      
+      {/* Separator between profile and password forms */}
+      <Separator className="my-8" />
+      
+      {/* Password Change Section */}
+      <PasswordChangeForm />
+    </div>
   )
 }
 

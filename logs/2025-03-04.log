@@ -3,3 +3,70 @@
 [2025-03-04T09:00:18.273Z] [INFO] Fetching latest inventory data to rebuild cache
 [2025-03-04T09:00:19.603Z] [INFO] Inventory refresh complete - cache rebuilt with fresh data
 [2025-03-04T09:00:57.922Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-04T09:44:19.457Z] [ERROR] Registration error: 
+Invalid `prisma.user.create()` invocation:
+
+{
+  data: {
+    email: "mehiskont+1@gmail.com",
+    name: "me to",
+    hashedPassword: "$2b$12$pd3aWfl4s6kr8OT4FlGREeGLRGDz50WyW4UtRvYk5AIrQv3IE8HKe",
+    ~~~~~~~~~~~~~~
+?   id?: String,
+?   emailVerified?: DateTime | Null,
+?   image?: String | Null,
+?   phone?: String | Null,
+?   address?: String | Null,
+?   city?: String | Null,
+?   state?: String | Null,
+?   country?: String | Null,
+?   postalCode?: String | Null,
+?   accounts?: AccountCreateNestedManyWithoutUserInput,
+?   sessions?: SessionCreateNestedManyWithoutUserInput,
+?   orders?: OrderCreateNestedManyWithoutUserInput
+  }
+}
+
+Unknown argument `hashedPassword`. Available options are marked with ?.
+[2025-03-04T10:05:14.716Z] [INFO] User registered successfully: mehiskont+11@gmail.com
+[2025-03-04T10:05:16.341Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-04T10:07:40.738Z] [INFO] Password reset email sent to: mehiskont+11@gmail.com
+[2025-03-04T15:51:25.464Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-04T15:51:48.619Z] [INFO] User registered successfully: mehiskont+112@gmail.com
+[2025-03-04T15:51:49.909Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-04T15:52:34.062Z] [ERROR] Password reset email error: {"statusCode":403,"message":"You can only send testing emails to your own email address (mehiskont@gmail.com). To send emails to other recipients, please verify a domain at resend.com/domains, and change the `from` address to an email using this domain.","name":"validation_error"}
+[2025-03-04T15:52:34.062Z] [ERROR] Failed to send password reset email: Email sending failed: You can only send testing emails to your own email address (mehiskont@gmail.com). To send emails to other recipients, please verify a domain at resend.com/domains, and change the `from` address to an email using this domain.
+[2025-03-04T15:52:34.063Z] [ERROR] Password reset error: Email sending failed: You can only send testing emails to your own email address (mehiskont@gmail.com). To send emails to other recipients, please verify a domain at resend.com/domains, and change the `from` address to an email using this domain.
+[2025-03-04T15:53:53.544Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-04T16:09:50.789Z] [ERROR] Registration error: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-04T16:22:37.332Z] [ERROR] Registration error: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-04T16:23:15.415Z] [ERROR] Registration error: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-04T16:23:26.495Z] [ERROR] Registration error: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-04T16:29:23.368Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-04T16:29:35.638Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-04T16:31:36.807Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-04T16:33:30.802Z] [INFO] Resend client initialized with API key: re_U2Su4...

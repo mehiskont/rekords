@@ -36,6 +36,12 @@ export function PasswordResetForm() {
     setIsLoading(true)
     
     try {
+      // Show loading toast to indicate the request is being processed
+      toast({
+        title: "Sending reset link...",
+        description: "Please wait while we process your request.",
+      });
+      
       // Request password reset
       const response = await fetch("/api/auth/reset-password", {
         method: "POST",
