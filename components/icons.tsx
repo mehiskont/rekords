@@ -1,4 +1,4 @@
-import { Loader2, type LightbulbIcon as LucideProps, Moon, SunMedium, Twitter, type LucideIcon } from "lucide-react"
+import { CheckCircle, Loader2, Mail, type LightbulbIcon as LucideProps, Moon, SunMedium, Twitter, type LucideIcon } from "lucide-react"
 
 export type Icon = LucideIcon
 
@@ -7,6 +7,8 @@ export const Icons = {
   moon: Moon,
   twitter: Twitter,
   spinner: Loader2,
+  mail: Mail,
+  check: CheckCircle,
   google: (props: LucideProps) => (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" {...props}>
       <path

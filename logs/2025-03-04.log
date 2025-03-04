@@ -1,0 +1,5 @@
+[2025-03-04T09:00:18.259Z] [INFO] Refreshing inventory: clearing caches
+[2025-03-04T09:00:18.273Z] [INFO] Cleared 2 inventory cache entries and 3 record cache entries
+[2025-03-04T09:00:18.273Z] [INFO] Fetching latest inventory data to rebuild cache
+[2025-03-04T09:00:19.603Z] [INFO] Inventory refresh complete - cache rebuilt with fresh data
+[2025-03-04T09:00:57.922Z] [INFO] Resend client initialized with API key: re_U2Su4...

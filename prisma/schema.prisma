@@ -45,6 +45,7 @@ model User {
   name          String?
   email         String?   @unique
   emailVerified DateTime?
+  hashedPassword String?   // Added for password authentication
   image         String?
   phone         String?
   address       String?
@@ -55,6 +56,8 @@ model User {
   accounts      Account[]
   sessions      Session[]
   orders        Order[]
+  resetToken    String?    // For password reset
+  resetTokenExpiry DateTime?
 
   @@map("users")
 }
