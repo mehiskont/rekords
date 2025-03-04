@@ -21,7 +21,8 @@ export default async function DashboardPage() {
   // Try to get user orders, but handle database connection errors gracefully
   try {
     if (session?.user?.id) {
-      orders = await getOrdersByUserId(session.user.id);
+      // Get user orders with a limit of 5 for the dashboard preview
+      orders = await getOrdersByUserId(session.user.id, 5);
     }
   } catch (error) {
     console.error("Error fetching orders:", error);
@@ -47,7 +48,15 @@ export default async function DashboardPage() {
       
       {/* Order history section */}
       <div className="space-y-4">
-        <h3 className="text-xl font-semibold">Recent Orders</h3>
+        <div className="flex items-center justify-between">
+          <h3 className="text-xl font-semibold">Recent Orders</h3>
+          {orders.length > 0 && (
+            <a href="/dashboard/orders" className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300">
+              View all orders →
+            </a>
+          )}
+        </div>
+        
         {dbError ? (
           <div className="rounded-lg border border-yellow-200 bg-yellow-50 dark:bg-yellow-950/20 dark:border-yellow-900 p-6 text-center">
             <p className="text-yellow-800 dark:text-yellow-400">
@@ -58,7 +67,14 @@ export default async function DashboardPage() {
             </p>
           </div>
         ) : orders.length > 0 ? (
-          <OrderList orders={orders} />
+          <>
+            <OrderList orders={orders} />
+            <div className="text-center mt-2">
+              <a href="/dashboard/orders" className="text-sm text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 md:hidden inline-block">
+                View all orders →
+              </a>
+            </div>
+          </>
         ) : (
           <div className="rounded-lg border p-6 text-center">
             <p className="text-muted-foreground">You haven't placed any orders yet.</p>

@@ -19,11 +19,13 @@ export async function middleware(request: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   })
   
-  // Debug token information
-  console.log(`Middleware check for ${path}:`, { 
-    hasToken: !!token,
-    userId: token?.userId || token?.sub
-  })
+  // Only log middleware checks occasionally to reduce console spam
+  if (Math.random() < 0.1) { // Only log ~10% of checks
+    console.log(`Middleware check for ${path}:`, { 
+      hasToken: !!token,
+      userId: token?.userId || token?.sub
+    })
+  }
   
   // Redirect to login if no token exists and page is protected
   if (!token && isProtectedRoute) {

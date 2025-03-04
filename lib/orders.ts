@@ -164,7 +164,7 @@ export async function updateOrderStatus(orderId: string, status: string) {
   return order
 }
 
-export async function getOrdersByUserId(userId: string) {
+export async function getOrdersByUserId(userId: string, limit?: number) {
   try {
     return await prisma.order.findMany({
       where: { userId },
@@ -174,6 +174,7 @@ export async function getOrdersByUserId(userId: string) {
       orderBy: {
         createdAt: "desc",
       },
+      take: limit,
     });
   } catch (error) {
     console.error("Database error in getOrdersByUserId:", error);
@@ -182,11 +183,16 @@ export async function getOrdersByUserId(userId: string) {
 }
 
 export async function getOrderById(orderId: string) {
-  return prisma.order.findUnique({
-    where: { id: orderId },
-    include: {
-      items: true,
-    },
-  })
+  try {
+    return await prisma.order.findUnique({
+      where: { id: orderId },
+      include: {
+        items: true,
+      },
+    })
+  } catch (error) {
+    console.error("Database error in getOrderById:", error);
+    throw error; // Let the caller handle the error
+  }
 }
 

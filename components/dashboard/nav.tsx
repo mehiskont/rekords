@@ -15,6 +15,11 @@ export function DashboardNav() {
           Dashboard
         </Button>
       </Link>
+      <Link href="/dashboard/orders">
+        <Button variant="ghost" className={cn("w-full justify-start", pathname.startsWith("/dashboard/orders") && "bg-muted")}>
+          Orders
+        </Button>
+      </Link>
       <Link href="/dashboard/profile">
         <Button variant="ghost" className={cn("w-full justify-start", pathname === "/dashboard/profile" && "bg-muted")}>
           Profile

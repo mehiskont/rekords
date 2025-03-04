@@ -14,7 +14,11 @@ const API_KEY = process.env.RESEND_API_KEY || "re_U2Su4RXX_E72x5WeyUvBmJq3qu6SkV
 let resend: Resend;
 try {
   resend = new Resend(API_KEY);
-  log(`Resend client initialized with API key: ${API_KEY.substring(0, 8)}...`);
+  
+  // Only log once per 100 initializations to reduce spam
+  if (Math.random() < 0.01) {
+    log(`Resend client initialized with API key: ${API_KEY.substring(0, 8)}...`);
+  }
 } catch (error) {
   log(`Failed to initialize Resend client: ${error instanceof Error ? error.message : String(error)}`, "error");
   // Create an empty client to prevent crashes - it will handle errors properly when called
@@ -25,6 +29,14 @@ export async function sendOrderConfirmationEmail(to: string, orderDetails: any) 
   log(`Sending order confirmation email to ${to} for order ${orderDetails.orderId}`);
   
   try {
+    // IMPORTANT: For development/testing with free Resend account, only send to your own email
+    // Must use your own email address for testing as Resend's free tier only allows sending to your own email
+    // In production, you would use the actual customer email
+    const testEmail = "mehiskont@gmail.com"; // Replace with your registered Resend email
+    const recipientEmail = process.env.NODE_ENV === "production" ? to : testEmail;
+    
+    log(`Using email recipient: ${recipientEmail} (original: ${to}) - ${process.env.NODE_ENV === "production" ? "production mode" : "development mode"}`);
+    
     // Ensure we have cover_image field for all items (for email template)
     const enhancedItems = orderDetails.items.map((item: any) => ({
       ...item,
@@ -42,7 +54,7 @@ export async function sendOrderConfirmationEmail(to: string, orderDetails: any) 
     // Send the email using the verified onboarding domain from Resend
     const response = await resend.emails.send({
       from: "Plastik Records <onboarding@resend.dev>",
-      to: [to],
+      to: [recipientEmail],
       subject: `Your Order Confirmation - #${orderDetails.orderId}`,
       html: html,
       text: `Thank you for your order #${orderDetails.orderId}! Total: $${orderDetails.total.toFixed(2)}`,

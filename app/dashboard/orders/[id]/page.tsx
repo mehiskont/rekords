@@ -1,54 +1,86 @@
-import { getServerSession } from "next-auth/next"
-import { redirect } from "next/navigation"
-import Link from "next/link"
-import { authOptions } from "@/lib/auth"
-import { getOrderById } from "@/lib/orders"
-import { formatDate } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+"use client";
 
-export default async function OrderDetailsPage({ params }: { params: { id: string } }) {
-  const session = await getServerSession(authOptions)
-  const orderId = params.id
-  
-  if (!session) {
-    redirect("/auth/signin")
-  }
-  
-  let order = null
-  let error = null
-  
-  try {
-    order = await getOrderById(orderId)
-    
-    // Check if the order belongs to the current user or return error
-    if (order && order.userId && order.userId !== session.user.id) {
-      error = "You don't have permission to view this order"
-      order = null
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { formatDate } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+
+// Client component to avoid server-side data fetching issues
+export default function OrderDetailsPage({ params }: { params: { id: string } }) {
+  const [order, setOrder] = useState<any>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const orderId = params.id;
+
+  useEffect(() => {
+    async function fetchOrder() {
+      try {
+        const response = await fetch(`/api/order-details/?id=${orderId}`);
+        
+        if (!response.ok) {
+          const errorData = await response.json();
+          setError(errorData.message || "Failed to load order details");
+          setLoading(false);
+          return;
+        }
+        
+        const data = await response.json();
+        setOrder(data);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching order:", err);
+        setError("An unexpected error occurred");
+        setLoading(false);
+      }
     }
-  } catch (e) {
-    console.error("Error fetching order:", e)
-    error = "Error fetching order details"
-  }
-  
-  // Get the status badge variant
+
+    if (orderId) {
+      fetchOrder();
+    }
+  }, [orderId]);
+
+  // Status badge variant helper function
   const getStatusVariant = (status: string) => {
-    switch (status?.toLowerCase()) {
+    if (!status) return "default";
+    
+    switch (status.toLowerCase()) {
       case "completed":
-        return "success"
+        return "success";
       case "paid":
-        return "info"
+        return "info";
       case "pending":
-        return "warning"
+        return "warning";
       case "cancelled":
-        return "destructive"
+        return "destructive";
       default:
-        return "default"
+        return "default";
     }
+  };
+
+  if (loading) {
+    return (
+      <div className="space-y-6 py-8">
+        <div className="flex items-center justify-between">
+          <h2 className="text-3xl font-bold tracking-tight">Order Details</h2>
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/orders">Back to Orders</Link>
+          </Button>
+        </div>
+        <Card>
+          <CardContent className="py-10">
+            <div className="flex justify-center items-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-gray-100"></div>
+              <span className="ml-3">Loading order details...</span>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
   }
-  
+
   return (
     <div className="space-y-6 py-8">
       <div className="flex items-center justify-between">
@@ -173,7 +205,7 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {order.items.map((item) => (
+                  {order.items.map((item: any) => (
                     <TableRow key={item.id}>
                       <TableCell className="font-medium">{item.title}</TableCell>
                       <TableCell>{item.condition || 'N/A'}</TableCell>
@@ -187,10 +219,10 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
             </CardContent>
             <CardFooter className="flex justify-between border-t p-6">
               <div className="text-sm text-gray-500 dark:text-gray-400">
-                Subtotal ({order.items.reduce((acc, item) => acc + item.quantity, 0)} items)
+                Subtotal ({order.items.reduce((acc: number, item: any) => acc + item.quantity, 0)} items)
               </div>
               <div className="font-medium">
-                ${order.items.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2)}
+                ${order.items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0).toFixed(2)}
               </div>
             </CardFooter>
           </Card>
@@ -204,13 +236,13 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
               <div className="space-y-2">
                 <div className="flex justify-between text-sm">
                   <span>Subtotal</span>
-                  <span>${order.items.reduce((acc, item) => acc + (item.price * item.quantity), 0).toFixed(2)}</span>
+                  <span>${order.items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0).toFixed(2)}</span>
                 </div>
                 
                 <div className="flex justify-between text-sm">
                   <span>Shipping</span>
                   <span>
-                    ${(order.total - order.items.reduce((acc, item) => acc + (item.price * item.quantity), 0)).toFixed(2)}
+                    ${(order.total - order.items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0)).toFixed(2)}
                   </span>
                 </div>
                 
@@ -224,5 +256,5 @@ export default async function OrderDetailsPage({ params }: { params: { id: strin
         </div>
       )}
     </div>
-  )
+  );
 }

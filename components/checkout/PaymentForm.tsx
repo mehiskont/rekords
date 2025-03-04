@@ -37,10 +37,14 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
         throw new Error(submitError.message)
       }
 
+      // Get stored session ID if available
+      const storedSessionId = localStorage.getItem('checkout_session_id');
+      
       const { error: paymentError, paymentIntent } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: `${window.location.origin}/checkout/success`,
+          // Include session_id query parameter to help success page create order
+          return_url: `${window.location.origin}/success?session_id=${encodeURIComponent(storedSessionId || '')}`,
         },
         redirect: 'if_required', // Only redirect if 3D Secure is required
       })
@@ -86,6 +90,16 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
 }
 
 export function PaymentForm({ clientSecret, total, subtotal, vat, shippingCost, onSuccess }: PaymentFormProps) {
+  // Extract session ID from URL - it's appended to the URL after successful payment intent creation
+  const searchParams = new URLSearchParams(window.location.search);
+  const sessionId = searchParams.get('session_id') || '';
+  
+  // Store the session ID in localStorage so we can use it on redirect
+  if (sessionId) {
+    localStorage.setItem('checkout_session_id', sessionId);
+    console.log("Stored checkout session ID:", sessionId);
+  }
+  
   const options: any = {
     clientSecret,
     appearance: {

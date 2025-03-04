@@ -90,25 +90,14 @@ export const authOptions = {
       // Return previous token if the access token has not expired yet
       return token;
     },
-    async session({ session, token, user }) {
-      // Log session data for debugging
-      console.log("Session callback triggered in auth.ts", { 
-        hasToken: !!token, 
-        hasUser: !!user,
-        tokenUserId: token?.userId,
-        userId: user?.id 
-      });
+    async session({ session, token }) {
+      // In JWT strategy, we primarily use token, not user
+      // User param may be undefined with JWT strategy
       
-      if (session?.user) {
-        // Ensure we always have a user ID, preferring token-based ID for JWT strategy
-        if (token?.userId) {
+      if (session?.user && token) {
+        // Set user ID from token (in JWT mode, this is our source of truth)
+        if (token.userId) {
           session.user.id = token.userId;
-          console.log("Session ID set from token:", token.userId);
-        } 
-        // Fallback to database user
-        else if (user?.id) {
-          session.user.id = user.id;
-          console.log("Session ID set from user:", user.id);
         }
       }
       

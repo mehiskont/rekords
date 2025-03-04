@@ -7,17 +7,26 @@ import { OrderList } from "@/components/dashboard/order-list"
 export default async function OrdersPage() {
   const session = await getServerSession(authOptions)
   
-  if (!session) {
-    redirect("/auth/signin")
+  // We still need the session check to prevent errors
+  if (!session?.user?.id) {
+    console.warn("Orders page accessed without valid session")
+    return (
+      <div className="space-y-6 py-8">
+        <h2 className="text-3xl font-bold tracking-tight">Your Orders</h2>
+        <div className="rounded-lg border border-yellow-200 bg-yellow-50 dark:bg-yellow-950/20 dark:border-yellow-900 p-6">
+          <p className="text-yellow-800 dark:text-yellow-400">
+            Session problem detected. Please try refreshing the page.
+          </p>
+        </div>
+      </div>
+    )
   }
   
   let orders = []
   let dbError = false
 
   try {
-    if (session?.user?.id) {
-      orders = await getOrdersByUserId(session.user.id)
-    }
+    orders = await getOrdersByUserId(session.user.id)
   } catch (error) {
     console.error("Error fetching orders:", error)
     dbError = true
