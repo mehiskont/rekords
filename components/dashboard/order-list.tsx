@@ -51,7 +51,7 @@ export function OrderList({ orders }: OrderListProps) {
           {orders.map((order) => (
             <TableRow key={order.id}>
               <TableCell>
-                <Link href={`/api/order-details?id=${order.id}`} className="font-medium hover:underline">
+                <Link href={`/dashboard/orders/${order.id}`} className="font-medium hover:underline">
                   {formatOrderId(order.id)}
                 </Link>
               </TableCell>
