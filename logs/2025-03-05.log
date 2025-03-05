@@ -1863,3 +1863,701 @@ Details: {}
 Details: {}
 [2025-03-05T13:04:04.305Z] [INFO] PrismaAdapter initialized successfully
 Details: {}
+[2025-03-05T13:04:24.868Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:04:26.706Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:04:26.986Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:04:31.139Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:04:31.357Z] [INFO] Google auth: processing profile
+Details: {"email":"mehiskont@gmail.com"}
+[2025-03-05T13:04:31.362Z] [INFO] Sign-in attempt:
+Details: {"provider":"google","userId":"cm7vuskvw0000pv2i6pgwgd9u","userEmail":"mehiskont@gmail.com"}
+[2025-03-05T13:04:31.364Z] [INFO] Found existing user for email mehiskont@gmail.com
+Details: {"userId":"cm7vuskvw0000pv2i6pgwgd9u"}
+[2025-03-05T13:04:31.631Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:04:32.190Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:04:53.029Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:06:09.143Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:06:56.046Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:08.417Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:08.711Z] [INFO] Creating payment intent with items:
+Details: [{"id":3483822696,"title":"Ninja Tools Vol.6","price":221,"quantity":2}]
+[2025-03-05T13:07:08.748Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:09.754Z] [INFO] Using origin header for base URL: http://localhost:3000
+[2025-03-05T13:07:09.755Z] [INFO] Creating Stripe session with base URL: http://localhost:3000
+[2025-03-05T13:07:10.369Z] [INFO] Created checkout session:
+Details: cs_test_a1Mwc3DDpTs28OYAKSByzJnbgvQEodhE4j4Azwl92KyfjgkOH89nCBT8VA
+[2025-03-05T13:07:10.842Z] [INFO] Payment intent created:
+Details: {"id":"pi_3QzHfGLKWZZc2yek06reatJv","amount":49096,"items":1,"sessionId":"cs_test_a1Mwc3DDpTs28OYAKSByzJnbgvQEodhE4j4Azwl92KyfjgkOH89nCBT8VA"}
+[2025-03-05T13:07:11.414Z] [INFO] Webhook received
+[2025-03-05T13:07:11.415Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-05T13:07:11.634Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:21.614Z] [INFO] Webhook received
+[2025-03-05T13:07:21.615Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-05T13:07:21.621Z] [INFO] Payment intent succeeded: pi_3QzHfGLKWZZc2yek06reatJv
+[2025-03-05T13:07:21.621Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-05T13:07:21.621Z] [INFO] Associated with checkout session: cs_test_a1Mwc3DDpTs28OYAKSByzJnbgvQEodhE4j4Azwl92KyfjgkOH89nCBT8VA
+[2025-03-05T13:07:21.649Z] [INFO] No order found for session cs_test_a1Mwc3DDpTs28OYAKSByzJnbgvQEodhE4j4Azwl92KyfjgkOH89nCBT8VA, but payment succeeded. Creating order from payment intent.
+Details: warn
+[2025-03-05T13:07:21.649Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:21.650Z] [INFO] Found existing user with ID: cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:07:21.650Z] [INFO] Sending order confirmation email to mehiskont@gmail.com for order 06REATJV
+[2025-03-05T13:07:21.651Z] [INFO] Using email recipient: mehiskont@gmail.com (original: mehiskont@gmail.com) - development mode
+[2025-03-05T13:07:22.253Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:22.852Z] [INFO] Order confirmation email sent successfully. ID: c3971027-cc2b-4067-bf77-6fed1140c9b5
+[2025-03-05T13:07:22.853Z] [INFO] Sent order confirmation email to mehiskont@gmail.com from payment intent
+[2025-03-05T13:07:22.854Z] [INFO] Creating order for user cm7vuskvw0000pv2i6pgwgd9u, stripe session: cs_test_a1Mwc3DDpTs28OYAKSByzJnbgvQEodhE4j4Azwl92KyfjgkOH89nCBT8VA
+[2025-03-05T13:07:22.855Z] [INFO] Order total calculated: 442
+[2025-03-05T13:07:22.855Z] [INFO] Saving shipping address to user profile for cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:07:22.860Z] [INFO] Successfully saved shipping address to user profile
+[2025-03-05T13:07:22.873Z] [INFO] Order created successfully with ID: cm7vxn3hs0003pvlerwibm4a2
+[2025-03-05T13:07:22.873Z] [INFO] Attempting to send confirmation email to user account: mehiskont@gmail.com
+[2025-03-05T13:07:22.873Z] [INFO] Sending order confirmation email to mehiskont@gmail.com for order cm7vxn3hs0003pvlerwibm4a2
+[2025-03-05T13:07:22.874Z] [INFO] Using email recipient: mehiskont@gmail.com (original: mehiskont@gmail.com) - development mode
+[2025-03-05T13:07:23.523Z] [INFO] Order confirmation email sent successfully. ID: 62399977-f2a6-4ce4-9969-e6c7bcf26b1c
+[2025-03-05T13:07:23.524Z] [INFO] Sent order confirmation email to user account: mehiskont@gmail.com
+[2025-03-05T13:07:23.524Z] [INFO] Created order cm7vxn3hs0003pvlerwibm4a2 from payment intent metadata
+[2025-03-05T13:07:23.527Z] [INFO] Marked order cm7vxn3hs0003pvlerwibm4a2 as paid
+[2025-03-05T13:07:23.527Z] [INFO] Processing Discogs inventory for item 3483822696, quantity: 2
+[2025-03-05T13:07:23.527Z] [INFO] Updating Discogs inventory for listing 3483822696, quantity purchased: 2
+[2025-03-05T13:07:23.527Z] [INFO] Fetching current listing data from: https://api.discogs.com/marketplace/listings/3483822696
+[2025-03-05T13:07:24.376Z] [INFO] Found listing 3483822696: release_id=27105051, current quantity=2
+[2025-03-05T13:07:24.377Z] [INFO] Deleting listing 3483822696 (current qty: 2 <= purchased: 2)
+[2025-03-05T13:07:24.758Z] [INFO] ✅ Successfully deleted listing 3483822696
+[2025-03-05T13:07:24.759Z] [INFO] ✅ Successfully updated Discogs inventory for item 3483822696
+Details: info
+[2025-03-05T13:07:24.759Z] [INFO] Clearing inventory cache after creating order from payment intent...
+[2025-03-05T13:07:24.880Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:24.882Z] [INFO] Retrieved 1 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:07:24.883Z] [INFO] Retrieved 1 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:07:37.588Z] [INFO] Retrieved 1 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:07:37.848Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:40.441Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:40.447Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:40.750Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:40.782Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:41.110Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:41.422Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:41.772Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:42.086Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:42.394Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:42.733Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:43.051Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:43.371Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:43.708Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:44.046Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:07:44.075Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:08:23.363Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:11:35.784Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:11:36.054Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:11:36.851Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:11:59.144Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:11:59.370Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:12:02.600Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:12:03.224Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:12:38.380Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:07.283Z] [INFO] Refreshing inventory: clearing caches
+[2025-03-05T13:13:07.290Z] [INFO] Cleared 6 inventory cache entries and 0 record cache entries
+[2025-03-05T13:13:07.290Z] [INFO] Fetching latest inventory data to rebuild cache
+[2025-03-05T13:13:07.425Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:08.364Z] [INFO] Inventory refresh complete - cache rebuilt with fresh data
+[2025-03-05T13:13:15.777Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:25.346Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:25.360Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:25.745Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:26.116Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:26.517Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:26.865Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:27.220Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:27.573Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:27.970Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:28.332Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:28.689Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:29.044Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:29.401Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:29.747Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:30.104Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:30.497Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:31.023Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:35.500Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:35.875Z] [INFO] Creating payment intent with items:
+Details: [{"id":3489455955,"title":"Keep It Raw","price":222,"quantity":1}]
+[2025-03-05T13:13:35.900Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:36.954Z] [INFO] Using origin header for base URL: http://localhost:3000
+[2025-03-05T13:13:36.955Z] [INFO] Creating Stripe session with base URL: http://localhost:3000
+[2025-03-05T13:13:37.441Z] [INFO] Created checkout session:
+Details: cs_test_a1ZJ1EEEzwOzkv7xkrx1L3VEjT0UkKSeAzS8S7Pane1cIcUwme8ptjAVGS
+[2025-03-05T13:13:38.306Z] [INFO] Payment intent created:
+Details: {"id":"pi_3QzHlVLKWZZc2yek1TGmOXJD","amount":24808,"items":1,"sessionId":"cs_test_a1ZJ1EEEzwOzkv7xkrx1L3VEjT0UkKSeAzS8S7Pane1cIcUwme8ptjAVGS"}
+[2025-03-05T13:13:38.635Z] [INFO] Webhook received
+[2025-03-05T13:13:38.635Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-05T13:13:38.651Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:47.975Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:48.052Z] [INFO] Webhook received
+[2025-03-05T13:13:48.053Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-05T13:13:48.058Z] [INFO] Payment intent succeeded: pi_3QzHlVLKWZZc2yek1TGmOXJD
+[2025-03-05T13:13:48.059Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-05T13:13:48.059Z] [INFO] Associated with checkout session: cs_test_a1ZJ1EEEzwOzkv7xkrx1L3VEjT0UkKSeAzS8S7Pane1cIcUwme8ptjAVGS
+[2025-03-05T13:13:48.063Z] [INFO] No order found for session cs_test_a1ZJ1EEEzwOzkv7xkrx1L3VEjT0UkKSeAzS8S7Pane1cIcUwme8ptjAVGS, but payment succeeded. Creating order from payment intent.
+Details: warn
+[2025-03-05T13:13:48.067Z] [INFO] Found existing user with ID: cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:13:48.068Z] [INFO] Sending order confirmation email to mehiskont@gmail.com for order 1TGMOXJD
+[2025-03-05T13:13:48.068Z] [INFO] Using email recipient: mehiskont@gmail.com (original: mehiskont@gmail.com) - development mode
+[2025-03-05T13:13:49.226Z] [INFO] Order confirmation email sent successfully. ID: 7f85ba35-11cf-472b-9250-374e82fac92a
+[2025-03-05T13:13:49.227Z] [INFO] Sent order confirmation email to mehiskont@gmail.com from payment intent
+[2025-03-05T13:13:49.227Z] [INFO] Creating order for user cm7vuskvw0000pv2i6pgwgd9u, stripe session: cs_test_a1ZJ1EEEzwOzkv7xkrx1L3VEjT0UkKSeAzS8S7Pane1cIcUwme8ptjAVGS
+[2025-03-05T13:13:49.227Z] [INFO] Order total calculated: 222
+[2025-03-05T13:13:49.227Z] [INFO] Saving shipping address to user profile for cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:13:49.231Z] [INFO] Successfully saved shipping address to user profile
+[2025-03-05T13:13:49.241Z] [INFO] Order created successfully with ID: cm7vxvdmb0003pvh83pgrssro
+[2025-03-05T13:13:49.242Z] [INFO] Attempting to send confirmation email to user account: mehiskont@gmail.com
+[2025-03-05T13:13:49.242Z] [INFO] Sending order confirmation email to mehiskont@gmail.com for order cm7vxvdmb0003pvh83pgrssro
+[2025-03-05T13:13:49.242Z] [INFO] Using email recipient: mehiskont@gmail.com (original: mehiskont@gmail.com) - development mode
+[2025-03-05T13:13:49.881Z] [INFO] Order confirmation email sent successfully. ID: ca3b99c4-da5d-4b31-9b4c-7260f67c4d5e
+[2025-03-05T13:13:49.881Z] [INFO] Sent order confirmation email to user account: mehiskont@gmail.com
+[2025-03-05T13:13:49.882Z] [INFO] Created order cm7vxvdmb0003pvh83pgrssro from payment intent metadata
+[2025-03-05T13:13:49.886Z] [INFO] Marked order cm7vxvdmb0003pvh83pgrssro as paid
+[2025-03-05T13:13:49.886Z] [INFO] Processing Discogs inventory for item 3489455955, quantity: 1
+[2025-03-05T13:13:49.887Z] [INFO] Updating Discogs inventory for listing 3489455955, quantity purchased: 1
+[2025-03-05T13:13:49.888Z] [INFO] Fetching current listing data from: https://api.discogs.com/marketplace/listings/3489455955
+[2025-03-05T13:13:50.314Z] [INFO] Found listing 3489455955: release_id=1929188, current quantity=3
+[2025-03-05T13:13:50.314Z] [INFO] Updating listing 3489455955 quantity from 3 to 2
+[2025-03-05T13:13:50.315Z] [INFO] Update data: {"release_id":1929188,"condition":"Very Good Plus (VG+)","price":222,"status":"For Sale","quantity":2}
+[2025-03-05T13:13:50.966Z] [INFO] Update response (non-JSON): 
+[2025-03-05T13:13:50.967Z] [INFO] ✅ Successfully updated listing 3489455955 quantity to 2
+[2025-03-05T13:13:50.968Z] [INFO] ✅ Successfully updated Discogs inventory for item 3489455955
+Details: info
+[2025-03-05T13:13:50.969Z] [INFO] Clearing inventory cache after creating order from payment intent...
+[2025-03-05T13:13:56.823Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:57.591Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:13:57.591Z] [INFO] Retrieved 2 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:13:57.595Z] [INFO] Retrieved 2 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:13:57.607Z] [INFO] Retrieved 2 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:13:57.843Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:03.542Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:03.543Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:03.785Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:03.985Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:04.274Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:04.589Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:04.901Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:05.204Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:05.519Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:05.820Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:06.119Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:06.432Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:06.738Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:07.052Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:07.377Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:07.490Z] [INFO] Retrieved 2 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:14:07.493Z] [INFO] Retrieved 2 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:14:08.581Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:08.912Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:09.236Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:09.537Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:09.844Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:10.159Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:10.506Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:10.822Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:11.132Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:11.445Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:14:11.534Z] [INFO] Retrieved 2 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:14:11.535Z] [INFO] Retrieved 2 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:14:55.099Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:17.999Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:19.445Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:19.751Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:20.058Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:20.440Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:20.756Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:21.059Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:21.363Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:21.663Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:21.963Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:22.309Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:22.639Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:22.946Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:23.274Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:23.583Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:23.890Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:24.200Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:24.511Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:24.831Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:25.146Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:25.462Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:25.779Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:26.135Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:26.491Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:26.795Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:27.134Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:27.518Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:27.836Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:28.206Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:28.534Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:28.878Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:29.238Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:29.544Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:29.881Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:30.183Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:30.487Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:30.806Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:31.147Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:31.462Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:31.781Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:32.119Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:32.431Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:32.736Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:33.033Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:33.352Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:33.666Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:33.979Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:34.304Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:34.652Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:34.972Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:35.285Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:35.318Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:35.591Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:35.915Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:36.250Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:36.587Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:40.699Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:15:41.305Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:16:51.436Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:16:53.617Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:17:21.815Z] [INFO] User registered successfully: mehiskont+john@gmail.com
+[2025-03-05T13:17:22.139Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:17:22.408Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:17:22.504Z] [INFO] User authenticated successfully from database
+Details: {"userId":"cm7vxzxn80005pvh8zs0n9plx"}
+[2025-03-05T13:17:22.504Z] [INFO] Sign-in attempt:
+Details: {"provider":"credentials","userId":"cm7vxzxn80005pvh8zs0n9plx","userEmail":"mehiskont+john@gmail.com"}
+[2025-03-05T13:17:23.056Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:17:31.664Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:17:32.017Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:17:38.026Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:17:38.074Z] [INFO] User authenticated successfully from database
+Details: {"userId":"cm7vxzxn80005pvh8zs0n9plx"}
+[2025-03-05T13:17:38.074Z] [INFO] Sign-in attempt:
+Details: {"provider":"credentials","userId":"cm7vxzxn80005pvh8zs0n9plx","userEmail":"mehiskont+john@gmail.com"}
+[2025-03-05T13:17:38.377Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:19:16.696Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:19:16.974Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:22:56.093Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:23:07.732Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:23:07.951Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:23:12.188Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:23:12.672Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:23:27.186Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:23:27.443Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:23:56.390Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:24:01.990Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:24:02.248Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:24:06.471Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:24:06.910Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:24:31.089Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:24:55.227Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:24:55.447Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:24:55.489Z] [INFO] User authenticated successfully from database
+Details: {"userId":"cm7vxzxn80005pvh8zs0n9plx"}
+[2025-03-05T13:24:55.490Z] [INFO] Sign-in attempt:
+Details: {"provider":"credentials","userId":"cm7vxzxn80005pvh8zs0n9plx","userEmail":"mehiskont+john@gmail.com"}
+[2025-03-05T13:24:55.803Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:25:03.251Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:25:03.884Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:25:21.759Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:25:32.082Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:25:32.360Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:25:36.442Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:25:36.818Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:26:01.300Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:26:04.482Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:26:08.537Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:26:08.775Z] [INFO] Google auth: processing profile
+Details: {"email":"mehiskont@gmail.com"}
+[2025-03-05T13:26:08.781Z] [INFO] Sign-in attempt:
+Details: {"provider":"google","userId":"cm7vuskvw0000pv2i6pgwgd9u","userEmail":"mehiskont@gmail.com"}
+[2025-03-05T13:26:08.783Z] [INFO] Found existing user for email mehiskont@gmail.com
+Details: {"userId":"cm7vuskvw0000pv2i6pgwgd9u"}
+[2025-03-05T13:26:09.459Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:26:11.754Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:26:11.975Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:26:17.596Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:26:25.498Z] [INFO] Creating payment intent with items:
+Details: [{"id":3489455955,"title":"Keep It Raw","price":222,"quantity":1}]
+[2025-03-05T13:26:25.677Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:26:26.669Z] [INFO] Using origin header for base URL: http://localhost:3000
+[2025-03-05T13:26:26.670Z] [INFO] Creating Stripe session with base URL: http://localhost:3000
+[2025-03-05T13:26:27.283Z] [INFO] Created checkout session:
+Details: cs_test_a1bdWWyOHds1INBjKlSqxSZh6d5D7Bm2YH431vaWZ6pzFj9kmiihf7Dcry
+[2025-03-05T13:26:27.699Z] [INFO] Payment intent created:
+Details: {"id":"pi_3QzHxvLKWZZc2yek0UmeS5LD","amount":24808,"items":1,"sessionId":"cs_test_a1bdWWyOHds1INBjKlSqxSZh6d5D7Bm2YH431vaWZ6pzFj9kmiihf7Dcry"}
+[2025-03-05T13:26:28.320Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-05T13:26:28.323Z] [INFO] Webhook received
+[2025-03-05T13:26:28.324Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-05T13:26:28.627Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:26:36.797Z] [INFO] Webhook received
+[2025-03-05T13:26:36.797Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-05T13:26:36.809Z] [INFO] Payment intent succeeded: pi_3QzHxvLKWZZc2yek0UmeS5LD
+[2025-03-05T13:26:36.809Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-05T13:26:36.809Z] [INFO] Associated with checkout session: cs_test_a1bdWWyOHds1INBjKlSqxSZh6d5D7Bm2YH431vaWZ6pzFj9kmiihf7Dcry
+[2025-03-05T13:26:36.809Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:26:36.827Z] [INFO] No order found for session cs_test_a1bdWWyOHds1INBjKlSqxSZh6d5D7Bm2YH431vaWZ6pzFj9kmiihf7Dcry, but payment succeeded. Creating order from payment intent.
+Details: warn
+[2025-03-05T13:26:36.851Z] [INFO] Found existing user with ID: cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:26:36.851Z] [INFO] Sending order confirmation email to mehiskont@gmail.com for order 0UMES5LD
+[2025-03-05T13:26:36.851Z] [INFO] Using email recipient: mehiskont@gmail.com (original: mehiskont@gmail.com) - development mode
+[2025-03-05T13:26:37.916Z] [INFO] Order confirmation email sent successfully. ID: 72bbd5ce-54b8-41d5-ba16-c06499d65967
+[2025-03-05T13:26:37.918Z] [INFO] Sent order confirmation email to mehiskont@gmail.com from payment intent
+[2025-03-05T13:26:37.919Z] [INFO] Creating order for user cm7vuskvw0000pv2i6pgwgd9u, stripe session: cs_test_a1bdWWyOHds1INBjKlSqxSZh6d5D7Bm2YH431vaWZ6pzFj9kmiihf7Dcry
+[2025-03-05T13:26:37.919Z] [INFO] Order total calculated: 222
+[2025-03-05T13:26:37.919Z] [INFO] Saving shipping address to user profile for cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:26:37.926Z] [INFO] Successfully saved shipping address to user profile
+[2025-03-05T13:26:37.934Z] [INFO] Order created successfully with ID: cm7vybuqx0009pvh8x62d9h3p
+[2025-03-05T13:26:37.935Z] [INFO] Attempting to send confirmation email to user account: mehiskont@gmail.com
+[2025-03-05T13:26:37.936Z] [INFO] Sending order confirmation email to mehiskont@gmail.com for order cm7vybuqx0009pvh8x62d9h3p
+[2025-03-05T13:26:37.936Z] [INFO] Using email recipient: mehiskont@gmail.com (original: mehiskont@gmail.com) - development mode
+[2025-03-05T13:26:38.752Z] [INFO] Order confirmation email sent successfully. ID: fdf4a2ed-0785-4efc-ac62-1a1377c095ba
+[2025-03-05T13:26:38.753Z] [INFO] Sent order confirmation email to user account: mehiskont@gmail.com
+[2025-03-05T13:26:38.753Z] [INFO] Created order cm7vybuqx0009pvh8x62d9h3p from payment intent metadata
+[2025-03-05T13:26:38.757Z] [INFO] Marked order cm7vybuqx0009pvh8x62d9h3p as paid
+[2025-03-05T13:26:38.758Z] [INFO] Processing Discogs inventory for item 3489455955, quantity: 1
+[2025-03-05T13:26:38.759Z] [INFO] Updating Discogs inventory for listing 3489455955, quantity purchased: 1
+[2025-03-05T13:26:38.759Z] [INFO] Fetching current listing data from: https://api.discogs.com/marketplace/listings/3489455955
+[2025-03-05T13:26:39.189Z] [INFO] Found listing 3489455955: release_id=1929188, current quantity=2
+[2025-03-05T13:26:39.190Z] [INFO] Updating listing 3489455955 quantity from 2 to 1
+[2025-03-05T13:26:39.190Z] [INFO] Update data: {"release_id":1929188,"condition":"Very Good Plus (VG+)","price":222,"status":"For Sale","quantity":1}
+[2025-03-05T13:26:39.699Z] [INFO] Update response (non-JSON): 
+[2025-03-05T13:26:39.699Z] [INFO] ✅ Successfully updated listing 3489455955 quantity to 1
+[2025-03-05T13:26:39.700Z] [INFO] ✅ Successfully updated Discogs inventory for item 3489455955
+Details: info
+[2025-03-05T13:26:39.700Z] [INFO] Clearing inventory cache after creating order from payment intent...
+[2025-03-05T13:26:56.974Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:57:12.103Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:02:19.786Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:02:20.059Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:02:20.166Z] [INFO] User authenticated successfully from database
+Details: {"userId":"cm7vxzxn80005pvh8zs0n9plx"}
+[2025-03-05T14:02:20.167Z] [INFO] Sign-in attempt:
+Details: {"provider":"credentials","userId":"cm7vxzxn80005pvh8zs0n9plx","userEmail":"mehiskont+john@gmail.com"}
+[2025-03-05T14:02:20.545Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:02:26.517Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:02:27.914Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:02:27.923Z] [INFO] Retrieved 0 orders for user cm7vxzxn80005pvh8zs0n9plx
+[2025-03-05T14:02:27.924Z] [INFO] Retrieved 0 orders for user cm7vxzxn80005pvh8zs0n9plx
+[2025-03-05T14:02:29.988Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:02:44.713Z] [INFO] Retrieved 0 orders for user cm7vxzxn80005pvh8zs0n9plx
+[2025-03-05T14:02:44.715Z] [INFO] Retrieved 0 orders for user cm7vxzxn80005pvh8zs0n9plx
+[2025-03-05T14:03:00.187Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:11.745Z] [INFO] Creating payment intent with items:
+Details: [{"id":3489455955,"title":"Keep It Raw","price":222,"quantity":1}]
+[2025-03-05T14:03:11.941Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:12.895Z] [INFO] Using origin header for base URL: https://6327-2001-1530-1010-142b-7195-abda-fa81-85f2.ngrok-free.app
+[2025-03-05T14:03:12.896Z] [INFO] Creating Stripe session with base URL: https://6327-2001-1530-1010-142b-7195-abda-fa81-85f2.ngrok-free.app
+[2025-03-05T14:03:13.526Z] [INFO] Created checkout session:
+Details: cs_test_a1gtLxjmHjjGiiZSzZg0HMeLydzDzqCmW6c9vmvRYTtGrcUamPgmqQPZ9L
+[2025-03-05T14:03:13.974Z] [INFO] Payment intent created:
+Details: {"id":"pi_3QzIXVLKWZZc2yek12A32iLW","amount":24808,"items":1,"sessionId":"cs_test_a1gtLxjmHjjGiiZSzZg0HMeLydzDzqCmW6c9vmvRYTtGrcUamPgmqQPZ9L"}
+[2025-03-05T14:03:14.741Z] [INFO] Webhook received
+[2025-03-05T14:03:14.742Z] [INFO] ✅ Webhook event received: payment_intent.created
+[2025-03-05T14:03:14.954Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:22.239Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:22.375Z] [INFO] Webhook received
+[2025-03-05T14:03:22.376Z] [INFO] ✅ Webhook event received: payment_intent.succeeded
+[2025-03-05T14:03:22.381Z] [INFO] Payment intent succeeded: pi_3QzIXVLKWZZc2yek12A32iLW
+[2025-03-05T14:03:22.381Z] [INFO] Found 1 items in payment intent metadata
+[2025-03-05T14:03:22.382Z] [INFO] Associated with checkout session: cs_test_a1gtLxjmHjjGiiZSzZg0HMeLydzDzqCmW6c9vmvRYTtGrcUamPgmqQPZ9L
+[2025-03-05T14:03:22.384Z] [INFO] No order found for session cs_test_a1gtLxjmHjjGiiZSzZg0HMeLydzDzqCmW6c9vmvRYTtGrcUamPgmqQPZ9L, but payment succeeded. Creating order from payment intent.
+Details: warn
+[2025-03-05T14:03:22.386Z] [INFO] Found existing user with ID: cm7vxzxn80005pvh8zs0n9plx
+[2025-03-05T14:03:22.387Z] [INFO] Sending order confirmation email to mehiskont+john@gmail.com for order 12A32ILW
+[2025-03-05T14:03:22.388Z] [INFO] Using email recipient: mehiskont@gmail.com (original: mehiskont+john@gmail.com) - development mode
+[2025-03-05T14:03:23.105Z] [INFO] Order confirmation email sent successfully. ID: dafe99d4-caae-4546-892f-fd60f5c91f0a
+[2025-03-05T14:03:23.106Z] [INFO] Sent order confirmation email to mehiskont+john@gmail.com from payment intent
+[2025-03-05T14:03:23.106Z] [INFO] Creating order for user cm7vxzxn80005pvh8zs0n9plx, stripe session: cs_test_a1gtLxjmHjjGiiZSzZg0HMeLydzDzqCmW6c9vmvRYTtGrcUamPgmqQPZ9L
+[2025-03-05T14:03:23.106Z] [INFO] Order total calculated: 222
+[2025-03-05T14:03:23.106Z] [INFO] Saving shipping address to user profile for cm7vxzxn80005pvh8zs0n9plx
+[2025-03-05T14:03:23.111Z] [INFO] Successfully saved shipping address to user profile
+[2025-03-05T14:03:23.116Z] [INFO] Order created successfully with ID: cm7vzn4a1000epvh84w4d751q
+[2025-03-05T14:03:23.117Z] [INFO] Attempting to send confirmation email to user account: mehiskont+john@gmail.com
+[2025-03-05T14:03:23.117Z] [INFO] Sending order confirmation email to mehiskont+john@gmail.com for order cm7vzn4a1000epvh84w4d751q
+[2025-03-05T14:03:23.117Z] [INFO] Using email recipient: mehiskont@gmail.com (original: mehiskont+john@gmail.com) - development mode
+[2025-03-05T14:03:23.787Z] [INFO] Order confirmation email sent successfully. ID: ad9c4e6d-6bd7-45c8-99f7-e99378fe9b90
+[2025-03-05T14:03:23.787Z] [INFO] Sent order confirmation email to user account: mehiskont+john@gmail.com
+[2025-03-05T14:03:23.788Z] [INFO] Created order cm7vzn4a1000epvh84w4d751q from payment intent metadata
+[2025-03-05T14:03:23.794Z] [INFO] Marked order cm7vzn4a1000epvh84w4d751q as paid
+[2025-03-05T14:03:23.794Z] [INFO] Processing Discogs inventory for item 3489455955, quantity: 1
+[2025-03-05T14:03:23.795Z] [INFO] Updating Discogs inventory for listing 3489455955, quantity purchased: 1
+[2025-03-05T14:03:23.795Z] [INFO] Fetching current listing data from: https://api.discogs.com/marketplace/listings/3489455955
+[2025-03-05T14:03:24.315Z] [INFO] Found listing 3489455955: release_id=1929188, current quantity=1
+[2025-03-05T14:03:24.315Z] [INFO] Deleting listing 3489455955 (current qty: 1 <= purchased: 1)
+[2025-03-05T14:03:24.962Z] [INFO] ✅ Successfully deleted listing 3489455955
+[2025-03-05T14:03:24.963Z] [INFO] ✅ Successfully updated Discogs inventory for item 3489455955
+Details: info
+[2025-03-05T14:03:24.963Z] [INFO] Clearing inventory cache after creating order from payment intent...
+[2025-03-05T14:03:31.748Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:32.355Z] [INFO] Retrieved 1 orders for user cm7vxzxn80005pvh8zs0n9plx
+[2025-03-05T14:03:32.357Z] [INFO] Retrieved 1 orders for user cm7vxzxn80005pvh8zs0n9plx
+[2025-03-05T14:03:36.065Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:36.252Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:36.472Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:36.955Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:37.708Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:37.940Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:38.303Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:38.736Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:39.179Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:39.648Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:40.121Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:40.581Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:41.046Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:41.514Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:42.002Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:42.487Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:42.970Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:43.390Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:43.836Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:44.270Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:44.737Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:45.192Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:45.605Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:46.054Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:46.522Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:47.013Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:51.324Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:03:57.471Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T14:04:16.649Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
