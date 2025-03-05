@@ -66,3 +66,1800 @@ Details: {}
 Details: {}
 [2025-03-05T07:47:43.588Z] [INFO] PrismaAdapter initialized successfully
 Details: {}
+[2025-03-05T07:50:54.052Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:01:45.139Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:02:04.538Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:02:04.801Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:02:06.485Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:02:09.839Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:02:13.365Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:02:14.079Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:02:14.667Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:02:24.357Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:02:24.691Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:02:30.046Z] [WARN] Database unavailable, using temporary hardcoded auth
+Details: {}
+[2025-03-05T08:02:30.264Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:02:33.983Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:02:37.995Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:02:38.663Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:02:42.542Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:02:42.886Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:02:42.894Z] [INFO] Error in orders API: 
+Invalid `prisma.order.findMany()` invocation:
+
+
+Can't reach database server at `aws-0-eu-central-1-pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-0-eu-central-1-pooler.supabase.com:6543`.
+Details: error
+[2025-03-05T08:02:42.894Z] [INFO] Error in orders API: 
+Invalid `prisma.order.findMany()` invocation:
+
+
+Can't reach database server at `aws-0-eu-central-1-pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-0-eu-central-1-pooler.supabase.com:6543`.
+Details: error
+[2025-03-05T08:03:12.809Z] [INFO] Error in orders API: 
+Invalid `prisma.order.findMany()` invocation:
+
+
+Can't reach database server at `aws-0-eu-central-1-pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-0-eu-central-1-pooler.supabase.com:6543`.
+Details: error
+[2025-03-05T08:03:14.337Z] [INFO] Error in orders API: 
+Invalid `prisma.order.findMany()` invocation:
+
+
+Can't reach database server at `aws-0-eu-central-1-pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-0-eu-central-1-pooler.supabase.com:6543`.
+Details: error
+[2025-03-05T08:03:14.551Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:03:37.188Z] [INFO] Error in orders API: 
+Invalid `prisma.order.findMany()` invocation:
+
+
+Can't reach database server at `aws-0-eu-central-1-pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-0-eu-central-1-pooler.supabase.com:6543`.
+Details: error
+[2025-03-05T08:03:37.372Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:03:51.286Z] [INFO] Error in orders API: 
+Invalid `prisma.order.findMany()` invocation:
+
+
+Can't reach database server at `aws-0-eu-central-1-pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-0-eu-central-1-pooler.supabase.com:6543`.
+Details: error
+[2025-03-05T08:03:51.466Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:04:21.808Z] [INFO] Error in orders API: 
+Invalid `prisma.order.findMany()` invocation:
+
+
+Can't reach database server at `aws-0-eu-central-1-pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-0-eu-central-1-pooler.supabase.com:6543`.
+Details: error
+[2025-03-05T08:04:44.603Z] [INFO] Error in orders API: 
+Invalid `prisma.order.findMany()` invocation:
+
+
+Can't reach database server at `aws-0-eu-central-1-pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-0-eu-central-1-pooler.supabase.com:6543`.
+Details: error
+[2025-03-05T08:04:44.832Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:04:47.981Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:04:58.701Z] [INFO] Error in orders API: 
+Invalid `prisma.order.findMany()` invocation:
+
+
+Can't reach database server at `aws-0-eu-central-1-pooler.supabase.com:6543`
+
+Please make sure your database server is running at `aws-0-eu-central-1-pooler.supabase.com:6543`.
+Details: error
+[2025-03-05T08:04:58.903Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:05:08.717Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:05:28.441Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:05:28.802Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:05:28.803Z] [INFO] Returning 0 mock orders for 110230232580597474224
+[2025-03-05T08:05:50.073Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:05:58.798Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:05:58.799Z] [INFO] Returning 0 mock orders for 110230232580597474224
+[2025-03-05T08:06:28.814Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:06:28.815Z] [INFO] Returning 0 mock orders for 110230232580597474224
+[2025-03-05T08:06:58.800Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:06:58.801Z] [INFO] Returning 0 mock orders for 110230232580597474224
+[2025-03-05T08:07:18.937Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:07:38.636Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:07:38.637Z] [INFO] Returning 0 mock orders for 110230232580597474224
+[2025-03-05T08:07:38.870Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:07:38.909Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:07:38.909Z] [INFO] Returning 0 mock orders for 110230232580597474224
+[2025-03-05T08:07:39.123Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:07:40.277Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:07:40.277Z] [INFO] Returning 0 mock orders for 110230232580597474224
+[2025-03-05T08:07:40.277Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:07:40.278Z] [INFO] Returning 0 mock orders for 110230232580597474224
+[2025-03-05T08:07:40.284Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:07:40.284Z] [INFO] Returning 0 mock orders for 110230232580597474224
+[2025-03-05T08:07:40.461Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:07:41.293Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:07:41.293Z] [INFO] Returning 0 mock orders for 110230232580597474224
+[2025-03-05T08:07:41.293Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:07:41.294Z] [INFO] Returning 0 mock orders for 110230232580597474224
+[2025-03-05T08:07:41.301Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:07:41.302Z] [INFO] Returning 0 mock orders for 110230232580597474224
+[2025-03-05T08:07:41.473Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:07:47.675Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:07:47.676Z] [INFO] Returning 0 mock orders for 110230232580597474224
+[2025-03-05T08:07:47.676Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:07:47.676Z] [INFO] Returning 0 mock orders for 110230232580597474224
+[2025-03-05T08:07:47.684Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:07:47.684Z] [INFO] Returning 0 mock orders for 110230232580597474224
+[2025-03-05T08:07:47.861Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:07:49.961Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:07:50.376Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:07:50.921Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:08:23.014Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:08:30.176Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:08:41.100Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:08:41.304Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:08:43.098Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:08:53.659Z] [WARN] Database unavailable, using temporary hardcoded auth
+Details: {}
+[2025-03-05T08:08:53.853Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:09:01.174Z] [INFO] Refreshing inventory: clearing caches
+[2025-03-05T08:09:01.177Z] [INFO] Cleared 12 inventory cache entries and 3 record cache entries
+[2025-03-05T08:09:01.177Z] [INFO] Fetching latest inventory data to rebuild cache
+[2025-03-05T08:09:01.378Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:09:02.362Z] [INFO] Inventory refresh complete - cache rebuilt with fresh data
+[2025-03-05T08:10:47.075Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:10:51.084Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:11:09.197Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:11:10.424Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:11:10.622Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:11:11.859Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:11:18.405Z] [WARN] Database unavailable, using temporary hardcoded auth
+Details: {}
+[2025-03-05T08:11:18.620Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:11:22.613Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:12:36.308Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:12:36.873Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:12:40.019Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:12:51.759Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:13:46.377Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:13:47.494Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:13:50.592Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:13:50.786Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:13:55.857Z] [WARN] Database unavailable, using temporary hardcoded auth
+Details: {}
+[2025-03-05T08:13:56.045Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:15:27.890Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:16:19.957Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:16:34.165Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:16:46.273Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T08:16:55.320Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:16:55.321Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:17:03.708Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:17:03.709Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:17:25.012Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:17:25.013Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:17:36.252Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:17:36.253Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:17:36.524Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:17:36.524Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:19:51.735Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:19:51.737Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:19:51.870Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:19:51.870Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:20:08.362Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:20:08.363Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:20:18.663Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:20:18.665Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:20:19.815Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:20:19.816Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:20:20.006Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:20:20.007Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:20:21.690Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:20:21.690Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:20:30.464Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:20:30.465Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:20:30.659Z] [WARN] Database unavailable, using temporary hardcoded auth
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:20:30.719Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:20:30.721Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:20:31.452Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:20:31.453Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:20:40.164Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:20:40.165Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:21:25.861Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:21:25.863Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:23:41.589Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:23:41.591Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:23:41.737Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:23:41.739Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:23:42.399Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:23:42.401Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:23:44.328Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:23:44.329Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:23:46.551Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:23:46.553Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:23:46.770Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:23:46.772Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:23:47.690Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:23:47.691Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:23:51.059Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:23:51.059Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:23:51.321Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:23:51.323Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:23:55.370Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:23:55.372Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:23:55.598Z] [INFO] Google auth: creating fallback profile
+Details: {"email":"mehiskont@gmail.com"}
+[2025-03-05T08:23:56.160Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:23:56.160Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:23:56.766Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:23:56.768Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:23:58.307Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:23:58.307Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:23:58.669Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:23:58.669Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:23:58.671Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:23:58.672Z] [INFO] Returning 0 mock orders for google-110230232580597474224
+[2025-03-05T08:23:58.672Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:23:58.672Z] [INFO] Returning 0 mock orders for google-110230232580597474224
+[2025-03-05T08:24:06.804Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:24:06.806Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:24:08.676Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:24:08.678Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:24:09.024Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:24:09.025Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T08:24:16.403Z] [WARN] Database unavailable, using temporary hardcoded auth
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:24:16.614Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T08:24:16.616Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:22:05.262Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T09:22:05.799Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T09:22:06.360Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T09:22:16.680Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T09:25:33.031Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T09:31:10.012Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T09:35:29.907Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:35:29.909Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:35:32.605Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:35:32.606Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:35:32.810Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:35:32.812Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:35:35.919Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:35:35.919Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:35:43.830Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:35:43.832Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:35:43.856Z] [WARN] Database unavailable, using temporary hardcoded auth
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:35:44.082Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:35:44.084Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:36:14.547Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:36:14.549Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:36:14.807Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:36:14.809Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:36:23.371Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:36:23.372Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:36:23.948Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:36:23.950Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:36:27.433Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:36:27.434Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:36:27.677Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:36:27.679Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:36:32.735Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:36:32.737Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:36:32.991Z] [INFO] Google auth: creating fallback profile
+Details: {"email":"mehiskont@gmail.com"}
+[2025-03-05T09:36:33.723Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:36:33.723Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:36:34.334Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:36:34.336Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:36:45.976Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:36:45.977Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:36:51.114Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:36:51.115Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:36:51.549Z] [INFO] Creating payment intent with items:
+Details: [{"id":3483822696,"title":"Ninja Tools Vol.6","price":221,"quantity":2}]
+[2025-03-05T09:36:51.572Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:36:51.572Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:36:52.604Z] [INFO] Using origin header for base URL: http://localhost:3000
+[2025-03-05T09:36:52.605Z] [INFO] Creating Stripe session with base URL: http://localhost:3000
+[2025-03-05T09:36:53.154Z] [INFO] Created checkout session:
+Details: cs_test_a1H5eQNgAr6yWY8TvSUHzII79NU5zdvvrPolErjHAGzrX5CamzVtIyzIWk
+[2025-03-05T09:36:53.729Z] [INFO] Payment intent created:
+Details: {"id":"pi_3QzENlLKWZZc2yek1Kf0wI4o","amount":49096,"items":1,"sessionId":"cs_test_a1H5eQNgAr6yWY8TvSUHzII79NU5zdvvrPolErjHAGzrX5CamzVtIyzIWk"}
+[2025-03-05T09:37:08.880Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:37:08.880Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:37:19.005Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:37:19.006Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:37:37.485Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:37:37.486Z] [INFO] Returning 0 mock orders for google-110230232580597474224
+[2025-03-05T09:37:37.486Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:37:37.487Z] [INFO] Returning 0 mock orders for google-110230232580597474224
+[2025-03-05T09:37:37.487Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:37:37.487Z] [INFO] Returning 0 mock orders for google-110230232580597474224
+[2025-03-05T09:37:37.487Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:37:37.487Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:37:37.565Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:37:37.568Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:38:08.307Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:38:08.308Z] [INFO] Returning 0 mock orders for google-110230232580597474224
+[2025-03-05T09:38:38.296Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:38:38.296Z] [INFO] Returning 0 mock orders for google-110230232580597474224
+[2025-03-05T09:39:08.298Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:39:08.298Z] [INFO] Returning 0 mock orders for google-110230232580597474224
+[2025-03-05T09:39:38.295Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:39:38.296Z] [INFO] Returning 0 mock orders for google-110230232580597474224
+[2025-03-05T09:39:39.231Z] [WARN] Database fetch failed, using mock orders
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:39:39.232Z] [INFO] Returning 0 mock orders for google-110230232580597474224
+[2025-03-05T09:39:39.477Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:39:39.478Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:39:45.108Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:39:45.110Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:39:45.453Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:39:45.455Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:39:47.046Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:39:47.046Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:39:48.967Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:39:48.967Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:39:49.176Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:39:49.178Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:39:58.454Z] [WARN] Database unavailable, using temporary hardcoded auth
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:39:58.657Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:39:58.658Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:46:43.352Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:46:43.354Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:46:45.052Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:46:45.053Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:47:34.544Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:47:34.545Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:47:40.811Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:47:40.812Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:51:14.597Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:51:14.597Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:51:23.266Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:51:23.267Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:55:00.386Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:55:00.386Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:55:35.337Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:55:35.339Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:55:37.204Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:55:37.204Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:55:37.413Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:55:37.415Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:55:37.840Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:55:37.840Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:55:47.761Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:55:47.762Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:55:47.781Z] [INFO] Using test user hardcoded auth
+Details: {}
+[2025-03-05T09:55:47.993Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:55:47.995Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:55:51.184Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:55:51.184Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:56:03.383Z] [INFO] Registration error: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+Details: error
+[2025-03-05T09:56:03.560Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:56:03.561Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:56:16.713Z] [INFO] Registration error: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+Details: error
+[2025-03-05T09:57:55.530Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:57:55.531Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:58:01.268Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:58:01.268Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:59:37.237Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:59:37.238Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T09:59:51.288Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T09:59:51.288Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T10:01:09.782Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T10:01:09.782Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T10:02:33.577Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T10:02:33.578Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T10:03:12.434Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T10:03:12.435Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T10:04:30.431Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T10:04:30.432Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T10:05:50.511Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T10:05:50.512Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T10:05:59.523Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T10:05:59.523Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T10:08:02.799Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T10:08:02.799Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T10:08:03.608Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T10:08:03.608Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T10:08:04.118Z] [ERROR] Database connection test failed
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T10:08:04.121Z] [WARN] Skipping PrismaAdapter due to database connection failure
+Details: {}
+[2025-03-05T10:08:56.884Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:09:40.126Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:24:16.352Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:24:18.544Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:24:18.758Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:24:25.205Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:24:32.266Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:24:32.305Z] [WARN] Database error during auth, using fallback
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T10:24:32.562Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:24:47.485Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:25:20.188Z] [INFO] Registration error: 
+Invalid `prisma.user.findUnique()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+Details: error
+[2025-03-05T10:25:20.364Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:30:10.422Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:30:19.207Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:31:07.209Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:31:21.179Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:38:19.923Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:38:20.285Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:42:52.789Z] [INFO] Using Resend API key: re_U2Su4...
+[2025-03-05T10:42:52.948Z] [INFO] Testing auth configuration
+Details: {}
+[2025-03-05T10:42:52.948Z] [INFO] Environment variables check:
+Details: {"NEXTAUTH_URL":true,"NEXTAUTH_SECRET":true,"GOOGLE_CLIENT_ID":true,"GOOGLE_CLIENT_SECRET":true}
+[2025-03-05T10:42:52.949Z] [ERROR] Session fetch error
+Details: {"description":"Route /api/auth/test couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error","digest":"DYNAMIC_SERVER_USAGE"}
+[2025-03-05T10:42:52.949Z] [INFO] Auth test complete
+Details: {"sessionExists":false,"userAuthenticated":false,"providers":2}
+[2025-03-05T10:42:52.951Z] [INFO] Using Resend API key: re_U2Su4...
+[2025-03-05T10:42:53.041Z] [INFO] Testing database connection before processing order...
+[2025-03-05T10:42:53.043Z] [INFO] Testing database connection before processing order...
+[2025-03-05T10:42:53.556Z] [INFO] Database connection test result: [{"connected":1}]
+[2025-03-05T10:42:53.819Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:42:53.822Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:42:53.822Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:42:53.824Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:42:53.832Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:42:53.835Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:42:53.840Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:42:53.874Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:42:53.938Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:42:53.941Z] [INFO] Database connection test result: [{"connected":1}]
+[2025-03-05T10:42:54.243Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T10:46:17.891Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:46:18.382Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:46:23.924Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:46:24.160Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:46:38.539Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:46:46.368Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:46:46.410Z] [WARN] Database error during auth, using fallback
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T10:46:46.612Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:48:24.428Z] [ERROR] Registration error: Database unavailable
+Details: {"error":"\nInvalid `prisma.$queryRaw()` invocation:\n\n\nUser `postgres` was denied access on the database `postgres.public`"}
+[2025-03-05T10:48:24.679Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:49:46.867Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:49:47.199Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:49:51.982Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:49:59.007Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:51:03.579Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:51:26.911Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:51:27.183Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:51:36.908Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:51:45.504Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:51:54.545Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+User `postgres` was denied access on the database `postgres.public`
+[2025-03-05T10:53:09.559Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Authentication failed against database server at `db.ccqgafetgnpzybsjkaoj.supabase.co`, the provided database credentials for `postgres.ccqgafetgnpzybsjkaoj` are not valid.
+
+Please make sure to provide valid database credentials for the database server at `db.ccqgafetgnpzybsjkaoj.supabase.co`.
+[2025-03-05T10:53:10.775Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Authentication failed against database server at `db.ccqgafetgnpzybsjkaoj.supabase.co`, the provided database credentials for `postgres.ccqgafetgnpzybsjkaoj` are not valid.
+
+Please make sure to provide valid database credentials for the database server at `db.ccqgafetgnpzybsjkaoj.supabase.co`.
+[2025-03-05T10:53:10.776Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Authentication failed against database server at `db.ccqgafetgnpzybsjkaoj.supabase.co`, the provided database credentials for `postgres.ccqgafetgnpzybsjkaoj` are not valid.
+
+Please make sure to provide valid database credentials for the database server at `db.ccqgafetgnpzybsjkaoj.supabase.co`.
+[2025-03-05T10:53:10.969Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Authentication failed against database server at `db.ccqgafetgnpzybsjkaoj.supabase.co`, the provided database credentials for `postgres.ccqgafetgnpzybsjkaoj` are not valid.
+
+Please make sure to provide valid database credentials for the database server at `db.ccqgafetgnpzybsjkaoj.supabase.co`.
+[2025-03-05T10:53:15.097Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:03:15.850Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:03:42.632Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:03:51.319Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:03:51.624Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:04:28.212Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:04:28.213Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:04:36.947Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:04:38.375Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:04:38.616Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:04:48.572Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:04:58.293Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:04:59.014Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:04:59.256Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:05:06.754Z] [WARN] Database error during auth, using fallback
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T11:05:06.975Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:06:17.042Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:06:30.145Z] [INFO] AUTH_FORCE_FALLBACK is enabled, skipping database connection
+Details: {}
+[2025-03-05T11:07:12.018Z] [INFO] AUTH_FORCE_FALLBACK is enabled, skipping database connection
+Details: {}
+[2025-03-05T11:07:12.341Z] [INFO] AUTH_FORCE_FALLBACK is enabled, skipping database connection
+Details: {}
+[2025-03-05T11:26:10.735Z] [INFO] AUTH_FORCE_FALLBACK is enabled, skipping database connection
+Details: {}
+[2025-03-05T11:26:20.397Z] [INFO] AUTH_FORCE_FALLBACK is enabled, skipping database connection
+Details: {}
+[2025-03-05T11:26:20.538Z] [WARN] Database error during auth, using fallback
+Details: {"name":"PrismaClientInitializationError","clientVersion":"6.4.0"}
+[2025-03-05T11:26:20.668Z] [INFO] AUTH_FORCE_FALLBACK is enabled, skipping database connection
+Details: {}
+[2025-03-05T11:26:21.115Z] [INFO] AUTH_FORCE_FALLBACK is enabled, skipping database connection
+Details: {}
+[2025-03-05T11:30:36.096Z] [INFO] AUTH_FORCE_FALLBACK is enabled, skipping database connection
+Details: {}
+[2025-03-05T11:33:41.592Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:33:41.813Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:42:45.019Z] [INFO] Using Resend API key: re_U2Su4...
+[2025-03-05T11:42:45.129Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:42:45.151Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:42:45.180Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:42:45.181Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:42:45.189Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:42:45.198Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:42:45.198Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:42:45.211Z] [INFO] Using Resend API key: re_U2Su4...
+[2025-03-05T11:42:45.243Z] [INFO] Testing auth configuration
+Details: {}
+[2025-03-05T11:42:45.243Z] [INFO] Environment variables check:
+Details: {"NEXTAUTH_URL":true,"NEXTAUTH_SECRET":true,"GOOGLE_CLIENT_ID":true,"GOOGLE_CLIENT_SECRET":true}
+[2025-03-05T11:42:45.244Z] [ERROR] Session fetch error
+Details: {"description":"Route /api/auth/test couldn't be rendered statically because it used `headers`. See more info here: https://nextjs.org/docs/messages/dynamic-server-error","digest":"DYNAMIC_SERVER_USAGE"}
+[2025-03-05T11:42:45.244Z] [INFO] Auth test complete
+Details: {"sessionExists":false,"userAuthenticated":false,"providers":2}
+[2025-03-05T11:42:45.296Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:42:45.301Z] [INFO] Testing database connection before processing order...
+[2025-03-05T11:42:45.302Z] [INFO] Testing database connection before processing order...
+[2025-03-05T11:42:45.303Z] [INFO] Database connection test result: [{"connected":1}]
+[2025-03-05T11:42:45.304Z] [INFO] Database connection test result: [{"connected":1}]
+[2025-03-05T11:42:45.310Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:46:34.664Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:46:52.536Z] [WARN] Database connection test failed, skipping PrismaAdapter
+Details: 
+Invalid `prisma.$queryRaw()` invocation:
+
+
+Can't reach database server at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`
+
+Please make sure your database server is running at `db.ccqgafetgnpzybsjkaoj.supabase.co:5432`.
+[2025-03-05T11:47:12.296Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:47:14.173Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:47:14.413Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:47:16.403Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:47:16.753Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:47:17.489Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:47:23.848Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:47:24.098Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:47:27.139Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:47:39.839Z] [INFO] User registered successfully: mehiskont+asd1@gmail.com
+[2025-03-05T11:47:39.964Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:47:40.199Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:47:40.245Z] [INFO] User authenticated successfully from database
+Details: {"userId":"cm7vuskvw0000pv2i6pgwgd9u"}
+[2025-03-05T11:47:40.884Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:47:49.529Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:48:01.284Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:48:08.511Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:48:25.089Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:48:28.242Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:48:28.643Z] [INFO] Creating payment intent with items:
+Details: [{"id":3483822696,"title":"Ninja Tools Vol.6","price":221,"quantity":2}]
+[2025-03-05T11:48:28.663Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:48:29.751Z] [INFO] Using origin header for base URL: http://localhost:3000
+[2025-03-05T11:48:29.752Z] [INFO] Creating Stripe session with base URL: http://localhost:3000
+[2025-03-05T11:48:30.369Z] [INFO] Created checkout session:
+Details: cs_test_a1uVzBkC5TVJPbZUfaw7yfI4ZMvdRLxi6q5NqBmYkxWytzaq6lJkAprAxh
+[2025-03-05T11:48:30.771Z] [INFO] Payment intent created:
+Details: {"id":"pi_3QzGR8LKWZZc2yek0lWvPBWV","amount":49096,"items":1,"sessionId":"cs_test_a1uVzBkC5TVJPbZUfaw7yfI4ZMvdRLxi6q5NqBmYkxWytzaq6lJkAprAxh"}
+[2025-03-05T11:48:39.188Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:48:59.088Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:49:01.920Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:49:03.878Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:49:08.788Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:49:29.328Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:49:31.468Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:49:31.826Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:49:58.647Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:50:02.615Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:50:13.125Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:50:13.391Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:50:32.946Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:50:36.730Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:50:37.222Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:50:37.685Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:50:54.826Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:54:30.665Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:54:31.958Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:54:32.168Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:54:39.887Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:54:42.454Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:54:46.871Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:54:47.360Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:54:47.848Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:54:54.218Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:57:38.561Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:57:40.758Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:57:41.006Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:57:41.216Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:57:45.237Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:57:49.505Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:57:53.366Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:57:54.420Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T11:57:54.764Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:00:01.198Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:00:04.879Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:00:08.521Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:00:09.059Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:00:09.389Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:00:17.486Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:05:10.601Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:05:27.147Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:05:27.353Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:05:27.696Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:05:33.820Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:05:35.547Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:05:43.942Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:05:44.226Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:05:48.924Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:05:51.502Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:06:04.514Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:06:05.074Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:06:05.450Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:06:32.879Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:06:50.123Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:07:01.119Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:07:19.452Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:03.425Z] [INFO] User registered successfully: mehiskont+abc1@gmail.com
+[2025-03-05T12:08:03.460Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:03.648Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:03.766Z] [INFO] User authenticated successfully from database
+Details: {"userId":"cm7vvit0c0000pv6vcu7p72ox"}
+[2025-03-05T12:08:04.162Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:04.507Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:05.175Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:11.769Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:12.068Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:19.647Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:19.854Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:19.909Z] [INFO] User authenticated successfully from database
+Details: {"userId":"cm7vvit0c0000pv6vcu7p72ox"}
+[2025-03-05T12:08:20.186Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:33.390Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:35.238Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:35.564Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:44.985Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:47.385Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:53.502Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:54.122Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:08:54.462Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:09:07.469Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:09:07.522Z] [INFO] User authenticated successfully from database
+Details: {"userId":"cm7vvit0c0000pv6vcu7p72ox"}
+[2025-03-05T12:09:07.827Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:09:20.810Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:09:27.486Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:09:27.964Z] [INFO] Creating payment intent with items:
+Details: [{"id":3483822696,"title":"Ninja Tools Vol.6","price":221,"quantity":2}]
+[2025-03-05T12:09:27.988Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:09:29.114Z] [INFO] Using origin header for base URL: http://localhost:3000
+[2025-03-05T12:09:29.114Z] [INFO] Creating Stripe session with base URL: http://localhost:3000
+[2025-03-05T12:09:29.685Z] [INFO] Created checkout session:
+Details: cs_test_a1bHcmnU4SxegVBgwHE1wrR3dSBVlOWucCpGIQwTGoTyabo3YUWIHo0DJb
+[2025-03-05T12:09:30.157Z] [INFO] Payment intent created:
+Details: {"id":"pi_3QzGlSLKWZZc2yek1hmMHrOV","amount":49096,"items":1,"sessionId":"cs_test_a1bHcmnU4SxegVBgwHE1wrR3dSBVlOWucCpGIQwTGoTyabo3YUWIHo0DJb"}
+[2025-03-05T12:09:40.057Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:09:44.657Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:09:46.967Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:09:49.281Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:09:49.476Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:09:49.477Z] [INFO] Retrieved 0 orders for user cm7vvit0c0000pv6vcu7p72ox
+[2025-03-05T12:09:49.486Z] [INFO] Retrieved 0 orders for user cm7vvit0c0000pv6vcu7p72ox
+[2025-03-05T12:09:49.486Z] [INFO] Retrieved 0 orders for user cm7vvit0c0000pv6vcu7p72ox
+[2025-03-05T12:09:49.686Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:09:54.443Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:10:40.213Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:10:42.210Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:13:59.634Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:14:15.562Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:12.270Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:12.932Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:13.150Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:16.393Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:16.790Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:18.150Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:19.801Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:20.035Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:24.160Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:24.433Z] [INFO] Google auth: processing profile
+Details: {"email":"mehiskont@gmail.com"}
+[2025-03-05T12:18:24.753Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:33.906Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:36.934Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:40.713Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:40.882Z] [INFO] Google auth: processing profile
+Details: {"email":"mehiskont@gmail.com"}
+[2025-03-05T12:18:41.125Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:53.401Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:53.985Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:54.546Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:58.137Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:58.299Z] [INFO] Google auth: processing profile
+Details: {"email":"mehiskont@gmail.com"}
+[2025-03-05T12:18:58.573Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:18:58.932Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:20:36.645Z] [INFO] User registered successfully: mehiskont+matt@gmail.com
+[2025-03-05T12:20:36.928Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:20:37.160Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:20:37.217Z] [INFO] User authenticated successfully from database
+Details: {"userId":"cm7vvyy760000pvtwnnwdue89"}
+[2025-03-05T12:20:38.023Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:20:41.889Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:20:43.596Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:20:43.815Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:20:50.172Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:20:50.218Z] [INFO] User authenticated successfully from database
+Details: {"userId":"cm7vvyy760000pvtwnnwdue89"}
+[2025-03-05T12:20:50.520Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:29:45.575Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:29:46.575Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:29:46.810Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:30:08.266Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:30:12.316Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:30:12.715Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:30:13.556Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:30:15.485Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:30:15.709Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:30:19.381Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:30:19.582Z] [INFO] Google auth: processing profile
+Details: {"email":"mehiskont@gmail.com"}
+[2025-03-05T12:30:19.835Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:30:28.146Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:30:37.540Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:30:41.171Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:30:41.326Z] [INFO] Google auth: processing profile
+Details: {"email":"mehiskont@gmail.com"}
+[2025-03-05T12:30:41.614Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:30:41.971Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:32:03.387Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:33:04.910Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:34:16.835Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:34:17.537Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:34:17.816Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:34:18.969Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:34:46.992Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:34:47.230Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:34:47.264Z] [INFO] User authenticated successfully from database
+Details: {"userId":"cm7vvyy760000pvtwnnwdue89"}
+[2025-03-05T12:34:47.265Z] [INFO] Sign-in attempt:
+Details: {"provider":"credentials","userId":"cm7vvyy760000pvtwnnwdue89","userEmail":"mehiskont+matt@gmail.com"}
+[2025-03-05T12:34:47.572Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:34:47.961Z] [INFO] Resend client initialized with API key: re_U2Su4...
+[2025-03-05T12:34:47.963Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:34:55.719Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:35:00.038Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:35:00.297Z] [INFO] Creating payment intent with items:
+Details: [{"id":3483822696,"title":"Ninja Tools Vol.6","price":221,"quantity":2}]
+[2025-03-05T12:35:00.315Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:35:01.360Z] [INFO] Using origin header for base URL: http://localhost:3000
+[2025-03-05T12:35:01.360Z] [INFO] Creating Stripe session with base URL: http://localhost:3000
+[2025-03-05T12:35:01.896Z] [INFO] Created checkout session:
+Details: cs_test_a1fyyLHc1bIBc7xrZ7je55nYSY3fZeUgsXYnUhhkPFuQLpLmDzdjdX9j0P
+[2025-03-05T12:35:02.384Z] [INFO] Payment intent created:
+Details: {"id":"pi_3QzHAALKWZZc2yek0eKAi9fx","amount":49096,"items":1,"sessionId":"cs_test_a1fyyLHc1bIBc7xrZ7je55nYSY3fZeUgsXYnUhhkPFuQLpLmDzdjdX9j0P"}
+[2025-03-05T12:35:10.776Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:35:11.361Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:35:13.259Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:35:13.723Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:35:13.731Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:35:13.731Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:35:16.626Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:35:16.627Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:35:17.868Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:35:18.621Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:35:18.622Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:35:25.247Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:35:25.248Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:35:25.255Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:35:25.444Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:46:36.655Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:46:39.483Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:46:39.713Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:46:39.924Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:46:44.358Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:46:44.531Z] [INFO] Google auth: processing profile
+Details: {"email":"mehiskont@gmail.com"}
+[2025-03-05T12:46:44.536Z] [INFO] Sign-in attempt:
+Details: {"provider":"google","userId":"110230232580597474224","userEmail":"mehiskont@gmail.com"}
+[2025-03-05T12:46:44.538Z] [INFO] Found existing user for email mehiskont@gmail.com
+Details: {"userId":"cm7vuskvw0000pv2i6pgwgd9u"}
+[2025-03-05T12:46:44.542Z] [INFO] Linking account
+Details: {"provider":"google","userId":"cm7vvyy760000pvtwnnwdue89"}
+[2025-03-05T12:46:45.152Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:46:45.753Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:46:55.567Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:47:11.057Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:47:14.001Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:47:14.365Z] [INFO] Creating payment intent with items:
+Details: [{"id":3483822696,"title":"Ninja Tools Vol.6","price":221,"quantity":2}]
+[2025-03-05T12:47:14.388Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:47:15.537Z] [INFO] Using origin header for base URL: http://localhost:3000
+[2025-03-05T12:47:15.538Z] [INFO] Creating Stripe session with base URL: http://localhost:3000
+[2025-03-05T12:47:16.148Z] [INFO] Created checkout session:
+Details: cs_test_a1BPQcsuJbfuvLh773nupb8P3Kd44tzYGMNzJKOrLzn47iTbxNclJhfo9l
+[2025-03-05T12:47:16.576Z] [INFO] Payment intent created:
+Details: {"id":"pi_3QzHM0LKWZZc2yek0Ui65jXa","amount":49096,"items":1,"sessionId":"cs_test_a1BPQcsuJbfuvLh773nupb8P3Kd44tzYGMNzJKOrLzn47iTbxNclJhfo9l"}
+[2025-03-05T12:47:27.408Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:47:35.648Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:47:36.316Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:47:36.327Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:47:36.331Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:47:36.336Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:47:36.548Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:47:45.867Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:47:45.869Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:47:48.105Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:47:48.106Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:47:48.114Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:47:48.335Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:48:00.341Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:48:00.342Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:48:25.141Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:48:25.378Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:48:26.586Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:48:26.587Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:48:26.593Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:48:26.790Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:48:27.531Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:48:27.532Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:48:27.537Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:48:27.731Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:48:28.288Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:48:28.289Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:48:28.295Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:48:28.506Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:48:30.065Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:48:30.067Z] [INFO] Retrieved 0 orders for user cm7vvyy760000pvtwnnwdue89
+[2025-03-05T12:48:32.630Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:48:32.975Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:48:52.474Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:49:07.334Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:50:16.509Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:50:20.344Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:50:20.671Z] [INFO] Google auth: processing profile
+Details: {"email":"mehiskont@gmail.com"}
+[2025-03-05T12:50:20.674Z] [INFO] Sign-in attempt:
+Details: {"provider":"google","userId":"cm7vvyy760000pvtwnnwdue89","userEmail":"mehiskont+matt@gmail.com"}
+[2025-03-05T12:50:20.676Z] [INFO] Found existing user for email mehiskont@gmail.com
+Details: {"userId":"cm7vuskvw0000pv2i6pgwgd9u"}
+[2025-03-05T12:50:20.676Z] [WARN] Google account linked to different user
+Details: {"linkedUserId":"cm7vvyy760000pvtwnnwdue89","attemptedUserId":"cm7vuskvw0000pv2i6pgwgd9u"}
+[2025-03-05T12:50:20.678Z] [INFO] Updated Google account to link to correct user
+Details: {}
+[2025-03-05T12:50:21.364Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:50:23.565Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:50:28.260Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:50:28.483Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:50:36.771Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:50:40.362Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:50:40.480Z] [INFO] Google auth: processing profile
+Details: {"email":"mehiskont@gmail.com"}
+[2025-03-05T12:50:40.482Z] [INFO] Sign-in attempt:
+Details: {"provider":"google","userId":"cm7vuskvw0000pv2i6pgwgd9u","userEmail":"mehiskont@gmail.com"}
+[2025-03-05T12:50:40.483Z] [INFO] Found existing user for email mehiskont@gmail.com
+Details: {"userId":"cm7vuskvw0000pv2i6pgwgd9u"}
+[2025-03-05T12:50:41.046Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:50:50.735Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:50:50.972Z] [INFO] Creating payment intent with items:
+Details: [{"id":3483822696,"title":"Ninja Tools Vol.6","price":221,"quantity":2}]
+[2025-03-05T12:50:51.007Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:50:51.991Z] [INFO] Using origin header for base URL: http://localhost:3000
+[2025-03-05T12:50:51.992Z] [INFO] Creating Stripe session with base URL: http://localhost:3000
+[2025-03-05T12:50:52.486Z] [INFO] Created checkout session:
+Details: cs_test_a1xFYyCegunc3Iqt6n4VypQc7ppF1ZTV5nsCMxHtarmdZr4IWAynDuKPkH
+[2025-03-05T12:50:52.920Z] [INFO] Payment intent created:
+Details: {"id":"pi_3QzHPULKWZZc2yek1WibKYbX","amount":49096,"items":1,"sessionId":"cs_test_a1xFYyCegunc3Iqt6n4VypQc7ppF1ZTV5nsCMxHtarmdZr4IWAynDuKPkH"}
+[2025-03-05T12:51:00.973Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:51:01.589Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:51:03.595Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:51:03.595Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:51:03.596Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:51:16.169Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:51:16.355Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:51:20.199Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:51:20.403Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:51:36.082Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:51:36.272Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:52:06.244Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:52:36.231Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:53:06.230Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:53:36.231Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:56:22.529Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:56:24.342Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:56:24.574Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:56:29.585Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:56:31.631Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:56:32.091Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:56:32.101Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:56:32.102Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:56:33.706Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:56:33.708Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:56:37.793Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:56:47.782Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:56:50.460Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:56:50.884Z] [INFO] Creating payment intent with items:
+Details: [{"id":3483822696,"title":"Ninja Tools Vol.6","price":221,"quantity":2}]
+[2025-03-05T12:56:50.909Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:56:51.996Z] [INFO] Using origin header for base URL: http://localhost:3000
+[2025-03-05T12:56:51.997Z] [INFO] Creating Stripe session with base URL: http://localhost:3000
+[2025-03-05T12:56:52.559Z] [INFO] Created checkout session:
+Details: cs_test_a15NBGH3XKjftpWRQQ9lMFO3355S4Dnb3AZh8HoHtNVwNnvAaxYxx9CAe6
+[2025-03-05T12:56:53.070Z] [INFO] Payment intent created:
+Details: {"id":"pi_3QzHVILKWZZc2yek1OEq79EK","amount":49096,"items":1,"sessionId":"cs_test_a15NBGH3XKjftpWRQQ9lMFO3355S4Dnb3AZh8HoHtNVwNnvAaxYxx9CAe6"}
+[2025-03-05T12:57:04.128Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:57:14.980Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:57:14.982Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:57:14.998Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:57:15.249Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:57:45.234Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:58:15.236Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:58:45.231Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:59:00.926Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:59:01.177Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T12:59:31.238Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:59:55.817Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T12:59:56.047Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:00:20.290Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:00:38.373Z] [INFO] Creating payment intent with items:
+Details: [{"id":3483885180,"title":"Good Morning, Eyeball","price":214,"quantity":1}]
+[2025-03-05T13:00:39.436Z] [INFO] Using origin header for base URL: http://localhost:3000
+[2025-03-05T13:00:39.436Z] [INFO] Creating Stripe session with base URL: http://localhost:3000
+[2025-03-05T13:00:39.925Z] [INFO] Created checkout session:
+Details: cs_test_a1DBkR9Z4rT3yffAGCkDJSDgaTqcywn2RH604d19836sGlAelSCiNCjzx5
+[2025-03-05T13:00:40.409Z] [INFO] Payment intent created:
+Details: {"id":"pi_3QzHYyLKWZZc2yek0GXA73JD","amount":23925,"items":1,"sessionId":"cs_test_a1DBkR9Z4rT3yffAGCkDJSDgaTqcywn2RH604d19836sGlAelSCiNCjzx5"}
+[2025-03-05T13:00:48.445Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:00:49.974Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:00:49.976Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:01:05.250Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:01:05.481Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:01:36.247Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:02:06.244Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:02:11.383Z] [INFO] Retrieved 0 orders for user cm7vuskvw0000pv2i6pgwgd9u
+[2025-03-05T13:02:11.632Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:03:53.138Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:03:59.034Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:04:03.966Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T13:04:04.305Z] [INFO] PrismaAdapter initialized successfully
+Details: {}

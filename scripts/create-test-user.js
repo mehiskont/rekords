@@ -4,36 +4,46 @@ const prisma = new PrismaClient();
 
 async function createTestUser() {
   try {
-    // Generate hashed password
-    const hashedPassword = await bcrypt.hash('password123', 12);
+    const hashedPassword = await bcrypt.hash('password123', 10);
     
-    // Check if user exists
-    const existingUser = await prisma.user.findUnique({
-      where: { email: 'test@example.com' }
+    const user = await prisma.user.upsert({
+      where: { email: 'test@example.com' },
+      update: { 
+        hashedPassword,
+        name: 'Test User'
+      },
+      create: {
+        email: 'test@example.com',
+        name: 'Test User',
+        hashedPassword,
+      }
     });
     
-    if (existingUser) {
-      // Update user with password
-      const updatedUser = await prisma.user.update({
-        where: { id: existingUser.id },
-        data: { hashedPassword }
-      });
-      console.log('Updated test user with password:', updatedUser.id);
-    } else {
-      // Create new test user
-      const user = await prisma.user.create({
-        data: {
-          email: 'test@example.com',
-          name: 'Test User',
-          hashedPassword
-        }
-      });
-      console.log('Created test user:', user.id);
-    }
+    console.log('Test user created/updated:', user);
+    
+    // Create admin user too
+    const adminHashedPassword = await bcrypt.hash('admin123', 10);
+    
+    const adminUser = await prisma.user.upsert({
+      where: { email: 'admin@example.com' },
+      update: { 
+        hashedPassword: adminHashedPassword,
+        name: 'Admin User'
+      },
+      create: {
+        email: 'admin@example.com',
+        name: 'Admin User',
+        hashedPassword: adminHashedPassword,
+      }
+    });
+    
+    console.log('Admin user created/updated:', adminUser);
+    
+    await prisma.$disconnect();
   } catch (error) {
     console.error('Error creating test user:', error);
-  } finally {
     await prisma.$disconnect();
+    process.exit(1);
   }
 }
 

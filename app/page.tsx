@@ -14,18 +14,7 @@ export const revalidate = 0 // Do not cache this page
 export default function HomePage() {
   return (
     <div className="min-h-screen">
-      {/* Temporary Database Warning */}
-      <div className="container max-w-6xl mx-auto px-4 pt-4">
-        <Alert variant="destructive">
-          <AlertTitle>Database Connection Issue</AlertTitle>
-          <AlertDescription>
-            The database connection is currently unavailable. Some features like login will use a test mode with credentials: 
-            <strong> test@example.com / password123</strong>.{' '}
-            <Link href="/auth/debug" className="underline">View auth debug info</Link>
-          </AlertDescription>
-        </Alert>
-      </div>
-      
+   
       {/* Hero Section with Search */}
       <section className="relative py-16 bg-gradient-to-b from-background to-muted">
         <div className="container max-w-6xl mx-auto px-4">

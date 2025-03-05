@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { useSession } from "next-auth/react"
 import { Loader2 } from "lucide-react"
-import { OrderList } from "./order-list"
+import { OrderList } from "./dashboard/order-list"
 
 export function LiveOrders() {
   const { data: session } = useSession()
@@ -70,18 +70,9 @@ export function LiveOrders() {
   }
 
   if (orders.length === 0) {
-    // Log the session ID to help debugging
-    console.log("User ID from session:", session?.user?.id);
-    console.log("Email from session:", session?.user?.email);
-    
     return (
       <div className="rounded-lg border p-6 text-center">
-        <p className="text-muted-foreground mb-2">You haven't placed any orders yet.</p>
-        <p className="text-xs text-muted-foreground mt-2">
-          Orders appear instantly when completed. Try placing a new order.
-          <br/>
-          User ID: {session?.user?.id ? session.user.id.substring(0, 8) + '...' : 'Not signed in'}
-        </p>
+        <p className="text-muted-foreground">You haven't placed any orders yet.</p>
       </div>
     )
   }

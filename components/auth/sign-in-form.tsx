@@ -25,9 +25,61 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false)
   const [email, setEmail] = React.useState<string>("")
   const [password, setPassword] = React.useState<string>("")
+  const [dbStatus, setDbStatus] = React.useState<{
+    connected: boolean, 
+    error: string | null,
+    loading?: boolean,
+    forceFallback?: boolean
+  }>({ 
+    connected: true, 
+    error: null,
+    loading: true
+  })
 
   // Forces the redirect to the dashboard page
   const callbackUrl = "/dashboard"
+  
+  // Check database status on component mount
+  React.useEffect(() => {
+    const checkDbStatus = async () => {
+      try {
+        // Set loading state immediately
+        setDbStatus(prev => ({ ...prev, loading: true }));
+        
+        // Fetch with a 3 second timeout to avoid hanging the UI
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000);
+        
+        const response = await fetch('/api/db-status', { 
+          signal: controller.signal 
+        });
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) {
+          throw new Error(`Status check failed: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        setDbStatus({ 
+          connected: data.status === 'connected', 
+          error: data.error,
+          loading: false,
+          forceFallback: data.forceFallback === true
+        });
+      } catch (error) {
+        console.error('Failed to check DB status:', error);
+        // If request timed out or failed, force fallback mode
+        setDbStatus({ 
+          connected: false, 
+          error: String(error),
+          loading: false,
+          forceFallback: true 
+        });
+      }
+    };
+    
+    checkDbStatus();
+  }, [])
 
   // Email magic link sign in - this functionality has been disabled
   // The email provider has been conditionally disabled in auth.ts if not properly configured
@@ -138,11 +190,20 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
                 Forgot password?
               </Link>
             </div>
-            <div className="mt-1 text-xs text-yellow-600 bg-yellow-50 p-2 rounded">
-              <strong>Database unavailable!</strong> Use test account:<br />
-              Email: test@example.com<br />
-              Password: password123
-            </div>
+            {dbStatus.loading ? (
+  <div className="mt-1 text-xs text-blue-600 bg-blue-50 p-2 rounded">
+    <strong>Checking database connection...</strong>
+  </div>
+) : !dbStatus.connected || dbStatus.forceFallback ? (
+  <div className="mt-2 text-md text-yellow-600 bg-yellow-50 p-3 rounded-md border border-yellow-300">
+    <strong>Development Mode Activated</strong><br />
+    <div className="text-sm mt-1">
+      Use these test accounts:<br />
+      <span className="font-mono">User: test@example.com / password123</span><br />
+      <span className="font-mono">Admin: admin@example.com / admin123</span>
+    </div>
+  </div>
+) : null}
             <Input
               id="password"
               placeholder="••••••••"

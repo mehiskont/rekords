@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from 'zod';
 import { registerUser } from "@/lib/user";
 import { log } from "@/lib/logger";
+import { testDatabaseConnection } from "@/lib/prisma";
 
 // Validation schema
 const registerSchema = z.object({
@@ -24,6 +25,16 @@ export async function POST(request: Request) {
     }
     
     const { email, password, name } = result.data;
+    
+    // Check database connection before attempting registration
+    const dbStatus = await testDatabaseConnection();
+    if (!dbStatus.connected) {
+      log(`Registration error: Database unavailable`, { error: dbStatus.error }, "error");
+      return NextResponse.json(
+        { error: "Database unavailable", message: "Registration is temporarily unavailable. Please try again later or use the test account: test@example.com / password123" },
+        { status: 503 }
+      );
+    }
     
     // Register the user
     try {

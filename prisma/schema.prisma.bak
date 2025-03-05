@@ -4,8 +4,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://mehiskont:@localhost:5432/postgres?schema=public"
-  directUrl = "postgresql://mehiskont:@localhost:5432/postgres?schema=public"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 model Account {

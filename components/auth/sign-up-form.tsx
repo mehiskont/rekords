@@ -81,6 +81,16 @@ export function SignUpForm() {
             description: "This email is already registered. Please sign in instead.",
             variant: "destructive"
           });
+        } else if (response.status === 503) {
+          toast({
+            title: "Service unavailable",
+            description: "Registration is temporarily unavailable. Please try again later or use the test account: test@example.com / password123",
+            variant: "destructive"
+          });
+          // Redirect to sign in page after a short delay
+          setTimeout(() => {
+            router.push('/auth/signin');
+          }, 3000);
         } else {
           toast({
             title: "Registration failed",
