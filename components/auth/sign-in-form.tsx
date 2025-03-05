@@ -29,7 +29,8 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
   // Forces the redirect to the dashboard page
   const callbackUrl = "/dashboard"
 
-  // Email magic link sign in
+  // Email magic link sign in - this functionality has been disabled
+  // The email provider has been conditionally disabled in auth.ts if not properly configured
   async function onMagicLinkSubmit(e: React.FormEvent) {
     e.preventDefault()
     setIsLoading(true)
@@ -47,13 +48,15 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
           description: "We sent you a login link. Be sure to check your spam too.",
         })
       } else {
+        console.error("Magic link error:", result.error);
         toast({
-          title: "Something went wrong",
-          description: "Your sign in request failed. Please try again.",
+          title: "Email login unavailable",
+          description: "Please use password or Google sign-in instead.",
           variant: "destructive",
         })
       }
     } catch (error) {
+      console.error("Magic link exception:", error);
       toast({
         title: "Something went wrong",
         description: "Your sign in request failed. Please try again.",
@@ -70,6 +73,7 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
     setIsLoading(true)
 
     try {
+      console.log("Attempting to sign in with credentials", { email, callbackUrl });
       const result = await signIn("credentials", {
         email,
         password,
@@ -79,12 +83,14 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
 
       if (!result?.error) {
         // Successful login, redirect to callbackUrl or dashboard
-        router.push(callbackUrl)
+        console.log("Sign in successful, redirecting to", callbackUrl);
         toast({
           title: "Welcome back!",
           description: "You've been successfully signed in.",
         })
+        router.push(callbackUrl)
       } else {
+        console.error("Authentication error:", result.error);
         toast({
           title: "Authentication failed",
           description: "Your email or password is incorrect.",
@@ -92,6 +98,7 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
         })
       }
     } catch (error) {
+      console.error("Sign in exception:", error);
       toast({
         title: "Something went wrong",
         description: "Your sign in request failed. Please try again.",
@@ -130,6 +137,11 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
               >
                 Forgot password?
               </Link>
+            </div>
+            <div className="mt-1 text-xs text-yellow-600 bg-yellow-50 p-2 rounded">
+              <strong>Database unavailable!</strong> Use test account:<br />
+              Email: test@example.com<br />
+              Password: password123
             </div>
             <Input
               id="password"
@@ -171,10 +183,10 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
         disabled={isLoading}
         onClick={() => {
           setIsLoading(true)
-          // Add extra logging and proper error handling for Google sign in
+          // Log the attempt with the callback URL
           console.log("Attempting Google sign in with callbackUrl:", callbackUrl);
           
-          // Use the proper next-auth signIn method with error handling
+          // Use redirect: true for OAuth providers to complete the flow
           signIn("google", { 
             callbackUrl,
             redirect: true

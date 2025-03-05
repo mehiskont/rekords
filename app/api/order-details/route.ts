@@ -30,12 +30,44 @@ export async function GET(request: NextRequest) {
   );
 }
 
-// Handle order details lookup - requires authentication
+// Handle order details lookup - supports both session IDs and order IDs
 async function handleOrderDetails(orderId: string, request: NextRequest) {
   try {
     // Check authentication
     const session = await getServerSession(authOptions);
+    const isSessionId = orderId.startsWith('cs_') || orderId.startsWith('pi_');
     
+    // If it's a checkout session ID or payment intent ID, we allow access 
+    // without authentication to support the checkout success page
+    if (isSessionId) {
+      const { prisma } = await import('@/lib/prisma');
+      
+      // Look up order by Stripe session ID
+      const order = await prisma.order.findUnique({
+        where: { stripeId: orderId },
+        include: { items: true }
+      });
+      
+      if (!order) {
+        log(`Order not found for session/payment ID: ${orderId}`);
+        return NextResponse.json({ message: "Order not found" }, { status: 404 });
+      }
+      
+      // Return the order with limited data for the success page
+      return NextResponse.json({
+        id: order.id,
+        total: order.total,
+        status: order.status,
+        createdAt: order.createdAt,
+        items: order.items.map(item => ({
+          title: item.title,
+          quantity: item.quantity,
+          price: item.price
+        }))
+      });
+    }
+    
+    // For regular order IDs, require authentication
     if (!session?.user?.id) {
       log("Order details API accessed without valid session");
       return NextResponse.json(

@@ -1,0 +1,68 @@
+[2025-03-05T07:40:26.807Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:40:35.177Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:41:23.997Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:41:47.741Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:41:47.953Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:41:49.177Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:41:52.594Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:41:57.948Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:41:58.431Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:42:01.757Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:42:10.160Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:43:37.690Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:45:19.766Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:45:32.653Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:45:42.856Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:45:53.753Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:47:13.471Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:47:14.471Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:47:14.483Z] [INFO] Testing auth configuration
+Details: {}
+[2025-03-05T07:47:14.483Z] [INFO] Environment variables check:
+Details: {"NEXTAUTH_URL":true,"NEXTAUTH_SECRET":true,"GOOGLE_CLIENT_ID":true,"GOOGLE_CLIENT_SECRET":true}
+[2025-03-05T07:47:14.486Z] [INFO] Auth test complete
+Details: {"sessionExists":false,"userAuthenticated":false,"providers":2}
+[2025-03-05T07:47:14.492Z] [INFO] Testing auth configuration
+Details: {}
+[2025-03-05T07:47:14.492Z] [INFO] Environment variables check:
+Details: {"NEXTAUTH_URL":true,"NEXTAUTH_SECRET":true,"GOOGLE_CLIENT_ID":true,"GOOGLE_CLIENT_SECRET":true}
+[2025-03-05T07:47:14.493Z] [INFO] Auth test complete
+Details: {"sessionExists":false,"userAuthenticated":false,"providers":2}
+[2025-03-05T07:47:14.665Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:47:19.622Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:47:22.872Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:47:26.486Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:47:28.412Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:47:28.611Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:47:28.800Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:47:29.116Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:47:35.537Z] [INFO] PrismaAdapter initialized successfully
+Details: {}
+[2025-03-05T07:47:43.588Z] [INFO] PrismaAdapter initialized successfully
+Details: {}

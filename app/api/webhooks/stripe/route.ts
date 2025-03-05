@@ -145,6 +145,9 @@ export async function POST(req: Request) {
         // Create the order and update inventory in a transaction
         try {
           // Step 1: Create the order and mark as paid immediately
+          // Log the user ID and items for debugging
+          log(`Creating order for user ${userId || "anonymous"} with items: ${JSON.stringify(items)}`)
+          
           const order = await createOrder(
             userId || "anonymous", // Use anonymous if no user ID
             items,
@@ -170,7 +173,9 @@ export async function POST(req: Request) {
               
               while (!updated && attempts < 3) {
                 attempts++;
+                log(`Attempt ${attempts}: Updating Discogs inventory for item ${item.id}, quantity ${item.quantity || 1}`)
                 updated = await updateDiscogsInventory(item.id.toString(), item.quantity || 1)
+                
                 if (updated) {
                   log(`✅ Successfully updated Discogs inventory for item ${item.id} (attempt ${attempts})`)
                   break;
@@ -182,8 +187,17 @@ export async function POST(req: Request) {
               }
               
               if (!updated) {
-                log(`❌ All attempts failed to update Discogs inventory for item ${item.id}`, "error")
-                allUpdatesSuccessful = false;
+                // If after 3 attempts it still failed, try direct removal as a last resort
+                log(`All API attempts failed, trying direct removal for item ${item.id}`, "warn")
+                const removed = await removeFromDiscogsInventory(item.id.toString())
+                
+                if (removed) {
+                  log(`✅ Successfully removed item ${item.id} from inventory using direct API`, "info")
+                  updated = true; // Mark as updated since removal was successful
+                } else {
+                  log(`❌ All attempts failed to update Discogs inventory for item ${item.id}`, "error")
+                  allUpdatesSuccessful = false;
+                }
               }
             } catch (error) {
               log(`Error updating Discogs inventory for item ${item.id}: ${error instanceof Error ? error.message : "Unknown error"}`, "error")
@@ -205,8 +219,16 @@ export async function POST(req: Request) {
             
             // Fetch fresh inventory data to rebuild cache
             try {
+              // Get base URL for refresh request
+              let baseUrl = process.env.NEXT_PUBLIC_APP_URL;
+              if (!baseUrl || baseUrl === 'undefined') {
+                baseUrl = 'http://localhost:3000';
+                log('Using localhost fallback for inventory refresh URL');
+              }
+              
               // This fetch happens in the background and doesn't block the response
-              fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/refresh-inventory`, {
+              log(`Refreshing inventory using URL: ${baseUrl}/api/refresh-inventory`);
+              fetch(`${baseUrl}/api/refresh-inventory`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
               }).catch(err => log(`Background refresh inventory failed: ${err.message}`, "warn"))
@@ -271,11 +293,22 @@ export async function POST(req: Request) {
                 
                 try {
                   // Check if the listing still exists (if not, we don't need to update it)
+                  // Log detailed info before attempting inventory update
+                  log(`Processing inventory update for discogsId: ${item.discogsId}, quantity: ${item.quantity}`)
+                  
                   const updated = await updateDiscogsInventory(item.discogsId, item.quantity)
-                  log(updated 
-                    ? `✅ Successfully updated Discogs inventory for item ${item.discogsId}` 
-                    : `❌ Failed to update Discogs inventory for item ${item.discogsId}`, 
-                    updated ? "info" : "error")
+                  
+                  if (updated) {
+                    log(`✅ Successfully updated Discogs inventory for item ${item.discogsId}`, "info")
+                  } else {
+                    // If API token failed, try with the direct removal API as a fallback
+                    log(`First attempt failed, trying direct removal for item ${item.discogsId}`, "warn")
+                    const removed = await removeFromDiscogsInventory(item.discogsId)
+                    log(removed 
+                      ? `✅ Successfully removed item ${item.discogsId} from inventory using direct API` 
+                      : `❌ All attempts failed for item ${item.discogsId}`, 
+                      removed ? "info" : "error")
+                  }
                 } catch (error) {
                   log(`Error updating Discogs inventory for item ${item.discogsId}: ${error instanceof Error ? error.message : "Unknown error"}`, "error")
                 }
@@ -380,12 +413,20 @@ export async function POST(req: Request) {
               // Process Discogs inventory
               for (const item of items) {
                 try {
-                  log(`Processing Discogs inventory for item ${item.id}`);
+                  log(`Processing Discogs inventory for item ${item.id}, quantity: ${item.quantity || 1}`);
                   const updated = await updateDiscogsInventory(item.id.toString(), item.quantity || 1);
-                  log(updated 
-                    ? `✅ Successfully updated Discogs inventory for item ${item.id}` 
-                    : `❌ Failed to update Discogs inventory for item ${item.id}`, 
-                    updated ? "info" : "error");
+                  
+                  if (updated) {
+                    log(`✅ Successfully updated Discogs inventory for item ${item.id}`, "info");
+                  } else {
+                    // If API token failed, try with the direct removal API as a fallback
+                    log(`First attempt failed, trying direct removal for item ${item.id}`, "warn");
+                    const removed = await removeFromDiscogsInventory(item.id.toString());
+                    log(removed 
+                      ? `✅ Successfully removed item ${item.id} from inventory using direct API` 
+                      : `❌ All attempts failed for item ${item.id}`, 
+                      removed ? "info" : "error");
+                  }
                 } catch (error) {
                   log(`Error updating Discogs inventory for item ${item.id}: ${error instanceof Error ? error.message : "Unknown error"}`, "error");
                 }
@@ -463,8 +504,20 @@ export async function POST(req: Request) {
             // Process Discogs inventory
             for (const item of items) {
               try {
+                log(`Processing Discogs inventory for item ${item.id}, quantity: ${item.quantity || 1}`);
                 const updated = await updateDiscogsInventory(item.id.toString(), item.quantity || 1);
-                log(updated ? `✅ Updated Discogs inventory for item ${item.id}` : `❌ Failed to update Discogs inventory for item ${item.id}`);
+                
+                if (updated) {
+                  log(`✅ Successfully updated Discogs inventory for item ${item.id}`, "info");
+                } else {
+                  // If API token failed, try with the direct removal API as a fallback
+                  log(`First attempt failed, trying direct removal for item ${item.id}`, "warn");
+                  const removed = await removeFromDiscogsInventory(item.id.toString());
+                  log(removed 
+                    ? `✅ Successfully removed item ${item.id} from inventory using direct API` 
+                    : `❌ All attempts failed for item ${item.id}`, 
+                    removed ? "info" : "error");
+                }
               } catch (error) {
                 log(`Error updating Discogs inventory: ${error instanceof Error ? error.message : "Unknown error"}`, "error");
               }

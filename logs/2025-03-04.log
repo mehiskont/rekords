@@ -8553,3 +8553,47 @@ Argument `where` of type OrderWhereUniqueInput needs at least one of `id` or `st
 [2025-03-04T17:51:25.353Z] [INFO] Listing 123456 not found or already at zero quantity via OAuth
 [2025-03-04T17:51:25.353Z] [INFO] ✅ Updated Discogs inventory for item 123456
 [2025-03-04T17:51:25.353Z] [INFO] ====== ORDER PROCESSING COMPLETED ======
+[2025-03-04T18:22:18.998Z] [[{"ID":3483822696,"TITLE":"NINJA TOOLS VOL.6","PRICE":221,"QUANTITY":2}]] Creating payment intent with items:
+[2025-03-04T18:22:18.998Z] [CONSOLE[LEVEL] IS NOT A FUNCTION] Error creating payment intent:
+[2025-03-04T18:24:09.131Z] [INFO] Creating payment intent with items:
+Details: [{"id":3483822696,"title":"Ninja Tools Vol.6","price":221,"quantity":2}]
+[2025-03-04T18:24:10.935Z] [INFO] Using origin header for base URL: http://localhost:3000
+[2025-03-04T18:24:10.935Z] [INFO] Creating Stripe session with base URL: http://localhost:3000
+[2025-03-04T18:24:11.652Z] [INFO] Created checkout session:
+Details: cs_test_a15VFWpsKFvwy6qBfCf1ZDwPc9UoXR3oPZ54HTIKlebQe0mBoHr2UZGvf7
+[2025-03-04T18:24:12.165Z] [INFO] Payment intent created:
+Details: {"id":"pi_3Qz08WLKWZZc2yek0TITRkMx","amount":49096,"items":1,"sessionId":"cs_test_a15VFWpsKFvwy6qBfCf1ZDwPc9UoXR3oPZ54HTIKlebQe0mBoHr2UZGvf7"}
+[2025-03-04T18:28:32.016Z] [INFO] Creating payment intent with items:
+Details: [{"id":3483822696,"title":"Ninja Tools Vol.6","price":221,"quantity":2}]
+[2025-03-04T18:28:33.182Z] [INFO] Using origin header for base URL: http://localhost:3000
+[2025-03-04T18:28:33.182Z] [INFO] Creating Stripe session with base URL: http://localhost:3000
+[2025-03-04T18:28:33.639Z] [INFO] Created checkout session:
+Details: cs_test_a1KZwubTCcbnln5bK85iPwiDAmwDo61htslbgzpYvOq29oisuoKYoW9T0t
+[2025-03-04T18:28:34.070Z] [INFO] Payment intent created:
+Details: {"id":"pi_3Qz0CkLKWZZc2yek0FB5MjwT","amount":49096,"items":1,"sessionId":"cs_test_a1KZwubTCcbnln5bK85iPwiDAmwDo61htslbgzpYvOq29oisuoKYoW9T0t"}
+[2025-03-04T18:32:10.008Z] [INFO] Creating payment intent with items:
+Details: [{"id":3483822696,"title":"Ninja Tools Vol.6","price":221,"quantity":2}]
+[2025-03-04T18:32:11.008Z] [INFO] Using origin header for base URL: http://localhost:3000
+[2025-03-04T18:32:11.009Z] [INFO] Creating Stripe session with base URL: http://localhost:3000
+[2025-03-04T18:32:11.507Z] [INFO] Created checkout session:
+Details: cs_test_a1Y3jtOZ8OqR8R8C5SbMmhoXh2oiTwKIGGFXvXfbV6k9kk5qEQBv5WzlCJ
+[2025-03-04T18:32:12.014Z] [INFO] Payment intent created:
+Details: {"id":"pi_3Qz0GFLKWZZc2yek0p7pmFhC","amount":49096,"items":1,"sessionId":"cs_test_a1Y3jtOZ8OqR8R8C5SbMmhoXh2oiTwKIGGFXvXfbV6k9kk5qEQBv5WzlCJ"}
+[2025-03-04T18:36:38.502Z] [INFO] Retrieved 0 orders for user cm7ubp0dl0000pvl0a6r1yxtj
+[2025-03-04T18:36:39.562Z] [INFO] Retrieved 0 orders for user cm7ubp0dl0000pvl0a6r1yxtj
+[2025-03-04T18:36:39.742Z] [INFO] Retrieved 0 orders for user cm7ubp0dl0000pvl0a6r1yxtj
+[2025-03-04T18:36:53.981Z] [INFO] Retrieved 0 orders for user cm7ubp0dl0000pvl0a6r1yxtj
+[2025-03-04T18:37:18.402Z] [INFO] Retrieved 0 orders for user cm7ubp0dl0000pvl0a6r1yxtj
+[2025-03-04T18:37:21.928Z] [INFO] Retrieved 0 orders for user cm7ubp0dl0000pvl0a6r1yxtj
+[2025-03-04T18:37:22.362Z] [INFO] Retrieved 0 orders for user cm7ubp0dl0000pvl0a6r1yxtj
+[2025-03-04T18:37:22.364Z] [INFO] Retrieved 0 orders for user cm7ubp0dl0000pvl0a6r1yxtj
+[2025-03-04T18:37:35.163Z] [INFO] Creating payment intent with items:
+Details: [{"id":3483822696,"title":"Ninja Tools Vol.6","price":221,"quantity":2}]
+[2025-03-04T18:37:36.074Z] [INFO] Using origin header for base URL: http://localhost:3000
+[2025-03-04T18:37:36.075Z] [INFO] Creating Stripe session with base URL: http://localhost:3000
+[2025-03-04T18:37:36.623Z] [INFO] Created checkout session:
+Details: cs_test_a15ArBsoQV9zg23kmcmavSHZCtgIxirudDLKbYKCC8MQsAdE0Eo2hXm6Jp
+[2025-03-04T18:37:37.130Z] [INFO] Payment intent created:
+Details: {"id":"pi_3Qz0LVLKWZZc2yek0bzir5cq","amount":49096,"items":1,"sessionId":"cs_test_a15ArBsoQV9zg23kmcmavSHZCtgIxirudDLKbYKCC8MQsAdE0Eo2hXm6Jp"}
+[2025-03-04T18:37:48.847Z] [INFO] Retrieved 0 orders for user cm7ubp0dl0000pvl0a6r1yxtj
+[2025-03-04T18:37:48.852Z] [INFO] Retrieved 0 orders for user cm7ubp0dl0000pvl0a6r1yxtj

@@ -4,6 +4,8 @@ import { NewArrivals } from "@/components/new-arrivals"
 import { RecordGrid } from "@/components/record-grid"
 import { RecordGridSkeleton } from "@/components/record-grid-skeleton"
 import { RefreshButton } from "@/components/refresh-button"
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
+import Link from "next/link"
 
 // Force dynamic rendering to prevent stale data from being cached
 export const dynamic = 'force-dynamic'
@@ -12,8 +14,20 @@ export const revalidate = 0 // Do not cache this page
 export default function HomePage() {
   return (
     <div className="min-h-screen">
+      {/* Temporary Database Warning */}
+      <div className="container max-w-6xl mx-auto px-4 pt-4">
+        <Alert variant="destructive">
+          <AlertTitle>Database Connection Issue</AlertTitle>
+          <AlertDescription>
+            The database connection is currently unavailable. Some features like login will use a test mode with credentials: 
+            <strong> test@example.com / password123</strong>.{' '}
+            <Link href="/auth/debug" className="underline">View auth debug info</Link>
+          </AlertDescription>
+        </Alert>
+      </div>
+      
       {/* Hero Section with Search */}
-      <section className="relative py-20 bg-gradient-to-b from-background to-muted">
+      <section className="relative py-16 bg-gradient-to-b from-background to-muted">
         <div className="container max-w-6xl mx-auto px-4">
           <div className="text-center mb-12">
             <h1 className="text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/50">

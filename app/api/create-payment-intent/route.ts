@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server"
 import Stripe from "stripe"
+import { log } from "@/lib/logger"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
@@ -18,7 +19,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
-    console.log("Creating payment intent with items:", JSON.stringify(items))
+    log("Creating payment intent with items:", JSON.stringify(items))
 
     // Create products for each item
     const lineItems = await Promise.all(
@@ -47,12 +48,29 @@ export async function POST(req: Request) {
     const customerId = req.headers.get('x-user-id') || 'anonymous';
     
     // Create a checkout session first - this will be used on success page
+    // Get the origin from the request headers for proper URL construction
+    const origin = req.headers.get('origin');
+    
+    // Implement multiple fallbacks to ensure we always have a valid URL
+    let baseUrl = process.env.NEXT_PUBLIC_APP_URL;
+    if (!baseUrl || baseUrl === 'undefined') {
+      if (origin) {
+        baseUrl = origin;
+        log(`Using origin header for base URL: ${origin}`);
+      } else {
+        baseUrl = 'http://localhost:3000';
+        log('No origin or environment URL found, using localhost fallback');
+      }
+    }
+    
+    log(`Creating Stripe session with base URL: ${baseUrl}`);
+    
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
       line_items: lineItems,
-      success_url: `${process.env.NEXT_PUBLIC_APP_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${process.env.NEXT_PUBLIC_APP_URL}/checkout`,
+      success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${baseUrl}/checkout`,
       metadata: {
         userId: customerId,
         customerEmail: customer.email,
@@ -70,7 +88,7 @@ export async function POST(req: Request) {
       },
     });
     
-    console.log("Created checkout session:", session.id);
+    log("Created checkout session:", session.id);
     
     // Create the payment intent connected to the session
     const paymentIntent = await stripe.paymentIntents.create({
@@ -97,7 +115,7 @@ export async function POST(req: Request) {
       },
     })
 
-    console.log("Payment intent created:", {
+    log("Payment intent created:", {
       id: paymentIntent.id,
       amount: paymentIntent.amount,
       items: items.length,
@@ -109,7 +127,7 @@ export async function POST(req: Request) {
       sessionId: session.id // Also return the session ID
     })
   } catch (error) {
-    console.error("Error creating payment intent:", error)
+    log("Error creating payment intent", error, "error")
     return NextResponse.json(
       { error: "Failed to create payment intent", details: error instanceof Error ? error.message : String(error) },
       { status: 500 },
