@@ -130,21 +130,26 @@ export const authOptions = {
             // If no user or no password (OAuth user), return null
             if (!user || !user.hashedPassword) {
               // For debugging, check if this is our test user
-              if (credentials.email === "test@example.com" && credentials.password === "password123") {
-                log("Using test user hardcoded auth as fallback", {}, "info");
+              const testEmail = process.env.TEST_USER_EMAIL || "test@example.com";
+              const testPassword = process.env.TEST_USER_PASSWORD || "password123";
+              const adminEmail = process.env.ADMIN_USER_EMAIL || "admin@example.com";
+              const adminPassword = process.env.ADMIN_USER_PASSWORD || "admin123";
+              
+              if (credentials.email === testEmail && credentials.password === testPassword) {
+                log("Using test user auth as fallback", {}, "info");
                 return {
                   id: "temp-user-id-123",
-                  email: "test@example.com",
+                  email: testEmail,
                   name: "Test User"
                 };
               }
               
               // Add admin user fallback
-              if (credentials.email === "admin@example.com" && credentials.password === "admin123") {
-                log("Using admin user hardcoded auth", {}, "info");
+              if (credentials.email === adminEmail && credentials.password === adminPassword) {
+                log("Using admin user auth", {}, "info");
                 return {
                   id: "admin-user-id-456",
-                  email: "admin@example.com",
+                  email: adminEmail,
                   name: "Admin User" 
                 };
               }
@@ -170,20 +175,25 @@ export const authOptions = {
             log("Database error during auth, using fallback", dbError, "warn");
             
             // Check if this is our test user
-            if (credentials.email === "test@example.com" && credentials.password === "password123") {
+            const testEmail = process.env.TEST_USER_EMAIL || "test@example.com";
+            const testPassword = process.env.TEST_USER_PASSWORD || "password123";
+            const adminEmail = process.env.ADMIN_USER_EMAIL || "admin@example.com";
+            const adminPassword = process.env.ADMIN_USER_PASSWORD || "admin123";
+            
+            if (credentials.email === testEmail && credentials.password === testPassword) {
               return {
                 id: "temp-user-id-123",
-                email: "test@example.com",
+                email: testEmail,
                 name: "Test User"
               };
             }
             
             // Admin fallback
-            if (credentials.email === "admin@example.com" && credentials.password === "admin123") {
-              log("Using admin user hardcoded auth in fallback", {}, "info");
+            if (credentials.email === adminEmail && credentials.password === adminPassword) {
+              log("Using admin user auth in fallback", {}, "info");
               return {
                 id: "admin-user-id-456",
-                email: "admin@example.com",
+                email: adminEmail,
                 name: "Admin User" 
               };
             }
