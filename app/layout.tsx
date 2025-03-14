@@ -30,6 +30,7 @@ export default async function RootLayout({
       <body className={inter.className}>
         <NextAuthProvider session={session}>
           <ThemeProvider>
+            {/* Make sure CartProvider is only used in client components */}
             <CartProvider>
               <div className="flex min-h-screen flex-col">
                 <NavBar />

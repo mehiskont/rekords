@@ -1,7 +1,9 @@
 import { getDiscogsInventory } from "@/lib/discogs"
 import { serializeForClient } from "@/lib/utils"
 import { ApiUnavailable } from "@/components/api-unavailable"
-import { ClientRecordCard } from "@/components/client-record-card"
+import RecordGridClient from "./client-components/record-grid-client"
+import { getCachedData, setCachedData } from "@/lib/redis"
+import { log } from "@/lib/logger"
 
 interface RecordGridProps {
   searchParams?: { [key: string]: string | string[] | undefined }
@@ -14,31 +16,60 @@ export async function RecordGrid({ searchParams = {} }: RecordGridProps) {
   const page = typeof searchParams.page === "string" ? Number.parseInt(searchParams.page) : 1
   const perPage = 20
 
-  try {
-    // Add a cacheBuster to ALL inventory requests to ensure fresh availability data
-    const { records } = await getDiscogsInventory(search, sort, page, perPage, {
-      category,
-      fetchFullReleaseData: true,
-      cacheBuster: Date.now().toString() // Always add cacheBuster for real-time availability
-    })
+  // Create a unique cache key for this view
+  const viewCacheKey = `view:${search || "all"}:${category}:${sort || "default"}:${page}:${perPage}`;
+  let records = [];
+  let usedCache = false;
 
-    if (!records || records.length === 0) {
-      return <p className="text-center text-lg">No records found.</p>
+  try {
+    // First try to get from cache with a very short TTL for initial render
+    const cachedView = await getCachedData(viewCacheKey);
+    if (cachedView) {
+      try {
+        const parsed = JSON.parse(cachedView);
+        if (parsed?.length > 0) {
+          records = parsed;
+          usedCache = true;
+          log(`Using cached view data for ${viewCacheKey}`, {}, "info");
+        }
+      } catch (error) {
+        log(`Error parsing cached view data`, error, "warn");
+      }
     }
 
-    // Serialize records before passing to client component
-    const serializedRecords = records.map((record) => serializeForClient(record))
+    // If no cache or empty cache, fetch fresh data
+    if (records.length === 0) {
+      // Use cacheBuster only for real-time data needs or admin views
+      const needsFreshData = search?.includes("admin") || false;
+      
+      const options = {
+        category,
+        fetchFullReleaseData: true,
+        ...(needsFreshData ? { cacheBuster: Date.now().toString() } : {})
+      };
 
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-        {serializedRecords.map((record) => (
-          <ClientRecordCard key={record.id} record={record} />
-        ))}
-      </div>
-    )
+      const result = await getDiscogsInventory(search, sort, page, perPage, options);
+      
+      // Serialize records before passing to client component
+      records = result.records ? result.records.map((record) => serializeForClient(record)) : [];
+      
+      // Cache this view for a short time (2 minutes)
+      if (records.length > 0) {
+        setCachedData(viewCacheKey, JSON.stringify(records), 120);
+      }
+    }
+
+    // Return client component with data
+    return <RecordGridClient records={records} />
   } catch (error) {
-    console.error("Failed to fetch records:", error)
+    log("Failed to fetch records:", error, "error");
+    
+    // If we have cache, use it even if it's stale to ensure some data is displayed
+    if (usedCache && records.length > 0) {
+      log("Using stale cache due to fetch error", {}, "warn");
+      return <RecordGridClient records={records} />
+    }
+    
     return <ApiUnavailable />
   }
 }
-

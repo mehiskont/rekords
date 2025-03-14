@@ -17,11 +17,17 @@ export function log(message: string | any, details?: any, level: "info" | "error
   
   // Handle case where message is an object or error
   let logMessage = "";
-  if (typeof message === 'object') {
+  if (message === null) {
+    logMessage = `[${timestamp}] [${level.toUpperCase()}] null\n`;
+  } else if (typeof message === 'object') {
     if (message instanceof Error) {
       logMessage = `[${timestamp}] [${level.toUpperCase()}] ${message.message}\n${message.stack || ''}\n`;
     } else {
-      logMessage = `[${timestamp}] [${level.toUpperCase()}] ${JSON.stringify(message)}\n`;
+      try {
+        logMessage = `[${timestamp}] [${level.toUpperCase()}] ${JSON.stringify(message)}\n`;
+      } catch (e) {
+        logMessage = `[${timestamp}] [${level.toUpperCase()}] [Object cannot be stringified]\n`;
+      }
     }
   } else {
     logMessage = `[${timestamp}] [${level.toUpperCase()}] ${message}\n`;
@@ -29,8 +35,14 @@ export function log(message: string | any, details?: any, level: "info" | "error
   
   // If details are provided, append them
   if (details !== undefined) {
-    if (typeof details === 'object') {
-      logMessage += `Details: ${JSON.stringify(details)}\n`;
+    if (details === null) {
+      logMessage += `Details: null\n`;
+    } else if (typeof details === 'object') {
+      try {
+        logMessage += `Details: ${JSON.stringify(details)}\n`;
+      } catch (e) {
+        logMessage += `Details: [Object cannot be stringified]\n`;
+      }
     } else {
       logMessage += `Details: ${details}\n`;
     }

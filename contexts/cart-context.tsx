@@ -104,11 +104,26 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 }
 
 export function useCart() {
-  const context = useContext(CartContext)
-  if (!context) {
-    throw new Error("useCart must be used within a CartProvider")
+  try {
+    const context = useContext(CartContext)
+    if (!context) {
+      // Return a dummy context if the real one isn't available
+      // This allows components to work even if CartProvider isn't available
+      console.warn("useCart: Context not found. Using fallback values.");
+      return {
+        state: { items: [], isOpen: false },
+        dispatch: () => console.warn("Cart dispatcher called outside of CartProvider context")
+      };
+    }
+    return context
+  } catch (error) {
+    console.error("Error in useCart hook:", error);
+    // Return a dummy context in case of errors
+    return {
+      state: { items: [], isOpen: false },
+      dispatch: () => console.warn("Cart dispatcher called with error")
+    };
   }
-  return context
 }
 
 export type { CartState, CartAction }

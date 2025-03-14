@@ -1,55 +1,80 @@
 import { getDiscogsInventory } from "@/lib/discogs"
 import { serializeForClient } from "@/lib/utils"
-import { ClientRecordCard } from "@/components/client-record-card"
 import { ApiUnavailable } from "@/components/api-unavailable"
+import NewArrivalsClient from "./client-components/new-arrivals-client"
+import { getCachedData, setCachedData } from "@/lib/redis"
+import { log } from "@/lib/logger"
 
 export async function NewArrivals() {
+  // Cache key for new arrivals - with timestamp to refresh every hour
+  const cacheKey = `newArrivals:${Math.floor(Date.now() / 3600000)}`; 
+  let serializedRecords = [];
+  let usedCache = false;
+
   try {
-    // Request more records than needed to account for potentially unavailable items
-    // Adding cacheBuster to ensure we get fresh data - important for availability status
-    const { records } = await getDiscogsInventory(undefined, undefined, 1, 20, {
-      sort: "listed",
-      sort_order: "desc",
-      fetchFullReleaseData: true,
-      cacheBuster: Date.now().toString() // Force a fresh request to ensure accurate availability
-    })
-
-    if (!records || records.length === 0) {
-      return <p className="text-center text-lg">No new arrivals at the moment. Check back soon!</p>
+    // First try to get from cache
+    const cachedData = await getCachedData(cacheKey);
+    
+    if (cachedData) {
+      try {
+        const parsed = JSON.parse(cachedData);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          serializedRecords = parsed;
+          usedCache = true;
+          log("Using cached new arrivals data", {}, "info");
+        }
+      } catch (error) {
+        log("Error parsing cached new arrivals data", error, "warn");
+      }
     }
+    
+    // If cache miss or error, fetch fresh data
+    if (serializedRecords.length === 0) {
+      // Use cached data from the main inventory endpoint (no cacheBuster)
+      const { records } = await getDiscogsInventory(undefined, undefined, 1, 15, {
+        sort: "listed",
+        sort_order: "desc",
+        fetchFullReleaseData: true
+      });
 
-    // Stricter filtering for availability
-    const availableRecords = records.filter(record => 
-      record.quantity_available > 0 && 
-      record.status === "For Sale"
-    )
+      if (!records || records.length === 0) {
+        return <p className="text-center text-lg">No new arrivals at the moment. Check back soon!</p>
+      }
+
+      // Stricter filtering for availability
+      const availableRecords = records.filter(record => 
+        record.quantity_available > 0 && 
+        record.status === "For Sale"
+      );
+      
+      // Take more records than needed in case some don't load properly
+      const displayRecords = availableRecords.slice(0, 8);
+      
+      // Serialize records before passing to client component
+      serializedRecords = displayRecords.map((record) => serializeForClient(record));
+      
+      // Cache the result for an hour
+      if (serializedRecords.length > 0) {
+        setCachedData(cacheKey, JSON.stringify(serializedRecords), 3600); // 1 hour cache
+      }
+    }
     
-    // Take just the first 4 available records
-    const displayRecords = availableRecords.slice(0, 4)
-    
-    // Serialize records before passing to client component
-    const serializedRecords = displayRecords.map((record) => serializeForClient(record))
-    
-    // If we couldn't find any available records after filtering
+    // If we couldn't find any available records after everything
     if (serializedRecords.length === 0) {
       return <p className="text-center text-lg">No new arrivals at the moment. Check back soon!</p>
     }
 
-    return (
-      <section className="py-12">
-        <div className="container">
-          <h2 className="text-3xl font-bold mb-8">New Arrivals</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {serializedRecords.map((record) => (
-              <ClientRecordCard key={record.id} record={record} />
-            ))}
-          </div>
-        </div>
-      </section>
-    )
+    // Use the client component with ONLY 4 records max to display (performance)
+    return <NewArrivalsClient records={serializedRecords.slice(0, 4)} />
   } catch (error) {
-    console.error("Error in NewArrivals:", error)
+    log("Error in NewArrivals:", error, "error");
+    
+    // If we have cached data, use it even if it's stale
+    if (usedCache && serializedRecords.length > 0) {
+      log("Using stale new arrivals cache due to error", {}, "warn");
+      return <NewArrivalsClient records={serializedRecords.slice(0, 4)} />
+    }
+    
     return <ApiUnavailable />
   }
 }
-

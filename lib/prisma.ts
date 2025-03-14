@@ -6,17 +6,20 @@ const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
 }
 
-// Create client with direct database URL to avoid env file issues
+// Create client using environment variables
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
     log: ["error", "warn"],
     errorFormat: 'minimal',
-    datasources: {
-      db: {
-        url: "postgresql://mehiskont:@localhost:5432/postgres?schema=public"
+    // Only override datasource URL if explicitly needed - otherwise use .env settings
+    ...(process.env.DATABASE_URL ? {
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL
+        }
       }
-    }
+    } : {})
   })
 
 // Add a connection test function with timeout to prevent hanging

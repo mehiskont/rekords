@@ -7,42 +7,74 @@ import { prisma } from "@/lib/prisma"
 const CACHE_TTL = 86400 // 24 hours
 const BASE_URL = "https://api.discogs.com"
 
-// Create a batch processor for shipping price requests with larger batch size
+// Create a batch processor for shipping price requests with improved caching and rate limiting
 const shippingPriceProcessor = new BatchProcessor<string, number>(
   async (listingIds) => {
-    // Create an array to store all request promises
-    const requestPromises = listingIds.map(async (listingId) => {
-      try {
-        const response = await fetchWithRetry(
-          `${BASE_URL}/marketplace/listings/${listingId}/shipping/fee?currency=USD`,
-          {
-            headers: {
-              Authorization: `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
-              "User-Agent": "PlastikRecordStore/1.0",
+    // Process in smaller batches to avoid rate limiting
+    const batchSize = 5; // Smaller batch size to avoid rate limits
+    const batches = [];
+    
+    for (let i = 0; i < listingIds.length; i += batchSize) {
+      batches.push(listingIds.slice(i, i + batchSize));
+    }
+    
+    let allResults: number[] = [];
+    
+    // Process batches sequentially with short delays between them
+    for (let i = 0; i < batches.length; i++) {
+      const batch = batches[i];
+      
+      // Process this batch with concurrent requests
+      const batchPromises = batch.map(async (listingId) => {
+        try {
+          const response = await fetchWithRetry(
+            `${BASE_URL}/marketplace/listings/${listingId}/shipping/fee?currency=USD`,
+            {
+              headers: {
+                Authorization: `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
+                "User-Agent": "PlastikRecordStore/1.0",
+              },
+              retryOptions: {
+                maxRetries: 3,
+                baseDelay: 1000,
+                maxDelay: 5000,
+                timeout: 8000, // Add timeout to prevent hanging requests
+              },
             },
-            retryOptions: {
-              maxRetries: 3,
-              baseDelay: 1000,
-              maxDelay: 5000,
-            },
-          },
-        )
+          );
 
-        if (response.status === 404 || !response.ok) {
-          return 5.0; // Default price for not found or errors
+          if (response.status === 404 || !response.ok) {
+            return 5.0; // Default price for not found or errors
+          }
+
+          const data = await response.json();
+          return data.fee?.value || 5.0;
+        } catch (error) {
+          log(`Error fetching shipping price for listing ${listingId}`, error, "warn");
+          return 5.0; // Default shipping price on error
         }
+      });
 
-        const data = await response.json()
-        return data.fee?.value || 5.0
-      } catch (error) {
-        return 5.0 // Default shipping price on error
+      // Execute current batch concurrently
+      const batchResults = await Promise.all(batchPromises);
+      allResults = [...allResults, ...batchResults];
+      
+      // Add a small delay between batches to avoid rate limiting
+      if (i < batches.length - 1) {
+        await new Promise(resolve => setTimeout(resolve, 300));
       }
-    });
-
-    // Execute all requests in parallel and return results
-    return Promise.all(requestPromises);
+    }
+    
+    return allResults;
   },
-  { maxBatchSize: 20, maxWaitTime: 1000 },
+  { 
+    maxBatchSize: 15, 
+    maxWaitTime: 800,
+    // Add cache function to avoid redundant API calls
+    cacheKeyFn: (listingId) => `shipping:${listingId}`,
+    cacheTTL: 3600000, // Cache shipping prices for 1 hour (in ms)
+    maxConcurrentBatches: 1, // Process one batch at a time
+  },
 )
 
 async function fetchShippingPrice(listingId: string): Promise<number> {
@@ -60,23 +92,66 @@ async function fetchFullReleaseData(releaseId: string): Promise<any> {
   const cacheKey = `release:${releaseId}`
 
   try {
+    // Try to get cached data first
     const cachedData = await getCachedData(cacheKey)
     if (cachedData) {
-      return JSON.parse(cachedData)
+      try {
+        const parsed = JSON.parse(cachedData)
+        if (parsed && typeof parsed === 'object') {
+          return parsed
+        }
+      } catch (parseError) {
+        log(`Error parsing cached release data for ${releaseId}`, parseError, "warn")
+        // Continue to fetch fresh data on parse error
+      }
     }
 
+    // If cache miss or error, fetch from Discogs API with improved error handling
     const response = await fetchWithRetry(`${BASE_URL}/releases/${releaseId}`, {
       headers: {
         Authorization: `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
         "User-Agent": "PlastikRecordStore/1.0",
       },
+      retryOptions: {
+        maxRetries: 3,
+        baseDelay: 1000,
+        maxDelay: 8000,
+      },
     })
 
+    if (!response.ok) {
+      if (response.status === 429) {
+        // Rate limited - log and return minimal data
+        log(`Rate limited when fetching release ${releaseId}`, {
+          status: response.status,
+          headers: Object.fromEntries(response.headers.entries())
+        }, "warn")
+        
+        // Return minimal data structure
+        return { id: releaseId, _minimal: true }
+      }
+      
+      throw new Error(`Discogs API error: ${response.status} ${response.statusText}`)
+    }
+
     const data = await response.json()
-    await setCachedData(cacheKey, JSON.stringify(data), 30 * 24 * 60 * 60) // Cache for 30 days
+    
+    // Only cache valid response data
+    if (data && typeof data === 'object' && !data.error) {
+      // Cache for 30 days - using memory cache + Redis from our improved implementation
+      setCachedData(cacheKey, JSON.stringify(data), 30 * 24 * 60 * 60)
+    }
+    
     return data
   } catch (error) {
-    return null
+    log(`Error fetching release data for ${releaseId}`, error, "error")
+    
+    // Return minimal data on error so the application can continue
+    return { 
+      id: releaseId,
+      _error: true,
+      _errorMessage: error instanceof Error ? error.message : String(error)
+    }
   }
 }
 
@@ -194,8 +269,8 @@ async function mapListingToRecord(listing: any): Promise<DiscogsRecord> {
 
 function logApiError(endpoint: string, error: any) {
   console.error(`Discogs API Error - ${endpoint}:`, {
-    message: error.message,
-    stack: error.stack,
+    message: error?.message || String(error),
+    stack: error?.stack || 'No stack trace',
     timestamp: new Date().toISOString(),
   })
 }
@@ -461,7 +536,28 @@ export async function getDiscogsInventory(
   perPage = 50,
   options: DiscogsInventoryOptions = {},
 ): Promise<{ records: DiscogsRecord[]; totalPages: number }> {
-  // No caching for inventory data - always fetch fresh data
+  // Generate cache key based on request parameters
+  const cacheKey = `inventory:${search || "all"}:${sort || "default"}:${page}:${perPage}:${options.category || "all"}:${options.sort || ""}:${options.sort_order || ""}`;
+  
+  // Skip cache if explicitly requested
+  const useCache = !options.cacheBuster;
+  
+  if (useCache) {
+    try {
+      // Try to get cached data first
+      const cachedData = await getCachedData(cacheKey);
+      if (cachedData) {
+        const parsed = JSON.parse(cachedData);
+        if (parsed?.records?.length > 0) {
+          log(`Using cached inventory data for key ${cacheKey}`, {}, "info");
+          return parsed;
+        }
+      }
+    } catch (cacheError) {
+      // Log but continue on cache error
+      log(`Cache read error for ${cacheKey}`, cacheError, "warn");
+    }
+  }
 
   try {
     const params = new URLSearchParams({
@@ -494,14 +590,27 @@ export async function getDiscogsInventory(
     }
 
     const url = `${BASE_URL}/users/${process.env.DISCOGS_USERNAME}/inventory?${params.toString()}`
-    // Fetch from Discogs API
-
+    
+    // Add improved error handling and retries
     const response = await fetchWithRetry(url, {
       headers: {
         Authorization: `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
         "User-Agent": "PlastikRecordStore/1.0",
       },
+      retryOptions: {
+        maxRetries: 5,        // Increase retries
+        baseDelay: 1000,      // Start with 1s delay
+        maxDelay: 10000,      // Max 10s delay between retries
+      }
     })
+
+    // Check for circuit breaker synthetic response
+    const isCircuitBreaker = response.headers.get("X-Circuit-Breaker") === "true";
+    
+    if (isCircuitBreaker) {
+      log("Circuit breaker active for Discogs API - returning empty result", {}, "warn");
+      throw new Error("Circuit breaker active");
+    }
 
     if (!response.ok) {
       logApiError("getDiscogsInventory", new Error(`Discogs API error: ${response.status} ${response.statusText}`))
@@ -509,8 +618,7 @@ export async function getDiscogsInventory(
     }
 
     const data: DiscogsApiResponse = await response.json()
-    // Process API response
-
+    
     if (!data || !data.listings) {
       throw new Error("Invalid data structure received from Discogs API")
     }
@@ -521,56 +629,124 @@ export async function getDiscogsInventory(
       listing.status === "For Sale"
     )
 
+    // Optimize for performance by limiting release data fetches
+    // Only fetch for first page or explicitly requested
+    const shouldFetchFullData = options.fetchFullReleaseData || 
+                               (page === 1 && availableListings.length <= 50);
+                               
     // Optimize by batching full release data fetches before mapping listings
     const releaseIds = new Set<string>()
     const releaseDataMap = new Map<string, any>()
     
-    if (options.fetchFullReleaseData || (options.sort === "listed" && options.sort_order === "desc")) {
+    if (shouldFetchFullData) {
+      // Build list of release IDs
       availableListings.forEach(listing => {
         if (listing.release?.id) {
           releaseIds.add(listing.release.id.toString())
         }
       })
       
-      // Fetch all release data in parallel
-      const releaseDataPromises = Array.from(releaseIds).map(async (releaseId) => {
-        try {
-          const data = await fetchFullReleaseData(releaseId)
-          return [releaseId, data]
-        } catch (error) {
-          return [releaseId, null]
-        }
-      })
+      // Limit number of parallel requests to avoid rate limiting
+      const batchSize = 5;
+      const releaseIdBatches = [];
+      const releaseIdArray = Array.from(releaseIds);
       
-      const releaseDataResults = await Promise.all(releaseDataPromises)
-      releaseDataResults.forEach(([releaseId, data]) => {
-        if (data) releaseDataMap.set(releaseId as string, data)
-      })
+      // Split into batches
+      for (let i = 0; i < releaseIdArray.length; i += batchSize) {
+        releaseIdBatches.push(releaseIdArray.slice(i, i + batchSize));
+      }
+      
+      // Process batches sequentially to avoid overwhelming the API
+      for (const batch of releaseIdBatches) {
+        const batchPromises = batch.map(async (releaseId) => {
+          try {
+            // Check cache first (this uses memory cache from our redis.ts improvements)
+            const data = await fetchFullReleaseData(releaseId);
+            return [releaseId, data];
+          } catch (error) {
+            return [releaseId, null];
+          }
+        });
+        
+        // Process current batch in parallel
+        const batchResults = await Promise.all(batchPromises);
+        batchResults.forEach(([releaseId, data]) => {
+          if (data) releaseDataMap.set(releaseId as string, data);
+        });
+        
+        // Small delay between batches to avoid rate limiting
+        if (releaseIdBatches.length > 1) {
+          await new Promise(resolve => setTimeout(resolve, 300));
+        }
+      }
     }
     
     // Now map all listings using the pre-fetched release data
-    const records = await Promise.all(
-      availableListings.map(async (listing) => {
-        const releaseId = listing.release?.id?.toString()
-        const fullRelease = releaseId ? releaseDataMap.get(releaseId) : null
-        
-        const record = await mapListingToRecord(listing)
-        
-        if (fullRelease) {
-          return {
-            ...record,
-            catalogNumber: fullRelease?.labels?.[0]?.catno?.toString().trim() || record.catalogNumber,
-            label: fullRelease?.labels?.[0]?.name || record.label,
+    // Process in smaller batches to avoid memory issues and improve performance
+    const batchSize = 10;
+    const listingBatches = [];
+    
+    for (let i = 0; i < availableListings.length; i += batchSize) {
+      listingBatches.push(availableListings.slice(i, i + batchSize));
+    }
+    
+    let allRecords: DiscogsRecord[] = [];
+    
+    // Process listing batches sequentially
+    for (const batch of listingBatches) {
+      const batchRecords = await Promise.all(
+        batch.map(async (listing) => {
+          try {
+            const releaseId = listing.release?.id?.toString();
+            const fullRelease = releaseId ? releaseDataMap.get(releaseId) : null;
+            
+            const record = await mapListingToRecord(listing);
+            
+            if (fullRelease) {
+              return {
+                ...record,
+                catalogNumber: fullRelease?.labels?.[0]?.catno?.toString().trim() || record.catalogNumber,
+                label: fullRelease?.labels?.[0]?.name || record.label,
+              };
+            }
+            
+            return record;
+          } catch (error) {
+            log(`Error mapping listing ${listing.id}`, error, "error");
+            // Return a minimal valid record on error
+            return {
+              id: Number(listing.id) || 0,
+              title: listing.release?.title || "Error Loading Record",
+              artist: listing.release?.artist || "Unknown Artist",
+              price: 0,
+              shipping_price: 5,
+              cover_image: "/placeholder.svg",
+              condition: "Unknown",
+              status: "",
+              label: "Unknown Label",
+              catalogNumber: "",
+              release: "",
+              styles: [],
+              format: ["Unknown"],
+              country: "",
+              released: "",
+              date_added: "",
+              genres: [],
+              quantity_available: 0,
+              weight: 180,
+              weight_unit: "g",
+              format_quantity: 1,
+            };
           }
-        }
-        
-        return record
-      })
-    )
+        })
+      );
+      
+      allRecords = [...allRecords, ...batchRecords];
+    }
 
-    let filteredRecords = records
+    let filteredRecords = allRecords;
     if (options.category && options.category !== "everything") {
-      filteredRecords = filterRecordsByCategory(records, search || "", options.category)
+      filteredRecords = filterRecordsByCategory(allRecords, search || "", options.category);
     }
 
     const result = {
@@ -578,13 +754,22 @@ export async function getDiscogsInventory(
       totalPages: Math.ceil(data.pagination.items / perPage),
     }
 
-    // No caching for inventory data
+    // Cache the result for a short time (5 minutes)
+    // This will use both memory cache and Redis from our improved redis.ts
+    if (filteredRecords.length > 0) {
+      setCachedData(cacheKey, JSON.stringify(result), 300); // 5 minute cache
+    }
 
-    return result
+    return result;
   } catch (error) {
-    logApiError("getDiscogsInventory", error)
-    console.error("Error fetching inventory:", error)
-    return { records: [], totalPages: 0 }
+    // Safely log API errors
+    logApiError("getDiscogsInventory", error);
+    
+    // Use logger instead of console.error
+    log("Error fetching inventory: " + (error instanceof Error ? error.message : String(error)), {}, "error");
+    
+    // Return empty result
+    return { records: [], totalPages: 0 };
   }
 }
 
@@ -632,6 +817,10 @@ export async function getDiscogsRecord(
 
     return result
   } catch (error) {
+    // Log the error
+    log("Error fetching record details: " + (error instanceof Error ? error.message : String(error)), {}, "error")
+    
+    // Return empty result
     return { record: null, relatedRecords: [] }
   }
 }

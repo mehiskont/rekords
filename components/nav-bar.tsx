@@ -22,19 +22,10 @@ export function NavBar() {
   const { state, dispatch } = useCart()
   const [mounted, setMounted] = useState(false)
 
-  // Fix hydration issues with session and debug session state
+  // Fix hydration issues with session and ensure components render properly
   useEffect(() => {
     setMounted(true)
-    console.log("Session debug info:", {
-      hasSession: !!session,
-      status,
-      userData: session?.user ? {
-        id: session.user.id,
-        name: session.user.name,
-        email: session.user.email
-      } : null
-    })
-  }, [session, status])
+  }, [])
 
   const cartItemCount = state.items.reduce((sum, item) => sum + item.quantity, 0)
 
@@ -85,7 +76,11 @@ export function NavBar() {
                 </span>
               )}
             </Button>
-            {!mounted || status === "loading" ? null : session ? (
+            {!mounted ? null : status === "loading" ? (
+              <Button variant="ghost" size="icon" disabled>
+                <User className="h-5 w-5 opacity-50" />
+              </Button>
+            ) : session ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="relative">
@@ -125,7 +120,7 @@ export function NavBar() {
               </DropdownMenu>
             ) : (
               <Link href="/auth/signin">
-                <Button>Sign In</Button>
+                <Button variant="primary">Sign In</Button>
               </Link>
             )}
           </div>
@@ -169,7 +164,11 @@ export function NavBar() {
                   </span>
                 )}
               </Button>
-              {!mounted || status === "loading" ? null : session ? (
+              {!mounted ? null : status === "loading" ? (
+                <Button variant="ghost" size="icon" disabled>
+                  <User className="h-4 w-4 opacity-50" />
+                </Button>
+              ) : session ? (
                 <div className="flex flex-col gap-2">
                   <div className="flex items-center gap-2 text-sm">
                     <User className="h-4 w-4" />
@@ -193,7 +192,7 @@ export function NavBar() {
                 </div>
               ) : (
                 <Link href="/auth/signin">
-                  <Button>Sign In</Button>
+                  <Button variant="primary">Sign In</Button>
                 </Link>
               )}
             </div>

@@ -18,35 +18,64 @@ interface RecordCardProps {
 }
 
 export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps) {
-  // Safeguard against undefined record.price
-  if (!record || typeof record.price !== "number") {
+  // Safeguard against undefined record
+  if (!record) {
     return null
+  }
+  
+  // Safeguard against undefined record.price
+  if (typeof record.price !== "number") {
+    console.warn("Record has invalid price:", record)
+    record.price = 0
   }
 
   const price = calculatePriceWithoutFees(record.price)
 
+  // Ensure we have a valid cart state
+  const safeCartState = cartState || { items: [], isOpen: false }
+  
   // Safeguard against undefined cartState
-  const cartItem = cartState?.items?.find((item) => item.id === record.id)
+  const cartItem = safeCartState.items?.find((item) => item.id === record.id)
   const currentQuantityInCart = cartItem?.quantity || 0
-  const isMaxQuantity = currentQuantityInCart >= record.quantity_available
+  const isMaxQuantity = currentQuantityInCart >= (record.quantity_available || 0)
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault() // Prevent navigation when clicking the button
 
+    // Ensure quantity_available is a valid number
+    const qtyAvailable = record.quantity_available || 0
+
     if (isMaxQuantity) {
       toast({
         title: "Maximum quantity reached",
-        description: `Only ${record.quantity_available} unit${record.quantity_available > 1 ? "s" : ""} available`,
+        description: `Only ${qtyAvailable} unit${qtyAvailable > 1 ? "s" : ""} available`,
         variant: "destructive",
       })
       return
     }
 
-    if (cartDispatch) {
-      cartDispatch({ type: "ADD_ITEM", payload: record })
+    try {
+      // Only dispatch if the function is available
+      if (typeof cartDispatch === 'function') {
+        cartDispatch({ type: "ADD_ITEM", payload: record })
+        toast({
+          title: "Added to cart",
+          description: "Item has been added to your cart",
+        })
+      } else {
+        console.warn("Cart dispatch function not available")
+        toast({
+          title: "Could not add to cart",
+          description: "Cart functionality is unavailable",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      console.error("Error adding item to cart:", error)
       toast({
-        title: "Added to cart",
-        description: "Item has been added to your cart",
+        title: "Error",
+        description: "Could not add item to cart",
+        variant: "destructive",
       })
     }
   }
@@ -78,19 +107,19 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
             />
           </div>
           <div className="flex justify-between items-center">
-            <div className="text-lg font-semibold">${record.price.toFixed(2)}</div>
+            <div className="text-lg font-semibold">${(record.price || 0).toFixed(2)}</div>
           </div>
           <div className="mt-2 text-sm">
-            <span className="font-semibold">Format:</span> {formatDisplay}
+            <span className="font-semibold">Format:</span> {formatDisplay || "Unknown"}
           </div>
-          {record.styles && record.styles.length > 0 && (
+          {record.styles && Array.isArray(record.styles) && record.styles.length > 0 && (
             <div className="mt-1 text-sm">
               <span className="font-semibold">Styles:</span> {record.styles.join(", ")}
             </div>
           )}
-          {record.quantity_available > 0 && (
+          {(record.quantity_available || 0) > 0 && (
             <div className="mt-1 text-sm text-muted-foreground">
-              {record.quantity_available} unit{record.quantity_available > 1 ? "s" : ""} available
+              {record.quantity_available} unit{(record.quantity_available || 0) > 1 ? "s" : ""} available
             </div>
           )}
         </CardContent>
@@ -99,13 +128,13 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
         <Button
           className="w-full"
           onClick={handleAddToCart}
-          disabled={isMaxQuantity || record.quantity_available === 0}
+          disabled={isMaxQuantity || (record.quantity_available || 0) === 0}
         >
           <ShoppingCart className="mr-2 h-4 w-4" />
-          {record.quantity_available === 0
+          {(record.quantity_available || 0) === 0
             ? "Out of Stock"
             : isMaxQuantity
-              ? `Max Quantity (${record.quantity_available}) Reached`
+              ? `Max Quantity (${record.quantity_available || 0}) Reached`
               : "Add to Cart"}
         </Button>
       </CardFooter>

@@ -11,13 +11,33 @@ const REDIS_URL = process.env.REDIS_URL || "redis://localhost:6379"
 const redisClient = REDIS_ENABLED 
   ? createClient({
       url: REDIS_URL,
+      socket: {
+        reconnectStrategy: (retries) => {
+          // Exponential backoff with max delay of 10 seconds
+          return Math.min(retries * 500, 10000);
+        },
+        connectTimeout: 10000, // 10 seconds connection timeout
+      }
     })
   : null
+
+// Track Redis connection state
+let redisConnected = false;
 
 // Set up error handling if Redis is enabled
 if (redisClient) {
   redisClient.on("error", (err) => {
+    redisConnected = false;
     log("Redis Client Error", err, "error")
+  })
+  
+  redisClient.on("connect", () => {
+    redisConnected = true;
+    log("Redis connected", {}, "info")
+  })
+  
+  redisClient.on("reconnecting", () => {
+    log("Redis reconnecting...", {}, "info")
   })
 }
 
@@ -30,14 +50,21 @@ export function ensureConnection() {
     return Promise.resolve();
   }
   
+  // Return immediately if already connected
+  if (redisConnected && redisClient.isReady) {
+    return Promise.resolve();
+  }
+  
   // Only connect if we haven't tried yet and aren't already connected
   if (!connectionPromise && !redisClient.isReady) {
     log(`Connecting to Redis at ${REDIS_URL}`, {}, "info");
     connectionPromise = redisClient.connect()
       .then(() => {
+        redisConnected = true;
         log("Successfully connected to Redis", {}, "info");
       })
       .catch((err) => {
+        redisConnected = false;
         log("Failed to connect to Redis", err, "error");
         // Continue without Redis
         log("Continuing without Redis caching...", {}, "warn");
@@ -49,15 +76,43 @@ export function ensureConnection() {
 // Connect on module initialization
 ensureConnection();
 
+// In-memory cache for frequently accessed data
+const memoryCache: Map<string, { value: string, expiry: number }> = new Map();
+
 export async function getCachedData(key: string) {
   try {
+    // Check memory cache first
+    const memoryCached = memoryCache.get(key);
+    if (memoryCached && memoryCached.expiry > Date.now()) {
+      return memoryCached.value;
+    } else if (memoryCached) {
+      // Clean up expired items
+      memoryCache.delete(key);
+    }
+    
     // If Redis is disabled, return null immediately
     if (!redisClient) return null;
     
-    await ensureConnection();
+    // Don't await connection if not ready - use memory cache as fallback
+    if (!redisConnected) {
+      ensureConnection().catch(() => {}); // Start connection in background
+      return null;
+    }
+    
+    // Quick check if client is ready
     if (!redisClient.isReady) return null;
     
-    return await redisClient.get(key);
+    const value = await redisClient.get(key);
+    
+    // Store in memory cache for future access (60 second TTL)
+    if (value) {
+      memoryCache.set(key, { 
+        value, 
+        expiry: Date.now() + 60000 // 60 second TTL for memory cache
+      });
+    }
+    
+    return value;
   } catch (error) {
     log("Error getting cached data", error, "warn");
     return null;
@@ -66,13 +121,28 @@ export async function getCachedData(key: string) {
 
 export async function setCachedData(key: string, value: string, ttl: number) {
   try {
+    // Always set in memory cache regardless of Redis status
+    memoryCache.set(key, {
+      value,
+      expiry: Date.now() + Math.min(ttl * 1000, 60000) // Use min of ttl or 60 seconds for memory
+    });
+    
     // If Redis is disabled, return immediately
     if (!redisClient) return;
     
-    await ensureConnection();
+    // Don't wait for connection if not ready
+    if (!redisConnected) {
+      ensureConnection().catch(() => {}); // Start connection in background
+      return;
+    }
+    
+    // Quick check if client is ready
     if (!redisClient.isReady) return;
     
-    await redisClient.set(key, value, { EX: ttl });
+    // Don't await this promise - fire and forget
+    redisClient.set(key, value, { EX: ttl }).catch(error => {
+      log("Error setting cached data", error, "warn");
+    });
   } catch (error) {
     log("Error setting cached data", error, "warn");
     // Silently fail on cache errors

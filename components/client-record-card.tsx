@@ -9,13 +9,26 @@ interface ClientRecordCardProps {
 }
 
 export function ClientRecordCard({ record }: ClientRecordCardProps) {
-  const { state, dispatch } = useCart()
-
-  // Ensure that state is not undefined before passing it to RecordCard
-  if (!state) {
-    return null // or return a loading state
+  try {
+    const { state, dispatch } = useCart()
+    
+    return (
+      <RecordCard 
+        record={record} 
+        cartState={state} 
+        cartDispatch={dispatch} 
+      />
+    )
+  } catch (error) {
+    console.error("Error in ClientRecordCard:", error)
+    
+    // Provide fallback props when cart context is unavailable
+    return (
+      <RecordCard 
+        record={record}
+        cartState={{ items: [], isOpen: false }}
+        cartDispatch={() => {}} // No-op function
+      />
+    )
   }
-
-  return <RecordCard record={record} cartState={state} cartDispatch={dispatch} />
 }
-
