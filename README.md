@@ -75,8 +75,36 @@ npm run build
 npm start
 ```
 
-# github webhook start
-pm2 start webhook-server.js
+## GitHub Webhook for Automated Deployment
 
-### scripts
-node scripts/add-cart-tables.js        
+This application supports automated deployments using GitHub webhooks. When set up correctly, pushing to the main branch will trigger an automatic deployment on your production server.
+
+### Setup Instructions
+
+1. Add environment variables to your `.env` file:
+   ```
+   GITHUB_WEBHOOK_SECRET="your-secret-here"
+   DEPLOY_SCRIPT="/path/to/deploy.sh"
+   ```
+
+2. Create a webhook in your GitHub repository:
+   - Go to your repository → Settings → Webhooks → Add webhook
+   - Set Payload URL to: `https://yourdomain.com/api/webhooks/github`
+   - Content type: `application/json`
+   - Secret: Same value as your `GITHUB_WEBHOOK_SECRET`
+   - Select "Just the push event"
+   - Enable SSL verification
+   - Click "Add webhook"
+
+3. Ensure your deploy script is executable:
+   ```bash
+   chmod +x /path/to/deploy.sh
+   ```
+
+4. Automated deployments will now run when you push to the main branch
+
+### Manual Scripts
+```bash
+# Add cart tables if migrations failed
+node scripts/add-cart-tables.js
+```
