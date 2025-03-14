@@ -53,7 +53,7 @@ export function NavBar() {
             >
               Plastik Records
             </Link>
-            <div className="hidden md:flex items-center gap-6">
+            <div className="hidden">
               <Link
                 href="/"
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"

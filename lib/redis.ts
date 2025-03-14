@@ -1,11 +1,16 @@
 import { createClient } from "redis"
+import { log } from "./logger"
 
+// Get Redis URL from environment variable, fall back to localhost in development
+const REDIS_URL = process.env.REDIS_URL || "redis://localhost:6379"
+
+// Create Redis client with connection from environment
 const redisClient = createClient({
-  url: "redis://localhost:6379",
+  url: REDIS_URL,
 })
 
 redisClient.on("error", (err) => {
-  console.error("Redis Client Error:", err)
+  log("Redis Client Error", err, "error")
 })
 
 // Initialize connection only once and reuse
@@ -13,11 +18,15 @@ let connectionPromise: Promise<void> | null = null;
 
 export function ensureConnection() {
   if (!connectionPromise && !redisClient.isReady) {
+    log(`Connecting to Redis at ${REDIS_URL}`, {}, "info");
     connectionPromise = redisClient.connect()
+      .then(() => {
+        log("Successfully connected to Redis", {}, "info");
+      })
       .catch((err) => {
-        console.error("Failed to connect to Redis:", err)
+        log("Failed to connect to Redis", err, "error");
         // Continue without Redis in development
-        console.warn("Continuing without Redis caching...")
+        log("Continuing without Redis caching...", {}, "warn");
       });
   }
   return connectionPromise || Promise.resolve();

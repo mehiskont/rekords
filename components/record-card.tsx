@@ -78,8 +78,7 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
             />
           </div>
           <div className="flex justify-between items-center">
-            <div className="text-lg font-semibold">${price.toFixed(2)}</div>
-            <div className="text-sm text-muted-foreground line-through">${record.price.toFixed(2)}</div>
+            <div className="text-lg font-semibold">${record.price.toFixed(2)}</div>
           </div>
           <div className="mt-2 text-sm">
             <span className="font-semibold">Format:</span> {formatDisplay}

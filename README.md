@@ -44,9 +44,26 @@ Next.js loads environment variables in the following order:
 # Install dependencies
 npm install
 
+# Start local database and Redis
+docker-compose up -d
+
 # Run development server
 npm run dev
 ```
+
+## Redis Cache
+
+This application uses Redis for caching:
+
+- Discogs inventory data (24hr TTL)
+- Shipping prices (7 days TTL)
+- Release information (30 days TTL)
+
+Configure Redis with the `REDIS_URL` environment variable:
+- Local development: `redis://localhost:6379`
+- Production: Use your hosted Redis instance URL
+
+The application will fail gracefully if Redis is unavailable.
 
 ## Deployment
 
