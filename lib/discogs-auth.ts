@@ -7,6 +7,10 @@ const DISCOGS_AUTHORIZE_URL = "https://www.discogs.com/oauth/authorize"
 const DISCOGS_ACCESS_TOKEN_URL = "https://api.discogs.com/oauth/access_token"
 const DISCOGS_IDENTITY_URL = "https://api.discogs.com/oauth/identity"
 
+// Get the correct app URL for User-Agent and other uses
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL || "https://plastik.komeh.tech"
+const USER_AGENT = `PlastikRecordStore/1.0 +${APP_URL}`
+
 // Debug logging helper
 const debug = (...args: any[]) => {
   if (process.env.NODE_ENV === "development") {
@@ -66,7 +70,7 @@ export async function getRequestToken(callbackUrl: string): Promise<RequestToken
     const response = await fetch(requestData.url, {
       headers: {
         ...headers,
-        "User-Agent": "PlastikRecordStore/1.0 +http://localhost:3000",
+        "User-Agent": USER_AGENT,
       },
     })
 
@@ -129,7 +133,7 @@ export async function getAccessToken(
       method: "POST",
       headers: {
         ...headers,
-        "User-Agent": "PlastikRecordStore/1.0 +http://localhost:3000",
+        "User-Agent": USER_AGENT,
       },
     })
 
@@ -181,7 +185,7 @@ export async function verifyIdentity(access_token: string, access_token_secret: 
     const response = await fetch(requestData.url, {
       headers: {
         ...headers,
-        "User-Agent": "PlastikRecordStore/1.0 +http://localhost:3000",
+        "User-Agent": USER_AGENT,
       },
     })
 
@@ -227,7 +231,7 @@ export async function makeAuthenticatedRequest(
       method,
       headers: {
         ...headers,
-        "User-Agent": "PlastikRecordStore/1.0 +http://localhost:3000",
+        "User-Agent": USER_AGENT,
         "Content-Type": "application/json",
       },
       body: data ? JSON.stringify(data) : undefined,
@@ -248,4 +252,3 @@ export async function makeAuthenticatedRequest(
 
 // Export the OAuth instance for use in other parts of the application
 export { oauth }
-

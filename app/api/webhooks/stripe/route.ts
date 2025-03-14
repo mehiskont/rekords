@@ -220,11 +220,7 @@ export async function POST(req: Request) {
             // Fetch fresh inventory data to rebuild cache
             try {
               // Get base URL for refresh request
-              let baseUrl = process.env.NEXT_PUBLIC_APP_URL;
-              if (!baseUrl || baseUrl === 'undefined') {
-                baseUrl = 'http://localhost:3000';
-                log('Using localhost fallback for inventory refresh URL');
-              }
+              let baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://plastik.komeh.tech';
               
               // This fetch happens in the background and doesn't block the response
               log(`Refreshing inventory using URL: ${baseUrl}/api/refresh-inventory`);

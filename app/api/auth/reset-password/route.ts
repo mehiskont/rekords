@@ -48,8 +48,8 @@ export async function POST(request: Request) {
       // Generate reset token
       const resetToken = await createPasswordResetToken(email);
       
-      // Create reset URL
-      const baseUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+      // Create reset URL using APP_URL for proper redirect
+      const baseUrl = process.env.NEXT_PUBLIC_APP_URL || process.env.NEXTAUTH_URL || 'https://plastik.komeh.tech';
       const resetUrl = `${baseUrl}/auth/reset-password/${resetToken}`;
       
       // Send email with reset link

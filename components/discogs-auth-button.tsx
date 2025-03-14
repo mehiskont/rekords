@@ -11,7 +11,9 @@ export function DiscogsAuthButton() {
     setIsLoading(true)
 
     try {
-      const callbackUrl = `${window.location.origin}/api/auth/discogs/callback`
+      // Use the production URL in production mode, or current origin in development
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || window.location.origin
+      const callbackUrl = `${appUrl}/api/auth/discogs/callback`
       const response = await fetch(`/api/auth/discogs?callbackUrl=${encodeURIComponent(callbackUrl)}`)
 
       if (!response.ok) {

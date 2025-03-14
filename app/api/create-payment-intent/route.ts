@@ -52,15 +52,11 @@ export async function POST(req: Request) {
     const origin = req.headers.get('origin');
     
     // Implement multiple fallbacks to ensure we always have a valid URL
-    let baseUrl = process.env.NEXT_PUBLIC_APP_URL;
-    if (!baseUrl || baseUrl === 'undefined') {
-      if (origin) {
-        baseUrl = origin;
-        log(`Using origin header for base URL: ${origin}`);
-      } else {
-        baseUrl = 'http://localhost:3000';
-        log('No origin or environment URL found, using localhost fallback');
-      }
+    let baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://plastik.komeh.tech';
+    // Fallback to origin header if available
+    if (origin && (!baseUrl || baseUrl === 'undefined')) {
+      baseUrl = origin;
+      log(`Using origin header for base URL: ${origin}`);
     }
     
     log(`Creating Stripe session with base URL: ${baseUrl}`);

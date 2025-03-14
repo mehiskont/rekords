@@ -23,7 +23,8 @@ export async function GET(request: Request) {
         oauth_verifier,
         hasTokenSecret: !!oauth_token_secret,
       })
-      return NextResponse.redirect(new URL("/dashboard/settings?error=Invalid OAuth callback parameters", request.url))
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://plastik.komeh.tech"
+      return NextResponse.redirect(`${appUrl}/dashboard/settings?error=Invalid OAuth callback parameters`)
     }
 
     // Get access token
@@ -52,19 +53,17 @@ export async function GET(request: Request) {
     })
 
     // Clear the temporary oauth_token_secret cookie
-    const response = NextResponse.redirect(new URL("/dashboard/settings?success=true", request.url))
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://plastik.komeh.tech"
+    const response = NextResponse.redirect(`${appUrl}/dashboard/settings?success=true`)
     response.cookies.delete("oauth_token_secret")
 
     return response
   } catch (error) {
     console.error("Discogs callback error:", error)
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://plastik.komeh.tech"
+    const errorMessage = error instanceof Error ? error.message : "Failed to authenticate with Discogs"
     return NextResponse.redirect(
-      new URL(
-        `/dashboard/settings?error=${encodeURIComponent(
-          error instanceof Error ? error.message : "Failed to authenticate with Discogs",
-        )}`,
-        request.url,
-      ),
+      `${appUrl}/dashboard/settings?error=${encodeURIComponent(errorMessage)}`
     )
   }
 }
