@@ -53,7 +53,8 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
 
   const countryOptions = useMemo(() => countryList().getData(), [])
 
-  const subtotal = state.items.reduce((sum, item) => sum + calculatePriceWithoutFees(item.price) * item.quantity, 0)
+  // Use the actual price instead of calculating without fees
+  const subtotal = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const vat = subtotal * 0.2 // 20% VAT
   const total = subtotal + vat + shippingCost
 
@@ -413,7 +414,7 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
                 </div>
               </div>
               <div className="text-right">
-                <p className="font-medium">${(calculatePriceWithoutFees(item.price) * item.quantity).toFixed(2)}</p>
+                <p className="font-medium">${(item.price * item.quantity).toFixed(2)}</p>
               </div>
             </div>
           ))}

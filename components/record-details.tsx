@@ -14,7 +14,8 @@ interface RecordDetailsProps {
 
 export function RecordDetails({ record }: RecordDetailsProps) {
   const { state, dispatch } = useCart()
-  const price = calculatePriceWithoutFees(record.price)
+  // Use the actual price instead of calculating without fees
+  const price = record.price
 
   const cartItem = state.items.find((item) => item.id === record.id)
   const currentQuantityInCart = cartItem?.quantity || 0
@@ -56,7 +57,7 @@ export function RecordDetails({ record }: RecordDetailsProps) {
         <h1 className="text-3xl font-bold mb-2">{record.title}</h1>
         <p className="text-xl mb-4">{record.artist}</p>
         <div className="space-y-2 mb-6">
-          <p className="text-2xl font-bold">${price.toFixed(2)}</p>
+          <p className="text-2xl font-bold">${(record.price || 0).toFixed(2)}</p>
           <p>Condition: {record.condition}</p>
           <p>Label: {labelDisplay}</p>
           <p>Format: {formatDisplay}</p>

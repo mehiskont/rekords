@@ -12,7 +12,8 @@ interface OrderSummaryProps {
 }
 
 export function OrderSummary({ shippingInfo, paymentInfo, cartItems, onPlaceOrder }: OrderSummaryProps) {
-  const total = cartItems.reduce((sum, item) => sum + calculatePriceWithoutFees(item.price) * item.quantity, 0)
+  // Use the actual price instead of calculating without fees
+  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
   return (
     <div className="space-y-6">
@@ -33,7 +34,7 @@ export function OrderSummary({ shippingInfo, paymentInfo, cartItems, onPlaceOrde
         {cartItems.map((item) => (
           <div key={item.id} className="flex justify-between">
             <span>{`${item.title} (x${item.quantity})`}</span>
-            <span>${(calculatePriceWithoutFees(item.price) * item.quantity).toFixed(2)}</span>
+            <span>${(item.price * item.quantity).toFixed(2)}</span>
           </div>
         ))}
       </div>

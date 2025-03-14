@@ -14,7 +14,8 @@ interface CartItemProps {
 
 export function CartItem({ item }: CartItemProps) {
   const { dispatch } = useCart()
-  const price = calculatePriceWithoutFees(item.price)
+  // Use the actual price instead of calculating without fees
+  const price = item.price
 
   const handleQuantityChange = (newQuantity: number) => {
     if (newQuantity > item.quantity_available) {

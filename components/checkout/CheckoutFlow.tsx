@@ -46,7 +46,8 @@ export function CheckoutFlow() {
   const { data: session, status } = useSession()
 
   // Calculate totals
-  const subtotal = cartState.items.reduce((sum, item) => sum + calculatePriceWithoutFees(item.price) * item.quantity, 0)
+  // Use the actual price instead of calculating without fees
+  const subtotal = cartState.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const vat = subtotal * 0.2 // 20% VAT
   
   const total = subtotal + vat + shippingCost

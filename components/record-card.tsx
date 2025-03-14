@@ -29,7 +29,8 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
     record.price = 0
   }
 
-  const price = calculatePriceWithoutFees(record.price)
+  // No need to adjust price - use actual price from API
+  // const price = calculatePriceWithoutFees(record.price)
 
   // Ensure we have a valid cart state
   const safeCartState = cartState || { items: [], isOpen: false }

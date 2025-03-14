@@ -43,7 +43,7 @@ export async function POST(req: Request) {
             discogsId: item.id,
           },
         },
-        unit_amount: Math.round(calculatePriceWithoutFees(item.price) * 100),
+        unit_amount: Math.round(item.price * 100), // Use actual price
       },
       quantity: item.quantity,
     }))

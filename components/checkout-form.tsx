@@ -45,7 +45,8 @@ export function CheckoutForm({ onCancel }: CheckoutFormProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [createAccount, setCreateAccount] = useState(false)
 
-  const total = state.items.reduce((sum, item) => sum + calculatePriceWithoutFees(item.price) * item.quantity, 0)
+  // Use the actual price instead of calculating without fees
+  const total = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
   const form = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),

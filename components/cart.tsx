@@ -12,7 +12,8 @@ export function Cart() {
   const { data: session } = useSession()
   const { state, dispatch } = useCart()
 
-  const subtotal = state.items.reduce((sum, item) => sum + calculatePriceWithoutFees(item.price) * item.quantity, 0)
+  // Use the actual price instead of calculating without fees
+  const subtotal = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
 
   const handleCheckout = () => {
     dispatch({ type: "TOGGLE_CART" })
