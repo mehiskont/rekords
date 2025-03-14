@@ -332,6 +332,90 @@ export const authOptions = {
         }
       }
       
+      // Attempt to merge guest cart if user has successfully authenticated
+      if (user?.id) {
+        try {
+          const { cookies } = await import("next/headers");
+          const cookieStore = cookies();
+          const guestCartId = cookieStore.get("plastik_guest_cart_id")?.value;
+          
+          if (guestCartId) {
+            log("Found guest cart ID, attempting to merge", { userId: user.id, guestCartId }, "info");
+            
+            // Look for guest cart
+            const guestCart = await prisma.cart.findUnique({
+              where: { guestId: guestCartId },
+              include: { items: true }
+            });
+            
+            if (guestCart && guestCart.items.length > 0) {
+              // Find or create user cart
+              let userCart = await prisma.cart.findUnique({
+                where: { userId: user.id },
+                include: { items: true }
+              });
+              
+              if (!userCart) {
+                userCart = await prisma.cart.create({
+                  data: { userId: user.id },
+                  include: { items: true }
+                });
+              }
+              
+              // Merge items from guest cart into user cart
+              for (const guestItem of guestCart.items) {
+                const existingItem = userCart.items.find(item => 
+                  item.discogsId === guestItem.discogsId
+                );
+                
+                if (existingItem) {
+                  // Update quantity if item already exists
+                  await prisma.cartItem.update({
+                    where: { id: existingItem.id },
+                    data: {
+                      quantity: Math.min(
+                        existingItem.quantity + guestItem.quantity,
+                        guestItem.quantity_available
+                      )
+                    }
+                  });
+                } else {
+                  // Add item to user's cart
+                  await prisma.cartItem.create({
+                    data: {
+                      cartId: userCart.id,
+                      discogsId: guestItem.discogsId,
+                      title: guestItem.title,
+                      price: guestItem.price,
+                      quantity: guestItem.quantity,
+                      quantity_available: guestItem.quantity_available,
+                      condition: guestItem.condition,
+                      weight: guestItem.weight,
+                      images: guestItem.images
+                    }
+                  });
+                }
+              }
+              
+              // Delete the guest cart after successful merge
+              await prisma.cart.delete({
+                where: { id: guestCart.id }
+              });
+              
+              log("Successfully merged guest cart with user cart", 
+                { userId: user.id, itemsMerged: guestCart.items.length }, 
+                "info");
+              
+              // Clear the guest cart cookie
+              cookieStore.delete("plastik_guest_cart_id");
+            }
+          }
+        } catch (error) {
+          log("Error merging guest cart on sign in", error, "error");
+          // Don't block sign-in if cart merging fails
+        }
+      }
+      
       return true;
     }
   },
