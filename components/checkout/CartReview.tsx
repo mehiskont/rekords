@@ -55,8 +55,7 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
 
   // Use the actual price instead of calculating without fees
   const subtotal = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const vat = subtotal * 0.2 // 20% VAT
-  const total = subtotal + vat + shippingCost
+  const total = subtotal + shippingCost
 
   // Calculate shipping cost when country changes
   // Force Estonian rate update when the component mounts
@@ -428,10 +427,6 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
           <div className="flex justify-between text-sm">
             <span>Subtotal</span>
             <span>${subtotal.toFixed(2)}</span>
-          </div>
-          <div className="flex justify-between text-sm">
-            <span>VAT (20%)</span>
-            <span>${vat.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-sm">
             <span>Shipping {billingCountry ? `(to ${billingCountry})` : ''}</span>

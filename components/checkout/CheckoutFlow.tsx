@@ -48,9 +48,7 @@ export function CheckoutFlow() {
   // Calculate totals
   // Use the actual price instead of calculating without fees
   const subtotal = cartState.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
-  const vat = subtotal * 0.2 // 20% VAT
-  
-  const total = subtotal + vat + shippingCost
+  const total = subtotal + shippingCost
 
   // Load saved step on mount
   useEffect(() => {
@@ -173,7 +171,7 @@ export function CheckoutFlow() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          amount: subtotal + vat + shippingCost, // Calculate total here to ensure correct amount
+          amount: subtotal + shippingCost, // Calculate total here to ensure correct amount
           customer: {
             ...data,
             email: session?.user?.email || data.email,
@@ -269,7 +267,6 @@ export function CheckoutFlow() {
             clientSecret={clientSecret}
             total={total}
             subtotal={subtotal}
-            vat={vat}
             shippingCost={shippingCost}
             onSuccess={handlePaymentSuccess}
           />

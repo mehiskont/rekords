@@ -13,7 +13,6 @@ interface PaymentFormProps {
   clientSecret: string
   total: number
   subtotal: number
-  vat: number
   shippingCost: number
   onSuccess: () => void
 }
@@ -89,7 +88,7 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
   )
 }
 
-export function PaymentForm({ clientSecret, total, subtotal, vat, shippingCost, onSuccess }: PaymentFormProps) {
+export function PaymentForm({ clientSecret, total, subtotal, shippingCost, onSuccess }: PaymentFormProps) {
   // Extract session ID from URL - it's appended to the URL after successful payment intent creation
   const searchParams = new URLSearchParams(window.location.search);
   const sessionId = searchParams.get('session_id') || '';
@@ -119,10 +118,6 @@ export function PaymentForm({ clientSecret, total, subtotal, vat, shippingCost, 
           <div className="flex justify-between">
             <span>Subtotal</span>
             <span>${subtotal.toFixed(2)}</span>
-          </div>
-          <div className="flex justify-between">
-            <span>VAT (20%)</span>
-            <span>${vat.toFixed(2)}</span>
           </div>
           <div className="flex justify-between">
             <span>Shipping</span>
