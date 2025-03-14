@@ -86,6 +86,68 @@ npm run build
 npm start
 ```
 
+## Automated Deployment with PM2
+
+To set up automated deployment with PM2 and GitHub webhooks:
+
+1. Install PM2 globally on your server:
+
+```bash
+npm install -g pm2
+```
+
+2. Create a PM2 ecosystem file (ecosystem.config.js) in your project root:
+
+```javascript
+module.exports = {
+  apps: [
+    {
+      name: 'plastik',
+      script: 'npm',
+      args: 'start',
+      cwd: '/domeenid/www.komeh.tech/plastik/rekords',
+      env: {
+        NODE_ENV: 'production',
+      },
+      watch: false,
+      instances: 1,
+      autorestart: true,
+    },
+  ],
+};
+```
+
+3. Create a deployment script (deploy.sh):
+
+```bash
+#!/bin/bash
+# Change to your project directory
+cd /domeenid/www.komeh.tech/plastik/rekords
+
+# Pull the latest changes from GitHub
+git pull origin main
+
+# Install dependencies
+npm install --production
+
+# Run database migrations
+npx prisma migrate deploy
+
+# Build the application
+npm run build
+
+# Restart the PM2 process
+pm2 restart plastik
+```
+
+4. Make the deployment script executable:
+
+```bash
+chmod +x deploy.sh
+```
+
+5. Set up a webhook on your GitHub repository to trigger the deployment script when changes are pushed.
+
 ## Post-Deployment Verification
 
 1. Check if authentication works
