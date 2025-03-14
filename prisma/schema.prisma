@@ -25,6 +25,7 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@map("accounts") // Maps the model to the "accounts" table in the database
 }
 
 model Session {
@@ -33,6 +34,8 @@ model Session {
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@map("sessions")
 }
 
 model User {
@@ -53,6 +56,8 @@ model User {
   accounts         Account[]
   orders           Order[]
   sessions         Session[]
+  
+  @@map("users")
 }
 
 model VerificationToken {
@@ -61,6 +66,7 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+  @@map("verification_tokens")
 }
 
 model Order {
@@ -75,6 +81,8 @@ model Order {
   updatedAt       DateTime    @updatedAt
   items           OrderItem[]
   user            User?       @relation(fields: [userId], references: [id])
+  
+  @@map("orders")
 }
 
 model OrderItem {
@@ -86,6 +94,8 @@ model OrderItem {
   quantity  Int
   condition String?
   order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  
+  @@map("order_items")
 }
 
 model DiscogsAuth {
@@ -96,6 +106,8 @@ model DiscogsAuth {
   lastVerified      DateTime
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
+  
+  @@map("discogs_auth")
 }
 
 model WebhookLog {
@@ -103,4 +115,6 @@ model WebhookLog {
   type      String
   payload   String
   timestamp DateTime @default(now())
+  
+  @@map("webhook_logs")
 }

@@ -10,6 +10,12 @@ Zone.ee's PostgreSQL installation doesn't support the `uuid-ossp` extension whic
 
 1. Using CUID instead of UUID for primary keys in our Prisma schema
 2. Removing the `CREATE EXTENSION` commands from the migration files
+3. Adding `@@map` annotations to all models in the Prisma schema to correctly map between PascalCase model names and snake_case table names
+
+The Prisma schema now properly maps between model names and table names:
+- `model Account` maps to the `accounts` table
+- `model User` maps to the `users` table 
+- etc.
 
 ### Deployment Steps
 
