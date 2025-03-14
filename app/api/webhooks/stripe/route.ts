@@ -16,21 +16,38 @@ const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET
 
 export async function POST(req: Request) {
   log("Webhook received")
+  
+  // Log headers for debugging
+  const headersList = headers();
+  const allHeaders: Record<string, string> = {};
+  headersList.forEach((value, key) => {
+    allHeaders[key] = value;
+  });
+  log("Webhook request headers:", allHeaders, "info");
+  
   const body = await req.text()
-  const signature = headers().get("stripe-signature") as string
+  log(`Webhook body length: ${body.length} bytes`, {}, "info")
+  
+  const signature = headersList.get("stripe-signature") as string
+  log(`Stripe signature: ${signature ? signature.substring(0, 20) + '...' : 'MISSING'}`, {}, "info")
 
   if (!webhookSecret) {
     log("Missing STRIPE_WEBHOOK_SECRET environment variable", "error")
     return NextResponse.json({ message: "Missing webhook secret" }, { status: 500 })
   }
+  
+  log(`Using webhook secret: ${webhookSecret.substring(0, 5)}...`, {}, "info")
 
   let event: Stripe.Event
 
   try {
     event = stripe.webhooks.constructEvent(body, signature, webhookSecret)
+    log(`Successfully constructed webhook event: ${event.id} (${event.type})`, {}, "info")
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : "Unknown error"
     log(`❌ Webhook Error: ${errorMessage}`, "error")
+    // Log the first 100 chars of the body for debugging
+    log(`Webhook body preview: ${body.substring(0, 100)}...`, {}, "info")
     return NextResponse.json({ message: `Webhook Error: ${errorMessage}` }, { status: 400 })
   }
 
