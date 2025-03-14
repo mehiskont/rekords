@@ -15,7 +15,7 @@ git pull origin main
 
 # Install dependencies
 echo "Installing dependencies..."
-npm install --production
+npm install --legacy-peer-deps
 
 # Run database migrations
 echo "Running database migrations..."
@@ -27,6 +27,6 @@ npm run build
 
 # Restart the PM2 process
 echo "Restarting application..."
-pm2 restart plastik
+pm2 restart rekords
 
 echo "Deployment completed: $(date)"

@@ -77,3 +77,6 @@ npm start
 
 # github webhook start
 pm2 start webhook-server.js
+
+### scripts
+node scripts/add-cart-tables.js        

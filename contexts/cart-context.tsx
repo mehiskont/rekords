@@ -39,11 +39,13 @@ const initialState: CartState = {
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case "ADD_ITEM": {
-      const existingItem = state.items.find((item) => item.id === action.payload.id)
+      // Ensure ID is a number for consistent comparison
+      const payloadId = Number(action.payload.id);
+      const existingItem = state.items.find((item) => Number(item.id) === payloadId);
 
       if (existingItem) {
         const updatedItems = state.items.map((item) =>
-            item.id === action.payload.id
+            Number(item.id) === payloadId
               ? {
                   ...item,
                   quantity: Math.min(item.quantity + 1, item.quantity_available),
@@ -52,7 +54,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
               : item
         );
         
-        console.log(`Updated cart item: ID=${action.payload.id}, weight: ${action.payload.weight || 180}g`);
+        console.log(`Updated cart item: ID=${payloadId}, weight: ${action.payload.weight || 180}g`);
         
         return {
           ...state,
@@ -60,12 +62,13 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         }
       }
       
-      console.log(`Added new cart item: ID=${action.payload.id}, weight: ${action.payload.weight || 180}g`);
+      console.log(`Added new cart item: ID=${payloadId}, weight: ${action.payload.weight || 180}g`);
 
       return {
         ...state,
         items: [...state.items, { 
           ...action.payload, 
+          id: payloadId, // Make sure ID is a number in the state
           quantity: 1, 
           weight: action.payload.weight || 180
         }],
@@ -74,13 +77,13 @@ function cartReducer(state: CartState, action: CartAction): CartState {
     case "REMOVE_ITEM":
       return {
         ...state,
-        items: state.items.filter((item) => item.id !== action.payload),
+        items: state.items.filter((item) => Number(item.id) !== Number(action.payload)),
       }
     case "UPDATE_QUANTITY":
       return {
         ...state,
         items: state.items.map((item) =>
-          item.id === action.payload.id
+          Number(item.id) === Number(action.payload.id)
             ? { ...item, quantity: Math.min(action.payload.quantity, item.quantity_available) }
             : item,
         ),
@@ -133,7 +136,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           // Transform the cart items to match the format expected by the UI
           if (cartData.items && Array.isArray(cartData.items)) {
             const formattedItems = cartData.items.map((item: any) => ({
-              id: item.discogsId,
+              id: Number(item.discogsId), // Ensure discogsId is a number
               title: item.title,
               price: item.price,
               quantity: item.quantity,
@@ -184,13 +187,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         case 'UPDATE_QUANTITY':
           method = 'PUT';
           body = { 
-            discogsId: action.payload.id, 
+            discogsId: Number(action.payload.id), 
             quantity: action.payload.quantity 
           };
           break;
         case 'REMOVE_ITEM':
           method = 'DELETE';
-          endpoint = `/api/cart?discogsId=${action.payload}`;
+          endpoint = `/api/cart?discogsId=${Number(action.payload)}`;
           break;
         case 'CLEAR_CART':
           method = 'DELETE';
