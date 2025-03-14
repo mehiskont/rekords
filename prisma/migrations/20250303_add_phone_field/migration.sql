@@ -1,1 +1,2 @@
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp"; ALTER TABLE "users" ADD COLUMN IF NOT EXISTS "phone" TEXT;
+-- Removed UUID extension requirement
+ALTER TABLE "users" ADD COLUMN IF NOT EXISTS "phone" TEXT;

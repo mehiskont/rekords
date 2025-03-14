@@ -9,7 +9,10 @@
     "lint": "next lint",
     "test:db": "node -r dotenv/config scripts/verify-db.js",
     "test:connections": "node -r dotenv/config scripts/test-connections.js",
-    "test:final": "node -r dotenv/config scripts/verify-final.js"
+    "test:final": "node -r dotenv/config scripts/verify-final.js",
+    "fix:migrations": "node scripts/fix-migrations.js",
+    "postinstall": "prisma generate",
+    "prisma:deploy": "prisma migrate deploy"
   },
   "dependencies": {
     "@auth/core": "latest",

@@ -3,9 +3,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") // For direct connections in production
+  // The PostgreSQL provider doesn't need any special configuration to use CUID instead of UUID
 }
 
 model Account {

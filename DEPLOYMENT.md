@@ -1,0 +1,88 @@
+# Deploying to Zone.ee
+
+This guide provides steps for deploying the Plastik Records application to Zone.ee.
+
+## Database Configuration
+
+### PostgreSQL UUID Extension Issue
+
+Zone.ee's PostgreSQL installation doesn't support the `uuid-ossp` extension which was previously required in our migrations. We've modified the migrations to remove this dependency by:
+
+1. Using CUID instead of UUID for primary keys in our Prisma schema
+2. Removing the `CREATE EXTENSION` commands from the migration files
+
+### Deployment Steps
+
+#### First-time Deployment
+
+If this is your first deployment to Zone.ee and the database doesn't exist yet:
+
+1. Set up your database credentials in Zone.ee
+2. Update your `.env` file with the correct DATABASE_URL and DIRECT_URL:
+
+```
+DATABASE_URL="postgresql://username:password@hostname:5432/database_name?schema=public"
+DIRECT_URL="postgresql://username:password@hostname:5432/database_name?schema=public"
+```
+
+3. Deploy your application
+4. Run migrations as part of your deployment process:
+
+```bash
+npx prisma migrate deploy
+```
+
+#### Troubleshooting Migration Issues
+
+If you encounter migration errors related to the UUID extension:
+
+1. Connect to your Zone.ee database via psql
+2. Check if any tables exist:
+   ```sql
+   \dt
+   ```
+
+3. If tables don't exist:
+   - You can simply drop the database and let Prisma create it from scratch:
+   ```sql
+   DROP DATABASE your_database_name;
+   CREATE DATABASE your_database_name;
+   ```
+   - Then run migrations again
+
+4. If tables exist with data you want to preserve:
+   - Export your data
+   - Drop affected tables
+   - Run migrations to recreate tables
+   - Import your data back
+
+## Environment Variables
+
+Ensure these environment variables are configured on Zone.ee:
+
+```
+NEXTAUTH_URL=https://your-production-url
+NEXTAUTH_SECRET=your-secret-key
+DATABASE_URL=postgresql://username:password@hostname:5432/database_name?schema=public
+DIRECT_URL=postgresql://username:password@hostname:5432/database_name?schema=public
+REDIS_URL=redis://your-redis-url
+REDIS_ENABLED=true
+NEXT_PUBLIC_APP_URL=https://your-production-url
+```
+
+## Deployment Commands
+
+```bash
+# Build the application
+npm run build
+
+# Start the application
+npm start
+```
+
+## Post-Deployment Verification
+
+1. Check if authentication works
+2. Verify that the record inventory loads correctly
+3. Test the cart functionality
+4. Make sure the sign-in button appears properly

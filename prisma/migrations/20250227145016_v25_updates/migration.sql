@@ -9,8 +9,8 @@
   - You are about to drop the `VerificationToken` table. If the table is not empty, all the data it contains will be lost.
 
 */
--- CreateExtension
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA "extensions";
+-- We don't need the UUID extension since we're using cuid() for IDs
+-- Removed: -- Removed: CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- DropForeignKey
 ALTER TABLE "Account" DROP CONSTRAINT "Account_userId_fkey";
