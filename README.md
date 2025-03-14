@@ -51,19 +51,19 @@ docker-compose up -d
 npm run dev
 ```
 
-## Redis Cache
+## Redis Cache (Optional)
 
-This application uses Redis for caching:
+This application uses Redis for caching release information only (30 days TTL).
 
-- Discogs inventory data (24hr TTL)
-- Shipping prices (7 days TTL)
-- Release information (30 days TTL)
+Redis is optional and can be enabled/disabled with environment variables:
+- `REDIS_ENABLED`: Set to "false" to completely disable Redis
+- `REDIS_URL`: Connection string for Redis instance
 
-Configure Redis with the `REDIS_URL` environment variable:
-- Local development: `redis://localhost:6379`
-- Production: Use your hosted Redis instance URL
+For production:
+- Set `REDIS_URL` to your hosted Redis instance
+- The application will work without Redis if it's unavailable or disabled
 
-The application will fail gracefully if Redis is unavailable.
+For best performance in production, Redis is recommended but not required.
 
 ## Deployment
 

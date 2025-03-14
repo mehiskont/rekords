@@ -5,42 +5,30 @@ import { log } from "@/lib/logger"
 
 export async function POST() {
   try {
-    // Step 1: Clear all inventory-related caches
-    log("Refreshing inventory: clearing caches")
-    const clearedInventoryKeys = await clearCachedData("inventory:*")
-    const clearedRecordKeys = await clearCachedData("record:*")
+    // Fetch fresh data for main views - no cache anymore
+    log("Fetching latest inventory data")
     
-    log(`Cleared ${clearedInventoryKeys} inventory cache entries and ${clearedRecordKeys} record cache entries`)
-    
-    // Step 2: Fetch fresh data for primary views to rebuild cache
-    log("Fetching latest inventory data to rebuild cache")
-    
-    // Prefetch the main views used on the site with cache buster to ensure freshness
-    const cacheBuster = Date.now().toString()
+    // Don't use cache anymore - always fetch fresh data
+    const timestamp = Date.now().toString()
     
     // Fetch new arrivals (most recently listed)
     await getDiscogsInventory(undefined, undefined, 1, 20, {
-      sort: "listed",
+      sort: "listed", 
       sort_order: "desc",
-      fetchFullReleaseData: true,
-      cacheBuster
+      fetchFullReleaseData: true
     })
     
     // Fetch all records (main page view)
     await getDiscogsInventory(undefined, undefined, 1, 50, {
-      fetchFullReleaseData: true,
-      cacheBuster
+      fetchFullReleaseData: true
     })
     
-    log("Inventory refresh complete - cache rebuilt with fresh data")
+    log("Inventory refresh complete - fresh data fetched")
     
     return NextResponse.json({ 
       success: true,
       message: "Inventory refreshed successfully",
-      cacheCleared: {
-        inventoryEntries: clearedInventoryKeys,
-        recordEntries: clearedRecordKeys
-      }
+      timestamp: Date.now()
     })
     
   } catch (error) {

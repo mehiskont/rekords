@@ -46,18 +46,12 @@ const shippingPriceProcessor = new BatchProcessor<string, number>(
 )
 
 async function fetchShippingPrice(listingId: string): Promise<number> {
-  const cacheKey = `shipping:${listingId}`
-
   try {
-    const cachedPrice = await getCachedData(cacheKey)
-    if (cachedPrice) {
-      return Number(cachedPrice)
-    }
-
+    // Always fetch real-time shipping price data - no caching
     const price = await shippingPriceProcessor.add(listingId)
-    await setCachedData(cacheKey, price.toString(), 7 * 24 * 60 * 60) // Cache for 7 days
     return price
   } catch (error) {
+    log("Error fetching shipping price", error, "error")
     return 5.0 // Default shipping price
   }
 }
@@ -467,19 +461,7 @@ export async function getDiscogsInventory(
   perPage = 50,
   options: DiscogsInventoryOptions = {},
 ): Promise<{ records: DiscogsRecord[]; totalPages: number }> {
-  // Include a cacheBuster parameter in the cache key if provided
-  const cacheKey = `inventory:${search || "all"}:${sort || "default"}:${page}:${perPage}:${options.category || "all"}:${
-    options.sort || "default"
-  }:${options.sort_order || "default"}${options.cacheBuster ? `:${options.cacheBuster}` : ''}`
-
-  try {
-    const cachedData = await getCachedData(cacheKey)
-    if (cachedData) {
-      return JSON.parse(cachedData)
-    }
-  } catch (error) {
-    console.error("Cache read error:", error)
-  }
+  // No caching for inventory data - always fetch fresh data
 
   try {
     const params = new URLSearchParams({
@@ -596,15 +578,7 @@ export async function getDiscogsInventory(
       totalPages: Math.ceil(data.pagination.items / perPage),
     }
 
-    // Cache the result, but with a shorter TTL for the inventory list to maintain freshness
-    // This is especially important for availability status
-    try {
-      // If using cacheBuster, use a very short TTL (2 minutes)
-      // Otherwise use a longer TTL but still shorter than before (2 hours instead of 24 hours)
-      await setCachedData(cacheKey, JSON.stringify(result), options.cacheBuster ? 120 : 7200) 
-    } catch (error) {
-      // Silently continue on cache error
-    }
+    // No caching for inventory data
 
     return result
   } catch (error) {
@@ -618,19 +592,7 @@ export async function getDiscogsRecord(
   id: string,
   options?: { skipCache?: boolean }
 ): Promise<{ record: DiscogsRecord | null; relatedRecords: DiscogsRecord[] }> {
-  const cacheKey = `record:${id}`
-
-  // Allow skipping cache check for fresh data, useful after purchase
-  if (!options?.skipCache) {
-    try {
-      const cachedData = await getCachedData(cacheKey)
-      if (cachedData) {
-        return JSON.parse(cachedData)
-      }
-    } catch (error) {
-      // Continue if cache read fails
-    }
-  }
+  // Always fetch fresh record data - no caching
 
   try {
     const response = await fetchWithRetry(`${BASE_URL}/marketplace/listings/${id}`, {
@@ -666,8 +628,7 @@ export async function getDiscogsRecord(
 
     const result = { record, relatedRecords }
 
-    // Cache for longer duration - details view is less time-sensitive
-    await setCachedData(cacheKey, JSON.stringify(result), 7 * 24 * 60 * 60) // 7 days
+    // No caching for record data
 
     return result
   } catch (error) {

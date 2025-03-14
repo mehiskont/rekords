@@ -5,7 +5,7 @@ export async function POST(request: Request) {
   try {
     // Clear all cache or specific patterns
     const body = await request.json()
-    const pattern = body.pattern || 'inventory:*' // Default to clearing inventory cache
+    const pattern = body.pattern || 'release:*' // Default to clearing release cache only
     
     const clearedKeysCount = await clearCachedData(pattern)
     
