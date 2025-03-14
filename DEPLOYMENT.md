@@ -105,7 +105,7 @@ module.exports = {
       name: 'plastik',
       script: 'npm',
       args: 'start',
-      cwd: '/domeenid/www.komeh.tech/plastik/rekords',
+      cwd: '/data03/virt136643/domeenid/www.komeh.tech/plastik/rekords',
       env: {
         NODE_ENV: 'production',
       },
