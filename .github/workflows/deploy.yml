@@ -54,8 +54,26 @@ jobs:
           ssh-keyscan -H ${{ secrets.HOST_SERVER_IP }} >> ~/.ssh/known_hosts
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa
-          
-      - name: Deploy to server
+        
+      - name: Test SSH Connection
         run: |
-          rsync -vrm -e "ssh -i ~/.ssh/id_rsa" ./ ${{ secrets.SSH_LOGIN_CREDS }}:${{ secrets.PROJECT_PATH }} --exclude .git --exclude node_modules
+          echo "Testing SSH connection..."
+          ssh -v -i ~/.ssh/id_rsa ${{ secrets.SSH_LOGIN_CREDS }} "echo Connection successful"
+          
+      - name: Deploy to server using SFTP
+        run: |
+          # Create SFTP batch commands
+          echo "mkdir -p ${{ secrets.PROJECT_PATH }}" > sftp_commands.txt
+          echo "cd ${{ secrets.PROJECT_PATH }}" >> sftp_commands.txt
+          echo "put -r ./.next ./.next" >> sftp_commands.txt
+          echo "put -r ./public ./public" >> sftp_commands.txt
+          echo "put -r ./prisma ./prisma" >> sftp_commands.txt
+          echo "put package.json package.json" >> sftp_commands.txt
+          echo "put package-lock.json package-lock.json" >> sftp_commands.txt
+          echo "put next.config.js next.config.js" >> sftp_commands.txt
+          
+          # Execute SFTP commands
+          sftp -i ~/.ssh/id_rsa ${{ secrets.SSH_LOGIN_CREDS }} < sftp_commands.txt
+          
+          # Run post-deployment commands over SSH
           ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_LOGIN_CREDS }} "cd ${{ secrets.PROJECT_PATH }} && npm ci --legacy-peer-deps && npx prisma migrate deploy && pm2 describe ${{ secrets.PM2_APP_NAME }} > /dev/null && pm2 restart ${{ secrets.PM2_APP_NAME }} || pm2 start npm --name ${{ secrets.PM2_APP_NAME }} -- run start"
