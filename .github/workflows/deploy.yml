@@ -44,8 +44,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /data03/virt136643/domeenid/www.komeh.tech/plastik/rekords
+            cd ${{ secrets.PROJECT_PATH }}
             git pull
             npm ci --legacy-peer-deps 
             npx prisma migrate deploy
-            pm2 describe rekords > /dev/null && pm2 restart rekords || pm2 start rekords
+            pm2 describe ${{ secrets.PM2_APP_NAME }} > /dev/null && pm2 restart ${{ secrets.PM2_APP_NAME }} || pm2 start ${{ secrets.PM2_APP_NAME }}
