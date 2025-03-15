@@ -17,6 +17,7 @@ jobs:
       NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
       REDIS_ENABLED: ${{ secrets.REDIS_ENABLED }}
       REDIS_URL: ${{ secrets.REDIS_URL }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
       
     steps:
       - uses: actions/checkout@v3
@@ -24,7 +25,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
           
       - name: Install dependencies
@@ -36,8 +37,6 @@ jobs:
       - name: Generate Prisma client
         run: npx prisma generate
         
-      # You'll need to set up your own SSH deploy key or use a specific
-      # Zone.ee action if they provide one. This is a generic example.
       - name: Deploy to Zone.ee
         uses: appleboy/ssh-action@master
         with:
@@ -45,8 +44,8 @@ jobs:
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /path/to/your/deployment
+            cd /data03/virt136643/domeenid/www.komeh.tech/plastik/rekords
             git pull
-            npm ci --production
+            npm ci --legacy-peer-deps 
             npx prisma migrate deploy
-            pm2 restart your-app-name
+            pm2 describe rekords > /dev/null && pm2 restart rekords || pm2 start rekords
