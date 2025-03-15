@@ -52,8 +52,10 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.HOST_SERVER_IP }} >> ~/.ssh/known_hosts
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
           
       - name: Deploy to server
         run: |
-          rsync -vrm ./ ${{ secrets.SSH_LOGIN_CREDS }}:${{ secrets.PROJECT_PATH }} --exclude .git --exclude node_modules
-          ssh ${{ secrets.SSH_LOGIN_CREDS }} "cd ${{ secrets.PROJECT_PATH }} && npm ci --legacy-peer-deps && npx prisma migrate deploy && pm2 describe ${{ secrets.PM2_APP_NAME }} > /dev/null && pm2 restart ${{ secrets.PM2_APP_NAME }} || pm2 start npm --name ${{ secrets.PM2_APP_NAME }} -- run start"
+          rsync -vrm -e "ssh -i ~/.ssh/id_rsa" ./ ${{ secrets.SSH_LOGIN_CREDS }}:${{ secrets.PROJECT_PATH }} --exclude .git --exclude node_modules
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_LOGIN_CREDS }} "cd ${{ secrets.PROJECT_PATH }} && npm ci --legacy-peer-deps && npx prisma migrate deploy && pm2 describe ${{ secrets.PM2_APP_NAME }} > /dev/null && pm2 restart ${{ secrets.PM2_APP_NAME }} || pm2 start npm --name ${{ secrets.PM2_APP_NAME }} -- run start"
