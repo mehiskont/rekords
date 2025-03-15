@@ -18,6 +18,15 @@ jobs:
       REDIS_ENABLED: ${{ secrets.REDIS_ENABLED }}
       REDIS_URL: ${{ secrets.REDIS_URL }}
       RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}  
+      NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY }}
+      NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET: ${{ secrets.NEXT_PUBLIC_STRIPE_WEBHOOK_SECRET }}
+      DISCOGS_API_TOKEN: ${{ secrets.DISCOGS_API_TOKEN }}
+      DISCOGS_API_SECRET: ${{ secrets.DISCOGS_API_SECRET }}
+      DISCOGS_CONSUMER_KEY: ${{ secrets.DISCOGS_CONSUMER_KEY }}
+      DISCOGS_CONSUMER_SECRET: ${{ secrets.DISCOGS_CONSUMER_SECRET }}
+      
+      
       
     steps:
       - uses: actions/checkout@v3
