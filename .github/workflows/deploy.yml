@@ -47,7 +47,7 @@ jobs:
         run: npx prisma generate
         
       - name: Upload built files
-        uses: actions/upload-artifact@main
+        uses: actions/upload-artifact@v2
         with:
           name: production-files
           path: ./.next
@@ -77,4 +77,4 @@ jobs:
       - name: Deploy to server
         run: |
           rsync -vrm ./ ${{ secrets.SSH_LOGIN_CREDS }}:${{ secrets.PROJECT_PATH }} --exclude .git --exclude node_modules
-          ssh ${{ secrets.SSH_LOGIN_CREDS }} "cd ${{ secrets.PROJECT_PATH }} && npm ci --legacy-peer-deps && npx prisma migrate deploy && pm2 describe ${{ secrets.PM2_APP_NAME }} > /dev/null && pm2 restart ${{ secrets.PM2_APP_NAME }} || pm2 start npm --name ${{ secrets.PM2_APP_NAME }} -- run start"
+          ssh ${{ secrets.SSH_LOGIN_CREDS }} "cd ${{ secrets.PROJECT_PATH }} && npm ci --legacy-peer-deps && npx prisma migrate deploy && pm2 describe ${{ secrets.PM2_APP_NAME }} > /dev/null && pm2 restart ${{ secrets.PM2_APP_NAME }} || pm2 start npm --name \"${{ secrets.PM2_APP_NAME }}\" -- start"
