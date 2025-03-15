@@ -6,7 +6,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-and-deploy:
+  build:
+    name: Build
     runs-on: ubuntu-latest
     
     env:
@@ -26,12 +27,11 @@ jobs:
       DISCOGS_CONSUMER_KEY: ${{ secrets.DISCOGS_CONSUMER_KEY }}
       DISCOGS_CONSUMER_SECRET: ${{ secrets.DISCOGS_CONSUMER_SECRET }}
       
-      
-      
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout to main
+        uses: actions/checkout@main
       
-      - name: Setup Node.js
+      - name: Set up Node
         uses: actions/setup-node@v3
         with:
           node-version: '20'
@@ -46,15 +46,35 @@ jobs:
       - name: Generate Prisma client
         run: npx prisma generate
         
-      - name: Deploy to Zone.ee
-        uses: appleboy/ssh-action@master
+      - name: Upload built files
+        uses: actions/upload-artifact@v3
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            cd ${{ secrets.PROJECT_PATH }}
-            git pull
-            npm ci --legacy-peer-deps 
-            npx prisma migrate deploy
-            pm2 describe ${{ secrets.PM2_APP_NAME }} > /dev/null && pm2 restart ${{ secrets.PM2_APP_NAME }} || pm2 start ${{ secrets.PM2_APP_NAME }}
+          name: production-files
+          path: ./.next
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: build
+    
+    steps:
+      - name: Checkout to main
+        uses: actions/checkout@main
+        
+      - name: Download built files
+        uses: actions/download-artifact@v2
+        with:
+          name: production-files
+          path: ./.next
+          
+      - name: Connect to server over SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.HOST_SERVER_IP }} >> ~/.ssh/known_hosts
+          
+      - name: Deploy to server
+        run: |
+          rsync -vrm ./ ${{ secrets.SSH_LOGIN_CREDS }}:${{ secrets.PROJECT_PATH }} --exclude .git --exclude node_modules
+          ssh ${{ secrets.SSH_LOGIN_CREDS }} "cd ${{ secrets.PROJECT_PATH }} && npm ci --legacy-peer-deps && npx prisma migrate deploy && pm2 describe ${{ secrets.PM2_APP_NAME }} > /dev/null && pm2 restart ${{ secrets.PM2_APP_NAME }} || pm2 start ${{ secrets.PM2_APP_NAME }}"
