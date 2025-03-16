@@ -65,15 +65,15 @@ jobs:
           # Create SFTP batch commands
           echo "mkdir -p ${{ secrets.PROJECT_PATH }}" > sftp_commands.txt
           echo "cd ${{ secrets.PROJECT_PATH }}" >> sftp_commands.txt
-          echo "put -r ./.next ./.next" >> sftp_commands.txt
-          echo "put -r ./public ./public" >> sftp_commands.txt
-          echo "put -r ./prisma ./prisma" >> sftp_commands.txt
-          echo "put package.json package.json" >> sftp_commands.txt
-          echo "put package-lock.json package-lock.json" >> sftp_commands.txt
-          echo "put next.config.js next.config.js" >> sftp_commands.txt
+          echo "put -r ./.next" >> sftp_commands.txt
+          echo "put -r ./public" >> sftp_commands.txt
+          echo "put -r ./prisma" >> sftp_commands.txt
+          echo "put package.json" >> sftp_commands.txt
+          echo "put package-lock.json" >> sftp_commands.txt
+          echo "put next.config.js" >> sftp_commands.txt
           
           # Execute SFTP commands
           sftp -i ~/.ssh/id_rsa ${{ secrets.SSH_LOGIN_CREDS }} < sftp_commands.txt
           
           # Run post-deployment commands over SSH
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_LOGIN_CREDS }} "cd ${{ secrets.PROJECT_PATH }} && npm ci --legacy-peer-deps && npx prisma migrate deploy && pm2 describe ${{ secrets.PM2_APP_NAME }} > /dev/null && pm2 restart ${{ secrets.PM2_APP_NAME }} || pm2 start npm --name ${{ secrets.PM2_APP_NAME }} -- run start"
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_LOGIN_CREDS }} "cd ${{ secrets.PROJECT_PATH }} && npm ci --legacy-peer-deps && npx prisma migrate deploy && echo 'Building Next.js application...' && npm run build && pm2 describe ${{ secrets.PM2_APP_NAME }} > /dev/null && pm2 restart ${{ secrets.PM2_APP_NAME }} || pm2 start npm --name ${{ secrets.PM2_APP_NAME }} -- run start"
