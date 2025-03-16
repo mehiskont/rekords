@@ -117,67 +117,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = useReducer(cartReducer, initialState)
   const { data: session, status } = useSession()
   
-  // Load cart from API on component mount and when session changes
-  useEffect(() => {
-    async function fetchCart() {
-      try {
-        dispatch({ type: "SET_LOADING", payload: true });
-        
-        // Only fetch cart when session status is resolved (authenticated or unauthenticated)
-        if (status !== "loading") {
-          try {
-            // Try to get cart from localStorage first
-            const localCart = localStorage.getItem('cart');
-            if (localCart) {
-              const parsedCart = JSON.parse(localCart);
-              if (parsedCart.items && Array.isArray(parsedCart.items)) {
-                console.log('Loading cart from localStorage');
-                dispatch({ type: "LOAD_CART", payload: parsedCart.items });
-              }
-            }
-            
-            // If user is authenticated, also try API
-            if (status === 'authenticated') {
-              console.log('Authenticated user, fetching cart from API');
-              const response = await fetch('/api/cart');
-              
-              if (!response.ok) {
-                throw new Error(`Failed to load cart: ${response.status}`);
-              }
-              
-              const cartData = await response.json();
-              
-              // Transform the cart items to match the format expected by the UI
-              if (cartData.items && Array.isArray(cartData.items)) {
-                const formattedItems = cartData.items.map((item: any) => ({
-                  id: Number(item.discogsId), // Ensure discogsId is a number
-                  title: item.title,
-                  price: item.price,
-                  quantity: item.quantity,
-                  quantity_available: item.quantity_available || 1,
-                  weight: item.weight,
-                  condition: item.condition,
-                  images: item.images,
-                }));
-                
-                dispatch({ type: "LOAD_CART", payload: formattedItems });
-              }
-            }
-          } catch (error) {
-            console.error("Error loading cart from API:", error);
-            // If API fails, we'll still have localStorage cart as fallback
-          }
-        }
-      } catch (error) {
-        console.error("Error in cart loading process:", error);
-      } finally {
-        dispatch({ type: "SET_LOADING", payload: false });
-      }
-    }
-    
-    fetchCart();
-  }, [status]);
-  
   // Create a ref to store the latest dispatch function
   const dispatchRef = useRef(dispatch);
   
@@ -186,14 +125,112 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     dispatchRef.current = dispatch;
   }, [dispatch]);
   
+  // Helper function to safely interact with localStorage (client-side only)
+  const saveToLocalStorage = useCallback((key: string, data: any) => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(key, JSON.stringify(data));
+        console.log(`Saved to localStorage (${key}):`, 
+          data.items ? `${data.items.length} items` : 'No items');
+      } catch (error) {
+        console.error('Failed to save to localStorage:', error);
+      }
+    }
+  }, []);
+
+  const getFromLocalStorage = useCallback((key: string) => {
+    if (typeof window !== 'undefined') {
+      try {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+      } catch (error) {
+        console.error('Failed to get from localStorage:', error);
+        return null;
+      }
+    }
+    return null;
+  }, []);
+  
+  // Initialize cart from localStorage on first render (client-side only)
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      console.log('Initial cart load attempt from localStorage');
+      dispatch({ type: "SET_LOADING", payload: true });
+      
+      try {
+        const localCart = getFromLocalStorage('plastik-cart');
+        if (localCart && localCart.items && Array.isArray(localCart.items)) {
+          console.log('Found cart in localStorage with', localCart.items.length, 'items');
+          dispatch({ type: "LOAD_CART", payload: localCart.items });
+        } else {
+          console.log('No cart found in localStorage');
+        }
+      } catch (error) {
+        console.error('Error loading cart from localStorage', error);
+      } finally {
+        dispatch({ type: "SET_LOADING", payload: false });
+      }
+    }
+  }, [getFromLocalStorage]);
+  
+  // Load cart from API when session changes
+  useEffect(() => {
+    async function fetchCart() {
+      // Only attempt to fetch from API if authenticated
+      if (status === 'authenticated' && session?.user) {
+        console.log('Authenticated user, fetching cart from API');
+        dispatch({ type: "SET_LOADING", payload: true });
+        
+        try {
+          const response = await fetch('/api/cart');
+          
+          if (!response.ok) {
+            throw new Error(`Failed to load cart: ${response.status}`);
+          }
+          
+          const cartData = await response.json();
+          
+          // Transform the cart items to match the format expected by the UI
+          if (cartData.items && Array.isArray(cartData.items) && cartData.items.length > 0) {
+            console.log('Loaded', cartData.items.length, 'items from API');
+            const formattedItems = cartData.items.map((item: any) => ({
+              id: Number(item.discogsId), // Ensure discogsId is a number
+              title: item.title,
+              price: item.price,
+              quantity: item.quantity,
+              quantity_available: item.quantity_available || 1,
+              weight: item.weight || 180,
+              condition: item.condition,
+              images: item.images || [],
+            }));
+            
+            dispatch({ type: "LOAD_CART", payload: formattedItems });
+          } else {
+            console.log('API returned empty cart, keeping localStorage cart');
+          }
+        } catch (error) {
+          console.error("Error loading cart from API:", error);
+          // If API fails, we'll keep the localStorage cart as fallback
+        } finally {
+          dispatch({ type: "SET_LOADING", payload: false });
+        }
+      }
+    }
+    
+    // Only run this effect when auth status changes from loading to authenticated
+    if (status !== 'loading') {
+      fetchCart();
+    }
+  }, [status, session, getFromLocalStorage]);
+
   // Save cart to localStorage whenever it changes
   useEffect(() => {
     // Don't save while loading or if cart is empty on initial load
-    if (!state.isLoading && state.items.length > 0) {
-      localStorage.setItem('cart', JSON.stringify(state));
-      console.log('Saved cart to localStorage:', state.items.length, 'items');
+    if (!state.isLoading) {
+      // Always save cart state, even if empty (to clear previous cart)
+      saveToLocalStorage('plastik-cart', state);
     }
-  }, [state.items, state.isLoading]);
+  }, [state, state.items, state.isLoading, saveToLocalStorage]);
 
   // Handle syncing cart changes to the API
   const syncCartAction = useCallback(async (action: CartAction) => {
@@ -205,7 +242,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     try {
       // Always update localStorage regardless of API success
       const currentState = cartReducer(state, action);
-      localStorage.setItem('cart', JSON.stringify(currentState));
+      saveToLocalStorage('plastik-cart', currentState);
       
       // Only try to sync with API if user is authenticated
       if (status === 'authenticated') {
