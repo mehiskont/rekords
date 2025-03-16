@@ -54,6 +54,24 @@ export async function POST(request: NextRequest) {
     const cart = await getOrCreateCart(userId);
     const data = await request.json();
     
+    // Handle localStorage cart sync when a user logs in - pass entire cart items for sync
+    if (data.syncLocalCart && data.items && Array.isArray(data.items)) {
+      console.log(`Syncing ${data.items.length} items from localStorage to database for userId: ${userId}`);
+      
+      // Clear current cart first
+      await clearCart(cart.id);
+      
+      // Add all items from localStorage
+      for (const item of data.items) {
+        await addToCart(cart.id, item, item.quantity || 1);
+      }
+      
+      // Return the updated cart
+      const updatedCart = await getOrCreateCart(userId);
+      return NextResponse.json(updatedCart);
+    }
+    
+    // Regular item addition
     if (!data.item) {
       return NextResponse.json(
         { error: "Item data is required" },

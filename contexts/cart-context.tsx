@@ -182,6 +182,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         dispatch({ type: "SET_LOADING", payload: true });
         
         try {
+          // Check if we have items in localStorage first
+          const localCart = getFromLocalStorage('plastik-cart');
+          const localCartItems = localCart?.items && Array.isArray(localCart.items) ? localCart.items : [];
+          
+          // First fetch user's cart from the database
           const response = await fetch('/api/cart');
           
           if (!response.ok) {
@@ -189,12 +194,53 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           }
           
           const cartData = await response.json();
+          const dbCartItems = cartData.items && Array.isArray(cartData.items) ? cartData.items : [];
           
-          // Transform the cart items to match the format expected by the UI
-          if (cartData.items && Array.isArray(cartData.items) && cartData.items.length > 0) {
-            console.log('Loaded', cartData.items.length, 'items from API');
-            const formattedItems = cartData.items.map((item: any) => ({
-              id: Number(item.discogsId), // Ensure discogsId is a number
+          console.log('API cart has', dbCartItems.length, 'items');
+          console.log('Local cart has', localCartItems.length, 'items');
+          
+          // Logic for merging DB cart with localStorage cart
+          if (dbCartItems.length > 0 && localCartItems.length > 0) {
+            // We have items in both places - sync from localStorage to database
+            console.log('Both database and localStorage have items - syncing to database');
+            
+            // Option 1: Send all local items to be saved to the database
+            const syncResponse = await fetch('/api/cart', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                syncLocalCart: true,
+                items: localCartItems
+              })
+            });
+            
+            if (!syncResponse.ok) {
+              throw new Error('Failed to sync localStorage cart to database');
+            }
+            
+            const syncedCart = await syncResponse.json();
+            
+            // Transform the items to match the format expected by the UI
+            if (syncedCart.items && Array.isArray(syncedCart.items)) {
+              console.log('Synced and loaded', syncedCart.items.length, 'items from API');
+              const formattedItems = syncedCart.items.map((item: any) => ({
+                id: Number(item.discogsId),
+                title: item.title,
+                price: item.price,
+                quantity: item.quantity,
+                quantity_available: item.quantity_available || 1,
+                weight: item.weight || 180,
+                condition: item.condition,
+                images: item.images || [],
+              }));
+              
+              dispatch({ type: "LOAD_CART", payload: formattedItems });
+            }
+          } else if (dbCartItems.length > 0) {
+            // DB has items but localStorage doesn't - use DB cart
+            console.log('Using database cart with', dbCartItems.length, 'items');
+            const formattedItems = dbCartItems.map((item: any) => ({
+              id: Number(item.discogsId),
               title: item.title,
               price: item.price,
               quantity: item.quantity,
@@ -205,8 +251,27 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             }));
             
             dispatch({ type: "LOAD_CART", payload: formattedItems });
+          } else if (localCartItems.length > 0) {
+            // localStorage has items but DB doesn't - sync to DB
+            console.log('Syncing localStorage cart to empty database cart');
+            
+            const syncResponse = await fetch('/api/cart', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                syncLocalCart: true,
+                items: localCartItems
+              })
+            });
+            
+            if (!syncResponse.ok) {
+              throw new Error('Failed to sync localStorage cart to database');
+            }
+            
+            // We already have the items loaded from localStorage, so no need to update state
           } else {
-            console.log('API returned empty cart, keeping localStorage cart');
+            // Both empty - nothing to do
+            console.log('Both carts are empty');
           }
         } catch (error) {
           console.error("Error loading cart from API:", error);
@@ -228,7 +293,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     // Don't save while loading or if cart is empty on initial load
     if (!state.isLoading) {
       // Always save cart state, even if empty (to clear previous cart)
-      saveToLocalStorage('plastik-cart', state);
+      saveToLocalStorage('plastik-cart', {
+        ...state,
+        timestamp: Date.now() // Add timestamp to track when the cart was last updated
+      });
     }
   }, [state, state.items, state.isLoading, saveToLocalStorage]);
 
@@ -242,7 +310,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     try {
       // Always update localStorage regardless of API success
       const currentState = cartReducer(state, action);
-      saveToLocalStorage('plastik-cart', currentState);
+      saveToLocalStorage('plastik-cart', {
+        ...currentState,
+        timestamp: Date.now() // Add timestamp to track when the cart was last updated
+      });
       
       // Only try to sync with API if user is authenticated
       if (status === 'authenticated') {
@@ -274,6 +345,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             return;
         }
         
+        // Log status before API call
+        console.log(`Syncing action ${action.type} to database for authenticated user`);
+        
         const response = await fetch(endpoint, {
           method,
           headers: body ? { 'Content-Type': 'application/json' } : undefined,
@@ -283,12 +357,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         if (!response.ok) {
           throw new Error(`API error: ${response.status}`);
         }
+      } else {
+        console.log(`Not syncing action ${action.type} to database - user not authenticated`);
       }
     } catch (error) {
       console.error(`Error syncing cart action ${action.type}:`, error);
       // Continue without failing - localStorage backup is still working
     }
-  }, [state, status]);
+  }, [state, status, saveToLocalStorage]);
   
   // Create a wrapped version of dispatch that syncs with the API
   const syncedDispatch = useCallback((action: CartAction) => {
