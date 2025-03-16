@@ -21,6 +21,7 @@ type CartAction =
   | { type: "UPDATE_QUANTITY"; payload: { id: number; quantity: number } }
   | { type: "TOGGLE_CART" }
   | { type: "CLEAR_CART" }
+  | { type: "CLEAR_UI_CART" } // Only clears UI, doesn't sync to server
   | { type: "LOAD_CART"; payload: CartItem[] }
   | { type: "SET_LOADING"; payload: boolean }
 
@@ -94,6 +95,12 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         isOpen: !state.isOpen,
       }
     case "CLEAR_CART":
+      return {
+        ...state,
+        items: [],
+      }
+    case "CLEAR_UI_CART":
+      // Just clear the UI state without syncing to server
       return {
         ...state,
         items: [],
@@ -302,8 +309,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   // Handle syncing cart changes to the API
   const syncCartAction = useCallback(async (action: CartAction) => {
-    // Skip syncing for SET_LOADING and LOAD_CART actions
-    if (action.type === 'SET_LOADING' || action.type === 'LOAD_CART' || action.type === 'TOGGLE_CART') {
+    // Skip syncing for SET_LOADING, LOAD_CART, TOGGLE_CART, and CLEAR_UI_CART actions
+    if (action.type === 'SET_LOADING' || 
+        action.type === 'LOAD_CART' || 
+        action.type === 'TOGGLE_CART' ||
+        action.type === 'CLEAR_UI_CART') {
       return;
     }
     

@@ -110,8 +110,8 @@ export function NavBar() {
                     className="cursor-pointer"
                     onSelect={(event) => {
                       event.preventDefault();
-                      // Clear cart before logout
-                      dispatch({ type: "CLEAR_CART" });
+                      // Clear UI cart only without syncing to server
+                      dispatch({ type: "CLEAR_UI_CART" });
                       // Remove cart from localStorage
                       if (typeof window !== 'undefined') {
                         localStorage.removeItem('plastik-cart');
@@ -140,7 +140,7 @@ export function NavBar() {
 
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t">
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-4 hidden">
               <Link
                 href="/"
                 className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
@@ -189,8 +189,8 @@ export function NavBar() {
                     </Link>
                     <button 
                       onClick={() => {
-                        // Clear cart before logout
-                        dispatch({ type: "CLEAR_CART" });
+                        // Clear UI cart only without syncing to server
+                        dispatch({ type: "CLEAR_UI_CART" });
                         // Remove cart from localStorage
                         if (typeof window !== 'undefined') {
                           localStorage.removeItem('plastik-cart');
