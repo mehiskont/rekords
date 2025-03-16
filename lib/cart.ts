@@ -69,15 +69,16 @@ export async function getOrCreateCart(userId?: string) {
 // Add item to cart
 export async function addToCart(cartId: string, item: DiscogsRecord, quantity: number = 1) {
   try {
-    // Ensure discogsId is a number and within PostgreSQL INT4 range
-    let discogsId: number;
+    // Ensure discogsId is a valid number 
+    let discogsId: bigint;
     
     try {
-      discogsId = typeof item.id === 'string' ? parseInt(item.id) : Number(item.id);
+      // Use BigInt to handle large integers safely
+      discogsId = typeof item.id === 'string' ? BigInt(item.id) : BigInt(item.id);
       
-      // Check if discogsId is within PostgreSQL INT4 range (-2147483648 to 2147483647)
-      if (!discogsId || isNaN(discogsId) || discogsId < -2147483648 || discogsId > 2147483647) {
-        throw new Error(`Invalid discogsId: ${item.id} - must be within INT4 range`);
+      // Only basic validation now that we're using BigInt
+      if (!discogsId) {
+        throw new Error(`Invalid discogsId: ${item.id}`);
       }
     } catch (error) {
       throw new Error(`Failed to convert discogsId: ${item.id} - ${error.message}`);
@@ -135,16 +136,14 @@ export async function addToCart(cartId: string, item: DiscogsRecord, quantity: n
 }
 
 // Update cart item quantity
-export async function updateCartItemQuantity(cartId: string, discogsId: number, quantity: number) {
-  // Validate discogsId is within PostgreSQL INT4 range
-  if (discogsId < -2147483648 || discogsId > 2147483647) {
-    throw new Error(`Invalid discogsId: ${discogsId} - must be within INT4 range`);
-  }
+export async function updateCartItemQuantity(cartId: string, discogsId: number | bigint, quantity: number) {
+  // Convert to BigInt for consistent handling
+  const discogsBigInt = typeof discogsId === 'number' ? BigInt(discogsId) : discogsId;
   
   const item = await prisma.cartItem.findFirst({
     where: {
       cartId,
-      discogsId,
+      discogsId: discogsBigInt,
     },
   });
 
@@ -161,16 +160,14 @@ export async function updateCartItemQuantity(cartId: string, discogsId: number, 
 }
 
 // Remove item from cart
-export async function removeFromCart(cartId: string, discogsId: number) {
-  // Validate discogsId is within PostgreSQL INT4 range
-  if (discogsId < -2147483648 || discogsId > 2147483647) {
-    throw new Error(`Invalid discogsId: ${discogsId} - must be within INT4 range`);
-  }
+export async function removeFromCart(cartId: string, discogsId: number | bigint) {
+  // Convert to BigInt for consistent handling
+  const discogsBigInt = typeof discogsId === 'number' ? BigInt(discogsId) : discogsId;
   
   const item = await prisma.cartItem.findFirst({
     where: {
       cartId,
-      discogsId,
+      discogsId: discogsBigInt,
     },
   });
 
@@ -225,8 +222,9 @@ export async function mergeGuestCartToUserCart(guestId: string, userId: string) 
 
   // Merge the items
   for (const guestItem of guestCart.items) {
+    // Compare as strings to ensure correct matching with BigInt values
     const existingItem = userCart.items.find(
-      (item) => item.discogsId === guestItem.discogsId
+      (item) => item.discogsId.toString() === guestItem.discogsId.toString()
     );
 
     if (existingItem) {

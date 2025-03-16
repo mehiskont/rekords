@@ -4,6 +4,24 @@ This guide provides steps for deploying the Plastik Records application to Zone.
 
 ## Database Configuration
 
+### BigInt for Discogs IDs
+
+The `discogsId` field in the `cart_items` table needs to be changed from INT to BIGINT to support large Discogs IDs that exceed PostgreSQL's INT4 range (max 2,147,483,647).
+
+Run the following SQL command on your production database:
+
+```sql
+ALTER TABLE cart_items ALTER COLUMN "discogsId" TYPE BIGINT;
+```
+
+After deploying the updated code, verify that cart persistence works correctly with the following steps:
+
+1. Log in with a user account
+2. Add items to the cart
+3. Verify items are stored in the database
+4. Log out and confirm the cart appears empty in the UI
+5. Log back in and verify the previously added items are restored
+
 ### PostgreSQL UUID Extension Issue
 
 Zone.ee's PostgreSQL installation doesn't support the `uuid-ossp` extension which was previously required in our migrations. We've modified the migrations to remove this dependency by:
@@ -137,7 +155,7 @@ npx prisma migrate deploy
 npm run build
 
 # Restart the PM2 process
-pm2 restart plastik
+pm2 restart rekords
 ```
 
 4. Make the deployment script executable:

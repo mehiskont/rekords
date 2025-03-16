@@ -69,13 +69,7 @@ export async function POST(request: NextRequest) {
         let itemsAdded = 0;
         for (const item of data.items) {
           try {
-            // Validate item.id is within PostgreSQL INT4 range
-            const itemId = Number(item.id);
-            if (isNaN(itemId) || itemId < -2147483648 || itemId > 2147483647) {
-              console.error(`Skipping item with invalid discogsId: ${item.id} - outside INT4 range`);
-              continue;
-            }
-            
+            // No need to validate range since we're using BigInt now
             await addToCart(cart.id, item, item.quantity || 1);
             itemsAdded++;
           } catch (itemError) {
@@ -139,15 +133,8 @@ export async function PUT(request: NextRequest) {
     }
     
     try {
-      const discogsId = Number(data.discogsId);
-      
-      // Validate discogsId is a number and within PostgreSQL INT4 range
-      if (isNaN(discogsId) || discogsId < -2147483648 || discogsId > 2147483647) {
-        return NextResponse.json(
-          { error: `Invalid discogsId: ${data.discogsId} - must be a number within INT4 range` },
-          { status: 400 }
-        );
-      }
+      // Use BigInt to handle large discogs IDs
+      const discogsId = BigInt(data.discogsId);
       
       const result = await updateCartItemQuantity(cart.id, discogsId, data.quantity);
       return NextResponse.json(result);
@@ -191,13 +178,8 @@ export async function DELETE(request: NextRequest) {
     }
     
     try {
-      const id = parseInt(discogsId);
-      if (isNaN(id) || id < -2147483648 || id > 2147483647) {
-        return NextResponse.json(
-          { error: `Invalid discogsId: ${discogsId} - must be a number within INT4 range` },
-          { status: 400 }
-        );
-      }
+      // Parse using BigInt instead of parseInt to handle large numbers
+      const id = BigInt(discogsId);
       await removeFromCart(cart.id, id);
     } catch (e) {
       console.error(`Error parsing or processing discogsId ${discogsId}:`, e);

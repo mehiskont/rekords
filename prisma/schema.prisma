@@ -135,7 +135,7 @@ model Cart {
 model CartItem {
   id              String   @id @default(cuid())
   cartId          String
-  discogsId       Int
+  discogsId       BigInt   // Changed from Int to BigInt to support larger Discogs IDs
   title           String
   price           Float
   quantity        Int

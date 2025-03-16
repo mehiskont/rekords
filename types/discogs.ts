@@ -1,6 +1,6 @@
 export interface DiscogsRecord {
-  // The id needs to be within PostgreSQL INT4 range (-2147483648 to 2147483647)
-  id: number
+  // The id can be any integer, will be stored as BigInt in the database
+  id: number | string | bigint  // Allow different input formats
   title: string
   artist: string
   price: number
