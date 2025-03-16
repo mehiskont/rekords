@@ -22,7 +22,17 @@ export async function GET(request: NextRequest) {
     try {
       const cart = await getOrCreateCart(userId);
       console.log(`Cart retrieved: ID=${cart.id}, Items=${cart.items?.length || 0}`);
-      return NextResponse.json(cart);
+      
+      // Transform the cart object to handle BigInt serialization
+      const serializedCart = {
+        ...cart,
+        items: cart.items?.map(item => ({
+          ...item,
+          discogsId: item.discogsId.toString(), // Convert BigInt to string for JSON serialization
+        })) || []
+      };
+      
+      return NextResponse.json(serializedCart);
     } catch (dbError) {
       console.error("Database error getting cart:", dbError);
       // Return a fallback empty cart structure
@@ -81,7 +91,17 @@ export async function POST(request: NextRequest) {
         
         // Return the updated cart
         const updatedCart = await getOrCreateCart(userId);
-        return NextResponse.json(updatedCart);
+        
+        // Transform updated cart to handle BigInt serialization
+        const serializedCart = {
+          ...updatedCart,
+          items: updatedCart.items?.map(item => ({
+            ...item,
+            discogsId: item.discogsId.toString(), // Convert BigInt to string
+          })) || []
+        };
+        
+        return NextResponse.json(serializedCart);
       } catch (syncError) {
         console.error("Error syncing cart items:", syncError);
         // Continue with a fallback empty cart
@@ -106,7 +126,13 @@ export async function POST(request: NextRequest) {
     
     const result = await addToCart(cart.id, data.item, data.quantity || 1);
     
-    return NextResponse.json(result);
+    // Transform result to handle BigInt serialization
+    const serializedResult = {
+      ...result,
+      discogsId: result.discogsId.toString(), // Convert BigInt to string
+    };
+    
+    return NextResponse.json(serializedResult);
   } catch (error) {
     console.error("Error adding to cart:", error);
     return NextResponse.json(
@@ -137,7 +163,14 @@ export async function PUT(request: NextRequest) {
       const discogsId = BigInt(data.discogsId);
       
       const result = await updateCartItemQuantity(cart.id, discogsId, data.quantity);
-      return NextResponse.json(result);
+      
+      // Transform result to handle BigInt serialization
+      const serializedResult = {
+        ...result,
+        discogsId: result.discogsId.toString(), // Convert BigInt to string
+      };
+      
+      return NextResponse.json(serializedResult);
     } catch (e) {
       console.error(`Error processing discogsId ${data.discogsId}:`, e);
       return NextResponse.json(
@@ -223,7 +256,16 @@ export async function PATCH(request: NextRequest) {
     
     const mergedCart = await mergeGuestCartToUserCart(data.guestId, userId);
     
-    return NextResponse.json(mergedCart);
+    // Transform merged cart to handle BigInt serialization
+    const serializedCart = mergedCart ? {
+      ...mergedCart,
+      items: mergedCart.items?.map(item => ({
+        ...item,
+        discogsId: item.discogsId.toString(), // Convert BigInt to string
+      })) || []
+    } : null;
+    
+    return NextResponse.json(serializedCart);
   } catch (error) {
     console.error("Error merging carts:", error);
     return NextResponse.json(
