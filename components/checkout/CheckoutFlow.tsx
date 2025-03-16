@@ -222,7 +222,10 @@ export function CheckoutFlow() {
   // If cart is empty and not in payment step, redirect to cart
   useEffect(() => {
     if (cartState.items.length === 0 && currentStep !== 1) {
-      router.push("/cart")
+      console.log('Cart is empty, redirecting to cart page');
+      router.push("/cart");
+    } else {
+      console.log('Cart has items:', cartState.items.length);
     }
   }, [cartState.items.length, currentStep, router])
 

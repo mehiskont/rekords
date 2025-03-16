@@ -125,32 +125,51 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         
         // Only fetch cart when session status is resolved (authenticated or unauthenticated)
         if (status !== "loading") {
-          const response = await fetch('/api/cart');
-          
-          if (!response.ok) {
-            throw new Error(`Failed to load cart: ${response.status}`);
-          }
-          
-          const cartData = await response.json();
-          
-          // Transform the cart items to match the format expected by the UI
-          if (cartData.items && Array.isArray(cartData.items)) {
-            const formattedItems = cartData.items.map((item: any) => ({
-              id: Number(item.discogsId), // Ensure discogsId is a number
-              title: item.title,
-              price: item.price,
-              quantity: item.quantity,
-              quantity_available: item.quantity_available,
-              weight: item.weight,
-              condition: item.condition,
-              images: item.images,
-            }));
+          try {
+            // Try to get cart from localStorage first
+            const localCart = localStorage.getItem('cart');
+            if (localCart) {
+              const parsedCart = JSON.parse(localCart);
+              if (parsedCart.items && Array.isArray(parsedCart.items)) {
+                console.log('Loading cart from localStorage');
+                dispatch({ type: "LOAD_CART", payload: parsedCart.items });
+              }
+            }
             
-            dispatch({ type: "LOAD_CART", payload: formattedItems });
+            // If user is authenticated, also try API
+            if (status === 'authenticated') {
+              console.log('Authenticated user, fetching cart from API');
+              const response = await fetch('/api/cart');
+              
+              if (!response.ok) {
+                throw new Error(`Failed to load cart: ${response.status}`);
+              }
+              
+              const cartData = await response.json();
+              
+              // Transform the cart items to match the format expected by the UI
+              if (cartData.items && Array.isArray(cartData.items)) {
+                const formattedItems = cartData.items.map((item: any) => ({
+                  id: Number(item.discogsId), // Ensure discogsId is a number
+                  title: item.title,
+                  price: item.price,
+                  quantity: item.quantity,
+                  quantity_available: item.quantity_available || 1,
+                  weight: item.weight,
+                  condition: item.condition,
+                  images: item.images,
+                }));
+                
+                dispatch({ type: "LOAD_CART", payload: formattedItems });
+              }
+            }
+          } catch (error) {
+            console.error("Error loading cart from API:", error);
+            // If API fails, we'll still have localStorage cart as fallback
           }
         }
       } catch (error) {
-        console.error("Error loading cart from API:", error);
+        console.error("Error in cart loading process:", error);
       } finally {
         dispatch({ type: "SET_LOADING", payload: false });
       }
@@ -167,6 +186,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     dispatchRef.current = dispatch;
   }, [dispatch]);
   
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    // Don't save while loading or if cart is empty on initial load
+    if (!state.isLoading && state.items.length > 0) {
+      localStorage.setItem('cart', JSON.stringify(state));
+      console.log('Saved cart to localStorage:', state.items.length, 'items');
+    }
+  }, [state.items, state.isLoading]);
+
   // Handle syncing cart changes to the API
   const syncCartAction = useCallback(async (action: CartAction) => {
     // Skip syncing for SET_LOADING and LOAD_CART actions
@@ -175,55 +203,64 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
     
     try {
-      let endpoint = '/api/cart';
-      let method = 'POST';
-      let body: any = null;
+      // Always update localStorage regardless of API success
+      const currentState = cartReducer(state, action);
+      localStorage.setItem('cart', JSON.stringify(currentState));
       
-      switch (action.type) {
-        case 'ADD_ITEM':
-          method = 'POST';
-          body = { item: action.payload, quantity: 1 };
-          break;
-        case 'UPDATE_QUANTITY':
-          method = 'PUT';
-          body = { 
-            discogsId: Number(action.payload.id), 
-            quantity: action.payload.quantity 
-          };
-          break;
-        case 'REMOVE_ITEM':
-          method = 'DELETE';
-          endpoint = `/api/cart?discogsId=${Number(action.payload)}`;
-          break;
-        case 'CLEAR_CART':
-          method = 'DELETE';
-          endpoint = '/api/cart?clearAll=true';
-          break;
-        default:
-          return;
-      }
-      
-      const response = await fetch(endpoint, {
-        method,
-        headers: body ? { 'Content-Type': 'application/json' } : undefined,
-        body: body ? JSON.stringify(body) : undefined,
-      });
-      
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
+      // Only try to sync with API if user is authenticated
+      if (status === 'authenticated') {
+        let endpoint = '/api/cart';
+        let method = 'POST';
+        let body: any = null;
+        
+        switch (action.type) {
+          case 'ADD_ITEM':
+            method = 'POST';
+            body = { item: action.payload, quantity: 1 };
+            break;
+          case 'UPDATE_QUANTITY':
+            method = 'PUT';
+            body = { 
+              discogsId: Number(action.payload.id), 
+              quantity: action.payload.quantity 
+            };
+            break;
+          case 'REMOVE_ITEM':
+            method = 'DELETE';
+            endpoint = `/api/cart?discogsId=${Number(action.payload)}`;
+            break;
+          case 'CLEAR_CART':
+            method = 'DELETE';
+            endpoint = '/api/cart?clearAll=true';
+            break;
+          default:
+            return;
+        }
+        
+        const response = await fetch(endpoint, {
+          method,
+          headers: body ? { 'Content-Type': 'application/json' } : undefined,
+          body: body ? JSON.stringify(body) : undefined,
+        });
+        
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`);
+        }
       }
     } catch (error) {
       console.error(`Error syncing cart action ${action.type}:`, error);
+      // Continue without failing - localStorage backup is still working
     }
-  }, []);
+  }, [state, status]);
   
   // Create a wrapped version of dispatch that syncs with the API
   const syncedDispatch = useCallback((action: CartAction) => {
     // First update the local state
     dispatchRef.current(action);
     
-    // Then sync with the API (but only if not loading)
-    if (!state.isLoading) {
+    // Then sync with localStorage and API 
+    if (!state.isLoading || action.type === 'CLEAR_CART') {
+      // Always sync to ensure we don't miss actions
       syncCartAction(action);
     }
   }, [state.isLoading, syncCartAction]);
