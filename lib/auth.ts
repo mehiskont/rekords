@@ -335,6 +335,12 @@ export const authOptions = {
       // Attempt to merge guest cart if user has successfully authenticated
       if (user?.id) {
         try {
+          // Check if prisma is accessible before attempting cart operations
+          if (!prisma || !prisma.cart) {
+            log("Prisma or cart model not available", {}, "warn");
+            return true; // Continue with sign-in
+          }
+          
           const { cookies } = await import("next/headers");
           const cookieStore = cookies();
           const guestCartId = cookieStore.get("plastik_guest_cart_id")?.value;
@@ -361,7 +367,7 @@ export const authOptions = {
                   include: { items: true }
                 });
               }
-              
+            
               // Merge items from guest cart into user cart
               for (const guestItem of guestCart.items) {
                 const existingItem = userCart.items.find(item => 

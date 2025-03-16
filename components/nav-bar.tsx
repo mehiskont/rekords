@@ -110,6 +110,12 @@ export function NavBar() {
                     className="cursor-pointer"
                     onSelect={(event) => {
                       event.preventDefault();
+                      // Clear cart before logout
+                      dispatch({ type: "CLEAR_CART" });
+                      // Remove cart from localStorage
+                      if (typeof window !== 'undefined') {
+                        localStorage.removeItem('plastik-cart');
+                      }
                       signOut({ callbackUrl: '/' });
                     }}
                   >
@@ -182,7 +188,15 @@ export function NavBar() {
                       Profile
                     </Link>
                     <button 
-                      onClick={() => signOut({ callbackUrl: '/' })}
+                      onClick={() => {
+                        // Clear cart before logout
+                        dispatch({ type: "CLEAR_CART" });
+                        // Remove cart from localStorage
+                        if (typeof window !== 'undefined') {
+                          localStorage.removeItem('plastik-cart');
+                        }
+                        signOut({ callbackUrl: '/' });
+                      }}
                       className="text-sm pl-6 py-1 hover:text-primary text-left flex items-center gap-2"
                     >
                       <LogOut className="h-3 w-3" />

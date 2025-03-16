@@ -25,7 +25,7 @@ async function createStripeWebhook() {
     
     // Instructions for forwarding Stripe webhooks locally
     console.log('\nTo test webhooks locally, run this command in a separate terminal:');
-    console.log('stripe listen --forward-to http://localhost:3000/api/webhooks/stripe');
+    console.log('stripe listen --forward-to https://plastik.komeh.tech/api/webhooks/stripe');
     
     // Manually trigger a sample webhook event
     console.log('\nTo manually trigger a webhook event, run:');
@@ -39,7 +39,7 @@ async function createStripeWebhook() {
     console.log('- /api/webhook/route.ts');
     console.log('\nYou should update the Stripe dashboard to point to the correct endpoint:');
     console.log('https://dashboard.stripe.com/webhooks');
-    console.log('Add an endpoint with URL: https://your-domain.com/api/webhooks/stripe');
+    console.log('Add an endpoint with URL: https://plastik.komeh.tech/api/webhooks/stripe');
     
   } catch (error) {
     console.error('Error setting up webhook:', error);
