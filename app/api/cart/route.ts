@@ -16,9 +16,12 @@ export async function GET(request: NextRequest) {
     const session = await getServerSession(authOptions);
     const userId = session?.user?.id;
     
+    console.log(`GET /api/cart - User ID: ${userId || 'guest'}`);
+    
     // If database fails, return a fallback empty cart structure
     try {
       const cart = await getOrCreateCart(userId);
+      console.log(`Cart retrieved: ID=${cart.id}, Items=${cart.items?.length || 0}`);
       return NextResponse.json(cart);
     } catch (dbError) {
       console.error("Database error getting cart:", dbError);
@@ -58,17 +61,38 @@ export async function POST(request: NextRequest) {
     if (data.syncLocalCart && data.items && Array.isArray(data.items)) {
       console.log(`Syncing ${data.items.length} items from localStorage to database for userId: ${userId}`);
       
-      // Clear current cart first
-      await clearCart(cart.id);
-      
-      // Add all items from localStorage
-      for (const item of data.items) {
-        await addToCart(cart.id, item, item.quantity || 1);
+      try {
+        // Clear current cart first
+        await clearCart(cart.id);
+        
+        // Add all items from localStorage
+        let itemsAdded = 0;
+        for (const item of data.items) {
+          try {
+            await addToCart(cart.id, item, item.quantity || 1);
+            itemsAdded++;
+          } catch (itemError) {
+            console.error(`Error adding item ${item.id || 'unknown'} to cart:`, itemError);
+          }
+        }
+        
+        console.log(`Successfully added ${itemsAdded} of ${data.items.length} items to database cart`);
+        
+        // Return the updated cart
+        const updatedCart = await getOrCreateCart(userId);
+        return NextResponse.json(updatedCart);
+      } catch (syncError) {
+        console.error("Error syncing cart items:", syncError);
+        // Continue with a fallback empty cart
+        return NextResponse.json({
+          id: cart.id,
+          items: [],
+          userId: userId || null,
+          guestId: null,
+          createdAt: cart.createdAt,
+          updatedAt: new Date()
+        });
       }
-      
-      // Return the updated cart
-      const updatedCart = await getOrCreateCart(userId);
-      return NextResponse.json(updatedCart);
     }
     
     // Regular item addition

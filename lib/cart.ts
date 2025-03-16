@@ -24,11 +24,10 @@ export async function getOrCreateCart(userId?: string) {
       return existingCart;
     }
 
-    // Create new cart for the user
+    // Create new cart for the user - don't provide empty items array
     return prisma.cart.create({
       data: {
         userId,
-        items: [],
       },
       include: { items: true },
     });
@@ -58,11 +57,10 @@ export async function getOrCreateCart(userId?: string) {
     return existingGuestCart;
   }
 
-  // Create new cart for the guest
+  // Create new cart for the guest - don't provide empty items array
   return prisma.cart.create({
     data: {
       guestId,
-      items: [],
     },
     include: { items: true },
   });
@@ -70,38 +68,64 @@ export async function getOrCreateCart(userId?: string) {
 
 // Add item to cart
 export async function addToCart(cartId: string, item: DiscogsRecord, quantity: number = 1) {
-  // Check if the item already exists in the cart
-  const existingItem = await prisma.cartItem.findFirst({
-    where: {
-      cartId,
-      discogsId: item.id,
-    },
-  });
-
-  if (existingItem) {
-    // Update quantity of existing item
-    const newQuantity = Math.min(existingItem.quantity + quantity, item.quantity_available);
+  try {
+    // Ensure discogsId is a number
+    const discogsId = typeof item.id === 'string' ? parseInt(item.id) : Number(item.id);
     
-    return prisma.cartItem.update({
-      where: { id: existingItem.id },
-      data: { quantity: newQuantity },
+    // Validate required fields
+    if (!discogsId || isNaN(discogsId)) {
+      throw new Error(`Invalid discogsId: ${item.id}`);
+    }
+    
+    if (!item.title) {
+      throw new Error('Item title is required');
+    }
+    
+    if (typeof item.price !== 'number' || isNaN(item.price)) {
+      throw new Error(`Invalid price: ${item.price}`);
+    }
+    
+    const quantity_available = item.quantity_available || 1;
+    
+    // Check if the item already exists in the cart
+    const existingItem = await prisma.cartItem.findFirst({
+      where: {
+        cartId,
+        discogsId,
+      },
     });
+    
+    if (existingItem) {
+      // Update quantity of existing item
+      const newQuantity = Math.min(existingItem.quantity + quantity, quantity_available);
+      
+      return prisma.cartItem.update({
+        where: { id: existingItem.id },
+        data: { quantity: newQuantity },
+      });
+    }
+    
+    // Prepare images (ensure it's a valid Prisma JSON array)
+    const images = Array.isArray(item.images) ? item.images : [];
+    
+    // Add new item to cart
+    return prisma.cartItem.create({
+      data: {
+        cartId,
+        discogsId,
+        title: item.title,
+        price: item.price,
+        quantity: Math.min(quantity, quantity_available),
+        quantity_available,
+        condition: item.condition || 'VG+',
+        weight: item.weight || 180,
+        images,
+      },
+    });
+  } catch (error) {
+    console.error(`Error adding item to cart:`, error);
+    throw error;
   }
-
-  // Add new item to cart
-  return prisma.cartItem.create({
-    data: {
-      cartId,
-      discogsId: item.id,
-      title: item.title,
-      price: item.price,
-      quantity: Math.min(quantity, item.quantity_available),
-      quantity_available: item.quantity_available,
-      condition: item.condition,
-      weight: item.weight || 180,
-      images: item.images || [],
-    },
-  });
 }
 
 // Update cart item quantity

@@ -201,6 +201,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           }
           
           const cartData = await response.json();
+          console.log('API cart response:', cartData);
           const dbCartItems = cartData.items && Array.isArray(cartData.items) ? cartData.items : [];
           
           console.log('API cart has', dbCartItems.length, 'items');
@@ -212,6 +213,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             console.log('Both database and localStorage have items - syncing to database');
             
             // Option 1: Send all local items to be saved to the database
+            console.log('Sending local items to database:', localCartItems);
             const syncResponse = await fetch('/api/cart', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -246,6 +248,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           } else if (dbCartItems.length > 0) {
             // DB has items but localStorage doesn't - use DB cart
             console.log('Using database cart with', dbCartItems.length, 'items');
+            console.log('Database cart items:', dbCartItems);
+            
             const formattedItems = dbCartItems.map((item: any) => ({
               id: Number(item.discogsId),
               title: item.title,
@@ -257,6 +261,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
               images: item.images || [],
             }));
             
+            console.log('Formatted items for UI:', formattedItems);
             dispatch({ type: "LOAD_CART", payload: formattedItems });
           } else if (localCartItems.length > 0) {
             // localStorage has items but DB doesn't - sync to DB
