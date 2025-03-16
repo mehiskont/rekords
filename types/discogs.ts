@@ -1,4 +1,5 @@
 export interface DiscogsRecord {
+  // The id needs to be within PostgreSQL INT4 range (-2147483648 to 2147483647)
   id: number
   title: string
   artist: string
@@ -17,7 +18,7 @@ export interface DiscogsRecord {
   date_added: string
   genres: string[]
   quantity_available: number
-  format_quantity?: number // Add this field
+  format_quantity?: number
   weight?: number
   weight_unit?: string
 }

@@ -69,12 +69,18 @@ export async function getOrCreateCart(userId?: string) {
 // Add item to cart
 export async function addToCart(cartId: string, item: DiscogsRecord, quantity: number = 1) {
   try {
-    // Ensure discogsId is a number
-    const discogsId = typeof item.id === 'string' ? parseInt(item.id) : Number(item.id);
+    // Ensure discogsId is a number and within PostgreSQL INT4 range
+    let discogsId: number;
     
-    // Validate required fields
-    if (!discogsId || isNaN(discogsId)) {
-      throw new Error(`Invalid discogsId: ${item.id}`);
+    try {
+      discogsId = typeof item.id === 'string' ? parseInt(item.id) : Number(item.id);
+      
+      // Check if discogsId is within PostgreSQL INT4 range (-2147483648 to 2147483647)
+      if (!discogsId || isNaN(discogsId) || discogsId < -2147483648 || discogsId > 2147483647) {
+        throw new Error(`Invalid discogsId: ${item.id} - must be within INT4 range`);
+      }
+    } catch (error) {
+      throw new Error(`Failed to convert discogsId: ${item.id} - ${error.message}`);
     }
     
     if (!item.title) {
@@ -130,6 +136,11 @@ export async function addToCart(cartId: string, item: DiscogsRecord, quantity: n
 
 // Update cart item quantity
 export async function updateCartItemQuantity(cartId: string, discogsId: number, quantity: number) {
+  // Validate discogsId is within PostgreSQL INT4 range
+  if (discogsId < -2147483648 || discogsId > 2147483647) {
+    throw new Error(`Invalid discogsId: ${discogsId} - must be within INT4 range`);
+  }
+  
   const item = await prisma.cartItem.findFirst({
     where: {
       cartId,
@@ -151,6 +162,11 @@ export async function updateCartItemQuantity(cartId: string, discogsId: number, 
 
 // Remove item from cart
 export async function removeFromCart(cartId: string, discogsId: number) {
+  // Validate discogsId is within PostgreSQL INT4 range
+  if (discogsId < -2147483648 || discogsId > 2147483647) {
+    throw new Error(`Invalid discogsId: ${discogsId} - must be within INT4 range`);
+  }
+  
   const item = await prisma.cartItem.findFirst({
     where: {
       cartId,
