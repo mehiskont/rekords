@@ -7,8 +7,10 @@ import {
   removeFromCart, 
   updateCartItemQuantity, 
   clearCart,
-  mergeGuestCartToUserCart
+  mergeGuestCartToUserCart,
+  getCartWithItems
 } from "@/lib/cart";
+import { prisma } from "@/lib/prisma";
 
 // GET /api/cart - Get the current user's cart
 export async function GET(request: NextRequest) {
@@ -258,7 +260,8 @@ export async function DELETE(request: NextRequest) {
   }
 }
 
-// POST /api/cart/merge - Merge guest cart into user cart after login
+// PATCH /api/cart - Merge guest cart into user cart after login
+// This can handle either guestId or direct items from localStorage
 export async function PATCH(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
@@ -273,19 +276,74 @@ export async function PATCH(request: NextRequest) {
     
     const data = await request.json();
     
-    if (!data.guestId) {
+    // Get user's cart
+    const userCart = await getOrCreateCart(userId);
+    let updatedCart = null;
+    
+    console.log(`Processing cart merge for user ${userId}`);
+    
+    // Option 1: Using guestId for merging (used by auth callback)
+    if (data.guestId) {
+      console.log(`Merging guest cart ${data.guestId} into user cart`);
+      updatedCart = await mergeGuestCartToUserCart(data.guestId, userId);
+    }
+    // Option 2: Direct item merge from localStorage (used by client-side)
+    else if (data.items && Array.isArray(data.items)) {
+      console.log(`Merging ${data.items.length} items from localStorage into user cart`);
+      
+      // Get existing cart with items
+      const existingCart = await getCartWithItems(userCart.id);
+      
+      // Track stats
+      let itemsAdded = 0;
+      let itemsUpdated = 0;
+      
+      // Process each item
+      for (const item of data.items) {
+        try {
+          // Find matching item in user's cart
+          const existingItem = existingCart?.items?.find(
+            existing => existing.discogsId.toString() === item.id.toString()
+          );
+          
+          if (existingItem) {
+            // Update existing item by adding quantities
+            const newQuantity = Math.min(
+              existingItem.quantity + (item.quantity || 1),
+              item.quantity_available || existingItem.quantity_available
+            );
+            
+            await prisma.cartItem.update({
+              where: { id: existingItem.id },
+              data: { quantity: newQuantity }
+            });
+            
+            itemsUpdated++;
+          } else {
+            // Add new item
+            await addToCart(userCart.id, item, item.quantity || 1);
+            itemsAdded++;
+          }
+        } catch (itemError) {
+          console.error(`Error processing item ${item.id || 'unknown'}:`, itemError);
+        }
+      }
+      
+      console.log(`Merged cart items: ${itemsAdded} added, ${itemsUpdated} updated`);
+      
+      // Get the updated cart
+      updatedCart = await getCartWithItems(userCart.id);
+    } else {
       return NextResponse.json(
-        { error: "guestId is required" },
+        { error: "Either guestId or items array is required" },
         { status: 400 }
       );
     }
     
-    const mergedCart = await mergeGuestCartToUserCart(data.guestId, userId);
-    
     // Transform merged cart to handle BigInt serialization
-    const serializedCart = mergedCart ? {
-      ...mergedCart,
-      items: mergedCart.items?.map(item => ({
+    const serializedCart = updatedCart ? {
+      ...updatedCart,
+      items: updatedCart.items?.map(item => ({
         ...item,
         discogsId: item.discogsId.toString(), // Convert BigInt to string
       })) || []
