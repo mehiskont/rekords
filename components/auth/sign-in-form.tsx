@@ -136,6 +136,24 @@ export function SignInForm({ className, ...props }: SignInFormProps) {
       if (!result?.error) {
         // Successful login, redirect to callbackUrl or dashboard
         console.log("Sign in successful, redirecting to", callbackUrl);
+        
+        // Preserve cart data for merging by storing the current timestamp
+        // This ensures the server can identify this as a fresh login with potential cart items
+        if (typeof window !== 'undefined') {
+          try {
+            const cartData = localStorage.getItem('plastik-cart');
+            if (cartData) {
+              const parsedCart = JSON.parse(cartData);
+              if (parsedCart.items && parsedCart.items.length > 0) {
+                console.log(`Marking ${parsedCart.items.length} guest cart items for merge during login`);
+                localStorage.setItem('plastik-cart-login-time', Date.now().toString());
+              }
+            }
+          } catch (err) {
+            console.error('Error preserving cart before login:', err);
+          }
+        }
+        
         toast({
           title: "Welcome back!",
           description: "You've been successfully signed in.",

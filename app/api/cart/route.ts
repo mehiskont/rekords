@@ -308,10 +308,13 @@ export async function PATCH(request: NextRequest) {
           
           if (existingItem) {
             // Update existing item by adding quantities
-            const newQuantity = Math.min(
-              existingItem.quantity + (item.quantity || 1),
-              item.quantity_available || existingItem.quantity_available
-            );
+            const oldQuantity = existingItem.quantity;
+            const guestQuantity = item.quantity || 1;
+            const maxQuantity = item.quantity_available || existingItem.quantity_available;
+            const newQuantity = Math.min(oldQuantity + guestQuantity, maxQuantity);
+            
+            console.log(`Merging item ${item.id} (${item.title || 'unknown'}): ` +
+              `Existing qty ${oldQuantity} + Guest qty ${guestQuantity} = New qty ${newQuantity} (max: ${maxQuantity})`);
             
             await prisma.cartItem.update({
               where: { id: existingItem.id },
@@ -321,6 +324,7 @@ export async function PATCH(request: NextRequest) {
             itemsUpdated++;
           } else {
             // Add new item
+            console.log(`Adding new item to cart: ${item.id} (${item.title || 'unknown'}), qty: ${item.quantity || 1}`);
             await addToCart(userCart.id, item, item.quantity || 1);
             itemsAdded++;
           }

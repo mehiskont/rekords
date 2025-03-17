@@ -313,10 +313,17 @@ export async function mergeGuestCartToUserCart(guestId: string, userId: string) 
   
   console.log(`Merged cart successfully: ${itemsAdded} items added, ${itemsUpdated} items updated`);
 
-  // Delete the guest cart after merging
-  await prisma.cart.delete({
-    where: { id: guestCart.id },
-  });
+  // Delete the guest cart after merging, but keep the cookie and localStorage
+  // so client-side merging can still happen as a fallback
+  try {
+    await prisma.cart.delete({
+      where: { id: guestCart.id },
+    });
+    console.log(`Deleted guest cart with ID ${guestCart.id}`);
+  } catch (deleteError) {
+    console.error(`Failed to delete guest cart: ${deleteError.message}`);
+    // Continue even if delete fails - we've already merged the items
+  }
 
   // Return the updated user cart
   return prisma.cart.findUnique({

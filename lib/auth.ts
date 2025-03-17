@@ -341,9 +341,21 @@ export const authOptions = {
             return true; // Continue with sign-in
           }
           
-          const { cookies } = await import("next/headers");
-          const cookieStore = cookies();
-          const guestCartId = cookieStore.get("plastik_guest_cart_id")?.value;
+          // Get guest cart ID with error handling
+          let guestCartId;
+          try {
+            const { cookies } = await import("next/headers");
+            const cookieStore = cookies();
+            guestCartId = cookieStore.get("plastik_guest_cart_id")?.value;
+            
+            log("Cookie check result", {
+              hasGuestId: !!guestCartId,
+              guestCartId: guestCartId || "none"
+            }, "info");
+          } catch (cookieError) {
+            log("Error accessing cookies", cookieError, "error");
+            // Continue without guest cart ID
+          }
           
           if (guestCartId) {
             log("Found guest cart ID, attempting to merge", { userId: user.id, guestCartId }, "info");
@@ -384,8 +396,9 @@ export const authOptions = {
               
               // Guest cart deletion is already handled in mergeGuestCartToUserCart function
               
-              // Clear the guest cart cookie
-              cookieStore.delete("plastik_guest_cart_id");
+              // Don't delete the cookie immediately - let the client handle it
+              // This ensures client-side code can still access the guest cart if needed
+              // cookieStore.delete("plastik_guest_cart_id");
             }
           }
         } catch (error) {
