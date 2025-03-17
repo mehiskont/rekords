@@ -20,18 +20,20 @@ export interface CustomerInfo {
   email: string
   phone: string
   address: string
-  apartment?: string
+  apartment: string
   city: string
-  state: string
   postalCode: string
+  state: string
   country: string
-  shippingAddress?: string
-  shippingApartment?: string
-  shippingCity?: string
-  shippingState?: string
-  shippingPostalCode?: string
-  shippingCountry?: string
+  shippingAddress: string
+  shippingApartment: string
+  shippingCity: string
+  shippingPostalCode: string
+  shippingState: string
+  shippingCountry: string
   shippingAddressSameAsBilling: boolean
+  acceptTerms: boolean
+  subscribe: boolean
 }
 
 export function CheckoutFlow() {
@@ -41,6 +43,7 @@ export function CheckoutFlow() {
   const [isLoading, setIsLoading] = useState(false)
   const [loadingProfile, setLoadingProfile] = useState(false)
   const [shippingCost, setShippingCost] = useState(2.99) // Default to Estonian rate
+  const [initialCheckDone, setInitialCheckDone] = useState(false)
   const router = useRouter()
   const { state: cartState, dispatch: cartDispatch } = useCart()
   const { data: session, status } = useSession()
@@ -69,7 +72,28 @@ export function CheckoutFlow() {
           const savedData = localStorage.getItem("checkout_customer_info")
           if (savedData) {
             const parsedData = JSON.parse(savedData)
-            setCustomerInfo(parsedData)
+            // Ensure all required fields have values
+            setCustomerInfo({
+              firstName: parsedData.firstName || '',
+              lastName: parsedData.lastName || '',
+              email: parsedData.email || '',
+              phone: parsedData.phone || '',
+              address: parsedData.address || '',
+              apartment: parsedData.apartment || '',
+              city: parsedData.city || '',
+              state: parsedData.state || '',
+              postalCode: parsedData.postalCode || '',
+              country: parsedData.country || '',
+              shippingAddress: parsedData.shippingAddress || parsedData.address || '',
+              shippingApartment: parsedData.shippingApartment || parsedData.apartment || '',
+              shippingCity: parsedData.shippingCity || parsedData.city || '',
+              shippingState: parsedData.shippingState || parsedData.state || '',
+              shippingPostalCode: parsedData.shippingPostalCode || parsedData.postalCode || '',
+              shippingCountry: parsedData.shippingCountry || parsedData.country || '',
+              shippingAddressSameAsBilling: parsedData.shippingAddressSameAsBilling || true,
+              acceptTerms: parsedData.acceptTerms || false,
+              subscribe: parsedData.subscribe || false
+            })
             setLoadingProfile(false)
             return
           }
@@ -82,7 +106,32 @@ export function CheckoutFlow() {
             
             // Set the checkout form data from user profile
             if (Object.keys(checkoutInfo).length > 0) {
-              setCustomerInfo(checkoutInfo as CustomerInfo)
+              // Convert to the full CustomerInfo type with required fields
+              setCustomerInfo({
+                ...checkoutInfo,
+                // Fill required fields that might be missing with defaults
+                firstName: checkoutInfo.firstName || '',
+                lastName: checkoutInfo.lastName || '',
+                email: checkoutInfo.email || '',
+                phone: checkoutInfo.phone || '',
+                address: checkoutInfo.address || '',
+                apartment: checkoutInfo.apartment || '',
+                city: checkoutInfo.city || '',
+                state: checkoutInfo.state || '',
+                postalCode: checkoutInfo.postalCode || '',
+                country: checkoutInfo.country || '',
+                // Add shipping fields with defaults
+                shippingAddress: checkoutInfo.address || '',
+                shippingApartment: checkoutInfo.apartment || '',
+                shippingCity: checkoutInfo.city || '',
+                shippingState: checkoutInfo.state || '',
+                shippingPostalCode: checkoutInfo.postalCode || '',
+                shippingCountry: checkoutInfo.country || '',
+                // Add missing fields with defaults
+                shippingAddressSameAsBilling: true,
+                acceptTerms: false,
+                subscribe: false
+              })
             }
           }
         } catch (error) {
@@ -227,7 +276,15 @@ export function CheckoutFlow() {
     } else {
       console.log('Cart has items:', cartState.items.length);
     }
+    setInitialCheckDone(true);
   }, [cartState.items.length, currentStep, router])
+
+  // Don't render anything until we've checked if cart is empty
+  if (!initialCheckDone) {
+    return <div className="flex justify-center items-center min-h-[50vh]">
+      <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+    </div>;
+  }
 
   return (
     <div className="max-w-6xl mx-auto">

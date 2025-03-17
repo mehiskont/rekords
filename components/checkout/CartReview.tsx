@@ -13,6 +13,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { useState, useMemo, useEffect } from "react"
 import Select from "react-select"
 import countryList from "react-select-country-list"
+import { useRouter } from "next/navigation"
 
 interface CustomerInfo {
   firstName: string
@@ -44,6 +45,7 @@ interface CartReviewProps {
 
 export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) {
   const { state } = useCart()
+  const router = useRouter()
   const [shippingAddressSameAsBilling, setShippingAddressSameAsBilling] = useState(true)
   const [acceptTerms, setAcceptTerms] = useState(false)
   const [subscribe, setSubscribe] = useState(false)
@@ -52,6 +54,14 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
   const [shippingCost, setShippingCost] = useState(2.99) // Default to Estonian rate
 
   const countryOptions = useMemo(() => countryList().getData(), [])
+
+  // Redirect to cart if no items present
+  useEffect(() => {
+    if (state.items.length === 0) {
+      console.log('CartReview: No items in cart, redirecting to cart page');
+      router.push('/cart');
+    }
+  }, [state.items.length, router]);
 
   // Use the actual price instead of calculating without fees
   const subtotal = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
