@@ -48,13 +48,12 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
   const router = useRouter()
   
   // Early return with redirection if cart is empty
-  if (state.items.length === 0) {
+  // But only if we've completed loading to prevent false empty cart detection
+  if (state.items.length === 0 && !state.isLoading) {
     console.log('CartReview: No items in cart, redirecting immediately');
     // Use useEffect for the actual redirection to avoid React state updates during render
     useEffect(() => {
-      router.push('/cart');
-      // Use replace instead of push to prevent going back to an empty form
-      // router.replace('/cart');
+      router.replace('/cart'); // Replace to prevent back navigation to empty form
     }, [router]);
     
     // Show loading spinner instead of empty form
@@ -75,14 +74,13 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
 
   const countryOptions = useMemo(() => countryList().getData(), [])
 
-  // This useEffect is no longer needed as we have the early return check
-  // But we'll keep it as a backup in case the early check somehow fails
+  // Backup redirect - only runs after cart is confirmed to be empty and not loading
   useEffect(() => {
-    if (state.items.length === 0) {
-      console.log('CartReview: No items in cart, redirecting via useEffect');
-      router.push('/cart');
+    if (state.items.length === 0 && !state.isLoading) {
+      console.log('CartReview: No items in cart and not loading, redirecting via useEffect');
+      router.replace('/cart'); // Use replace instead of push
     }
-  }, [state.items.length, router]);
+  }, [state.items.length, state.isLoading, router]);
 
   // Use the actual price instead of calculating without fees
   const subtotal = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)

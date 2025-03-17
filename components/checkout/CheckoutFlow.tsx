@@ -49,8 +49,8 @@ export function CheckoutFlow() {
   const { data: session, status } = useSession()
 
   // Early check for empty cart - redirect immediately if cart is empty and not in payment step
-  // We do this before any other logic or effects run
-  if (cartState.items.length === 0 && currentStep !== 1) {
+  // Only do this if we've completed initial loading (otherwise cart may appear empty before loading)
+  if (cartState.items.length === 0 && currentStep !== 1 && !cartState.isLoading && initialCheckDone) {
     // Use a useEffect for the redirect to avoid state updates during render
     useEffect(() => {
       console.log('CheckoutFlow: Empty cart detected at render time, redirecting immediately');
@@ -312,20 +312,22 @@ export function CheckoutFlow() {
   // If cart is empty and not in payment step, redirect to cart
   // Keep this as a backup to the early check
   useEffect(() => {
-    if (cartState.items.length === 0 && currentStep !== 1) {
-      console.log('Cart is empty, redirecting to cart page via useEffect');
+    // Only redirect if not loading (to prevent redirect during initial cart loading)
+    if (cartState.items.length === 0 && currentStep !== 1 && !cartState.isLoading) {
+      console.log('Cart is empty and not loading, redirecting to cart page via useEffect');
       localStorage.removeItem(STORAGE_KEY); // Clear checkout-related storage on redirect
       router.replace("/cart"); // Use replace to prevent going back to empty form
     } else {
-      console.log('Cart has items:', cartState.items.length);
+      console.log('Cart has items or is loading:', cartState.items.length, cartState.isLoading);
     }
     setInitialCheckDone(true);
-  }, [cartState.items.length, currentStep, router])
+  }, [cartState.items.length, cartState.isLoading, currentStep, router])
 
-  // Don't render anything until we've checked if cart is empty - backup protection
-  if (!initialCheckDone && cartState.items.length > 0) {
+  // Show loading indicator while cart is being loaded
+  if (cartState.isLoading || (!initialCheckDone && cartState.items.length === 0)) {
     return <div className="flex justify-center items-center min-h-[50vh]">
       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      <p className="ml-3">Loading cart...</p>
     </div>;
   }
 
