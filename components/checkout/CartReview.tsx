@@ -46,6 +46,26 @@ interface CartReviewProps {
 export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) {
   const { state } = useCart()
   const router = useRouter()
+  
+  // Early return with redirection if cart is empty
+  if (state.items.length === 0) {
+    console.log('CartReview: No items in cart, redirecting immediately');
+    // Use useEffect for the actual redirection to avoid React state updates during render
+    useEffect(() => {
+      router.push('/cart');
+      // Use replace instead of push to prevent going back to an empty form
+      // router.replace('/cart');
+    }, [router]);
+    
+    // Show loading spinner instead of empty form
+    return (
+      <div className="flex justify-center items-center min-h-[50vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        <p className="ml-3">Redirecting to cart...</p>
+      </div>
+    );
+  }
+  
   const [shippingAddressSameAsBilling, setShippingAddressSameAsBilling] = useState(true)
   const [acceptTerms, setAcceptTerms] = useState(false)
   const [subscribe, setSubscribe] = useState(false)
@@ -55,10 +75,11 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
 
   const countryOptions = useMemo(() => countryList().getData(), [])
 
-  // Redirect to cart if no items present
+  // This useEffect is no longer needed as we have the early return check
+  // But we'll keep it as a backup in case the early check somehow fails
   useEffect(() => {
     if (state.items.length === 0) {
-      console.log('CartReview: No items in cart, redirecting to cart page');
+      console.log('CartReview: No items in cart, redirecting via useEffect');
       router.push('/cart');
     }
   }, [state.items.length, router]);

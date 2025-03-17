@@ -48,10 +48,45 @@ export function CheckoutFlow() {
   const { state: cartState, dispatch: cartDispatch } = useCart()
   const { data: session, status } = useSession()
 
+  // Early check for empty cart - redirect immediately if cart is empty and not in payment step
+  // We do this before any other logic or effects run
+  if (cartState.items.length === 0 && currentStep !== 1) {
+    // Use a useEffect for the redirect to avoid state updates during render
+    useEffect(() => {
+      console.log('CheckoutFlow: Empty cart detected at render time, redirecting immediately');
+      
+      // Clear checkout-related storage to ensure fresh start next time
+      localStorage.removeItem(STORAGE_KEY);
+      
+      // Redirect to cart page
+      router.replace("/cart"); // Use replace to prevent going back to empty form
+    }, [router]);
+    
+    // Show loading spinner instead of empty form
+    return (
+      <div className="flex justify-center items-center min-h-[50vh]">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        <p className="ml-3">Redirecting to cart...</p>
+      </div>
+    );
+  }
+
   // Calculate totals
   // Use the actual price instead of calculating without fees
   const subtotal = cartState.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const total = subtotal + shippingCost
+
+  // Cleanup on unmount - ensure we don't leave partial state
+  useEffect(() => {
+    return () => {
+      // If we're unmounting and not through a successful checkout (no items in cart)
+      // then we should clean up the checkout state
+      if (cartState.items.length === 0) {
+        console.log('CheckoutFlow: Cleaning up checkout state on unmount');
+        localStorage.removeItem(STORAGE_KEY);
+      }
+    };
+  }, [cartState.items.length]);
 
   // Load saved step on mount
   useEffect(() => {
@@ -258,29 +293,37 @@ export function CheckoutFlow() {
     // Clear checkout-related storage
     localStorage.removeItem(STORAGE_KEY)
     
+    // Reset checkout step to ensure a fresh start next time
+    setCurrentStep(0)
+    
     // Don't clear customer info so it can be used next time
     // localStorage.removeItem("checkout_customer_info")
 
     // Clear the cart
     cartDispatch({ type: "CLEAR_CART" })
 
-    // Redirect to success page
-    router.push("/checkout/success")
+    // Clear client secret to prevent trying to reuse it
+    setClientSecret(null)
+
+    // Redirect to success page - use replace to prevent going back to checkout
+    router.replace("/checkout/success")
   }
 
   // If cart is empty and not in payment step, redirect to cart
+  // Keep this as a backup to the early check
   useEffect(() => {
     if (cartState.items.length === 0 && currentStep !== 1) {
-      console.log('Cart is empty, redirecting to cart page');
-      router.push("/cart");
+      console.log('Cart is empty, redirecting to cart page via useEffect');
+      localStorage.removeItem(STORAGE_KEY); // Clear checkout-related storage on redirect
+      router.replace("/cart"); // Use replace to prevent going back to empty form
     } else {
       console.log('Cart has items:', cartState.items.length);
     }
     setInitialCheckDone(true);
   }, [cartState.items.length, currentStep, router])
 
-  // Don't render anything until we've checked if cart is empty
-  if (!initialCheckDone) {
+  // Don't render anything until we've checked if cart is empty - backup protection
+  if (!initialCheckDone && cartState.items.length > 0) {
     return <div className="flex justify-center items-center min-h-[50vh]">
       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
     </div>;
