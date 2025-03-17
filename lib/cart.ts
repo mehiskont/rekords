@@ -113,7 +113,42 @@ export async function addToCart(cartId: string, item: DiscogsRecord, quantity: n
     }
     
     // Prepare images (ensure it's a valid Prisma JSON array)
-    const images = Array.isArray(item.images) ? item.images : [];
+    let images = [];
+    
+    // If item has a cover_image, make sure we store it in the images array
+    // This ensures we can reconstruct the cover_image when loading from DB
+    if (item.cover_image) {
+      if (Array.isArray(item.images) && item.images.length > 0) {
+        // If we already have images, use them
+        images = item.images;
+        
+        // Check if cover_image is already in the images array
+        const hasCoverImage = images.some(img => {
+          if (typeof img === 'string') {
+            return img === item.cover_image;
+          } else if (typeof img === 'object') {
+            return img.uri === item.cover_image || 
+                   img.resource_url === item.cover_image ||
+                   img.url === item.cover_image;
+          }
+          return false;
+        });
+        
+        // If cover_image is not in images array, add it
+        if (!hasCoverImage) {
+          // Add as first element to ensure it's used as primary image
+          images.unshift(item.cover_image);
+        }
+      } else {
+        // No images array, create one with the cover_image
+        images = [item.cover_image];
+      }
+    } else if (Array.isArray(item.images)) {
+      // No cover_image but we have images
+      images = item.images;
+    }
+    
+    console.log(`Adding item to cart: ${item.title}, images:`, images);
     
     // Add new item to cart
     return prisma.cartItem.create({

@@ -232,7 +232,75 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             // Transform the items to match the format expected by the UI
             if (syncedCart.items && Array.isArray(syncedCart.items)) {
               console.log('Synced and loaded', syncedCart.items.length, 'items from API');
-              const formattedItems = syncedCart.items.map((item: any) => ({
+              const formattedItems = syncedCart.items.map((item: any) => {
+                // Extract the first image URL for cover_image or use placeholder
+                let cover_image = "/placeholder.svg";
+                
+                if (item.images && Array.isArray(item.images) && item.images.length > 0) {
+                  const firstImage = item.images[0];
+                  
+                  // Handle different possible image object structures
+                  if (typeof firstImage === 'string') {
+                    cover_image = firstImage;
+                  } else if (typeof firstImage === 'object') {
+                    // Try various properties that might contain the image URL
+                    cover_image = firstImage.uri || firstImage.resource_url || 
+                      firstImage.url || firstImage.image || firstImage.src || 
+                      "/placeholder.svg";
+                  }
+                  
+                  console.log(`Synced item ${item.title} - Found image: ${cover_image}`);
+                } else {
+                  console.log(`Synced item ${item.title} - No images found, using placeholder`);
+                }
+                  
+                return {
+                  id: Number(item.discogsId),
+                  title: item.title,
+                  price: item.price,
+                  quantity: item.quantity,
+                  quantity_available: item.quantity_available || 1,
+                  weight: item.weight || 180,
+                  condition: item.condition,
+                  images: item.images || [],
+                  cover_image: cover_image, // Add the cover_image field
+                };
+              });
+              
+              dispatch({ type: "LOAD_CART", payload: formattedItems });
+            }
+          } else if (dbCartItems.length > 0) {
+            // DB has items but localStorage doesn't - use DB cart
+            console.log('Using database cart with', dbCartItems.length, 'items');
+            
+            // Debug image data structure
+            if (dbCartItems.length > 0 && dbCartItems[0].images) {
+              console.log('First item image data:', JSON.stringify(dbCartItems[0].images, null, 2));
+            }
+            
+            const formattedItems = dbCartItems.map((item: any) => {
+              // Extract the first image URL for cover_image or use placeholder
+              let cover_image = "/placeholder.svg";
+              
+              if (item.images && Array.isArray(item.images) && item.images.length > 0) {
+                const firstImage = item.images[0];
+                
+                // Handle different possible image object structures
+                if (typeof firstImage === 'string') {
+                  cover_image = firstImage;
+                } else if (typeof firstImage === 'object') {
+                  // Try various properties that might contain the image URL
+                  cover_image = firstImage.uri || firstImage.resource_url || 
+                    firstImage.url || firstImage.image || firstImage.src || 
+                    "/placeholder.svg";
+                }
+                
+                console.log(`Item ${item.title} - Found image: ${cover_image}`);
+              } else {
+                console.log(`Item ${item.title} - No images found, using placeholder`);
+              }
+                
+              return {
                 id: Number(item.discogsId),
                 title: item.title,
                 price: item.price,
@@ -241,25 +309,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 weight: item.weight || 180,
                 condition: item.condition,
                 images: item.images || [],
-              }));
-              
-              dispatch({ type: "LOAD_CART", payload: formattedItems });
-            }
-          } else if (dbCartItems.length > 0) {
-            // DB has items but localStorage doesn't - use DB cart
-            console.log('Using database cart with', dbCartItems.length, 'items');
-            console.log('Database cart items:', dbCartItems);
-            
-            const formattedItems = dbCartItems.map((item: any) => ({
-              id: Number(item.discogsId),
-              title: item.title,
-              price: item.price,
-              quantity: item.quantity,
-              quantity_available: item.quantity_available || 1,
-              weight: item.weight || 180,
-              condition: item.condition,
-              images: item.images || [],
-            }));
+                cover_image: cover_image, // Add the cover_image field
+              };
+            });
             
             console.log('Formatted items for UI:', formattedItems);
             dispatch({ type: "LOAD_CART", payload: formattedItems });
