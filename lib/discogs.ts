@@ -623,11 +623,25 @@ export async function getDiscogsInventory(
       throw new Error("Invalid data structure received from Discogs API")
     }
 
-    // More strict filtering for available listings - both quantity and status
-    const availableListings = data.listings.filter((listing) => 
-      listing.quantity > 0 && 
-      listing.status === "For Sale"
-    )
+    // More strict filtering for available listings
+    const availableListings = data.listings.filter((listing) => {
+      const isAvailable = 
+        // Must have positive quantity
+        (listing.quantity && parseInt(listing.quantity, 10) > 0) && 
+        // Must have "For Sale" status
+        listing.status === "For Sale" &&
+        // Must have a valid price
+        (listing.price && parseFloat(listing.price.value || listing.price) > 0);
+      
+      if (!isAvailable && options.cacheBuster) {
+        // Only log when explicitly refreshing to reduce noise
+        log(`Filtered out unavailable listing: ID=${listing.id}, title=${listing.release?.title}, quantity=${listing.quantity}, status=${listing.status}`, 
+            { price: listing.price }, 
+            "info");
+      }
+      
+      return isAvailable;
+    })
 
     // Optimize for performance by limiting release data fetches
     // Only fetch for first page or explicitly requested
@@ -800,15 +814,31 @@ export async function getDiscogsRecord(
     })
 
     // Get related records using a simpler query with minimal fields
-    const { records: allRelatedRecords } = await getDiscogsInventory(undefined, undefined, 1, 4, {
-      fetchFullReleaseData: false // Don't fetch full release data for related records
+    // We'll fetch a fresh copy of inventory to ensure we have the latest available items
+    const { records: allRelatedRecords } = await getDiscogsInventory(undefined, undefined, 1, 20, {
+      fetchFullReleaseData: false, // Don't fetch full release data for related records
+      cacheBuster: Date.now().toString() // Bypass cache to get fresh inventory
     })
     
-    const relatedRecords = allRelatedRecords.filter(
-      (relatedRecord) =>
-        relatedRecord.id !== record.id &&
-        relatedRecord.release !== record.release &&
-        relatedRecord.quantity_available > 0,
+    // Apply more strict filtering to ensure we're only showing available records
+    const relatedRecords = allRelatedRecords
+      .filter(
+        (relatedRecord) =>
+          // Don't show the current record
+          relatedRecord.id !== record.id &&
+          // Don't show records from the same release
+          relatedRecord.release !== record.release &&
+          // Ensure the record is actually available
+          relatedRecord.quantity_available > 0 &&
+          // Ensure "For Sale" status
+          relatedRecord.status === "For Sale"
+      )
+      // Limit to 4 related records
+      .slice(0, 4)
+      
+    // Log the related records for debugging
+    log(`Found ${relatedRecords.length} related records for ${record.title}`, 
+      relatedRecords.map(r => ({id: r.id, title: r.title, qty: r.quantity_available}))
     )
 
     const result = { record, relatedRecords }
