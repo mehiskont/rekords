@@ -72,22 +72,48 @@ export async function POST(request: NextRequest) {
       console.log(`Syncing ${data.items.length} items from localStorage to database for userId: ${userId}`);
       
       try {
-        // Clear current cart first
-        await clearCart(cart.id);
+        // Get existing user cart items first
+        const existingCart = await getCartWithItems(cart.id);
+        const existingItems = existingCart?.items || [];
+        console.log(`Found ${existingItems.length} existing items in user's cart`);
         
-        // Add all items from localStorage
+        // DON'T clear current cart - we want to merge, not replace
+        
+        // Add or merge items from localStorage
         let itemsAdded = 0;
+        let itemsUpdated = 0;
+        
         for (const item of data.items) {
           try {
-            // No need to validate range since we're using BigInt now
-            await addToCart(cart.id, item, item.quantity || 1);
-            itemsAdded++;
+            // Check if item already exists in user's cart
+            const existingItem = existingItems.find(
+              (existing) => existing.discogsId.toString() === item.id.toString()
+            );
+            
+            if (existingItem) {
+              // Update quantity if item already exists by adding guest item quantity
+              const newQuantity = Math.min(
+                existingItem.quantity + (item.quantity || 1),
+                item.quantity_available || existingItem.quantity_available
+              );
+              
+              await prisma.cartItem.update({
+                where: { id: existingItem.id },
+                data: { quantity: newQuantity }
+              });
+              
+              itemsUpdated++;
+            } else {
+              // Add new item to user's cart
+              await addToCart(cart.id, item, item.quantity || 1);
+              itemsAdded++;
+            }
           } catch (itemError) {
             console.error(`Error adding item ${item.id || 'unknown'} to cart:`, itemError);
           }
         }
         
-        console.log(`Successfully added ${itemsAdded} of ${data.items.length} items to database cart`);
+        console.log(`Successfully synchronized cart: ${itemsAdded} added, ${itemsUpdated} updated in database cart`);
         
         // Return the updated cart
         const updatedCart = await getOrCreateCart(userId);

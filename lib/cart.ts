@@ -239,8 +239,11 @@ export async function mergeGuestCartToUserCart(guestId: string, userId: string) 
   });
 
   if (!guestCart || guestCart.items.length === 0) {
+    console.log("No guest cart or empty cart, nothing to merge");
     return null; // No guest cart or empty cart, nothing to merge
   }
+
+  console.log(`Found guest cart with ${guestCart.items.length} items to merge`);
 
   // Find or create the user's cart
   let userCart = await prisma.cart.findUnique({
@@ -249,11 +252,18 @@ export async function mergeGuestCartToUserCart(guestId: string, userId: string) 
   });
 
   if (!userCart) {
+    console.log("No user cart found, creating a new one");
     userCart = await prisma.cart.create({
       data: { userId },
       include: { items: true },
     });
+  } else {
+    console.log(`Found existing user cart with ${userCart.items.length} items`);
   }
+
+  // Track merge results
+  let itemsAdded = 0;
+  let itemsUpdated = 0;
 
   // Merge the items
   for (const guestItem of guestCart.items) {
@@ -263,18 +273,26 @@ export async function mergeGuestCartToUserCart(guestId: string, userId: string) 
     );
 
     if (existingItem) {
-      // Update quantity of existing item
+      // Update quantity of existing item by ADDING the guest item quantity
+      const newQuantity = Math.min(
+        existingItem.quantity + guestItem.quantity,
+        guestItem.quantity_available
+      );
+      
+      console.log(`Updating quantity for item ${guestItem.title} from ${existingItem.quantity} to ${newQuantity}`);
+      
       await prisma.cartItem.update({
         where: { id: existingItem.id },
         data: {
-          quantity: Math.min(
-            existingItem.quantity + guestItem.quantity,
-            guestItem.quantity_available
-          ),
+          quantity: newQuantity,
         },
       });
+      
+      itemsUpdated++;
     } else {
       // Add guest's item to user's cart
+      console.log(`Adding new item ${guestItem.title} to user cart`);
+      
       await prisma.cartItem.create({
         data: {
           cartId: userCart.id,
@@ -288,8 +306,12 @@ export async function mergeGuestCartToUserCart(guestId: string, userId: string) 
           images: guestItem.images,
         },
       });
+      
+      itemsAdded++;
     }
   }
+  
+  console.log(`Merged cart successfully: ${itemsAdded} items added, ${itemsUpdated} items updated`);
 
   // Delete the guest cart after merging
   await prisma.cart.delete({

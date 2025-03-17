@@ -368,49 +368,21 @@ export const authOptions = {
                 });
               }
             
-              // Merge items from guest cart into user cart
-              for (const guestItem of guestCart.items) {
-                const existingItem = userCart.items.find(item => 
-                  item.discogsId === guestItem.discogsId
-                );
-                
-                if (existingItem) {
-                  // Update quantity if item already exists
-                  await prisma.cartItem.update({
-                    where: { id: existingItem.id },
-                    data: {
-                      quantity: Math.min(
-                        existingItem.quantity + guestItem.quantity,
-                        guestItem.quantity_available
-                      )
-                    }
-                  });
-                } else {
-                  // Add item to user's cart
-                  await prisma.cartItem.create({
-                    data: {
-                      cartId: userCart.id,
-                      discogsId: guestItem.discogsId,
-                      title: guestItem.title,
-                      price: guestItem.price,
-                      quantity: guestItem.quantity,
-                      quantity_available: guestItem.quantity_available,
-                      condition: guestItem.condition,
-                      weight: guestItem.weight,
-                      images: guestItem.images
-                    }
-                  });
-                }
+              // Import cart merging function to ensure consistent logic
+              const { mergeGuestCartToUserCart } = await import("./cart");
+              
+              // Use the dedicated cart merging function to ensure consistent behavior
+              const mergedCart = await mergeGuestCartToUserCart(guestCartId, user.id);
+              
+              if (mergedCart) {
+                log("Successfully merged cart using mergeGuestCartToUserCart function", 
+                  { itemCount: mergedCart.items.length },
+                  "info");
+              } else {
+                log("No items were merged or an error occurred during cart merging", {}, "warn");
               }
               
-              // Delete the guest cart after successful merge
-              await prisma.cart.delete({
-                where: { id: guestCart.id }
-              });
-              
-              log("Successfully merged guest cart with user cart", 
-                { userId: user.id, itemsMerged: guestCart.items.length }, 
-                "info");
+              // Guest cart deletion is already handled in mergeGuestCartToUserCart function
               
               // Clear the guest cart cookie
               cookieStore.delete("plastik_guest_cart_id");
