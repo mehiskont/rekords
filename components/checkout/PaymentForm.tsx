@@ -1,7 +1,7 @@
 "use client"
 
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { loadStripe } from "@stripe/stripe-js"
 import { Elements, PaymentElement, useStripe, useElements } from "@stripe/react-stripe-js"
 import { Button } from "@/components/ui/button"
@@ -26,6 +26,8 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
   
   // Setup effect to monitor for component remounts and expirations
   useEffect(() => {
+    if (typeof window === 'undefined') return; // Skip on server-side rendering
+    
     console.log(`StripePaymentForm mounted at ${new Date().toISOString()}`);
     
     // Check if there was a previous instance
@@ -136,11 +138,16 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
 
 export function PaymentForm({ clientSecret, total, subtotal, shippingCost, onSuccess }: PaymentFormProps) {
   // Extract session ID from URL - it's appended to the URL after successful payment intent creation
-  const searchParams = new URLSearchParams(window.location.search);
+  const searchParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : new URLSearchParams();
   const sessionId = searchParams.get('session_id') || '';
   
+  // Use state for tracking mount time rather than just a variable
+  const [componentMountTime] = useState(() => new Date().getTime());
+  
   // Add debugging to track component mount time and detect reloads
-  useState(() => {
+  useEffect(() => {
+    if (typeof window === 'undefined') return; // Skip on server-side rendering
+    
     const mountTime = new Date().toISOString();
     console.log(`PaymentForm mounted at ${mountTime} with clientSecret: ${clientSecret?.substring(0, 10)}...`);
     
@@ -157,7 +164,7 @@ export function PaymentForm({ clientSecret, total, subtotal, shippingCost, onSuc
     
     // Store current mount time as previous for next reload detection
     localStorage.setItem('payment_form_previous_mount', mountTime);
-  });
+  }, [clientSecret]);
   
   // Store the session ID in localStorage so we can use it on redirect
   if (sessionId) {
@@ -178,6 +185,8 @@ export function PaymentForm({ clientSecret, total, subtotal, shippingCost, onSuc
   // Monitor component initialization timing for Stripe Elements
   const [elementsInitTimestamp] = useState(() => new Date().getTime());
   useEffect(() => {
+    if (typeof window === 'undefined') return; // Skip on server-side rendering
+    
     console.log(`Stripe Elements about to initialize at ${new Date().toISOString()}`);
     
     // Check if Stripe options have changed since last render
