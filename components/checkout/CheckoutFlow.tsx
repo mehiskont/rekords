@@ -88,12 +88,12 @@ export function CheckoutFlow() {
     };
   }, [cartState.items.length]);
 
-  // Load saved step on mount
+  // Always start at the first step when mounting the component
   useEffect(() => {
-    const savedStep = localStorage.getItem(STORAGE_KEY)
-    if (savedStep) {
-      setCurrentStep(Number.parseInt(savedStep))
-    }
+    // Reset the step to ensure users always start at the beginning
+    setCurrentStep(0)
+    // Clear any previously saved step
+    localStorage.removeItem(STORAGE_KEY)
   }, [])
 
   // Load user profile data if logged in
