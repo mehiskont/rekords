@@ -200,17 +200,38 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [status, getFromLocalStorage, saveToLocalStorage]);
   
   // Initialize cart from localStorage on first render (client-side only)
-  // But only for unauthenticated users - authenticated users get cart from API
+  // For unauthenticated users OR on initial load
   useEffect(() => {
-    if (typeof window !== 'undefined' && status === 'unauthenticated') {
-      console.log('Initial cart load attempt from localStorage for guest user');
+    if (typeof window !== 'undefined') {
       dispatch({ type: "SET_LOADING", payload: true });
       
       try {
         const localCart = getFromLocalStorage('plastik-cart');
         if (localCart && localCart.items && Array.isArray(localCart.items)) {
           console.log('Found cart in localStorage with', localCart.items.length, 'items');
-          dispatch({ type: "LOAD_CART", payload: localCart.items });
+          
+          // Load the cart only for unauthenticated users
+          // Or when the authentication status is still loading
+          if (status === 'unauthenticated' || status === 'loading') {
+            console.log('Loading localStorage cart for unauthenticated/loading user');
+            dispatch({ type: "LOAD_CART", payload: localCart.items });
+            
+            // Save guest cart items for potential merge later
+            // This is crucial to handle OAuth login flows
+            if (localCart.items.length > 0) {
+              console.log(`Preserving ${localCart.items.length} initial cart items for potential merge`);
+              guestCartRef.current = localCart.items;
+              
+              // Copy to a special key for backup that persists across page reloads
+              localStorage.removeItem('plastik-cart-merged-flag');
+              saveToLocalStorage('plastik-guest-cart-backup', {
+                items: localCart.items,
+                timestamp: Date.now()
+              });
+            }
+          } else {
+            console.log('Skipping localStorage cart load for authenticated user');
+          }
         } else {
           console.log('No cart found in localStorage');
         }
@@ -238,31 +259,36 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         if (status === 'authenticated' && session?.user) {
           console.log('Authenticated user, fetching cart from API');
           
-          // Create a flag to track if we've already merged localStorage items
-          // to prevent merging again on page refresh
+          // We need a reliable way to check if we've already merged carts
+          // that works with OAuth flows that involve page navigation
           const hasAlreadyMerged = getFromLocalStorage('plastik-cart-merged-flag');
-          // Get previous status from the ref we update when status changes
-          const previousStatus = sessionRef.current;
-          const isAuthTransition = status === 'authenticated' && status !== previousStatus;
           
-          // Only skip merging if we've already merged AND this is not a new login
-          if (hasAlreadyMerged && !isAuthTransition) {
-            console.log('Cart has already been merged, skipping merge operation');
+          if (hasAlreadyMerged) {
+            console.log('Cart has already been merged according to flag, skipping merge operation');
           } else {
-            // Check if we have previously preserved guest cart items
+            // Always try to merge if we haven't merged yet since login
+            console.log('No merge flag found - will check for items to merge');
+            // Check multiple sources for guest cart items
+            // 1. Current React reference (works within same session)
             const guestItems = guestCartRef.current;
             const hasPreservedGuestItems = guestItems && Array.isArray(guestItems) && guestItems.length > 0;
             
-            // Try backup if needed
-            const guestCartBackup = hasPreservedGuestItems ? null : getFromLocalStorage('plastik-guest-cart-backup');
+            // 2. Persistent backup in localStorage (works across page navigation/OAuth)
+            const guestCartBackup = getFromLocalStorage('plastik-guest-cart-backup');
             const backupItems = guestCartBackup?.items || [];
             
-            console.log(`Preserved guest items: ${hasPreservedGuestItems ? guestItems.length : 0}`);
-            console.log(`Backup guest items: ${backupItems.length}`);
+            // 3. Current localStorage cart (fallback)
+            const currentLocalItems = localCartItems || [];
             
-            // Get items to merge from our preserved ref (preferred) or backup
+            console.log(`Sources of guest items for merge:`);
+            console.log(`1. React ref: ${hasPreservedGuestItems ? guestItems.length : 0} items`);
+            console.log(`2. Backup: ${backupItems.length} items`);
+            console.log(`3. Current localStorage: ${currentLocalItems.length} items`);
+            
+            // Get items to merge, prioritizing sources with items
             const itemsToMerge = hasPreservedGuestItems ? guestItems : 
-                                (backupItems.length > 0 ? backupItems : localCartItems);
+                                (backupItems.length > 0 ? backupItems : 
+                                (currentLocalItems.length > 0 ? currentLocalItems : []));
                                 
             // If we have items to merge, attempt the merge
             if (itemsToMerge.length > 0) {
@@ -284,14 +310,18 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 
                 console.log('Successfully merged carts after login');
                 
-                // Set a flag indicating we've merged the cart
-                saveToLocalStorage('plastik-cart-merged-flag', {
-                  merged: true,
+                // We'll set the merged flag after we verify the merge was successful
+                // But clear localStorage cart NOW to prevent remerging on refresh
+                saveToLocalStorage('plastik-cart', {
+                  items: [],
+                  isOpen: state.isOpen,
+                  isLoading: state.isLoading,
                   timestamp: Date.now()
                 });
                 
-                // We'll clear the cart after we verify the merge was successful
-                console.log('Merge successful, will clear local carts after verifying');
+                // Don't set the merged flag yet
+                // We'll do that after verifying the merge was successful
+                console.log('Merge API call successful, cleared localStorage cart to prevent duplicate merges');
               } catch (mergeError) {
                 console.error('Failed to merge carts after login:', mergeError);
               }
@@ -308,6 +338,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           const cartData = await response.json();
           console.log('API cart response:', cartData);
           const dbCartItems = cartData.items && Array.isArray(cartData.items) ? cartData.items : [];
+          
+          console.log(`Received ${dbCartItems.length} items from database cart`);
+          
+          // Log item details for debugging
+          if (dbCartItems.length > 0) {
+            dbCartItems.forEach((item, index) => {
+              console.log(`DB Cart Item #${index + 1}: ID=${item.discogsId}, Title=${item.title}, Qty=${item.quantity}`);
+            });
+          }
           
           console.log('API cart has', dbCartItems.length, 'items');
           
