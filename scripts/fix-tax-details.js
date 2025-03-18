@@ -1,6 +1,10 @@
 // Script to fix tax details display in order emails and order summaries
 const { PrismaClient } = require('@prisma/client');
-const { log } = require('../lib/logger');
+// Use direct console.log instead of the logger to avoid path issues
+const log = (message, level = 'info') => {
+  const timestamp = new Date().toISOString();
+  console.log(`[${timestamp}] [${level.toUpperCase()}] ${message}`);
+};
 
 const prisma = new PrismaClient();
 
@@ -53,6 +57,7 @@ async function fixTaxDetails() {
     log("Tax details fix completed");
   } catch (error) {
     log(`Error fixing tax details: ${error.message}`, "error");
+    console.error(error);
   } finally {
     await prisma.$disconnect();
   }
@@ -61,5 +66,6 @@ async function fixTaxDetails() {
 // Run the function
 fixTaxDetails().catch(e => {
   log(`Fatal error: ${e.message}`, "error");
+  console.error(e);
   process.exit(1);
 });
