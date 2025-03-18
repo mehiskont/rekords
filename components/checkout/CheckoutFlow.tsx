@@ -34,6 +34,9 @@ export interface CustomerInfo {
   shippingAddressSameAsBilling: boolean
   acceptTerms: boolean
   subscribe: boolean
+  taxDetails: boolean
+  organization: string
+  taxId: string
 }
 
 export function CheckoutFlow() {
@@ -128,7 +131,10 @@ export function CheckoutFlow() {
               shippingCountry: parsedData.shippingCountry || parsedData.country || '',
               shippingAddressSameAsBilling: parsedData.shippingAddressSameAsBilling || true,
               acceptTerms: parsedData.acceptTerms || false,
-              subscribe: parsedData.subscribe || false
+              subscribe: parsedData.subscribe || false,
+              taxDetails: parsedData.taxDetails || false,
+              organization: parsedData.organization || '',
+              taxId: parsedData.taxId || ''
             })
             setLoadingProfile(false)
             return
@@ -166,7 +172,10 @@ export function CheckoutFlow() {
                 // Add missing fields with defaults
                 shippingAddressSameAsBilling: true,
                 acceptTerms: false,
-                subscribe: false
+                subscribe: false,
+                taxDetails: false,
+                organization: '',
+                taxId: ''
               })
             }
           }

@@ -100,6 +100,10 @@ export async function createOrder(
         })),
         total: order.total,
         shippingAddress: shippingAddress as ShippingAddress,
+        // Include tax details from billing address if available
+        taxDetails: billingAddress?.taxDetails === "true" || false,
+        organization: billingAddress?.organization || "",
+        taxId: billingAddress?.taxId || ""
       }
 
       // Get the primary email to send the confirmation to

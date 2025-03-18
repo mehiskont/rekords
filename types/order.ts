@@ -20,5 +20,8 @@ export interface OrderDetails {
   items: OrderItem[]
   total: number
   shippingAddress: ShippingAddress
+  taxDetails?: boolean
+  organization?: string
+  taxId?: string
 }
 

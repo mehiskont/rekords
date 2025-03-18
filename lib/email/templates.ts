@@ -23,6 +23,11 @@ export function getOrderConfirmationEmail(order: OrderDetails): string {
     `;
   };
   
+  // Get tax details from metadata if available
+  const taxDetails = order.taxDetails || false;
+  const organization = order.organization || '';
+  const taxId = order.taxId || '';
+  
   // Calculate subtotal
   const subtotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   
@@ -144,6 +149,14 @@ export function getOrderConfirmationEmail(order: OrderDetails): string {
             <p>${formatAddress(order.shippingAddress)}</p>
             <p><strong>Estimated Delivery:</strong> 5-7 business days</p>
           </div>
+          
+          ${taxDetails ? `
+          <div class="shipping" style="margin-top: 20px;">
+            <h3>Tax Details:</h3>
+            <p><strong>Organization:</strong> ${organization}</p>
+            <p><strong>Tax ID:</strong> ${taxId}</p>
+          </div>
+          ` : ''}
           
           <div class="footer">
             <p>Thank you for shopping with Plastik Records!</p>

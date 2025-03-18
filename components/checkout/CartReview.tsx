@@ -35,6 +35,9 @@ interface CustomerInfo {
   shippingAddressSameAsBilling: boolean
   acceptTerms: boolean
   subscribe: boolean
+  taxDetails: boolean
+  organization: string
+  taxId: string
 }
 
 interface CartReviewProps {
@@ -68,6 +71,7 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
   const [shippingAddressSameAsBilling, setShippingAddressSameAsBilling] = useState(true)
   const [acceptTerms, setAcceptTerms] = useState(false)
   const [subscribe, setSubscribe] = useState(false)
+  const [taxDetails, setTaxDetails] = useState(false)
   const [billingCountry, setBillingCountry] = useState("")
   const [shippingCountry, setShippingCountry] = useState("")
   const [shippingCost, setShippingCost] = useState(2.99) // Default to Estonian rate
@@ -167,6 +171,9 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
       shippingAddressSameAsBilling,
       acceptTerms,
       subscribe,
+      taxDetails,
+      organization: taxDetails ? (data.organization || '') : '',
+      taxId: taxDetails ? (data.taxId || '') : '',
     })
   }
 
@@ -182,6 +189,9 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
       }
       if (initialData.shippingAddressSameAsBilling !== undefined) {
         setShippingAddressSameAsBilling(initialData.shippingAddressSameAsBilling);
+      }
+      if (initialData.taxDetails !== undefined) {
+        setTaxDetails(initialData.taxDetails);
       }
     }
   }, [initialData]);
@@ -397,6 +407,41 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
                 Shipping address same as billing address
               </Label>
             </div>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox
+                id="taxDetails"
+                checked={taxDetails}
+                onCheckedChange={(checked) => setTaxDetails(checked as boolean)}
+              />
+              <Label htmlFor="taxDetails" className="text-sm">
+                Add tax details
+              </Label>
+            </div>
+
+            {taxDetails && (
+              <div className="pl-6 space-y-4 border-l-2 border-muted-foreground/20">
+                <div>
+                  <Label htmlFor="organization">Organization</Label>
+                  <Input 
+                    id="organization" 
+                    name="organization" 
+                    defaultValue={initialData?.organization || ''} 
+                    required={taxDetails}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="taxId">Tax ID</Label>
+                  <Input 
+                    id="taxId" 
+                    name="taxId" 
+                    defaultValue={initialData?.taxId || ''} 
+                    required={taxDetails}
+                  />
+                </div>
+              </div>
+            )}
+
             <div className="flex items-center space-x-2">
               <Checkbox
                 id="terms"
