@@ -80,9 +80,23 @@ export default function CheckoutSuccessPage() {
               <p className="text-muted-foreground">Order ID: <span className="font-medium text-foreground">{orderId.substring(0, 8)}</span></p>
               <p className="text-sm text-muted-foreground">We've sent a confirmation email with your order details.</p>
               
+              {/* Show local pickup info if applicable */}
+              {order?.billingAddress?.localPickup === "true" && (
+                <div className="mt-4 p-3 bg-green-50 border-l-4 border-green-500 rounded text-left">
+                  <h3 className="text-sm font-medium mb-2">Local Pick-up Information</h3>
+                  <p className="text-sm">Please bring your ID when picking up your order.</p>
+                  <p className="text-sm mt-2"><span className="font-medium">Pick-up Location:</span><br />
+                    Plastik Records, 5 Main Street, Tallinn, Estonia
+                  </p>
+                  <p className="text-sm mt-2"><span className="font-medium">Store Hours:</span><br />
+                    Monday-Friday 10am-7pm, Saturday 11am-5pm
+                  </p>
+                </div>
+              )}
+              
               {/* Show tax details if available */}
               {order?.billingAddress?.taxDetails === "true" && (
-                <div className="mt-4 p-3 bg-slate-50 border-l-4 border-blue-500 rounded">
+                <div className="mt-4 p-3 bg-slate-50 border-l-4 border-blue-500 rounded text-left">
                   <h3 className="text-sm font-medium mb-2">Tax Details</h3>
                   <p className="text-sm"><span className="text-muted-foreground">Organization:</span> {order.billingAddress.organization}</p>
                   <p className="text-sm"><span className="text-muted-foreground">Tax ID:</span> {order.billingAddress.taxId}</p>

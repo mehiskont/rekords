@@ -23,5 +23,6 @@ export interface OrderDetails {
   taxDetails?: boolean
   organization?: string
   taxId?: string
+  localPickup?: boolean
 }
 

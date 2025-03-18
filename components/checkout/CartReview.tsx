@@ -33,6 +33,7 @@ interface CustomerInfo {
   shippingState: string
   shippingCountry: string
   shippingAddressSameAsBilling: boolean
+  localPickup: boolean
   acceptTerms: boolean
   subscribe: boolean
   taxDetails: boolean
@@ -69,6 +70,7 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
   }
   
   const [shippingAddressSameAsBilling, setShippingAddressSameAsBilling] = useState(true)
+  const [localPickup, setLocalPickup] = useState(false)
   const [acceptTerms, setAcceptTerms] = useState(false)
   const [subscribe, setSubscribe] = useState(false)
   const [taxDetails, setTaxDetails] = useState(false)
@@ -90,15 +92,21 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
   const subtotal = state.items.reduce((sum, item) => sum + item.price * item.quantity, 0)
   const total = subtotal + shippingCost
 
-  // Calculate shipping cost when country changes
-  // Force Estonian rate update when the component mounts
+  // Calculate shipping cost when component mounts
   useEffect(() => {
     console.log('CartReview: Initializing shipping cost to €2.99 (Estonian rate)');
     setShippingCost(2.99);
   }, []);
 
-  // Calculate shipping cost when country or items change
+  // Calculate shipping cost when country, items, or localPickup changes
   useEffect(() => {
+    // If local pickup is selected, set shipping cost to 0 and return early
+    if (localPickup) {
+      console.log('CartReview: Local pickup selected, setting shipping cost to €0');
+      setShippingCost(0);
+      return;
+    }
+    
     // Explicitly determine the actual country value from the select component
     const countryToUse = shippingAddressSameAsBilling ? billingCountry : shippingCountry;
     console.log(`CartReview: Country changed to: ${countryToUse || 'none'}, sameAddress: ${shippingAddressSameAsBilling}, billing: ${billingCountry}, shipping: ${shippingCountry}`);
@@ -140,7 +148,7 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
     const cost = calculateShippingCost(totalWeight, countryToUse);
     console.log(`CartReview: Final shipping cost for ${countryToUse}: €${cost}`);
     setShippingCost(cost);
-  }, [billingCountry, shippingCountry, shippingAddressSameAsBilling, state.items])
+  }, [billingCountry, shippingCountry, shippingAddressSameAsBilling, state.items, localPickup])
 
   const customStyles = {
     control: (provided: any) => ({
@@ -169,6 +177,7 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
       country: billingCountry,
       shippingCountry: shippingAddressSameAsBilling ? billingCountry : shippingCountry,
       shippingAddressSameAsBilling,
+      localPickup,
       acceptTerms,
       subscribe,
       taxDetails,
@@ -189,6 +198,9 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
       }
       if (initialData.shippingAddressSameAsBilling !== undefined) {
         setShippingAddressSameAsBilling(initialData.shippingAddressSameAsBilling);
+      }
+      if (initialData.localPickup !== undefined) {
+        setLocalPickup(initialData.localPickup);
       }
       if (initialData.taxDetails !== undefined) {
         setTaxDetails(initialData.taxDetails);
@@ -399,9 +411,21 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
           <div className="space-y-4 mt-8">
             <div className="flex items-center space-x-2">
               <Checkbox
+                id="localPickup"
+                checked={localPickup}
+                onCheckedChange={(checked) => setLocalPickup(checked as boolean)}
+              />
+              <Label htmlFor="localPickup" className="text-sm">
+                Local pick-up from store
+              </Label>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Checkbox
                 id="sameAddress"
                 checked={shippingAddressSameAsBilling}
                 onCheckedChange={(checked) => setShippingAddressSameAsBilling(checked as boolean)}
+                disabled={localPickup}
               />
               <Label htmlFor="sameAddress" className="text-sm">
                 Shipping address same as billing address
@@ -503,10 +527,19 @@ export function CartReview({ onNext, isLoading, initialData }: CartReviewProps) 
             <span>${subtotal.toFixed(2)}</span>
           </div>
           <div className="flex justify-between text-sm">
-            <span>Shipping {billingCountry ? `(to ${billingCountry})` : ''}</span>
-            <span>${shippingCost.toFixed(2)}</span>
-            {billingCountry?.toLowerCase() === 'estonia' && (
-              <span className="text-xs text-muted-foreground">(Itella SmartPost)</span>
+            {localPickup ? (
+              <>
+                <span>Shipping</span>
+                <span className="text-green-600 font-medium">Free (Local pick-up)</span>
+              </>
+            ) : (
+              <>
+                <span>Shipping {billingCountry ? `(to ${billingCountry})` : ''}</span>
+                <span>${shippingCost.toFixed(2)}</span>
+                {billingCountry?.toLowerCase() === 'estonia' && (
+                  <span className="text-xs text-muted-foreground">(Itella SmartPost)</span>
+                )}
+              </>
             )}
           </div>
           <div className="flex justify-between font-bold text-lg pt-2 border-t">

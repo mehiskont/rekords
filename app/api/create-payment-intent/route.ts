@@ -22,10 +22,11 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
     
-    // Extract tax details if available
+    // Extract tax details and shipping preferences if available
     const taxDetails = customer.taxDetails || false
     const organization = customer.organization || ''
     const taxId = customer.taxId || ''
+    const localPickup = customer.localPickup || false
 
     log("Creating payment intent with items:", JSON.stringify(items));
     
@@ -88,6 +89,7 @@ export async function POST(req: Request) {
         taxDetails: taxDetails ? "true" : "false",
         organization: organization,
         taxId: taxId,
+        localPickup: localPickup ? "true" : "false",
         items: JSON.stringify(
           items.map((item) => ({
             id: item.id,
@@ -118,6 +120,7 @@ export async function POST(req: Request) {
         taxDetails: taxDetails ? "true" : "false",
         organization: organization,
         taxId: taxId,
+        localPickup: localPickup ? "true" : "false",
         items: JSON.stringify(
           items.map((item) => ({
             id: item.id,

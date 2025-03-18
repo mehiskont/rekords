@@ -23,10 +23,11 @@ export function getOrderConfirmationEmail(order: OrderDetails): string {
     `;
   };
   
-  // Get tax details from metadata if available
+  // Get tax details and shipping preferences from metadata if available
   const taxDetails = order.taxDetails || false;
   const organization = order.organization || '';
   const taxId = order.taxId || '';
+  const localPickup = order.localPickup || false;
   
   // Calculate subtotal
   const subtotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
@@ -127,9 +128,14 @@ export function getOrderConfirmationEmail(order: OrderDetails): string {
               <span>$${subtotal.toFixed(2)}</span>
             </div>
             <div class="summary-row">
+              ${localPickup ? `
+              <span>Shipping:</span>
+              <span style="color: #22c55e; font-weight: 500;">Free (Local pick-up)</span>
+              ` : `
               <span>Shipping${order.shippingAddress?.country ? ` (to ${order.shippingAddress.country})` : ''}:</span>
               <span>$${shippingCost.toFixed(2)}</span>
               ${isEstonia ? `<span class="shipping-method">(Itella SmartPost)</span>` : ''}
+              `}
             </div>
             <div class="summary-total">
               <span>Total:</span>
@@ -138,9 +144,17 @@ export function getOrderConfirmationEmail(order: OrderDetails): string {
           </div>
           
           <div class="shipping">
+            ${localPickup ? `
+            <h3>Delivery Method:</h3>
+            <p><strong>Local pick-up from store</strong></p>
+            <p>Please bring your ID when picking up your order.</p>
+            <p><strong>Pick-up Location:</strong> Plastik Records, 5 Main Street, Tallinn, Estonia</p>
+            <p><strong>Store Hours:</strong> Monday-Friday 10am-7pm, Saturday 11am-5pm</p>
+            ` : `
             <h3>Shipping Address:</h3>
             <p>${formatAddress(order.shippingAddress)}</p>
             <p><strong>Estimated Delivery:</strong> 5-7 business days</p>
+            `}
           </div>
           
           ${taxDetails ? `

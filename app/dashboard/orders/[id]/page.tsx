@@ -159,8 +159,19 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
                 
                 <div className="space-y-4">
                   <div>
-                    <h3 className="font-medium mb-2">Shipping Address</h3>
-                    {order.shippingAddress ? (
+                    <h3 className="font-medium mb-2">
+                      {order.billingAddress?.localPickup === "true" ? "Delivery Method" : "Shipping Address"}
+                    </h3>
+                    {order.billingAddress?.localPickup === "true" ? (
+                      <div className="text-sm">
+                        <p className="font-medium text-green-600">Local pick-up from store</p>
+                        <p className="mt-1">Please bring your ID when picking up your order.</p>
+                        <p className="mt-2 font-medium">Pick-up Location:</p>
+                        <p>Plastik Records, 5 Main Street, Tallinn, Estonia</p>
+                        <p className="mt-2 font-medium">Store Hours:</p>
+                        <p>Monday-Friday 10am-7pm, Saturday 11am-5pm</p>
+                      </div>
+                    ) : order.shippingAddress ? (
                       <address className="not-italic text-sm">
                         {order.shippingAddress.name && (
                           <p>{order.shippingAddress.name}</p>
@@ -277,9 +288,13 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
                 
                 <div className="flex justify-between text-sm">
                   <span>Shipping</span>
-                  <span>
-                    ${(order.total - order.items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0)).toFixed(2)}
-                  </span>
+                  {order.billingAddress?.localPickup === "true" ? (
+                    <span className="text-green-600 font-medium">Free (Local pick-up)</span>
+                  ) : (
+                    <span>
+                      ${(order.total - order.items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0)).toFixed(2)}
+                    </span>
+                  )}
                 </div>
                 
                 <div className="flex justify-between font-medium text-lg pt-2 border-t">
