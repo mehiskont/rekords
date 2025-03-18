@@ -59,6 +59,8 @@ async function handleOrderDetails(orderId: string, request: NextRequest) {
         total: order.total,
         status: order.status,
         createdAt: order.createdAt,
+        shippingAddress: order.shippingAddress,
+        billingAddress: order.billingAddress,
         items: order.items.map(item => ({
           title: item.title,
           quantity: item.quantity,

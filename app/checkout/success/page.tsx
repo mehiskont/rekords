@@ -13,6 +13,7 @@ export default function CheckoutSuccessPage() {
   const searchParams = useSearchParams()
   const sessionId = searchParams.get('session_id')
   const [orderId, setOrderId] = useState<string | null>(null)
+  const [order, setOrder] = useState<any>(null)
   const [isLoading, setIsLoading] = useState(true)
   const { data: session } = useSession()
   const cartContext = useCart()
@@ -35,6 +36,7 @@ export default function CheckoutSuccessPage() {
         .then(response => response.json())
         .then(data => {
           setOrderId(data.id || null)
+          setOrder(data)
           setIsLoading(false)
         })
         .catch(err => {
@@ -77,6 +79,15 @@ export default function CheckoutSuccessPage() {
             <div className="my-6 space-y-3">
               <p className="text-muted-foreground">Order ID: <span className="font-medium text-foreground">{orderId.substring(0, 8)}</span></p>
               <p className="text-sm text-muted-foreground">We've sent a confirmation email with your order details.</p>
+              
+              {/* Show tax details if available */}
+              {order?.billingAddress?.taxDetails === "true" && (
+                <div className="mt-4 p-3 bg-slate-50 border-l-4 border-blue-500 rounded">
+                  <h3 className="text-sm font-medium mb-2">Tax Details</h3>
+                  <p className="text-sm"><span className="text-muted-foreground">Organization:</span> {order.billingAddress.organization}</p>
+                  <p className="text-sm"><span className="text-muted-foreground">Tax ID:</span> {order.billingAddress.taxId}</p>
+                </div>
+              )}
             </div>
           ) : (
             <p className="my-6 text-sm text-muted-foreground">Your payment was successful and your order is being processed.</p>

@@ -157,28 +157,40 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
                   </dl>
                 </div>
                 
-                <div>
-                  <h3 className="font-medium mb-2">Shipping Address</h3>
-                  {order.shippingAddress ? (
-                    <address className="not-italic text-sm">
-                      {order.shippingAddress.name && (
-                        <p>{order.shippingAddress.name}</p>
-                      )}
-                      {order.shippingAddress.line1 && (
-                        <p>{order.shippingAddress.line1}</p>
-                      )}
-                      {order.shippingAddress.line2 && (
-                        <p>{order.shippingAddress.line2}</p>
-                      )}
-                      <p>
-                        {order.shippingAddress.city && `${order.shippingAddress.city}, `}
-                        {order.shippingAddress.state && `${order.shippingAddress.state} `}
-                        {order.shippingAddress.postal_code}
-                      </p>
-                      <p>{order.shippingAddress.country}</p>
-                    </address>
-                  ) : (
-                    <p className="text-sm text-gray-500">No shipping address available</p>
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-medium mb-2">Shipping Address</h3>
+                    {order.shippingAddress ? (
+                      <address className="not-italic text-sm">
+                        {order.shippingAddress.name && (
+                          <p>{order.shippingAddress.name}</p>
+                        )}
+                        {order.shippingAddress.line1 && (
+                          <p>{order.shippingAddress.line1}</p>
+                        )}
+                        {order.shippingAddress.line2 && (
+                          <p>{order.shippingAddress.line2}</p>
+                        )}
+                        <p>
+                          {order.shippingAddress.city && `${order.shippingAddress.city}, `}
+                          {order.shippingAddress.state && `${order.shippingAddress.state} `}
+                          {order.shippingAddress.postal_code}
+                        </p>
+                        <p>{order.shippingAddress.country}</p>
+                      </address>
+                    ) : (
+                      <p className="text-sm text-gray-500">No shipping address available</p>
+                    )}
+                  </div>
+                  
+                  {order.billingAddress?.taxDetails === "true" && (
+                    <div>
+                      <h3 className="font-medium mb-2">Tax Details</h3>
+                      <div className="text-sm">
+                        <p><span className="text-gray-500">Organization:</span> {order.billingAddress.organization}</p>
+                        <p><span className="text-gray-500">Tax ID:</span> {order.billingAddress.taxId}</p>
+                      </div>
+                    </div>
                   )}
                 </div>
               </div>
@@ -226,6 +238,30 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
               </div>
             </CardFooter>
           </Card>
+          
+          {/* Tax Details Card (shown only if tax details are available) */}
+          {order.billingAddress?.taxDetails === "true" && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Tax Details</CardTitle>
+                <CardDescription>
+                  Information for tax and accounting purposes
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="grid grid-cols-[140px_1fr] gap-1">
+                    <span className="text-gray-500 font-medium">Organization:</span>
+                    <span>{order.billingAddress.organization}</span>
+                  </div>
+                  <div className="grid grid-cols-[140px_1fr] gap-1">
+                    <span className="text-gray-500 font-medium">Tax ID:</span>
+                    <span>{order.billingAddress.taxId}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
           
           {/* Order Total Card */}
           <Card>

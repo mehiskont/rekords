@@ -31,11 +31,8 @@ export function getOrderConfirmationEmail(order: OrderDetails): string {
   // Calculate subtotal
   const subtotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
   
-  // Calculate VAT (20% of subtotal)
-  const vat = subtotal * 0.2;
-  
   // Assume shipping cost is included in the total
-  const shippingCost = parseFloat((order.total - subtotal - vat).toFixed(2)) || 2.99;
+  const shippingCost = parseFloat((order.total - subtotal).toFixed(2)) || 2.99;
   
   // Determine if shipping is to Estonia for special handling
   const isEstonia = order.shippingAddress?.country && 
@@ -130,10 +127,6 @@ export function getOrderConfirmationEmail(order: OrderDetails): string {
               <span>$${subtotal.toFixed(2)}</span>
             </div>
             <div class="summary-row">
-              <span>VAT (20%):</span>
-              <span>$${vat.toFixed(2)}</span>
-            </div>
-            <div class="summary-row">
               <span>Shipping${order.shippingAddress?.country ? ` (to ${order.shippingAddress.country})` : ''}:</span>
               <span>$${shippingCost.toFixed(2)}</span>
               ${isEstonia ? `<span class="shipping-method">(Itella SmartPost)</span>` : ''}
@@ -151,10 +144,18 @@ export function getOrderConfirmationEmail(order: OrderDetails): string {
           </div>
           
           ${taxDetails ? `
-          <div class="shipping" style="margin-top: 20px;">
-            <h3>Tax Details:</h3>
-            <p><strong>Organization:</strong> ${organization}</p>
-            <p><strong>Tax ID:</strong> ${taxId}</p>
+          <div class="shipping" style="margin-top: 20px; background-color: #f0f7ff; border-left: 3px solid #3b82f6;">
+            <h3>Tax Details</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 8px 0; color: #4b5563; width: 120px;">Organization:</td>
+                <td style="padding: 8px 0; font-weight: 500;">${organization}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #4b5563; width: 120px;">Tax ID:</td>
+                <td style="padding: 8px 0; font-weight: 500;">${taxId}</td>
+              </tr>
+            </table>
           </div>
           ` : ''}
           
