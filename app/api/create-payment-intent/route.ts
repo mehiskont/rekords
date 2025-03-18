@@ -7,6 +7,9 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 })
 
 export async function POST(req: Request) {
+  const requestTime = new Date().toISOString();
+  log(`Payment intent creation request received at ${requestTime}`);
+  
   if (!process.env.STRIPE_SECRET_KEY) {
     console.error("Missing STRIPE_SECRET_KEY environment variable")
     return NextResponse.json({ error: "Stripe is not properly configured" }, { status: 500 })
@@ -19,7 +22,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
     }
 
-    log("Creating payment intent with items:", JSON.stringify(items))
+    log("Creating payment intent with items:", JSON.stringify(items));
+    
+    // Check for client-side refresh tracking
+    const refreshCount = req.headers.get('x-refresh-count') || '0';
+    const clientId = req.headers.get('x-client-id') || 'unknown';
+    log(`Payment intent request metrics: refreshCount=${refreshCount}, clientId=${clientId}, time=${requestTime}`);
 
     // Create products for each item
     const lineItems = await Promise.all(

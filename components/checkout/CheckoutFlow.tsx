@@ -44,6 +44,7 @@ export function CheckoutFlow() {
   const [loadingProfile, setLoadingProfile] = useState(false)
   const [shippingCost, setShippingCost] = useState(2.99) // Default to Estonian rate
   const [initialCheckDone, setInitialCheckDone] = useState(false)
+  const [paymentInitTime] = useState(() => new Date().getTime()) // Track when payment form was first loaded
   const router = useRouter()
   const { state: cartState, dispatch: cartDispatch } = useCart()
   const { data: session, status } = useSession()
@@ -184,6 +185,38 @@ export function CheckoutFlow() {
   useEffect(() => {
     localStorage.setItem(STORAGE_KEY, currentStep.toString())
   }, [currentStep])
+  
+  // Add a stability monitor to prevent reload loops in the payment step
+  useEffect(() => {
+    // Only run this for payment step
+    if (currentStep !== 1 || !clientSecret) return;
+    
+    console.log(`Payment step stability monitor initialized at ${new Date().toISOString()}`);
+    
+    // Store payment step initialization data in sessionStorage to track across page reloads
+    const paymentSessionData = {
+      clientSecret: clientSecret.substring(0, 10), // Only store prefix for security
+      initTime: paymentInitTime,
+      lastActive: new Date().getTime()
+    };
+    sessionStorage.setItem('payment_session_data', JSON.stringify(paymentSessionData));
+    
+    // Set up interval to keep the connection alive and prevent unintended refreshes
+    const keepAliveInterval = setInterval(() => {
+      // Update lastActive timestamp
+      const currentData = JSON.parse(sessionStorage.getItem('payment_session_data') || '{}');
+      currentData.lastActive = new Date().getTime();
+      sessionStorage.setItem('payment_session_data', JSON.stringify(currentData));
+      
+      // Log heartbeat every 20 seconds
+      console.log(`Payment session heartbeat: active for ${Math.round((new Date().getTime() - paymentInitTime) / 1000)}s`);
+    }, 20000); // Every 20 seconds
+    
+    return () => {
+      console.log(`Payment step stability monitor shutting down at ${new Date().toISOString()}`);
+      clearInterval(keepAliveInterval);
+    };
+  }, [currentStep, clientSecret, paymentInitTime])
 
   const handleDetailsSubmit = async (data: CustomerInfo) => {
     setIsLoading(true)
@@ -369,6 +402,7 @@ export function CheckoutFlow() {
         )}
         {currentStep === 1 && clientSecret && (
           <PaymentForm
+            key={`payment-form-${clientSecret.substring(0, 10)}`} // Add stable key to prevent unwanted re-renders
             clientSecret={clientSecret}
             total={total}
             subtotal={subtotal}

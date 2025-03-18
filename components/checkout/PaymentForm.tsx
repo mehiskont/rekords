@@ -22,6 +22,44 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
   const elements = useElements()
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [mountTimestamp] = useState(() => new Date().getTime())
+  
+  // Setup effect to monitor for component remounts and expirations
+  useEffect(() => {
+    console.log(`StripePaymentForm mounted at ${new Date().toISOString()}`);
+    
+    // Check if there was a previous instance
+    const lastRender = localStorage.getItem('stripe_payment_form_last_render');
+    if (lastRender) {
+      const timeDiff = mountTimestamp - parseInt(lastRender, 10);
+      console.log(`Time since last StripePaymentForm render: ${timeDiff}ms`);
+      
+      if (timeDiff < 5000) {
+        console.log(`⚠️ Rapid re-rendering detected in StripePaymentForm - possible reload loop`);
+      }
+    }
+    
+    // Store current render timestamp
+    localStorage.setItem('stripe_payment_form_last_render', mountTimestamp.toString());
+    
+    // Check for payment intent expiration - usually Stripe payment intents expire after 1 hour
+    // but we can detect if something is triggering more frequent reloads
+    const checkExpirationInterval = setInterval(() => {
+      const now = new Date().getTime();
+      const uptime = now - mountTimestamp;
+      console.log(`StripePaymentForm uptime: ${uptime}ms (${uptime/1000}s)`);
+      
+      // If we're approaching the 1 minute mark, log this for debugging
+      if (uptime > 55000 && uptime < 65000) {
+        console.log(`⚠️ StripePaymentForm approaching 1 minute uptime - watch for potential refresh`);
+      }
+    }, 10000); // Check every 10 seconds
+    
+    return () => {
+      console.log(`StripePaymentForm unmounting at ${new Date().toISOString()} - uptime: ${(new Date().getTime() - mountTimestamp)/1000}s`);
+      clearInterval(checkExpirationInterval);
+    };
+  }, [mountTimestamp]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -29,16 +67,21 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
 
     setIsLoading(true)
     setError(null)
+    console.log("Payment submission started");
 
     try {
+      console.log("Calling elements.submit()");
       const { error: submitError } = await elements.submit()
       if (submitError) {
+        console.error("Submit error:", submitError);
         throw new Error(submitError.message)
       }
 
       // Get stored session ID if available
       const storedSessionId = localStorage.getItem('checkout_session_id');
+      console.log("Retrieved stored session ID:", storedSessionId ? "Available" : "Not available");
       
+      console.log("Calling stripe.confirmPayment()");
       const { error: paymentError, paymentIntent } = await stripe.confirmPayment({
         elements,
         confirmParams: {
@@ -49,6 +92,7 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
       })
 
       if (paymentError) {
+        console.error("Payment error:", paymentError);
         throw new Error(paymentError.message)
       }
 
@@ -62,9 +106,11 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
         onSuccess();
       }
     } catch (err) {
+      console.error("Payment submission error:", err);
       setError(err instanceof Error ? err.message : "Payment failed")
     } finally {
       setIsLoading(false)
+      console.log("Payment submission completed");
     }
   }
 
@@ -93,6 +139,26 @@ export function PaymentForm({ clientSecret, total, subtotal, shippingCost, onSuc
   const searchParams = new URLSearchParams(window.location.search);
   const sessionId = searchParams.get('session_id') || '';
   
+  // Add debugging to track component mount time and detect reloads
+  useState(() => {
+    const mountTime = new Date().toISOString();
+    console.log(`PaymentForm mounted at ${mountTime} with clientSecret: ${clientSecret?.substring(0, 10)}...`);
+    
+    // Record mount time in localStorage to detect reloads
+    localStorage.setItem('payment_form_mount_time', mountTime);
+    localStorage.setItem('payment_form_client_secret_prefix', clientSecret?.substring(0, 10) || 'none');
+    
+    // Check if this is a reload
+    const previousMountTime = localStorage.getItem('payment_form_previous_mount');
+    if (previousMountTime) {
+      const timeDiff = new Date().getTime() - new Date(previousMountTime).getTime();
+      console.log(`PaymentForm reload detected. Previous mount was ${timeDiff}ms ago (${previousMountTime})`);
+    }
+    
+    // Store current mount time as previous for next reload detection
+    localStorage.setItem('payment_form_previous_mount', mountTime);
+  });
+  
   // Store the session ID in localStorage so we can use it on redirect
   if (sessionId) {
     localStorage.setItem('checkout_session_id', sessionId);
@@ -109,6 +175,30 @@ export function PaymentForm({ clientSecret, total, subtotal, shippingCost, onSuc
     },
   }
 
+  // Monitor component initialization timing for Stripe Elements
+  const [elementsInitTimestamp] = useState(() => new Date().getTime());
+  useEffect(() => {
+    console.log(`Stripe Elements about to initialize at ${new Date().toISOString()}`);
+    
+    // Check if Stripe options have changed since last render
+    const lastOptionsJson = localStorage.getItem('stripe_elements_last_options');
+    const currentOptionsJson = JSON.stringify({
+      clientSecretPrefix: clientSecret?.substring(0, 10),
+      total,
+    });
+    
+    if (lastOptionsJson && lastOptionsJson !== currentOptionsJson) {
+      console.log(`Stripe Elements options changed since last render. This could indicate a payment intent refresh.`);
+    }
+    
+    // Store current options for comparison on next render
+    localStorage.setItem('stripe_elements_last_options', currentOptionsJson);
+    
+    return () => {
+      console.log(`Stripe Elements container unmounting at ${new Date().toISOString()} - lifetime: ${(new Date().getTime() - elementsInitTimestamp)/1000}s`);
+    };
+  }, [clientSecret, total, elementsInitTimestamp]);
+
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <h2 className="text-2xl font-bold mb-6">Payment Information</h2>
@@ -122,7 +212,6 @@ export function PaymentForm({ clientSecret, total, subtotal, shippingCost, onSuc
           <div className="flex justify-between">
             <span>Shipping</span>
             <span>${shippingCost.toFixed(2)}</span>
-            <span className="text-xs text-muted-foreground ml-1">(based on weight & destination)</span>
           </div>
           <div className="flex justify-between font-bold pt-2 border-t">
             <span>Total</span>
@@ -141,9 +230,35 @@ export function PaymentForm({ clientSecret, total, subtotal, shippingCost, onSuc
         </p>
       </div>
 
-      <Elements stripe={stripePromise} options={options}>
-        <StripePaymentForm onSuccess={onSuccess} />
-      </Elements>
+      {/* Use a memoized wrapper with a stable key to prevent recreation */}
+      <div className="stripe-elements-container" id={`stripe-container-${clientSecret?.substring(0, 10)}`}>
+        <Elements 
+          stripe={stripePromise} 
+          options={{
+            ...options,
+            // Add flags to improve stability
+            loader: 'always',
+            // Enforce 'auto' mode which matches the Elements appearance to its container
+            appearance: {
+              ...options.appearance,
+              theme: 'stripe',
+              variables: {
+                ...options.appearance?.variables,
+                colorPrimary: "#dc2626",
+              },
+            }
+          }} 
+          key={`elements-${clientSecret?.substring(0, 10)}`}
+        >
+          <StripePaymentForm onSuccess={onSuccess} />
+        </Elements>
+      </div>
+      
+      {/* Add a hidden timestamp for debugging refresh issues */}
+      <div className="sr-only" data-payment-form-loaded={new Date().toISOString()} 
+           data-client-secret-prefix={clientSecret?.substring(0, 10)}>
+        Payment form loaded at {new Date().toISOString()}
+      </div>
     </div>
   )
 }
