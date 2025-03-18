@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma"
 import { createOrder, updateOrderStatus } from "@/lib/orders"
 import { clearCachedData } from "@/lib/redis"
 import { saveUserCheckoutInfo } from "@/lib/user"
+import { clearCart } from "@/lib/cart"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
   apiVersion: "2023-10-16",
@@ -253,6 +254,25 @@ export async function POST(req: Request) {
             log(`Error clearing cache: ${error instanceof Error ? error.message : "Unknown error"}`, "error")
           }
           
+          // Clear the user's cart after successful order creation
+          if (userId && userId !== "anonymous") {
+            try {
+              log(`Clearing cart for user ${userId} after successful payment`)
+              const userCart = await prisma.cart.findUnique({
+                where: { userId }
+              })
+              
+              if (userCart) {
+                await clearCart(userCart.id)
+                log(`Successfully cleared cart for user ${userId}`)
+              } else {
+                log(`No cart found for user ${userId}`, "warn")
+              }
+            } catch (cartError) {
+              log(`Error clearing user cart: ${cartError instanceof Error ? cartError.message : "Unknown error"}`, "error")
+            }
+          }
+          
           log(`Order processing complete. All inventory updates successful: ${allUpdatesSuccessful}`)
         } catch (error) {
           log(`Failed to create or process order: ${error instanceof Error ? error.message : "Unknown error"}`, "error")
@@ -295,6 +315,25 @@ export async function POST(req: Request) {
               log(`Updated order ${order.id} status to paid`)
             } else {
               log(`Order ${order.id} already marked as paid, skipping status update`)
+            }
+            
+            // Clear the user's cart after successful payment
+            if (order.userId && order.userId !== "anonymous") {
+              try {
+                log(`Clearing cart for user ${order.userId} after successful payment`)
+                const userCart = await prisma.cart.findUnique({
+                  where: { userId: order.userId }
+                })
+                
+                if (userCart) {
+                  await clearCart(userCart.id)
+                  log(`Successfully cleared cart for user ${order.userId}`)
+                } else {
+                  log(`No cart found for user ${order.userId}`, "warn")
+                }
+              } catch (cartError) {
+                log(`Error clearing user cart: ${cartError instanceof Error ? cartError.message : "Unknown error"}`, "error")
+              }
             }
             
             // Process any Discogs inventory updates that might have failed
@@ -423,6 +462,25 @@ export async function POST(req: Request) {
               await updateOrderStatus(order.id, "paid");
               log(`Marked order ${order.id} as paid`);
               
+              // Clear the user's cart after successful payment
+              if (userId && userId !== "anonymous") {
+                try {
+                  log(`Clearing cart for user ${userId} after successful payment (payment intent path)`)
+                  const userCart = await prisma.cart.findUnique({
+                    where: { userId }
+                  })
+                  
+                  if (userCart) {
+                    await clearCart(userCart.id)
+                    log(`Successfully cleared cart for user ${userId}`)
+                  } else {
+                    log(`No cart found for user ${userId}`, "warn")
+                  }
+                } catch (cartError) {
+                  log(`Error clearing user cart: ${cartError instanceof Error ? cartError.message : "Unknown error"}`, "error")
+                }
+              }
+              
               // Process Discogs inventory
               for (const item of items) {
                 try {
@@ -513,6 +571,25 @@ export async function POST(req: Request) {
             
             // Mark as paid immediately
             await updateOrderStatus(order.id, "paid");
+            
+            // Clear the user's cart after successful payment
+            if (userId && userId !== "anonymous") {
+              try {
+                log(`Clearing cart for user ${userId} after successful payment (direct payment intent path)`)
+                const userCart = await prisma.cart.findUnique({
+                  where: { userId }
+                })
+                
+                if (userCart) {
+                  await clearCart(userCart.id)
+                  log(`Successfully cleared cart for user ${userId}`)
+                } else {
+                  log(`No cart found for user ${userId}`, "warn")
+                }
+              } catch (cartError) {
+                log(`Error clearing user cart: ${cartError instanceof Error ? cartError.message : "Unknown error"}`, "error")
+              }
+            }
             
             // Process Discogs inventory
             for (const item of items) {
