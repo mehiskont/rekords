@@ -7,6 +7,7 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { useSession } from 'next-auth/react'
+import { useCart } from '@/contexts/cart-context'
 
 export default function CheckoutSuccessPage() {
   const searchParams = useSearchParams()
@@ -14,8 +15,12 @@ export default function CheckoutSuccessPage() {
   const [orderId, setOrderId] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const { data: session } = useSession()
+  const { dispatch } = useCart()
   
   useEffect(() => {
+    // Clear cart UI state on success page load
+    dispatch({ type: "CLEAR_UI_CART" })
+    
     // Fetch order details if we have a session ID
     if (sessionId) {
       fetch(`/api/order-details?id=${encodeURIComponent(sessionId)}`)
@@ -31,7 +36,7 @@ export default function CheckoutSuccessPage() {
     } else {
       setIsLoading(false)
     }
-  }, [sessionId])
+  }, [sessionId, dispatch])
 
   return (
     <div className="container max-w-lg mx-auto py-12">

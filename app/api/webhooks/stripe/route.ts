@@ -403,42 +403,10 @@ export async function POST(req: Request) {
                 }
               }
               
-              // Extra check to ensure successful order completion gets a confirmation email
-              try {
-                const checkoutEmail = customerEmail;
-                if (checkoutEmail) {
-                  // Import in a specific way to avoid circular dependencies
-                  const { sendOrderConfirmationEmail } = await import("@/lib/email");
-                  
-                  // Prepare order details with required fields for rich email template
-                  const orderDetailsForEmail = {
-                    orderId: paymentIntent.id.slice(-8).toUpperCase(),
-                    items: items.map(item => ({
-                      title: item.title || "Unknown Item",
-                      quantity: item.quantity || 1,
-                      price: item.price || 0,
-                      condition: item.condition || "Not specified",
-                      cover_image: item.cover_image || "/placeholder.svg",
-                      artist: item.artist || "",
-                      label: item.label || "",
-                      format: item.format || ""
-                    })),
-                    total: paymentIntent.amount ? (paymentIntent.amount / 100) : 0,
-                    shippingAddress: {
-                      name: customerName || "Customer",
-                      line1: customerAddress || "Address not provided",
-                      city: "",
-                      postal_code: "",
-                      country: "Estonia" // Default to Estonia for testing
-                    }
-                  };
-                  
-                  await sendOrderConfirmationEmail(checkoutEmail, orderDetailsForEmail);
-                  log(`Sent order confirmation email to ${checkoutEmail} from payment intent`);
-                }
-              } catch (emailError) {
-                log(`Failed to send order confirmation from payment intent: ${emailError instanceof Error ? emailError.message : String(emailError)}`, "error");
-              }
+              // Don't send confirmation email here - createOrder already handles this
+              // This prevents duplicate emails from being sent
+              log(`Order will be created with createOrder, which handles email sending`);
+              // The createOrder function will handle sending the confirmation email
               
               // Create shipping/billing address from metadata
               const shippingAddress = {

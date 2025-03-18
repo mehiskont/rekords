@@ -102,42 +102,28 @@ export async function createOrder(
         shippingAddress: shippingAddress as ShippingAddress,
       }
 
-      // Try to send to user's email first if they have an account
-      if (order.user?.email) {
-        try {
-          log(`Attempting to send confirmation email to user account: ${order.user.email}`);
-          const result = await sendOrderConfirmationEmail(order.user.email, orderDetails)
-          if (result && result.success) {
-            log(`Sent order confirmation email to user account: ${order.user.email}`)
-          } else {
-            log(`Failed to send email to user account: ${JSON.stringify(result)}`, "warn")
-          }
-        } catch (emailError) {
-          log(`Exception sending email to user account: ${emailError instanceof Error ? emailError.message : String(emailError)}`, "error")
-        }
-      }
-      
-      // Also send to the email provided during checkout (may be different from account email)
-      // This ensures guest users or users with different emails get confirmation
+      // Get the primary email to send the confirmation to
+      // Prefer user's account email for registered users
+      const userEmail = order.user?.email;
+      // For guest checkout, use the email provided during checkout
       const checkoutEmail = shippingAddress?.email || billingAddress?.email;
-      if (checkoutEmail && (!order.user?.email || checkoutEmail !== order.user.email)) {
+      
+      // Only send one email - to the user's account if available, otherwise to checkout email
+      const targetEmail = userEmail || checkoutEmail;
+      
+      if (targetEmail) {
         try {
-          log(`Attempting to send confirmation email to checkout email: ${checkoutEmail}`);
-          const result = await sendOrderConfirmationEmail(checkoutEmail, orderDetails)
+          log(`Sending confirmation email to: ${targetEmail}`);
+          const result = await sendOrderConfirmationEmail(targetEmail, orderDetails)
           if (result && result.success) {
-            log(`Sent order confirmation email to checkout email: ${checkoutEmail}`)
+            log(`Successfully sent order confirmation email to: ${targetEmail}`)
           } else {
-            log(`Failed to send email to checkout email: ${JSON.stringify(result)}`, "warn")
+            log(`Failed to send email: ${JSON.stringify(result)}`, "warn")
           }
         } catch (emailError) {
-          log(`Exception sending email to checkout email: ${emailError instanceof Error ? emailError.message : String(emailError)}`, "error")
+          log(`Exception sending email: ${emailError instanceof Error ? emailError.message : String(emailError)}`, "error")
         }
-      }
-      
-      // We've improved the main email sending function, so no need for this additional fallback
-      // The primary sendOrderConfirmationEmail already has proper error handling and fallbacks
-      
-      if (!order.user?.email && !checkoutEmail) {
+      } else {
         log("No email found to send order confirmation", "warn")
       }
     } catch (error) {
