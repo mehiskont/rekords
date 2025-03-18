@@ -57,9 +57,25 @@ function StripePaymentForm({ onSuccess }: { onSuccess: () => void }) {
       }
     }, 10000); // Check every 10 seconds
     
+    // Add event listener for tab visibility changes
+    const handleVisibilityChange = () => {
+      const isVisible = document.visibilityState === 'visible';
+      console.log(`Page visibility changed: ${isVisible ? 'visible' : 'hidden'} at ${new Date().toISOString()}`);
+      
+      if (isVisible) {
+        // Tab is now visible again - check if we need to preserve the form state
+        console.log(`Tab became visible again - preserving payment form state`);
+        // Set a flag to indicate we've detected a tab visibility change
+        sessionStorage.setItem('payment_form_tab_switch_detected', 'true');
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
     return () => {
       console.log(`StripePaymentForm unmounting at ${new Date().toISOString()} - uptime: ${(new Date().getTime() - mountTimestamp)/1000}s`);
       clearInterval(checkExpirationInterval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
   }, [mountTimestamp]);
 
@@ -143,6 +159,8 @@ export function PaymentForm({ clientSecret, total, subtotal, shippingCost, onSuc
   
   // Use state for tracking mount time rather than just a variable
   const [componentMountTime] = useState(() => new Date().getTime());
+  // Track whether a tab switch has occurred
+  const [tabSwitchOccurred, setTabSwitchOccurred] = useState(false);
   
   // Add debugging to track component mount time and detect reloads
   useEffect(() => {
@@ -164,6 +182,27 @@ export function PaymentForm({ clientSecret, total, subtotal, shippingCost, onSuc
     
     // Store current mount time as previous for next reload detection
     localStorage.setItem('payment_form_previous_mount', mountTime);
+    
+    // Add visibility change detection for tab switching at parent form level
+    const handleVisibilityChange = () => {
+      const isVisible = document.visibilityState === 'visible';
+      console.log(`Page visibility changed in payment form: ${isVisible ? 'visible' : 'hidden'} at ${new Date().toISOString()}`);
+      
+      if (isVisible) {
+        setTabSwitchOccurred(true);
+        // Add a flag to indicate tab switching has occurred
+        sessionStorage.setItem('payment_form_tab_switched', 'true');
+        // Preserve payment intent data
+        localStorage.setItem('payment_form_preserved_client_secret', clientSecret?.substring(0, 10) || 'none');
+        localStorage.setItem('payment_form_preserved_time', new Date().toISOString());
+      }
+    };
+    
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [clientSecret]);
   
   // Store the session ID in localStorage so we can use it on redirect
@@ -255,12 +294,19 @@ export function PaymentForm({ clientSecret, total, subtotal, shippingCost, onSuc
                 ...options.appearance?.variables,
                 colorPrimary: "#dc2626",
               },
-            }
+            },
+            // Add persistence for tab switching
+            persistenceDisabled: false
           }} 
           key={`elements-${clientSecret?.substring(0, 10)}`}
         >
           <StripePaymentForm onSuccess={onSuccess} />
         </Elements>
+        {tabSwitchOccurred && (
+          <div className="mt-2 p-2 bg-amber-50 text-amber-800 rounded text-sm">
+            It looks like you switched tabs and came back. If your payment form data is missing, please refresh the page to restore it.
+          </div>
+        )}
       </div>
       
       {/* Add a hidden timestamp for debugging refresh issues */}

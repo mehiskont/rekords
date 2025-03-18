@@ -212,9 +212,31 @@ export function CheckoutFlow() {
       console.log(`Payment session heartbeat: active for ${Math.round((new Date().getTime() - paymentInitTime) / 1000)}s`);
     }, 20000); // Every 20 seconds
     
+    // Add visibility change detection for tab switching
+    const handleVisibilityChange = () => {
+      const isVisible = document.visibilityState === 'visible';
+      console.log(`Page visibility changed in checkout: ${isVisible ? 'visible' : 'hidden'} at ${new Date().toISOString()}`);
+      
+      if (isVisible) {
+        // Tab is now visible again - update the session data to prevent refresh
+        const currentData = JSON.parse(sessionStorage.getItem('payment_session_data') || '{}');
+        currentData.lastActive = new Date().getTime();
+        currentData.tabSwitchDetected = true;
+        sessionStorage.setItem('payment_session_data', JSON.stringify(currentData));
+        console.log(`Tab became visible again - updated payment session data to prevent refresh`);
+      }
+    };
+    
+    if (typeof document !== 'undefined') {
+      document.addEventListener('visibilitychange', handleVisibilityChange);
+    }
+    
     return () => {
       console.log(`Payment step stability monitor shutting down at ${new Date().toISOString()}`);
       clearInterval(keepAliveInterval);
+      if (typeof document !== 'undefined') {
+        document.removeEventListener('visibilitychange', handleVisibilityChange);
+      }
     };
   }, [currentStep, clientSecret, paymentInitTime])
 
