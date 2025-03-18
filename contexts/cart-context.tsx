@@ -176,7 +176,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     if (previousStatus === 'unauthenticated' && status === 'authenticated') {
       console.log('Authentication transition detected - preserving guest cart');
       
+      // Clear the merge flag when user logs in so we can merge guest cart items
       try {
+        // First remove any existing merge flag to ensure we'll attempt a merge
+        localStorage.removeItem('plastik-cart-merged-flag');
+        console.log('Cleared previous merge flag to allow new cart merge');
+        
         const localCart = getFromLocalStorage('plastik-cart');
         if (localCart?.items && Array.isArray(localCart.items) && localCart.items.length > 0) {
           console.log(`Preserving ${localCart.items.length} guest cart items for merge`);
@@ -236,8 +241,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           // Create a flag to track if we've already merged localStorage items
           // to prevent merging again on page refresh
           const hasAlreadyMerged = getFromLocalStorage('plastik-cart-merged-flag');
+          // Get previous status from the ref we update when status changes
+          const previousStatus = sessionRef.current;
+          const isAuthTransition = status === 'authenticated' && status !== previousStatus;
           
-          if (hasAlreadyMerged) {
+          // Only skip merging if we've already merged AND this is not a new login
+          if (hasAlreadyMerged && !isAuthTransition) {
             console.log('Cart has already been merged, skipping merge operation');
           } else {
             // Check if we have previously preserved guest cart items
@@ -353,7 +362,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             
             // If we had items to merge and now DB has items, the merge was successful
             // Now it's safe to clear everything
-            if (!getFromLocalStorage('plastik-cart-merged-flag') && itemsToMerge && itemsToMerge.length > 0) {
+            if (itemsToMerge && itemsToMerge.length > 0) {
               console.log('Merge verified successful, clearing local cart data');
               
               // Now clear all cart sources
@@ -372,10 +381,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 timestamp: Date.now() 
               });
               
-              // Set merged flag to prevent future attempts
+              // Set merged flag to prevent future attempts on refresh
+              // But only after we've verified the merge was successful
               saveToLocalStorage('plastik-cart-merged-flag', {
                 merged: true,
-                timestamp: Date.now()
+                timestamp: Date.now(),
+                mergeCount: dbCartItems.length
               });
               
               // Delete guest cart cookie
@@ -485,6 +496,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             // Both empty - nothing to do, but still clear the UI state
             console.log('Both carts are empty');
             dispatch({ type: "CLEAR_UI_CART" });
+            
+            // Even though there was nothing to merge, set the merged flag
+            // to prevent additional merge attempts on refresh
+            saveToLocalStorage('plastik-cart-merged-flag', {
+              merged: true,
+              timestamp: Date.now(),
+              mergeCount: 0
+            });
           }
         }
       } catch (error) {
