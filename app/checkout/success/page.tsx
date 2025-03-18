@@ -15,11 +15,19 @@ export default function CheckoutSuccessPage() {
   const [orderId, setOrderId] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const { data: session } = useSession()
-  const { dispatch } = useCart()
+  const cartContext = useCart()
   
   useEffect(() => {
-    // Clear cart UI state on success page load
-    dispatch({ type: "CLEAR_UI_CART" })
+    // Handle cart clearing
+    try {
+      if (cartContext && cartContext.dispatch) {
+        // Clear cart UI state on success page load
+        cartContext.dispatch({ type: "CLEAR_UI_CART" })
+        console.log("Cart UI cleared on success page")
+      }
+    } catch (error) {
+      console.error("Error clearing cart:", error)
+    }
     
     // Fetch order details if we have a session ID
     if (sessionId) {
@@ -36,7 +44,20 @@ export default function CheckoutSuccessPage() {
     } else {
       setIsLoading(false)
     }
-  }, [sessionId, dispatch])
+  }, [sessionId, cartContext])
+
+  // Handle navigation functions
+  const goToHome = () => {
+    window.location.href = "/"
+  }
+  
+  const goToOrders = () => {
+    if (session?.user) {
+      window.location.href = "/dashboard/orders"
+    } else {
+      window.location.href = "/auth/signin?callbackUrl=/dashboard/orders"
+    }
+  }
 
   return (
     <div className="container max-w-lg mx-auto py-12">
@@ -63,17 +84,17 @@ export default function CheckoutSuccessPage() {
         </CardContent>
         
         <CardFooter className="flex justify-center gap-4">
-          <Button asChild variant="outline">
-            <Link href="/">Continue Shopping</Link>
+          <Button variant="outline" onClick={goToHome}>
+            Continue Shopping
           </Button>
           
           {session?.user ? (
-            <Button asChild>
-              <Link href="/dashboard/orders">View Your Orders</Link>
+            <Button onClick={goToOrders}>
+              View Your Orders
             </Button>
           ) : (
-            <Button asChild>
-              <Link href="/auth/signin?callbackUrl=/dashboard/orders">Sign In to View Orders</Link>
+            <Button onClick={goToOrders}>
+              Sign In to View Orders
             </Button>
           )}
         </CardFooter>
