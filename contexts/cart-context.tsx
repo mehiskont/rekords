@@ -195,9 +195,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [status, getFromLocalStorage, saveToLocalStorage]);
   
   // Initialize cart from localStorage on first render (client-side only)
+  // But only for unauthenticated users - authenticated users get cart from API
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      console.log('Initial cart load attempt from localStorage');
+    if (typeof window !== 'undefined' && status === 'unauthenticated') {
+      console.log('Initial cart load attempt from localStorage for guest user');
       dispatch({ type: "SET_LOADING", payload: true });
       
       try {
@@ -214,7 +215,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         dispatch({ type: "SET_LOADING", payload: false });
       }
     }
-  }, [getFromLocalStorage]);
+  }, [getFromLocalStorage, status]);
   
   // Load cart from API when session changes
   useEffect(() => {
@@ -332,6 +333,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           if (dbCartItems.length > 0) {
             console.log('Loading', dbCartItems.length, 'items from database');
             
+            // Always clear the UI state before loading items from the database
+            // to prevent duplicate items after page refresh
+            dispatch({ type: "CLEAR_UI_CART" });
+            
             // If we had items to merge and now DB has items, the merge was successful
             // Now it's safe to clear everything
             if (itemsToMerge && itemsToMerge.length > 0) {
@@ -339,7 +344,6 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
               
               // Now clear all cart sources
               guestCartRef.current = [];
-              dispatch({ type: "CLEAR_CART" });
               saveToLocalStorage('plastik-cart', { items: [], isOpen: false, isLoading: false });
               saveToLocalStorage('plastik-guest-cart-backup', { items: [], timestamp: Date.now() });
               
@@ -388,6 +392,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           } else if (localCartItems.length > 0) {
             // localStorage has items but DB doesn't - use PATCH endpoint to merge
             console.log('Syncing localStorage cart to empty database cart');
+            
+            // Make sure to clear UI state before loading new items
+            dispatch({ type: "CLEAR_UI_CART" });
             
             const mergeResponse = await fetch('/api/cart', {
               method: 'PATCH',
@@ -444,8 +451,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
               saveToLocalStorage('plastik-cart', { items: [], isOpen: false, isLoading: false });
             }
           } else {
-            // Both empty - nothing to do
+            // Both empty - nothing to do, but still clear the UI state
             console.log('Both carts are empty');
+            dispatch({ type: "CLEAR_UI_CART" });
           }
         }
       } catch (error) {
