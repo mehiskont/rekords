@@ -164,6 +164,9 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
                     </h3>
                     {order.billingAddress?.localPickup === "true" ? (
                       <div className="text-sm">
+                         {order.shippingAddress?.name && (
+                          <p>{order.shippingAddress.name}</p>
+                        )}
                         <p className="font-medium text-green-600">Local pick-up from store</p>
                         <p className="mt-1">Please bring your ID when picking up your order.</p>
                         <p className="mt-2 font-medium">Pick-up Location:</p>
@@ -176,33 +179,41 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
                         {order.shippingAddress.name && (
                           <p>{order.shippingAddress.name}</p>
                         )}
-                        {order.shippingAddress.line1 && (
+                        {/* Check for line1 in shippingAddress or in nested address object */}
+                        {order.shippingAddress.line1 ? (
                           <p>{order.shippingAddress.line1}</p>
+                        ) : order.shippingAddress.address?.line1 && (
+                          <p>{order.shippingAddress.address.line1}</p>
                         )}
-                        {order.shippingAddress.line2 && (
+                        
+                        {/* Check for line2 in shippingAddress or in nested address object */}
+                        {order.shippingAddress.line2 ? (
                           <p>{order.shippingAddress.line2}</p>
+                        ) : order.shippingAddress.address?.line2 && (
+                          <p>{order.shippingAddress.address.line2}</p>
                         )}
+                        
                         <p>
-                          {order.shippingAddress.city && `${order.shippingAddress.city}, `}
-                          {order.shippingAddress.state && `${order.shippingAddress.state} `}
-                          {order.shippingAddress.postal_code}
+                          {/* Check for city in both places */}
+                          {order.shippingAddress.city ? `${order.shippingAddress.city}, ` : 
+                           order.shippingAddress.address?.city ? `${order.shippingAddress.address.city}, ` : ''}
+                          
+                          {/* Check for state in both places */}
+                          {order.shippingAddress.state ? `${order.shippingAddress.state} ` : 
+                           order.shippingAddress.address?.state ? `${order.shippingAddress.address.state} ` : ''}
+                          
+                          {/* Check for postal_code in both places */}
+                          {order.shippingAddress.postal_code || order.shippingAddress.address?.postal_code}
                         </p>
-                        <p>{order.shippingAddress.country}</p>
+                        
+                        {/* Check for country in both places */}
+                        <p>{order.shippingAddress.country || order.shippingAddress.address?.country}</p>
                       </address>
                     ) : (
                       <p className="text-sm text-gray-500">No shipping address available</p>
                     )}
                   </div>
                   
-                  {order.billingAddress?.taxDetails === "true" && (
-                    <div>
-                      <h3 className="font-medium mb-2">Tax Details</h3>
-                      <div className="text-sm">
-                        <p><span className="text-gray-500">Organization:</span> {order.billingAddress.organization}</p>
-                        <p><span className="text-gray-500">Tax ID:</span> {order.billingAddress.taxId}</p>
-                      </div>
-                    </div>
-                  )}
                 </div>
               </div>
             </CardContent>

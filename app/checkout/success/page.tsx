@@ -80,8 +80,8 @@ export default function CheckoutSuccessPage() {
               <p className="text-muted-foreground">Order ID: <span className="font-medium text-foreground">{orderId.substring(0, 8)}</span></p>
               <p className="text-sm text-muted-foreground">We've sent a confirmation email with your order details.</p>
               
-              {/* Show local pickup info if applicable */}
-              {order?.billingAddress?.localPickup === "true" && (
+              {/* Show shipping information based on method */}
+              {order?.billingAddress?.localPickup === "true" ? (
                 <div className="mt-4 p-3 bg-green-50 border-l-4 border-green-500 rounded text-left">
                   <h3 className="text-sm font-medium mb-2">Local Pick-up Information</h3>
                   <p className="text-sm">Please bring your ID when picking up your order.</p>
@@ -91,6 +91,44 @@ export default function CheckoutSuccessPage() {
                   <p className="text-sm mt-2"><span className="font-medium">Store Hours:</span><br />
                     Monday-Friday 10am-7pm, Saturday 11am-5pm
                   </p>
+                </div>
+              ) : order?.shippingAddress && (
+                <div className="mt-4 p-3 bg-blue-50 border-l-4 border-blue-500 rounded text-left">
+                  <h3 className="text-sm font-medium mb-2">Shipping Information</h3>
+                  <address className="not-italic text-sm">
+                    {order.shippingAddress.name && (
+                      <p>{order.shippingAddress.name}</p>
+                    )}
+                    {/* Check for line1 in shippingAddress or in nested address object */}
+                    {order.shippingAddress.line1 ? (
+                      <p>{order.shippingAddress.line1}</p>
+                    ) : order.shippingAddress.address?.line1 && (
+                      <p>{order.shippingAddress.address.line1}</p>
+                    )}
+                    
+                    {/* Check for line2 in shippingAddress or in nested address object */}
+                    {order.shippingAddress.line2 ? (
+                      <p>{order.shippingAddress.line2}</p>
+                    ) : order.shippingAddress.address?.line2 && (
+                      <p>{order.shippingAddress.address.line2}</p>
+                    )}
+                    
+                    <p>
+                      {/* Check for city in both places */}
+                      {order.shippingAddress.city ? `${order.shippingAddress.city}, ` : 
+                       order.shippingAddress.address?.city ? `${order.shippingAddress.address.city}, ` : ''}
+                      
+                      {/* Check for state in both places */}
+                      {order.shippingAddress.state ? `${order.shippingAddress.state} ` : 
+                       order.shippingAddress.address?.state ? `${order.shippingAddress.address.state} ` : ''}
+                      
+                      {/* Check for postal_code in both places */}
+                      {order.shippingAddress.postal_code || order.shippingAddress.address?.postal_code}
+                    </p>
+                    
+                    {/* Check for country in both places */}
+                    <p>{order.shippingAddress.country || order.shippingAddress.address?.country}</p>
+                  </address>
                 </div>
               )}
               

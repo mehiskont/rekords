@@ -9,10 +9,10 @@ export function getOrderConfirmationEmail(order: OrderDetails): string {
     const name = address.name || '';
     const line1 = address.line1 || address.address?.line1 || address.address || '';
     const line2 = address.line2 || address.address?.line2 || '';
-    const city = address.city || '';
-    const state = address.state || '';
-    const postalCode = address.postal_code || address.postalCode || '';
-    const country = address.country || '';
+    const city = address.city || address.address?.city || '';
+    const state = address.state || address.address?.state || '';
+    const postalCode = address.postal_code || address.address?.postal_code || address.postalCode || '';
+    const country = address.country || address.address?.country || '';
     
     return `
       ${name}<br>
