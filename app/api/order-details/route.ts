@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth/next";
 import { log } from "@/lib/logger";
 import { authOptions } from "@/lib/auth";
 import { getOrderById } from "@/lib/orders";
+import { normalizeTaxDetails } from "@/lib/utils";
 import Stripe from "stripe";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -53,6 +54,9 @@ async function handleOrderDetails(orderId: string, request: NextRequest) {
         return NextResponse.json({ message: "Order not found" }, { status: 404 });
       }
       
+      // Normalize tax details to ensure they're strings
+      const normalizedBillingAddress = order.billingAddress ? normalizeTaxDetails(order.billingAddress) : order.billingAddress;
+      
       // Return the order with limited data for the success page
       return NextResponse.json({
         id: order.id,
@@ -60,7 +64,7 @@ async function handleOrderDetails(orderId: string, request: NextRequest) {
         status: order.status,
         createdAt: order.createdAt,
         shippingAddress: order.shippingAddress,
-        billingAddress: order.billingAddress,
+        billingAddress: normalizedBillingAddress,
         items: order.items.map(item => ({
           title: item.title,
           quantity: item.quantity,

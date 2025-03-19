@@ -5,6 +5,7 @@ import type { CartItem } from "@/types/cart"
 import type { OrderDetails, ShippingAddress } from "@/types/order"
 import { log } from "@/lib/logger"
 import { saveUserCheckoutInfo } from "@/lib/user"
+import { normalizeTaxDetails } from "@/lib/utils"
 
 export async function createOrder(
   userId: string,
@@ -14,6 +15,9 @@ export async function createOrder(
   stripeSessionId: string,
 ) {
   log(`Creating order for user ${userId}, stripe session: ${stripeSessionId}`)
+  
+  // Normalize tax details in billing address
+  const normalizedBillingAddress = normalizeTaxDetails(billingAddress);
   
   // Calculate total from items
   const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0)
@@ -61,7 +65,7 @@ export async function createOrder(
         stripeId: stripeSessionId,
         status: "pending",
         shippingAddress,
-        billingAddress,
+        billingAddress: normalizedBillingAddress,
         items: {
           create: items.map((item) => ({
             discogsId: item.id.toString(),
@@ -157,7 +161,7 @@ export async function updateOrderStatus(orderId: string, status: string) {
 
 export async function getOrdersByUserId(userId: string, limit?: number) {
   try {
-    return await prisma.order.findMany({
+    const orders = await prisma.order.findMany({
       where: { userId },
       include: {
         items: true,
@@ -167,6 +171,17 @@ export async function getOrdersByUserId(userId: string, limit?: number) {
       },
       take: limit,
     });
+    
+    // Normalize tax details in all orders
+    return orders.map(order => {
+      if (order.billingAddress) {
+        return {
+          ...order,
+          billingAddress: normalizeTaxDetails(order.billingAddress)
+        };
+      }
+      return order;
+    });
   } catch (error) {
     console.error("Database error in getOrdersByUserId:", error);
     throw error; // Let the caller handle the error
@@ -175,12 +190,23 @@ export async function getOrdersByUserId(userId: string, limit?: number) {
 
 export async function getOrderById(orderId: string) {
   try {
-    return await prisma.order.findUnique({
+    const order = await prisma.order.findUnique({
       where: { id: orderId },
       include: {
         items: true,
       },
-    })
+    });
+    
+    // If order exists, normalize the tax details
+    if (order && order.billingAddress) {
+      // Create a copy of the order with normalized billing address
+      return {
+        ...order,
+        billingAddress: normalizeTaxDetails(order.billingAddress)
+      };
+    }
+    
+    return order;
   } catch (error) {
     console.error("Database error in getOrderById:", error);
     throw error; // Let the caller handle the error

@@ -166,11 +166,20 @@ export async function POST(req: Request) {
           // Log the user ID and items for debugging
           log(`Creating order for user ${userId || "anonymous"} with items: ${JSON.stringify(items)}`)
           
+          // Create billing details with tax information
+          const billingDetails = {
+            ...expandedSession.customer_details,
+            taxDetails: session.metadata?.taxDetails === "true" ? "true" : "false",
+            organization: session.metadata?.organization || "",
+            taxId: session.metadata?.taxId || "",
+            localPickup: session.metadata?.localPickup === "true" ? "true" : "false"
+          };
+          
           const order = await createOrder(
             userId || "anonymous", // Use anonymous if no user ID
             items,
             expandedSession.shipping_details || expandedSession.customer_details,
-            expandedSession.customer_details,
+            billingDetails,
             session.id
           )
           
@@ -415,12 +424,21 @@ export async function POST(req: Request) {
                 email: customerEmail
               };
               
+              // Create billing address with tax details if available
+              const billingAddress = {
+                ...shippingAddress,
+                taxDetails: paymentIntent.metadata?.taxDetails === "true" ? "true" : "false",
+                organization: paymentIntent.metadata?.organization || "",
+                taxId: paymentIntent.metadata?.taxId || "",
+                localPickup: paymentIntent.metadata?.localPickup === "true" ? "true" : "false"
+              };
+              
               // Create order
               const order = await createOrder(
                 userId,
                 items,
                 shippingAddress,
-                shippingAddress,
+                billingAddress,
                 paymentIntent.metadata.sessionId
               );
               
@@ -526,12 +544,21 @@ export async function POST(req: Request) {
               email: customerEmail
             };
             
+            // Create billing address with tax details if available
+            const billingAddress = {
+              ...address,
+              taxDetails: paymentIntent.metadata?.taxDetails === "true" ? "true" : "false",
+              organization: paymentIntent.metadata?.organization || "",
+              taxId: paymentIntent.metadata?.taxId || "",
+              localPickup: paymentIntent.metadata?.localPickup === "true" ? "true" : "false"
+            };
+            
             // Create order using payment intent ID as the Stripe ID
             const order = await createOrder(
               userId,
               items,
               address,
-              address,
+              billingAddress,
               paymentIntent.id
             );
             

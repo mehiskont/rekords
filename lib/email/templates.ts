@@ -24,10 +24,10 @@ export function getOrderConfirmationEmail(order: OrderDetails): string {
   };
   
   // Get tax details and shipping preferences from metadata if available
-  const taxDetails = order.taxDetails || false;
+  const taxDetails = order.taxDetails === true || order.taxDetails === "true";
   const organization = order.organization || '';
   const taxId = order.taxId || '';
-  const localPickup = order.localPickup || false;
+  const localPickup = order.localPickup === true || order.localPickup === "true";
   
   // Calculate subtotal
   const subtotal = order.items.reduce((sum, item) => sum + (item.price * item.quantity), 0);

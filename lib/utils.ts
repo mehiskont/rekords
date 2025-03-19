@@ -14,6 +14,23 @@ export function formatDate(date: Date) {
   }).format(new Date(date))
 }
 
+/**
+ * Normalizes tax details in billing address objects to ensure consistent string format
+ * @param billingAddress The billing address object to normalize
+ * @returns A new billing address object with normalized tax details
+ */
+export function normalizeTaxDetails(billingAddress: any) {
+  if (!billingAddress) return billingAddress;
+  
+  return {
+    ...billingAddress,
+    taxDetails: billingAddress.taxDetails === true || billingAddress.taxDetails === "true" ? "true" : "false",
+    organization: billingAddress.organization || "",
+    taxId: billingAddress.taxId || "",
+    localPickup: billingAddress.localPickup === true || billingAddress.localPickup === "true" ? "true" : "false"
+  };
+}
+
 // Update the serializeForClient function to include weight information
 export function serializeForClient<T extends Record<string, any>>(obj: T): T {
   // Create a clean object with only needed properties to avoid serialization issues

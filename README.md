@@ -108,3 +108,9 @@ This application supports automated deployments using GitHub webhooks. When set 
 # Add cart tables if migrations failed
 node scripts/add-cart-tables.js
 ```
+
+# tax info fixes for production
+ 1. First run the simple fix to ensure billing address data is correctly formatted:
+  node scripts/fix-tax-details.js
+  2. If you want to verify against Stripe data, run the metadata check script (requires Stripe API key):
+  node scripts/fix-tax-metadata.js
