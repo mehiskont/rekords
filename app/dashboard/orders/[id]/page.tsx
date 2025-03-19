@@ -179,35 +179,12 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
                         {order.shippingAddress.name && (
                           <p>{order.shippingAddress.name}</p>
                         )}
-                        {/* Check for line1 in shippingAddress or in nested address object */}
-                        {order.shippingAddress.line1 ? (
-                          <p>{order.shippingAddress.line1}</p>
-                        ) : order.shippingAddress.address?.line1 && (
-                          <p>{order.shippingAddress.address.line1}</p>
+                        {order.shippingAddress.email && (
+                          <p>{order.shippingAddress.email}</p>
                         )}
-                        
-                        {/* Check for line2 in shippingAddress or in nested address object */}
-                        {order.shippingAddress.line2 ? (
-                          <p>{order.shippingAddress.line2}</p>
-                        ) : order.shippingAddress.address?.line2 && (
-                          <p>{order.shippingAddress.address.line2}</p>
+                        {order.shippingAddress.address && (
+                          <p>{order.shippingAddress.address}</p>
                         )}
-                        
-                        <p>
-                          {/* Check for city in both places */}
-                          {order.shippingAddress.city ? `${order.shippingAddress.city}, ` : 
-                           order.shippingAddress.address?.city ? `${order.shippingAddress.address.city}, ` : ''}
-                          
-                          {/* Check for state in both places */}
-                          {order.shippingAddress.state ? `${order.shippingAddress.state} ` : 
-                           order.shippingAddress.address?.state ? `${order.shippingAddress.address.state} ` : ''}
-                          
-                          {/* Check for postal_code in both places */}
-                          {order.shippingAddress.postal_code || order.shippingAddress.address?.postal_code}
-                        </p>
-                        
-                        {/* Check for country in both places */}
-                        <p>{order.shippingAddress.country || order.shippingAddress.address?.country}</p>
                       </address>
                     ) : (
                       <p className="text-sm text-gray-500">No shipping address available</p>
