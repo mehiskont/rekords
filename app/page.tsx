@@ -17,15 +17,8 @@ export default function HomePage() {
    
       {/* Hero Section with Search */}
       <section className="relative py-16 bg-gradient-to-b from-background to-muted">
-        <div className="container max-w-6xl mx-auto px-4">
-          <div className="text-center mb-12">
-            <h1 className="text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/50">
-              Plastik Records
-            </h1>
-            <p className="text-lg text-muted-foreground mb-8">
-              Explore our vinyl collection
-            </p>
-          </div>
+        <div className="container max-w-6xl mx-auto px-4  mt-12">
+         
           <SearchBar />
         </div>
       </section>

@@ -108,3 +108,13 @@
 }
 
 /**/
+
+.logo-plastik {
+  width: 120px;
+  height: auto;
+  fill: currentColor;
+}
+
+.dark .logo-plastik {
+  fill: white;
+}
