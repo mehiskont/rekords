@@ -98,9 +98,10 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
               src={record.cover_image || "/placeholder.svg"}
               alt={record.title}
               fill
-              className="object-cover rounded-md"
+              className="object-cover rounded-md transition-opacity duration-300"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              priority={false}
+              quality={95}
+              loading="eager"
               onError={(e) => {
                 const target = e.target as HTMLImageElement
                 target.src = "/placeholder.svg"

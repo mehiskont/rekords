@@ -8,8 +8,16 @@ export default async function RecordPage({ params }: { params: { id: string } })
   try {
     const { record, relatedRecords } = await getDiscogsRecord(params.id)
 
-    // If record is null (not found or out of stock), show 404
-    if (!record || record.quantity_available === 0) {
+    // If record is null (not found, out of stock, or API issue), show 404
+    // Added more detailed logging to help troubleshoot
+    if (!record) {
+      console.log(`Record not found for ID: ${params.id}`)
+      notFound()
+    }
+    
+    // Out of stock
+    if (record.quantity_available === 0) {
+      console.log(`Record out of stock for ID: ${params.id}`)
       notFound()
     }
 

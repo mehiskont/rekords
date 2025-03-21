@@ -14,7 +14,16 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    unoptimized: true,
+    unoptimized: false,
+    domains: [
+      'img.discogs.com', 
+      'i.discogs.com', 
+      'api.discogs.com',
+      'st.discogs.com',
+      's.discogs.com'
+    ],
+    formats: ['image/avif', 'image/webp'],
+    minimumCacheTTL: 3600,
   },
   experimental: {
     webpackBuildWorker: true,

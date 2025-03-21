@@ -230,8 +230,9 @@ export async function fetchWithRetry(
         globalConsecutive429s++;
         
         // If we're getting too many rate limits across the app, trip the global circuit breaker
-        if (globalConsecutive429s >= 10) {
-          const circuitBreakerTime = Math.min(60000 * Math.pow(2, Math.floor(globalConsecutive429s / 10)), 300000);
+        // Use a higher threshold to make the circuit breaker less aggressive
+        if (globalConsecutive429s >= 20) {
+          const circuitBreakerTime = Math.min(30000 * Math.pow(2, Math.floor(globalConsecutive429s / 20)), 120000);
           globalCircuitBreakerUntil = Date.now() + circuitBreakerTime;
           console.warn(`Global circuit breaker tripped for ${circuitBreakerTime}ms due to excessive rate limiting`);
         }

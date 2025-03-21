@@ -48,9 +48,11 @@ export function RecordDetails({ record }: RecordDetailsProps) {
           src={record.cover_image || "/placeholder.svg"}
           alt={record.title}
           fill
-          className="object-contain rounded-lg"
+          className="object-contain rounded-lg shadow-md"
           sizes="(max-width: 768px) 100vw, 50vw"
+          quality={95}
           priority
+          loading="eager"
         />
       </div>
       <div className="flex flex-col justify-center">

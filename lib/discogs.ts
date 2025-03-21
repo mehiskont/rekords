@@ -214,13 +214,37 @@ async function mapListingToRecord(listing: any): Promise<DiscogsRecord> {
 
     const weight_unit = "g"
 
+    // Determine the best image URL - prefer high resolution images
+    let coverImage = "/placeholder.svg";
+    
+    // First check for high-resolution images
+    if (listing.release?.images && Array.isArray(listing.release.images) && listing.release.images.length > 0) {
+      // Find the primary image or use the first one
+      const primaryImage = listing.release.images.find((img: any) => img.type === "primary") || listing.release.images[0];
+      
+      // Prefer the highest resolution: resource_url > uri > uri150
+      coverImage = primaryImage.resource_url || primaryImage.uri || primaryImage.uri150 || "/placeholder.svg";
+    } 
+    // Fallback to main_release_url if available
+    else if (listing.release?.resource_url) {
+      coverImage = listing.release.resource_url;
+    }
+    // Fallback to cover_image if available 
+    else if (listing.release?.cover_image) {
+      coverImage = listing.release.cover_image;
+    }
+    // Last resort: use thumbnail
+    else if (listing.release?.thumbnail) {
+      coverImage = listing.release.thumbnail;
+    }
+    
     return {
       id: Number(listing.id) || 0,
       title: String(listing.release?.title || "Untitled"),
       artist: String(listing.release?.artist || "Unknown Artist"),
       price: price,
       shipping_price: Number(shippingPrice),
-      cover_image: String(listing.release?.thumbnail || "/placeholder.svg"),
+      cover_image: coverImage,
       condition: String(listing.condition || "Unknown"),
       status: String(listing.status || ""),
       label: String(listing.release?.label || "Unknown Label"),
@@ -241,13 +265,28 @@ async function mapListingToRecord(listing: any): Promise<DiscogsRecord> {
     }
   } catch (error) {
     console.error("Error mapping listing to record:", error)
+    // Try to extract a high-res image even in the error case
+    let fallbackCoverImage = "/placeholder.svg";
+    try {
+      if (listing.release?.images && Array.isArray(listing.release.images) && listing.release.images.length > 0) {
+        const primaryImage = listing.release.images.find((img: any) => img.type === "primary") || listing.release.images[0];
+        fallbackCoverImage = primaryImage.resource_url || primaryImage.uri || primaryImage.uri150 || "/placeholder.svg";
+      } else if (listing.release?.cover_image) {
+        fallbackCoverImage = listing.release.cover_image;
+      } else if (listing.release?.thumbnail) {
+        fallbackCoverImage = listing.release.thumbnail;
+      }
+    } catch (imgError) {
+      // Silently fail and use placeholder
+    }
+    
     return {
       id: Number(listing.id) || 0,
       title: String(listing.release?.title || "Error Loading Record"),
       artist: String(listing.release?.artist || "Unknown Artist"),
       price: 0,
       shipping_price: 5,
-      cover_image: "/placeholder.svg",
+      cover_image: fallbackCoverImage,
       condition: "Unknown",
       status: "",
       label: "Unknown Label",
@@ -643,10 +682,9 @@ export async function getDiscogsInventory(
       return isAvailable;
     })
 
-    // Optimize for performance by limiting release data fetches
-    // Only fetch for first page or explicitly requested
-    const shouldFetchFullData = options.fetchFullReleaseData || 
-                               (page === 1 && availableListings.length <= 50);
+    // Always fetch full release data to get high-resolution images
+    // This might be slightly slower but provides much better image quality
+    const shouldFetchFullData = true;
                                
     // Optimize by batching full release data fetches before mapping listings
     const releaseIds = new Set<string>()
@@ -801,9 +839,33 @@ export async function getDiscogsRecord(
       },
     })
 
+    // Check for circuit breaker synthetic response
+    const isCircuitBreaker = response.headers.get("X-Circuit-Breaker") === "true";
+    
+    if (isCircuitBreaker) {
+      log("Circuit breaker active for Discogs API when fetching record - attempting fallback", {}, "warn");
+      // Try to get a cached version if available
+      const cacheKey = `record:${id}`
+      const cachedData = await getCachedData(cacheKey)
+      if (cachedData) {
+        try {
+          const parsed = JSON.parse(cachedData)
+          if (parsed && typeof parsed === 'object' && parsed.record) {
+            log(`Using cached record data for ${id} due to circuit breaker`, {}, "info")
+            return parsed
+          }
+        } catch (parseError) {
+          // Continue with null response if cache parsing fails
+          log(`Error parsing cached record data for ${id}`, parseError, "warn")
+        }
+      }
+      // If no cache or invalid cache, return null record
+      return { record: null, relatedRecords: [] }
+    }
+    
     const data = await response.json()
 
-    if (data.status !== "For Sale" || data.quantity === 0) {
+    if (!response.ok || data.status !== "For Sale" || data.quantity === 0) {
       return { record: null, relatedRecords: [] }
     }
 
@@ -843,7 +905,9 @@ export async function getDiscogsRecord(
 
     const result = { record, relatedRecords }
 
-    // No caching for record data
+    // Cache record data for 30 minutes to provide a fallback during circuit breaker activation
+    const cacheKey = `record:${id}`
+    setCachedData(cacheKey, JSON.stringify(result), 30 * 60)  // 30 minutes
 
     return result
   } catch (error) {
