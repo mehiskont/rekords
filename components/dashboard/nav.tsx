@@ -9,7 +9,7 @@ export function DashboardNav() {
   const pathname = usePathname()
 
   return (
-    <nav className="grid items-start gap-2">
+    <nav className="grid items-start gap-2 mt-4">
       <Link href="/dashboard">
         <Button variant="ghost" className={cn("w-full justify-start", pathname === "/dashboard" && "bg-muted")}>
           Dashboard

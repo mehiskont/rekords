@@ -104,6 +104,9 @@ export function NavBar() {
                     <Link href="/dashboard">Dashboard</Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
+                    <Link href="/dashboard/orders">Orders</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
                     <Link href="/dashboard/profile">Profile</Link>
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
