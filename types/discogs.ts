@@ -1,3 +1,17 @@
+export interface TrackVideo {
+  title: string
+  url: string
+  duration?: string
+  embed?: boolean
+}
+
+export interface DiscogsTrack {
+  position: string
+  title: string
+  duration?: string
+  video?: TrackVideo
+}
+
 export interface DiscogsRecord {
   // The id can be any integer, will be stored as BigInt in the database
   id: number | string | bigint  // Allow different input formats
@@ -21,6 +35,8 @@ export interface DiscogsRecord {
   format_quantity?: number
   weight?: number
   weight_unit?: string
+  tracks?: DiscogsTrack[]
+  videos?: TrackVideo[]
 }
 
 export interface DiscogsApiResponse {

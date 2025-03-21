@@ -136,6 +136,43 @@ async function fetchFullReleaseData(releaseId: string): Promise<any> {
 
     const data = await response.json()
     
+    // Process videos and match them to tracks if possible
+    if (data.videos && Array.isArray(data.videos)) {
+      // Filter to only YouTube videos for simplicity
+      data.videos = data.videos
+        .filter((video: any) => video.uri && (
+          video.uri.includes('youtube.com') || 
+          video.uri.includes('youtu.be')
+        ))
+        .map((video: any) => ({
+          title: video.title || "",
+          url: video.uri || "",
+          duration: video.duration || "",
+          embed: video.embed || false
+        }));
+    }
+
+    // Process tracks and match with videos if possible
+    if (data.tracklist && Array.isArray(data.tracklist) && data.tracklist.length > 0) {
+      // Create a simplified and normalized tracklist
+      data.processedTracks = data.tracklist.map((track: any) => {
+        // Find a matching video for this track if possible
+        const matchingVideo = data.videos?.find((video: any) => 
+          video.title && track.title && 
+          (video.title.toLowerCase().includes(track.title.toLowerCase()) ||
+           track.title.toLowerCase().includes(video.title.toLowerCase()))
+        );
+        
+        return {
+          position: track.position || "",
+          title: track.title || "",
+          duration: track.duration || "",
+          // Only include video if we have a match
+          video: matchingVideo || undefined
+        };
+      });
+    }
+    
     // Only cache valid response data
     if (data && typeof data === 'object' && !data.error) {
       // Cache for 30 days - using memory cache + Redis from our improved implementation
@@ -238,6 +275,10 @@ async function mapListingToRecord(listing: any): Promise<DiscogsRecord> {
       coverImage = listing.release.thumbnail;
     }
     
+    // Include videos and tracks if available
+    const videos = listing.release?.videos || [];
+    const tracks = listing.release?.processedTracks || [];
+    
     return {
       id: Number(listing.id) || 0,
       title: String(listing.release?.title || "Untitled"),
@@ -262,6 +303,8 @@ async function mapListingToRecord(listing: any): Promise<DiscogsRecord> {
       weight: weight,
       weight_unit: weight_unit,
       format_quantity: listing.format_quantity || listing.release?.format_quantity,
+      videos: videos,
+      tracks: tracks,
     }
   } catch (error) {
     console.error("Error mapping listing to record:", error)
@@ -302,6 +345,8 @@ async function mapListingToRecord(listing: any): Promise<DiscogsRecord> {
       weight: 180, // Default weight for error cases
       weight_unit: "g",
       format_quantity: listing.format_quantity || listing.release?.format_quantity,
+      videos: [],
+      tracks: [],
     }
   }
 }
@@ -869,11 +914,26 @@ export async function getDiscogsRecord(
       return { record: null, relatedRecords: [] }
     }
 
+    // Get full release data which contains videos and tracklist
     const fullRelease = await fetchFullReleaseData(data.release.id.toString())
+    
+    // Log release data to debug videos and tracklist
+    log(`Release data for ${id}:`, {
+      has_videos: fullRelease.videos ? fullRelease.videos.length : 0,
+      has_tracklist: fullRelease.tracklist ? fullRelease.tracklist.length : 0,
+      has_processed_tracks: fullRelease.processedTracks ? fullRelease.processedTracks.length : 0,
+    }, "info")
+    
     const record = await mapListingToRecord({
       ...data,
       release: { ...data.release, ...fullRelease },
     })
+    
+    // Log the final record object to see if tracks and videos are included
+    log(`Final record for ${id}:`, {
+      has_videos: record.videos ? record.videos.length : 0,
+      has_tracks: record.tracks ? record.tracks.length : 0,
+    }, "info")
 
     // Get related records using a simpler query with minimal fields
     // We'll fetch a fresh copy of inventory to ensure we have the latest available items

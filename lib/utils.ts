@@ -31,7 +31,7 @@ export function normalizeTaxDetails(billingAddress: any) {
   };
 }
 
-// Update the serializeForClient function to include weight information
+// Update the serializeForClient function to include all record fields including tracks and videos
 export function serializeForClient<T extends Record<string, any>>(obj: T): T {
   // Create a clean object with only needed properties to avoid serialization issues
   const cleanObj = {
@@ -55,6 +55,10 @@ export function serializeForClient<T extends Record<string, any>>(obj: T): T {
     quantity_available: obj.quantity_available,
     weight: obj.weight,
     weight_unit: obj.weight_unit,
+    format_quantity: obj.format_quantity,
+    // Add the new fields for tracks and videos
+    tracks: obj.tracks || [],
+    videos: obj.videos || [],
   }
 
   // Direct object return is faster than JSON.parse(JSON.stringify())
