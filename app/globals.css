@@ -122,5 +122,6 @@
 .navbar-searchbar {
     position: absolute;
     left: 240px;
-    top: 14px;
+    top: 13px;
+    min-width: 200px;
 }
