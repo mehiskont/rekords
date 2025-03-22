@@ -26,7 +26,7 @@ export default async function RecordPage({ params }: { params: { id: string } })
     const serializedRelatedRecords = relatedRecords.map((record) => serializeForClient(record))
 
     return (
-      <div className="container max-w-6xl mx-auto px-4 py-12">
+      <div className="container mx-auto py-12">
         <RecordDetails record={serializedRecord} />
 
         {serializedRelatedRecords.length > 0 && (
