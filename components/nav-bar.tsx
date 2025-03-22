@@ -54,7 +54,7 @@ export function NavBar() {
             
             {/* Show search bar in navbar only when not on homepage */}
             {isNotHomePage && (
-              <div className="hidden md:block relative z-50">
+              <div className="hidden md:block relative z-50 navbar-searchbar">
                 <SearchBar isCompact={true} expandable={true} />
               </div>
             )}
