@@ -118,3 +118,9 @@
 .dark .logo-plastik {
   fill: white;
 }
+
+.navbar-searchbar {
+    position: absolute;
+    left: 240px;
+    top: 14px;
+}
