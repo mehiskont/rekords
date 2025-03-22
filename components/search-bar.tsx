@@ -95,9 +95,9 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything" }:
 
   return (
     <div ref={searchRef} className="relative w-full max-w-3xl mx-auto space-y-4">
-      <div className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 rounded-lg shadow-lg p-4">
+      <div className="bg-card shadow-xl rounded-xl overflow-hidden border border-primary/20 dark:bg-black/40 dark:border-white/10">
         <form onSubmit={handleSubmit} className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary dark:text-primary" />
           <Input
             type="search"
             placeholder="Search records..."
@@ -106,7 +106,7 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything" }:
               setQuery(e.target.value)
               setShowResults(true)
             }}
-            className="pl-10 bg-background"
+            className="pl-12 py-6 h-14 bg-transparent border-0 text-lg focus-visible:ring-0 focus-visible:ring-offset-0"
           />
         </form>
       </div>

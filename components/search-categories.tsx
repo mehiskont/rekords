@@ -27,7 +27,7 @@ export function SearchCategories({ activeCategory, query, onCategoryChange }: Se
   }
 
   return (
-    <div className="flex gap-2 justify-center">
+    <div className="flex gap-4 justify-center">
       {categories.map((category) => {
         const isActive = activeCategory === category.id
         const href = `/search?q=${encodeURIComponent(query)}&category=${category.id}`
@@ -37,8 +37,10 @@ export function SearchCategories({ activeCategory, query, onCategoryChange }: Se
             key={category.id}
             onClick={(e) => handleClick(category.id, e)}
             className={cn(
-              "px-3 py-1 text-sm transition-colors hover:text-foreground",
-              isActive ? "text-primary font-medium" : "text-muted-foreground",
+              "px-4 py-2 text-sm rounded-full transition-colors hover:bg-muted dark:hover:bg-white/10",
+              isActive 
+                ? "bg-primary/10 text-primary font-medium dark:bg-primary/20" 
+                : "text-muted-foreground hover:text-foreground dark:text-white/70 dark:hover:text-white",
             )}
           >
             {category.label}
@@ -48,8 +50,10 @@ export function SearchCategories({ activeCategory, query, onCategoryChange }: Se
             key={category.id}
             href={href}
             className={cn(
-              "px-3 py-1 text-sm transition-colors hover:text-foreground",
-              isActive ? "text-primary font-medium" : "text-muted-foreground",
+              "px-4 py-2 text-sm rounded-full transition-colors hover:bg-muted dark:hover:bg-white/10",
+              isActive 
+                ? "bg-primary/10 text-primary font-medium dark:bg-primary/20" 
+                : "text-muted-foreground hover:text-foreground dark:text-white/70 dark:hover:text-white",
             )}
           >
             {category.label}
