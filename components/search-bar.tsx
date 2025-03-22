@@ -146,7 +146,11 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
       
       {/* Show categories when input is focused in compact mode or always in full mode */}
       {(!isCompact || (isCompact && showResults)) && (
-        <div className={cn(isCompact && showResults ? "p-3 border-t" : "")}>
+        <div style={{
+          backgroundColor: '#1f2029',
+          borderRadius: 14
+        }}
+      className={cn(isCompact && showResults ? "p-3 border-t" : "")}>
           <SearchCategories 
             activeCategory={category} 
             query={query} 
