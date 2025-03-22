@@ -9,6 +9,7 @@ interface SearchCategoriesProps {
   activeCategory: string
   query: string
   onCategoryChange?: (category: string) => void
+  isCompact?: boolean
 }
 
 const categories = [
@@ -18,7 +19,7 @@ const categories = [
   { id: "labels", label: "Labels" },
 ]
 
-export function SearchCategories({ activeCategory, query, onCategoryChange }: SearchCategoriesProps) {
+export function SearchCategories({ activeCategory, query, onCategoryChange, isCompact = false }: SearchCategoriesProps) {
   const handleClick = (categoryId: string, e: React.MouseEvent) => {
     if (onCategoryChange) {
       e.preventDefault()
@@ -27,7 +28,10 @@ export function SearchCategories({ activeCategory, query, onCategoryChange }: Se
   }
 
   return (
-    <div className="flex gap-4 justify-center">
+    <div className={cn(
+      "flex gap-2 justify-center", 
+      isCompact ? "flex-wrap" : "gap-4"
+    )}>
       {categories.map((category) => {
         const isActive = activeCategory === category.id
         const href = `/search?q=${encodeURIComponent(query)}&category=${category.id}`
@@ -37,7 +41,8 @@ export function SearchCategories({ activeCategory, query, onCategoryChange }: Se
             key={category.id}
             onClick={(e) => handleClick(category.id, e)}
             className={cn(
-              "px-4 py-2 text-sm rounded-full transition-colors hover:bg-muted dark:hover:bg-white/10",
+              "text-sm rounded-full transition-colors hover:bg-muted dark:hover:bg-white/10",
+              isCompact ? "px-3 py-1 text-xs" : "px-4 py-2 text-sm",
               isActive 
                 ? "bg-primary/10 text-primary font-medium dark:bg-primary/20" 
                 : "text-muted-foreground hover:text-foreground dark:text-white/70 dark:hover:text-white",
@@ -50,7 +55,8 @@ export function SearchCategories({ activeCategory, query, onCategoryChange }: Se
             key={category.id}
             href={href}
             className={cn(
-              "px-4 py-2 text-sm rounded-full transition-colors hover:bg-muted dark:hover:bg-white/10",
+              "text-sm rounded-full transition-colors hover:bg-muted dark:hover:bg-white/10",
+              isCompact ? "px-3 py-1 text-xs" : "px-4 py-2 text-sm",
               isActive 
                 ? "bg-primary/10 text-primary font-medium dark:bg-primary/20" 
                 : "text-muted-foreground hover:text-foreground dark:text-white/70 dark:hover:text-white",

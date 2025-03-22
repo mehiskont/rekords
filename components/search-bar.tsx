@@ -9,13 +9,15 @@ import { Input } from "@/components/ui/input"
 import { SearchResults } from "@/components/search-results"
 import { SearchCategories } from "@/components/search-categories"
 import type { DiscogsRecord } from "@/types/discogs"
+import { cn } from "@/lib/utils"
 
 interface SearchBarProps {
   initialQuery?: string
   initialCategory?: string
+  isCompact?: boolean // Add compact mode for navbar
 }
 
-export function SearchBar({ initialQuery = "", initialCategory = "everything" }: SearchBarProps) {
+export function SearchBar({ initialQuery = "", initialCategory = "everything", isCompact = false }: SearchBarProps) {
   const router = useRouter()
   const [query, setQuery] = useState(initialQuery)
   const [category, setCategory] = useState(initialCategory)
@@ -94,10 +96,18 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything" }:
   }
 
   return (
-    <div ref={searchRef} className="relative w-full max-w-3xl mx-auto space-y-4">
-      <div className="bg-card shadow-xl rounded-xl overflow-hidden border border-primary/20 dark:bg-black/40 dark:border-white/10">
+    <div ref={searchRef} className={cn("relative w-full mx-auto", isCompact ? "" : "max-w-3xl space-y-4")}>
+      <div className={cn(
+        "bg-card overflow-hidden border border-primary/20 dark:bg-black/40 dark:border-white/10",
+        isCompact 
+          ? "rounded-md shadow" 
+          : "rounded-xl shadow-xl"
+      )}>
         <form onSubmit={handleSubmit} className="relative">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-primary dark:text-primary" />
+          <Search className={cn(
+            "absolute left-3 top-1/2 -translate-y-1/2 text-primary dark:text-primary",
+            isCompact ? "h-4 w-4" : "h-5 w-5"
+          )} />
           <Input
             type="search"
             placeholder="Search records..."
@@ -106,11 +116,28 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything" }:
               setQuery(e.target.value)
               setShowResults(true)
             }}
-            className="pl-12 py-6 h-14 bg-transparent border-0 text-lg focus-visible:ring-0 focus-visible:ring-offset-0"
+            className={cn(
+              "bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0",
+              isCompact 
+                ? "pl-9 py-2 h-9 text-sm" 
+                : "pl-12 py-6 h-14 text-lg"
+            )}
           />
         </form>
       </div>
-      <SearchCategories activeCategory={category} query={query} onCategoryChange={handleCategoryChange} />
+      
+      {/* Show categories only in full mode or in compact mode when results are visible */}
+      {(!isCompact || (isCompact && showResults && results.length > 0)) && (
+        <div className={cn(isCompact && showResults ? "p-3 border-t" : "")}>
+          <SearchCategories 
+            activeCategory={category} 
+            query={query} 
+            onCategoryChange={handleCategoryChange}
+            isCompact={isCompact}
+          />
+        </div>
+      )}
+      
       {showResults && (
         <SearchResults
           results={results}
@@ -118,6 +145,7 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything" }:
           query={query}
           category={category}
           onClose={() => setShowResults(false)}
+          isCompact={isCompact}
         />
       )}
     </div>
