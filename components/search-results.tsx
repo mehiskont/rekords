@@ -19,7 +19,7 @@ export function SearchResults({ results, isLoading, query, category, onClose, is
   const displayResults = results.slice(0, 5)
 
   return (
-    <div className={`absolute top-full left-0 right-0 z-50 mt-2 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border rounded-lg shadow-lg overflow-hidden ${isCompact ? "w-80 sm:w-96" : ""}`}>
+    <div className={`absolute top-full left-0 z-50 mt-2 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border rounded-lg shadow-lg overflow-hidden ${isCompact ? "w-80 sm:w-96" : "left-0 right-0"}`}>
       {isLoading ? (
         <div className="p-4 text-center">
           <Loader2 className={isCompact ? "h-5 w-5 animate-spin mx-auto" : "h-6 w-6 animate-spin mx-auto"} />

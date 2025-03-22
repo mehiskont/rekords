@@ -15,15 +15,17 @@ interface SearchBarProps {
   initialQuery?: string
   initialCategory?: string
   isCompact?: boolean // Add compact mode for navbar
+  expandable?: boolean // Add expandable mode for navbar searchbar
 }
 
-export function SearchBar({ initialQuery = "", initialCategory = "everything", isCompact = false }: SearchBarProps) {
+export function SearchBar({ initialQuery = "", initialCategory = "everything", isCompact = false, expandable = false }: SearchBarProps) {
   const router = useRouter()
   const [query, setQuery] = useState(initialQuery)
   const [category, setCategory] = useState(initialCategory)
   const [isLoading, setIsLoading] = useState(false)
   const [results, setResults] = useState<DiscogsRecord[]>([])
   const [showResults, setShowResults] = useState(false)
+  const [isFocused, setIsFocused] = useState(false)
   const searchRef = useRef<HTMLDivElement>(null)
   const debouncedQuery = useDebounce(query, 300)
 
@@ -31,6 +33,7 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
     const handleClickOutside = (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
         setShowResults(false)
+        setIsFocused(false)
       }
     }
 
@@ -96,7 +99,15 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
   }
 
   return (
-    <div ref={searchRef} className={cn("relative w-full mx-auto", isCompact ? "" : "max-w-3xl space-y-4")}>
+    <div 
+      ref={searchRef} 
+      className={cn(
+        "relative mx-auto", 
+        isCompact ? "" : "w-full max-w-3xl space-y-4",
+        expandable && isCompact ? "transition-all duration-300 ease-in-out" : "",
+        expandable && isCompact && isFocused ? "w-64" : expandable && isCompact ? "w-40" : "w-full"
+      )}
+    >
       <div className={cn(
         "bg-card overflow-hidden border border-primary/20 dark:bg-black/40 dark:border-white/10",
         isCompact 
@@ -116,6 +127,7 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
               setQuery(e.target.value)
               setShowResults(true)
             }}
+            onFocus={() => setIsFocused(true)}
             className={cn(
               "bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0",
               isCompact 
