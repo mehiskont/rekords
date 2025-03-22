@@ -24,6 +24,7 @@ export function SearchCategories({ activeCategory, query, onCategoryChange, isCo
     if (onCategoryChange) {
       e.preventDefault()
       onCategoryChange(categoryId)
+      // Don't navigate to search page when in dropdown
     }
   }
 

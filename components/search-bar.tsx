@@ -93,9 +93,11 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
 
   const handleCategoryChange = (newCategory: string) => {
     setCategory(newCategory)
-    if (query) {
+    // Only navigate to search page when not in compact/navbar mode
+    if (query && !isCompact) {
       router.push(`/search?q=${encodeURIComponent(query)}&category=${newCategory}`)
     }
+    // In compact mode just update the category for filtering search results in the dropdown
   }
 
   return (
@@ -107,6 +109,7 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
         expandable && isCompact ? "transition-all duration-300 ease-in-out" : "",
         expandable && isCompact && isFocused ? "w-64" : expandable && isCompact ? "w-40" : "w-full"
       )}
+      style={{ position: isCompact ? 'relative' : 'relative' }} // Ensure consistent positioning
     >
       <div className={cn(
         "bg-card overflow-hidden border border-primary/20 dark:bg-black/40 dark:border-white/10",
@@ -127,7 +130,10 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
               setQuery(e.target.value)
               setShowResults(true)
             }}
-            onFocus={() => setIsFocused(true)}
+            onFocus={() => {
+              setIsFocused(true)
+              setShowResults(true) // Show results when focused
+            }}
             className={cn(
               "bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0",
               isCompact 
@@ -138,8 +144,8 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
         </form>
       </div>
       
-      {/* Show categories only in full mode or in compact mode when results are visible */}
-      {(!isCompact || (isCompact && showResults && results.length > 0)) && (
+      {/* Show categories when input is focused in compact mode or always in full mode */}
+      {(!isCompact || (isCompact && showResults)) && (
         <div className={cn(isCompact && showResults ? "p-3 border-t" : "")}>
           <SearchCategories 
             activeCategory={category} 
@@ -150,7 +156,8 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
         </div>
       )}
       
-      {showResults && (
+      {/* Only show results when there's a query and results are supposed to be shown */}
+      {showResults && query.length > 0 && (
         <SearchResults
           results={results}
           isLoading={isLoading}
