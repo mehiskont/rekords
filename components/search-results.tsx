@@ -19,7 +19,7 @@ export function SearchResults({ results, isLoading, query, category, onClose, is
   const displayResults = results.slice(0, 5)
 
   return (
-    <div className={`absolute z-[100] mt-2 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/95 border rounded-lg shadow-lg overflow-hidden ${isCompact ? "w-80 sm:w-96" : "left-0 right-0"}`} 
+    <div className={`absolute z-[100] mt-2 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/90 border border-primary/10 rounded-lg shadow-lg overflow-hidden ${isCompact ? "w-80 sm:w-96" : "left-0 right-0"}`} 
       style={{ 
         position: 'absolute', 
         top: '100%', 
@@ -54,14 +54,14 @@ export function SearchResults({ results, isLoading, query, category, onClose, is
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className={`font-medium truncate ${isCompact ? "text-sm" : "text-base"}`}>{record.title}</h3>
-                    <p className={`text-muted-foreground truncate ${isCompact ? "text-xs" : "text-sm"}`}>{record.artist}</p>
+                    <p className={`text-muted-foreground/70 truncate ${isCompact ? "text-xs" : "text-sm"}`}>{record.artist}</p>
                     {!isCompact && (
-                      <p className="text-xs text-muted-foreground truncate">{labelDisplay}</p>
+                      <p className="text-xs text-muted-foreground/60 truncate">{labelDisplay}</p>
                     )}
                   </div>
                   <div className="text-right">
                     <div className={`font-medium ${isCompact ? "text-sm" : ""}`}>${(record.price || 0).toFixed(2)}</div>
-                    <div className={`text-muted-foreground ${isCompact ? "text-xs" : "text-sm"}`}>{record.condition || "Unknown"}</div>
+                    <div className={`text-muted-foreground/70 ${isCompact ? "text-xs" : "text-sm"}`}>{record.condition || "Unknown"}</div>
                   </div>
                 </Link>
               )
@@ -71,7 +71,7 @@ export function SearchResults({ results, isLoading, query, category, onClose, is
             <div className={isCompact ? "p-3 border-t" : "p-4 border-t"}>
               <Link
                 href={`/search?q=${encodeURIComponent(query)}&category=${category}`}
-                className={`block w-full text-center text-muted-foreground hover:text-foreground ${isCompact ? "text-xs" : "text-sm"}`}
+                className={`block w-full text-center text-muted-foreground/70 hover:text-foreground ${isCompact ? "text-xs" : "text-sm"}`}
                 onClick={onClose}
               >
                 View all {results.length} results
@@ -80,7 +80,7 @@ export function SearchResults({ results, isLoading, query, category, onClose, is
           )}
         </>
       ) : (
-        <div className={isCompact ? "p-3 text-center text-muted-foreground text-xs" : "p-4 text-center text-muted-foreground"}>No results found</div>
+        <div className={isCompact ? "p-3 text-center text-muted-foreground/70 text-xs" : "p-4 text-center text-muted-foreground/70"}>No results found</div>
       )}
     </div>
   )

@@ -46,7 +46,7 @@ export function SearchCategories({ activeCategory, query, onCategoryChange, isCo
               isCompact ? "px-3 py-1 text-xs" : "px-4 py-2 text-sm",
               isActive 
                 ? "bg-primary/10 text-primary font-medium dark:bg-primary/20" 
-                : "text-muted-foreground hover:text-foreground dark:text-white/70 dark:hover:text-white",
+                : "text-muted-foreground/70 hover:text-foreground dark:text-white/50 dark:hover:text-white/80",
             )}
           >
             {category.label}
@@ -60,7 +60,7 @@ export function SearchCategories({ activeCategory, query, onCategoryChange, isCo
               isCompact ? "px-3 py-1 text-xs" : "px-4 py-2 text-sm",
               isActive 
                 ? "bg-primary/10 text-primary font-medium dark:bg-primary/20" 
-                : "text-muted-foreground hover:text-foreground dark:text-white/70 dark:hover:text-white",
+                : "text-muted-foreground/70 hover:text-foreground dark:text-white/50 dark:hover:text-white/80",
             )}
           >
             {category.label}
