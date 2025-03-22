@@ -121,11 +121,13 @@
 
 .navbar-searchbar {
     position: absolute;
-    left: 240px;
+    left: 0;
+    right: 0;
     top: 13px;
-    min-width: 200px;
+    min-width: 340px;
 }
 
 .navbar-searchbar > div {
-   min-width: 178px;
+   min-width: 340px;
 }
+
