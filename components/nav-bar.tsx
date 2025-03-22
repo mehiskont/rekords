@@ -44,7 +44,11 @@ export function NavBar() {
       <div className="container mx-auto">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
-            <Link
+            <Link style={{
+    zIndex: 100,
+    position: 'relative',
+    display: 'block'
+  }}
               href="/"
             >
               <svg className="logo-plastik" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" id="Layer_1" x="0px" y="0px" viewBox="0 0 453.54 198.43" style={{enableBackground: "new 0 0 453.54 198.43"}} xmlSpace="preserve">
