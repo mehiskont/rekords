@@ -2,11 +2,11 @@ import { createTheme } from "@/lib/create-theme"
 
 export const theme = createTheme({
   light: {
-    background: "hsl(0 0% 100%)",
+    background: "#FFFCF7",
     foreground: "hsl(0 0% 3.9%)",
-    card: "hsl(0 0% 100%)",
+    card: "#FFFCF7",
     "card-foreground": "hsl(0 0% 3.9%)",
-    popover: "hsl(0 0% 100%)",
+    popover: "#FFFCF7",
     "popover-foreground": "hsl(0 0% 3.9%)",
     primary: "hsl(346.8 77.2% 49.8%)",
     "primary-foreground": "hsl(355.7 100% 97.3%)",
@@ -23,11 +23,11 @@ export const theme = createTheme({
     ring: "hsl(0 0% 3.9%)",
   },
   dark: {
-    background: "hsl(0 0% 3.9%)",
+    background: "#1E2028",
     foreground: "hsl(0 0% 98%)",
-    card: "hsl(0 0% 3.9%)",
+    card: "#1E2028",
     "card-foreground": "hsl(0 0% 98%)",
-    popover: "hsl(0 0% 3.9%)",
+    popover: "#1E2028",
     "popover-foreground": "hsl(0 0% 98%)",
     primary: "hsl(346.8 77.2% 49.8%)",
     "primary-foreground": "hsl(355.7 100% 97.3%)",
