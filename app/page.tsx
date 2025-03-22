@@ -25,7 +25,7 @@ export default function HomePage() {
 
       {/* New Arrivals Section */}
       <section className="py-16">
-        <div className="container max-w-6xl mx-auto px-4">        
+        <div className="container mx-auto">        
           <Suspense fallback={<RecordGridSkeleton />}>
             <NewArrivals />
           </Suspense>
@@ -34,7 +34,7 @@ export default function HomePage() {
 
       {/* All Records Section */}
       <section className="py-16 bg-muted/50">
-        <div className="container max-w-6xl mx-auto px-4">
+        <div className="container mx-auto">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold flex items-center gap-2">
               All Records
