@@ -25,11 +25,9 @@ export default function HomePage() {
 
       {/* New Arrivals Section */}
       <section className="py-16">
-        <div className="container mx-auto">        
           <Suspense fallback={<RecordGridSkeleton />}>
             <NewArrivals />
           </Suspense>
-        </div>
       </section>
 
       {/* All Records Section */}
