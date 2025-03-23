@@ -90,10 +90,17 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
       const response = await fetch(`/api/orders/download-pdf?id=${orderId}`);
       
       if (!response.ok) {
-        throw new Error('Failed to generate PDF');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to generate PDF');
       }
       
       const blob = await response.blob();
+      // Check content type and show error for debugging
+      if (blob.type !== 'application/pdf') {
+        console.error(`Unexpected content type: ${blob.type}`);
+        throw new Error(`Server returned incorrect content type: ${blob.type}`);
+      }
+      
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -104,7 +111,7 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
       document.body.removeChild(a);
     } catch (err) {
       console.error('Error generating PDF:', err);
-      alert('Failed to generate PDF. Please try again later.');
+      alert(`Failed to generate PDF: ${err.message}`);
     } finally {
       setGeneratingPdf(false);
     }
