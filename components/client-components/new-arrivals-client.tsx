@@ -15,9 +15,14 @@ export default function NewArrivalsClient({ records }: NewArrivalsClientProps) {
   return (
     <div>
       <h2 className="text-3xl font-bold mb-8">New Arrivals</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {records.map((record) => (
-          <ClientRecordCard key={record.id} record={record} />
+      <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-4">
+        {records.slice(0, 6).map((record) => (
+          <div 
+            key={record.id} 
+            className="w-64 flex-shrink-0"
+          >
+            <ClientRecordCard record={record} />
+          </div>
         ))}
       </div>
     </div>

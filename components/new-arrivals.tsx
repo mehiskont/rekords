@@ -64,15 +64,15 @@ export async function NewArrivals() {
       return <p className="text-center text-lg">No new arrivals at the moment. Check back soon!</p>
     }
 
-    // Use the client component with ONLY 4 records max to display (performance)
-    return <NewArrivalsClient records={serializedRecords.slice(0, 4)} />
+    // Use the client component with up to 8 records to display
+    return <NewArrivalsClient records={serializedRecords.slice(0, 8)} />
   } catch (error) {
     log("Error in NewArrivals:", error, "error");
     
     // If we have cached data, use it even if it's stale
     if (usedCache && serializedRecords.length > 0) {
       log("Using stale new arrivals cache due to error", {}, "warn");
-      return <NewArrivalsClient records={serializedRecords.slice(0, 4)} />
+      return <NewArrivalsClient records={serializedRecords.slice(0, 8)} />
     }
     
     return <ApiUnavailable />

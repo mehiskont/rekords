@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button"
 import { ShoppingCart } from "lucide-react"
 import { useCart } from "@/contexts/cart-context"
 import Link from "next/link"
+import Image from "next/image"
 
 interface RecordListViewProps {
   records: DiscogsRecord[]
@@ -28,6 +29,7 @@ export default function RecordListView({ records }: RecordListViewProps) {
       <Table>
         <TableHeader>
           <TableRow>
+            <TableHead className="w-20"></TableHead>
             <TableHead>Title</TableHead>
             <TableHead>Artist</TableHead>
             <TableHead>Format</TableHead>
@@ -46,6 +48,19 @@ export default function RecordListView({ records }: RecordListViewProps) {
 
             return (
               <TableRow key={record.id}>
+                <TableCell className="p-2">
+                  <Link href={`/records/${record.id}`}>
+                    <div className="relative h-16 w-16 overflow-hidden rounded-sm">
+                      <Image 
+                        src={record.cover_image} 
+                        alt={record.title}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                        sizes="64px"
+                      />
+                    </div>
+                  </Link>
+                </TableCell>
                 <TableCell className="font-medium">
                   <Link href={`/records/${record.id}`} className="hover:underline">
                     {record.title}
