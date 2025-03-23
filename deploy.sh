@@ -25,6 +25,13 @@ npx prisma migrate deploy
 echo "Building application..."
 npm run build
 
+# Create lib symlink in the .next directory to fix module resolution
+echo "Creating lib symlinks for module resolution..."
+mkdir -p .next/server/chunks
+ln -sf ../../lib .next/server/chunks/lib
+ln -sf ../../lib .next/server/lib
+ln -sf ../lib .next/lib
+
 # Restart the PM2 process
 echo "Restarting application..."
 pm2 restart rekords
