@@ -138,14 +138,9 @@ export function NavBar() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <div className="flex gap-2">
-                <Link href="/auth/signin">
-                  <Button variant="primary" size="sm">Sign In</Button>
-                </Link>
-                <Link href="/auth/signup">
-                  <Button variant="outline" size="sm">Sign Up</Button>
-                </Link>
-              </div>
+              <Link href="/auth/signin">
+                <Button variant="primary">Sign In</Button>
+              </Link>
             )}
           </div>
 
@@ -168,14 +163,6 @@ export function NavBar() {
             
             <div className="flex-1 flex flex-col justify-center mb-10">
               <div className="flex justify-center mb-6">
-                <Link href="/" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="outline" size="lg" className="w-full mx-2">
-                    <Home className="h-5 w-5 mr-2" />
-                    Home
-                  </Button>
-                </Link>
-              </div>
-              <div className="flex justify-center mb-10">
                 <Link href="/search" onClick={() => setIsMenuOpen(false)}>
                   <Button variant="outline" size="lg" className="w-full mx-2">
                     All Records
