@@ -35,6 +35,7 @@ export default function RecordListView({ records }: RecordListViewProps) {
             <TableHead>Format</TableHead>
             <TableHead>Label</TableHead>
             <TableHead className="text-right">Price</TableHead>
+            <TableHead className="text-center">Qty</TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
@@ -70,6 +71,9 @@ export default function RecordListView({ records }: RecordListViewProps) {
                 <TableCell>{formatDisplay || "Unknown"}</TableCell>
                 <TableCell className="max-w-[200px] truncate">{labelDisplay}</TableCell>
                 <TableCell className="text-right font-medium">${(record.price || 0).toFixed(2)}</TableCell>
+                <TableCell className="text-center">
+                  {record.quantity_available > 0 ? record.quantity_available : "0"}
+                </TableCell>
                 <TableCell>
                   <Button
                     size="sm"
