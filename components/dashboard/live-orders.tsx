@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, useRef } from "react"
 import { useSession } from "next-auth/react"
 import { Loader2 } from "lucide-react"
 import { OrderList } from "./order-list"
@@ -10,13 +10,18 @@ export function LiveOrders() {
   const [orders, setOrders] = useState([])
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(null)
+  const initialLoadComplete = useRef(false)
 
   useEffect(() => {
     async function fetchOrders() {
       if (!session?.user?.id) return
       
       try {
-        setIsLoading(true)
+        // Only show loading indicator on initial load
+        if (!initialLoadComplete.current) {
+          setIsLoading(true)
+        }
+        
         // Add cache-busting query param and force mock data for Google users
         const isMockUser = session.user.id === "temp-user-id-123" || session.user.id === "temp-google-user-123"
         const mockParam = isMockUser ? "&includeMock=true" : ""
@@ -31,13 +36,20 @@ export function LiveOrders() {
         
         const data = await response.json()
         console.log(`Client-side fetched ${data.length} orders`)
-        setOrders(data)
+        
+        // Sort orders by createdAt (newest first)
+        const sortedData = [...data].sort((a, b) => 
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        )
+        
+        setOrders(sortedData)
         setError(null)
       } catch (err) {
         console.error("Error fetching orders:", err)
         setError(err.message)
       } finally {
         setIsLoading(false)
+        initialLoadComplete.current = true
       }
     }
     
