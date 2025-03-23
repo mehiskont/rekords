@@ -19,7 +19,7 @@ export function SearchResults({ results, isLoading, query, category, onClose, is
   const displayResults = results.slice(0, 5)
 
   return (
-    <div className={`absolute z-[100] mt-2 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/90 border border-primary/10 rounded-lg shadow-lg overflow-hidden ${isCompact ? "w-80 sm:w-96" : "left-0 right-0"}`} 
+    <div className={`absolute z-[100] mt-2 ${isCompact ? "bg-white dark:bg-black/40" : "bg-background/90"} backdrop-blur supports-[backdrop-filter]:${isCompact ? "bg-white/95 dark:bg-black/40" : "bg-background/90"} border border-primary/10 dark:border-white/10 rounded-lg shadow-lg overflow-hidden ${isCompact ? "w-80 sm:w-96" : "left-0 right-0"}`} 
       style={{ 
         position: 'absolute', 
         top: '100%', 
@@ -41,7 +41,7 @@ export function SearchResults({ results, isLoading, query, category, onClose, is
                 <Link
                   key={record.id}
                   href={`/records/${record.id}`}
-                  className={`flex items-center hover:bg-muted/50 transition-colors ${isCompact ? "gap-3 p-3" : "gap-4 p-4"}`}
+                  className={`flex items-center hover:bg-muted/30 dark:hover:bg-white/5 transition-colors ${isCompact ? "gap-3 p-3" : "gap-4 p-4"}`}
                   onClick={onClose}
                 >
                   <div className={`relative flex-shrink-0 ${isCompact ? "w-10 h-10" : "w-12 h-12"}`}>
@@ -68,7 +68,7 @@ export function SearchResults({ results, isLoading, query, category, onClose, is
             })}
           </div>
           {results.length > 5 && (
-            <div className={isCompact ? "p-3 border-t" : "p-4 border-t"}>
+            <div className={isCompact ? "p-3 border-t border-primary/10 dark:border-white/10" : "p-4 border-t border-primary/10 dark:border-white/10"}>
               <Link
                 href={`/search?q=${encodeURIComponent(query)}&category=${category}`}
                 className={`block w-full text-center text-muted-foreground/70 hover:text-foreground ${isCompact ? "text-xs" : "text-sm"}`}

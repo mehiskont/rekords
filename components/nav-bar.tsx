@@ -25,8 +25,10 @@ export function NavBar() {
   const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
   
-  // Check if current page is not the homepage
-  const isNotHomePage = pathname !== "/"
+  // Check if current page is not the homepage and not the search page
+  const isNotHomePage = pathname !== "/" 
+  const isNotSearchPage = pathname !== "/search"
+  const shouldShowSearchBar = isNotHomePage && isNotSearchPage
 
   // Fix hydration issues with session and ensure components render properly
   useEffect(() => {
@@ -56,8 +58,8 @@ export function NavBar() {
               </svg>
             </Link>
             
-            {/* Show search bar in navbar only when not on homepage */}
-            {isNotHomePage && (
+            {/* Show search bar in navbar only when not on homepage and not on search page */}
+            {shouldShowSearchBar && (
               <div className="hidden md:block relative z-50 navbar-searchbar">
                 <SearchBar isCompact={true} expandable={true} />
               </div>
@@ -162,8 +164,8 @@ export function NavBar() {
 
         {isMenuOpen && (
           <div className="md:hidden py-4 border-t">
-            {/* Show search bar in mobile menu when not on homepage */}
-            {isNotHomePage && (
+            {/* Show search bar in mobile menu when not on homepage and not on search page */}
+            {shouldShowSearchBar && (
               <div className="mb-4">
                 <SearchBar isCompact={true} />
               </div>
