@@ -75,12 +75,13 @@ export function RecordDetails({ record }: RecordDetailsProps) {
             )}
           </div>
           <Button
-            size="lg"
-            className="w-full md:w-auto"
+            size="sm"
+            variant="secondary"
+            className="w-full md:w-auto h-8 text-xs"
             onClick={handleAddToCart}
             disabled={isMaxQuantity || record.quantity_available === 0}
           >
-            <ShoppingCart className="mr-2 h-4 w-4" />
+            <ShoppingCart className="mr-1 h-3 w-3" />
             {record.quantity_available === 0
               ? "Out of Stock"
               : isMaxQuantity
