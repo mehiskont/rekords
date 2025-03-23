@@ -8,6 +8,7 @@ import { ShoppingCart } from "lucide-react"
 import { useCart } from "@/contexts/cart-context"
 import Link from "next/link"
 import Image from "next/image"
+import { useEffect, useState } from "react"
 
 interface RecordListViewProps {
   records: DiscogsRecord[]
@@ -19,9 +20,67 @@ export default function RecordListView({ records }: RecordListViewProps) {
   }
 
   const { state, dispatch } = useCart()
+  const [sortField, setSortField] = useState<string>('title')
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
+  const [sortedRecords, setSortedRecords] = useState(records)
+
+  useEffect(() => {
+    // Sort records by title initially
+    const initialSorted = [...records].sort((a, b) => {
+      const titleA = a.title || '';
+      const titleB = b.title || '';
+      return titleA.localeCompare(titleB);
+    });
+    setSortedRecords(initialSorted);
+  }, [records])
 
   const handleAddToCart = (record: DiscogsRecord) => {
     dispatch({ type: "ADD_ITEM", payload: record })
+  }
+
+  const handleSort = (field: string) => {
+    // Toggle direction if sorting the same field
+    const newDirection = 
+      sortField === field && sortDirection === 'asc' ? 'desc' : 'asc';
+    
+    setSortField(field)
+    setSortDirection(newDirection)
+    
+    // Sort the records
+    const sorted = [...sortedRecords].sort((a, b) => {
+      let valueA, valueB;
+      
+      // Handle special cases for certain fields
+      if (field === 'price') {
+        valueA = a.price || 0;
+        valueB = b.price || 0;
+      } else if (field === 'quantity') {
+        valueA = a.quantity_available || 0;
+        valueB = b.quantity_available || 0;
+      } else {
+        valueA = a[field as keyof DiscogsRecord] || '';
+        valueB = b[field as keyof DiscogsRecord] || '';
+      }
+      
+      // String comparison for text fields
+      if (typeof valueA === 'string' && typeof valueB === 'string') {
+        return newDirection === 'asc' 
+          ? valueA.localeCompare(valueB) 
+          : valueB.localeCompare(valueA);
+      }
+      
+      // Numeric comparison
+      return newDirection === 'asc' 
+        ? valueA - valueB 
+        : valueB - valueA;
+    });
+    
+    setSortedRecords(sorted);
+  }
+
+  const renderSortIndicator = (field: string) => {
+    if (sortField !== field) return null;
+    return sortDirection === 'asc' ? ' ▲' : ' ▼';
   }
 
   return (
@@ -30,17 +89,47 @@ export default function RecordListView({ records }: RecordListViewProps) {
         <TableHeader>
           <TableRow>
             <TableHead className="w-20"></TableHead>
-            <TableHead>Title</TableHead>
-            <TableHead>Artist</TableHead>
-            <TableHead>Format</TableHead>
-            <TableHead>Label</TableHead>
-            <TableHead className="text-right">Price</TableHead>
-            <TableHead className="text-center">Qty</TableHead>
+            <TableHead 
+              className="cursor-pointer hover:bg-muted"
+              onClick={() => handleSort('title')}
+            >
+              Title{renderSortIndicator('title')}
+            </TableHead>
+            <TableHead 
+              className="cursor-pointer hover:bg-muted"
+              onClick={() => handleSort('artist')}
+            >
+              Artist{renderSortIndicator('artist')}
+            </TableHead>
+            <TableHead 
+              className="cursor-pointer hover:bg-muted"
+              onClick={() => handleSort('format')}
+            >
+              Format{renderSortIndicator('format')}
+            </TableHead>
+            <TableHead 
+              className="cursor-pointer hover:bg-muted" 
+              onClick={() => handleSort('label')}
+            >
+              Label{renderSortIndicator('label')}
+            </TableHead>
+            <TableHead 
+              className="text-right cursor-pointer hover:bg-muted"
+              onClick={() => handleSort('price')}
+            >
+              Price{renderSortIndicator('price')}
+            </TableHead>
+            <TableHead 
+              className="text-center cursor-pointer hover:bg-muted"
+              onClick={() => handleSort('quantity')}
+            >
+              Qty{renderSortIndicator('quantity')}
+            </TableHead>
             <TableHead></TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {records.map((record) => {
+          {sortedRecords.map((record) => {
             const formatDisplay = Array.isArray(record.format) ? record.format.join(", ") : record.format
             const labelDisplay = record.label + (record.catalogNumber ? ` [${record.catalogNumber}]` : "")
             const cartItem = state.items?.find((item) => item.id === record.id)

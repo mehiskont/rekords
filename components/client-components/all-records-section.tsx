@@ -5,9 +5,24 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { RefreshButton } from "@/components/refresh-button"
 import { RecordGridSkeleton } from "@/components/record-grid-skeleton"
 import RecordGridClient from "./record-grid-client"
-import { RecordFilter } from "@/components/record-filter"
 import { ApiUnavailable } from "@/components/api-unavailable"
 import { ViewToggle } from "@/components/view-toggle"
+import { Button } from "@/components/ui/button"
+import { ChevronDown, ChevronUp } from "lucide-react"
+
+// Define our sortable columns
+type SortableColumn = {
+  key: string
+  label: string
+}
+
+// List of columns that can be sorted
+const sortableColumns: SortableColumn[] = [
+  { key: "title", label: "Title" },
+  { key: "artist", label: "Artist" },
+  { key: "price", label: "Price" },
+  { key: "date", label: "Date Added" }
+]
 
 export function AllRecordsSection() {
   const router = useRouter()
@@ -29,6 +44,9 @@ export function AllRecordsSection() {
   const sort = searchParams.get("sort") || "date-desc"
   const page = parseInt(searchParams.get("page") || "1")
   const view = searchParams.get("view") as 'grid' | 'list' || 'grid'
+  
+  // Parse the current sort value to get field and direction
+  const [sortField, sortDirection] = sort.split("-");
   
   useEffect(() => {
     async function fetchRecords() {
@@ -93,12 +111,46 @@ export function AllRecordsSection() {
     }
   }
 
+  // Function to handle sorting
+  const handleSort = (columnKey: string) => {
+    const params = new URLSearchParams(searchParams.toString())
+    
+    // If already sorting by this column, toggle direction
+    if (sortField === columnKey) {
+      params.set("sort", `${columnKey}-${sortDirection === "asc" ? "desc" : "asc"}`)
+    } else {
+      // Default to ascending for new column
+      params.set("sort", `${columnKey}-asc`)
+    }
+    
+    // Reset to first page when sorting changes
+    params.set("page", "1")
+    
+    router.push(`${pathname}?${params.toString()}`)
+  }
+
+  // Function to render sort indicator
+  const renderSortIndicator = (columnKey: string) => {
+    if (sortField !== columnKey) {
+      return null;
+    }
+    
+    return sortDirection === "asc" ? (
+      <ChevronUp className="ml-1 h-4 w-4" />
+    ) : (
+      <ChevronDown className="ml-1 h-4 w-4" />
+    );
+  }
+
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="text-3xl font-bold flex items-center gap-2">
+          <h2 className="text-3xl font-bold">
             All Records
+            <span className="ml-2 text-sm font-normal text-muted-foreground">
+              {totalRecords} results
+            </span>
           </h2>
           <div className="flex items-center gap-4">
             <ViewToggle viewMode={viewMode} onViewModeChange={handleViewModeChange} />
@@ -106,27 +158,49 @@ export function AllRecordsSection() {
           </div>
         </div>
         
+        
         {isLoading ? (
           <RecordGridSkeleton />
         ) : error ? (
           <ApiUnavailable />
         ) : (
           <div className="space-y-6">
-            <RecordFilter
-              totalRecords={totalRecords}
-              currentPage={currentPage}
-              totalPages={totalPages}
-            />
-            
             <RecordGridClient records={records} viewMode={viewMode} />
             
+            {/* Pagination */}
             {totalPages > 1 && (
-              <div className="mt-8">
-                <RecordFilter
-                  totalRecords={totalRecords}
-                  currentPage={currentPage}
-                  totalPages={totalPages}
-                />
+              <div className="mt-8 flex justify-center">
+                <div className="flex space-x-2">
+                  <Button
+                    variant="outline"
+                    disabled={currentPage === 1}
+                    onClick={() => {
+                      const params = new URLSearchParams(searchParams.toString())
+                      params.set("page", String(currentPage - 1))
+                      router.push(`${pathname}?${params.toString()}`)
+                    }}
+                  >
+                    Previous
+                  </Button>
+                  
+                  <div className="flex items-center px-4">
+                    <span className="text-sm">
+                      Page {currentPage} of {totalPages}
+                    </span>
+                  </div>
+                  
+                  <Button
+                    variant="outline"
+                    disabled={currentPage === totalPages}
+                    onClick={() => {
+                      const params = new URLSearchParams(searchParams.toString())
+                      params.set("page", String(currentPage + 1))
+                      router.push(`${pathname}?${params.toString()}`)
+                    }}
+                  >
+                    Next
+                  </Button>
+                </div>
               </div>
             )}
           </div>
