@@ -26,13 +26,16 @@ export default async function RecordPage({ params }: { params: { id: string } })
     const serializedRelatedRecords = relatedRecords.map((record) => serializeForClient(record))
 
     return (
-      <div className="container mx-auto py-12">
+      <div className="container mx-auto py-6 px-4 sm:px-6">
         <RecordDetails record={serializedRecord} />
 
         {serializedRelatedRecords.length > 0 && (
-          <div className="mt-12">
-            <h2 className="text-2xl font-bold mb-6">Related Records</h2>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+          <div className="mt-8 pt-4 border-t">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold">Related Records</h2>
+              <span className="text-xs text-muted-foreground">{serializedRelatedRecords.length} items</span>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
               {serializedRelatedRecords.map((relatedRecord) => (
                 <ClientRecordCard key={relatedRecord.id} record={relatedRecord} />
               ))}
