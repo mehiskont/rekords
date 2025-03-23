@@ -72,7 +72,7 @@ export function AllRecordsSection() {
   }
 
   return (
-    <section className="py-20 bg-gradient-to-b from-background to-muted/20 dark:from-[#121317] dark:to-black/80">
+    <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-3xl font-bold flex items-center gap-2">

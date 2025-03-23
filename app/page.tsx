@@ -26,7 +26,7 @@ export default async function HomePage({ searchParams = {} }: HomePageProps) {
     <div className="min-h-screen">
    
       {/* Hero Section with Search */}
-      <section className="relative py-24 bg-gradient-to-b from-background via-background to-muted/20 dark:from-background dark:via-background/95 dark:to-black/60">
+      <section className="relative py-24 bg-background">
         <div className="container max-w-6xl mx-auto px-4 mt-12">
           {/* <h2 className="text-xl md:text-2xl font-medium text-center mb-8">{recordCount} records currently in our library</h2> */}
           <SearchBar preventRedirect={true} />
@@ -34,7 +34,7 @@ export default async function HomePage({ searchParams = {} }: HomePageProps) {
       </section>
 
       {/* New Arrivals Section */}
-      <section className="py-20 bg-card/30 dark:bg-black/40">
+      <section className="py-20 bg-card/30 bg-background">
         <div className="container mx-auto px-4">
           <Suspense fallback={<RecordGridSkeleton />}>
             <NewArrivals />

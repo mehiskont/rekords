@@ -85,17 +85,17 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
   const labelDisplay = record.label + (record.catalogNumber ? ` [${record.catalogNumber}]` : "")
 
   return (
-    <Card className="flex flex-col overflow-hidden rounded-none rounded-b-lg">
-      <Link href={`/records/${record.id}`} className="flex flex-col flex-1">
-        {/* Full width cover image at the top with no rounded corners or padding */}
-        <div className="relative aspect-square w-full overflow-hidden">
+    <Card className="flex flex-col overflow-hidden hover:shadow-md transition-shadow duration-200 h-full relative">
+      <Link href={`/records/${record.id}`} className="flex flex-col h-full">
+        {/* Cover image with hover effect */}
+        <div className="relative aspect-square w-full overflow-hidden bg-black/5 dark:bg-black/20">
           <Image
             src={record.cover_image || "/placeholder.svg"}
             alt={record.title}
             fill
-            className="object-cover transition-opacity duration-300"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            quality={95}
+            className="object-cover transition-all duration-300 hover:scale-105"
+            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
+            quality={90}
             priority 
             onError={(e) => {
               const target = e.target as HTMLImageElement
@@ -104,46 +104,31 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
           />
         </div>
         
-        {/* Text content below the image */}
-        <CardHeader className="space-y-1 pt-4">
-          <CardTitle className="text-lg line-clamp-2">{record.title}</CardTitle>
-          <p className="text-m line-clamp-1">{record.artist}</p>
-          <p className="text-xs text-muted-foreground line-clamp-1">{labelDisplay}</p>
-          
-          {/* Price prominently displayed */}
-          <div className="text-lg font-semibold mt-1">${(record.price || 0).toFixed(2)}</div>
+        {/* Compact text content */}
+        <CardHeader className="p-3 space-y-0.5">
+          <CardTitle className="text-sm font-medium line-clamp-1">{record.title}</CardTitle>
+          <p className="text-xs line-clamp-1">{record.artist}</p>
+          <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{labelDisplay}</p>
+          <p className="text-xs text-muted-foreground line-clamp-1">{formatDisplay || "Unknown"}</p>
+          <div className="text-sm font-semibold mt-1">${(record.price || 0).toFixed(2)}</div>
         </CardHeader>
-        
-        <CardContent className="flex-grow">
-          <div className="text-sm">
-            <span className="font-semibold">Format:</span> {formatDisplay || "Unknown"}
-          </div>
-          {record.styles && Array.isArray(record.styles) && record.styles.length > 0 && (
-            <div className="mt-1 text-sm line-clamp-1">
-              <span className="font-semibold">Styles:</span> {record.styles.join(", ")}
-            </div>
-          )}
-          {(record.quantity_available || 0) > 0 && (
-            <div className="mt-1 text-sm text-muted-foreground">
-              {record.quantity_available} unit{(record.quantity_available || 0) > 1 ? "s" : ""} available
-            </div>
-          )}
-        </CardContent>
       </Link>
-      <CardFooter className="mt-auto">
+      
+      {/* Smaller Add to Cart button at the bottom */}
+      <div className="p-2 pt-0">
         <Button
-          className="w-full"
+          className="w-full h-8 text-xs"
+          size="sm"
+          variant="secondary"
           onClick={handleAddToCart}
           disabled={isMaxQuantity || (record.quantity_available || 0) === 0}
         >
-          <ShoppingCart className="mr-2 h-4 w-4" />
+          <ShoppingCart className="mr-1 h-3 w-3" />
           {(record.quantity_available || 0) === 0
             ? "Out of Stock"
-            : isMaxQuantity
-              ? `Max Quantity (${record.quantity_available || 0}) Reached`
-              : "Add to Cart"}
+            : "Add to Cart"}
         </Button>
-      </CardFooter>
+      </div>
     </Card>
   )
 }
