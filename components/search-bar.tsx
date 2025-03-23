@@ -16,9 +16,10 @@ interface SearchBarProps {
   initialCategory?: string
   isCompact?: boolean // Add compact mode for navbar
   expandable?: boolean // Add expandable mode for navbar searchbar
+  preventRedirect?: boolean // Prevent redirect to search page, just filter in place
 }
 
-export function SearchBar({ initialQuery = "", initialCategory = "everything", isCompact = false, expandable = false }: SearchBarProps) {
+export function SearchBar({ initialQuery = "", initialCategory = "everything", isCompact = false, expandable = false, preventRedirect = false }: SearchBarProps) {
   const router = useRouter()
   const [query, setQuery] = useState(initialQuery)
   const [category, setCategory] = useState(initialCategory)
@@ -88,16 +89,24 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
     if (!query) return
 
     setShowResults(false)
-    router.push(`/search?q=${encodeURIComponent(query)}&category=${category}`)
+    
+    // Navigate to search page only if not prevented
+    if (!preventRedirect) {
+      router.push(`/search?q=${encodeURIComponent(query)}&category=${category}`)
+    }
   }
 
   const handleCategoryChange = (newCategory: string) => {
     setCategory(newCategory)
-    // Only navigate to search page when not in compact/navbar mode
-    if (query && !isCompact) {
+    
+    // Only navigate to search page when not in compact mode and not prevented
+    if (query && !isCompact && !preventRedirect) {
       router.push(`/search?q=${encodeURIComponent(query)}&category=${newCategory}`)
+    } else if (preventRedirect) {
+      // When using preventRedirect, keep the results open and show the filtered results
+      setShowResults(true)
     }
-    // In compact mode just update the category for filtering search results in the dropdown
+    // Otherwise just update the category for filtering search results in the dropdown
   }
 
   return (
