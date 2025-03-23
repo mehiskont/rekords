@@ -21,6 +21,23 @@ body {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
   }
+  
+  /* Mobile menu overlay styles */
+  .mobile-menu-overlay {
+    background-color: hsl(var(--background));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  
+  /* Mobile menu animation */
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  .mobile-menu-animate {
+    animation: fadeIn 0.2s ease-in-out;
+  }
 }
 
 @layer base {

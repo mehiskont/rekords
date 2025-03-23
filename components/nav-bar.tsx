@@ -3,13 +3,13 @@
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
-import { Menu, ShoppingCart, User, X, LogOut } from "lucide-react"
+import { Menu, ShoppingCart, User, X, LogOut, Home, Info, Phone } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { useCart } from "@/contexts/cart-context"
 import { Cart } from "@/components/cart"
 import { SearchBar } from "@/components/search-bar"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { 
   DropdownMenu,
   DropdownMenuContent,
@@ -24,6 +24,7 @@ export function NavBar() {
   const { state, dispatch } = useCart()
   const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
+  const router = useRouter()
   
   // Check if current page is not the homepage and not the search page
   const isNotHomePage = pathname !== "/" 
@@ -34,6 +35,11 @@ export function NavBar() {
   useEffect(() => {
     setMounted(true)
   }, [])
+  
+  // Close menu when route changes
+  useEffect(() => {
+    setIsMenuOpen(false)
+  }, [pathname])
 
   const cartItemCount = state.items.reduce((sum, item) => sum + item.quantity, 0)
 
@@ -66,24 +72,7 @@ export function NavBar() {
             )}
             
             <div className="hidden">
-              <Link
-                href="/"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Home
-              </Link>
-              <Link
-                href="/about"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                About
-              </Link>
-              <Link
-                href="/contact"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Contact
-              </Link>
+              {/* Removed desktop links */}
             </div>
           </div>
 
@@ -149,9 +138,14 @@ export function NavBar() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Link href="/auth/signin">
-                <Button variant="primary">Sign In</Button>
-              </Link>
+              <div className="flex gap-2">
+                <Link href="/auth/signin">
+                  <Button variant="primary" size="sm">Sign In</Button>
+                </Link>
+                <Link href="/auth/signup">
+                  <Button variant="outline" size="sm">Sign Up</Button>
+                </Link>
+              </div>
             )}
           </div>
 
@@ -163,61 +157,95 @@ export function NavBar() {
         </div>
 
         {isMenuOpen && (
-          <div className="md:hidden py-4 border-t">
+          <div className="md:hidden fixed top-16 left-0 right-0 bottom-0 bg-background/95 backdrop-blur mobile-menu-overlay z-40 flex flex-col p-6 overflow-y-auto mobile-menu-animate">
             {/* Show search bar in mobile menu when not on homepage and not on search page */}
             {shouldShowSearchBar && (
-              <div className="mb-4">
-                <SearchBar isCompact={true} />
+              <div className="mb-6">
+                <SearchBar isCompact={false} />
               </div>
             )}
-            <div className="flex flex-col gap-4 hidden">
-              <Link
-                href="/"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Home
-              </Link>
-              <Link
-                href="/about"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                About
-              </Link>
-              <Link
-                href="/contact"
-                className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Contact
-              </Link>
+            
+            
+            <div className="flex-1 flex flex-col justify-center mb-10">
+              <div className="flex justify-center mb-6">
+                <Link href="/" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="outline" size="lg" className="w-full mx-2">
+                    <Home className="h-5 w-5 mr-2" />
+                    Home
+                  </Button>
+                </Link>
+              </div>
+              <div className="flex justify-center mb-10">
+                <Link href="/search" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="outline" size="lg" className="w-full mx-2">
+                    All Records
+                  </Button>
+                </Link>
+              </div>
             </div>
-            <div className="flex items-center gap-4 mt-4 pt-4 border-t">
-              <ThemeToggle />
-              <Button variant="ghost" size="icon" className="relative" onClick={handleCartClick}>
-                <ShoppingCart className="h-5 w-5" />
-                {cartItemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-[10px] font-medium flex items-center justify-center text-primary-foreground">
-                    {cartItemCount}
-                  </span>
-                )}
-              </Button>
-              {!mounted ? null : status === "loading" ? (
-                <Button variant="ghost" size="icon" disabled>
-                  <User className="h-4 w-4 opacity-50" />
+            
+            <div className="mt-auto pt-6 border-t">
+              <div className="flex items-center justify-between mb-6">
+                <ThemeToggle />
+                <Button variant="outline" size="icon" className="relative" onClick={handleCartClick}>
+                  <ShoppingCart className="h-5 w-5" />
+                  {cartItemCount > 0 && (
+                    <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-[11px] font-medium flex items-center justify-center text-primary-foreground">
+                      {cartItemCount}
+                    </span>
+                  )}
                 </Button>
+              </div>
+              
+              {!mounted ? null : status === "loading" ? (
+                <div className="flex justify-center">
+                  <Button variant="ghost" size="sm" disabled>
+                    <User className="h-4 w-4 mr-2 opacity-50" />
+                    <span>Loading...</span>
+                  </Button>
+                </div>
               ) : session ? (
-                <div className="flex flex-col gap-2">
-                  <div className="flex items-center gap-2 text-sm">
-                    <User className="h-4 w-4" />
-                    <span>{session.user.name || session.user.email}</span>
+                <div className="flex flex-col gap-4">
+                  <div className="flex items-center gap-3 py-2">
+                    <User className="h-5 w-5" />
+                    <div className="flex flex-col">
+                      <span className="font-medium">{session.user.name}</span>
+                      <span className="text-sm text-muted-foreground truncate max-w-[250px]">{session.user.email}</span>
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-1">
-                    <Link href="/dashboard" className="text-sm pl-6 py-1 hover:text-primary">
-                      Dashboard
+                  
+                  <div className="grid grid-cols-1 gap-3 pt-4">
+                    <Link 
+                      href="/dashboard" 
+                      className="w-full"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Button variant="outline" className="w-full justify-start">
+                        Dashboard
+                      </Button>
                     </Link>
-                    <Link href="/dashboard/profile" className="text-sm pl-6 py-1 hover:text-primary">
-                      Profile
+                    <Link 
+                      href="/dashboard/orders" 
+                      className="w-full"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Button variant="outline" className="w-full justify-start">
+                        Orders
+                      </Button>
                     </Link>
-                    <button 
+                    <Link 
+                      href="/dashboard/profile" 
+                      className="w-full"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      <Button variant="outline" className="w-full justify-start">
+                        Profile
+                      </Button>
+                    </Link>
+                    
+                    <Button 
+                      variant="destructive"
+                      className="w-full justify-start mt-3"
                       onClick={() => {
                         // Clear UI cart only without syncing to server
                         dispatch({ type: "CLEAR_UI_CART" });
@@ -227,17 +255,21 @@ export function NavBar() {
                         }
                         signOut({ callbackUrl: '/' });
                       }}
-                      className="text-sm pl-6 py-1 hover:text-primary text-left flex items-center gap-2"
                     >
-                      <LogOut className="h-3 w-3" />
+                      <LogOut className="h-4 w-4 mr-2" />
                       <span>Sign out</span>
-                    </button>
+                    </Button>
                   </div>
                 </div>
               ) : (
-                <Link href="/auth/signin">
-                  <Button variant="primary">Sign In</Button>
-                </Link>
+                <div className="flex flex-col gap-4 items-center">
+                  <Link href="/auth/signin" onClick={() => setIsMenuOpen(false)} className="w-full">
+                    <Button variant="primary" size="lg" className="w-full">Sign In</Button>
+                  </Link>
+                  <Link href="/auth/signup" onClick={() => setIsMenuOpen(false)} className="w-full">
+                    <Button variant="outline" size="lg" className="w-full">Sign Up</Button>
+                  </Link>
+                </div>
               )}
             </div>
           </div>
