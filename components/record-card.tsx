@@ -85,37 +85,41 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
   const labelDisplay = record.label + (record.catalogNumber ? ` [${record.catalogNumber}]` : "")
 
   return (
-    <Card>
-      <Link href={`/records/${record.id}`}>
-        <CardHeader className="space-y-1">
+    <Card className="flex flex-col overflow-hidden rounded-none rounded-b-lg">
+      <Link href={`/records/${record.id}`} className="flex flex-col flex-1">
+        {/* Full width cover image at the top with no rounded corners or padding */}
+        <div className="relative aspect-square w-full overflow-hidden">
+          <Image
+            src={record.cover_image || "/placeholder.svg"}
+            alt={record.title}
+            fill
+            className="object-cover transition-opacity duration-300"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            quality={95}
+            priority 
+            onError={(e) => {
+              const target = e.target as HTMLImageElement
+              target.src = "/placeholder.svg"
+            }}
+          />
+        </div>
+        
+        {/* Text content below the image */}
+        <CardHeader className="space-y-1 pt-4">
           <CardTitle className="text-lg line-clamp-2">{record.title}</CardTitle>
           <p className="text-m line-clamp-1">{record.artist}</p>
           <p className="text-xs text-muted-foreground line-clamp-1">{labelDisplay}</p>
+          
+          {/* Price prominently displayed */}
+          <div className="text-lg font-semibold mt-1">${(record.price || 0).toFixed(2)}</div>
         </CardHeader>
-        <CardContent>
-          <div className="aspect-square relative mb-4 bg-muted">
-            <Image
-              src={record.cover_image || "/placeholder.svg"}
-              alt={record.title}
-              fill
-              className="object-cover rounded-md transition-opacity duration-300"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              quality={95}
-              loading="eager"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement
-                target.src = "/placeholder.svg"
-              }}
-            />
-          </div>
-          <div className="flex justify-between items-center">
-            <div className="text-lg font-semibold">${(record.price || 0).toFixed(2)}</div>
-          </div>
-          <div className="mt-2 text-sm">
+        
+        <CardContent className="flex-grow">
+          <div className="text-sm">
             <span className="font-semibold">Format:</span> {formatDisplay || "Unknown"}
           </div>
           {record.styles && Array.isArray(record.styles) && record.styles.length > 0 && (
-            <div className="mt-1 text-sm">
+            <div className="mt-1 text-sm line-clamp-1">
               <span className="font-semibold">Styles:</span> {record.styles.join(", ")}
             </div>
           )}
@@ -126,7 +130,7 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
           )}
         </CardContent>
       </Link>
-      <CardFooter>
+      <CardFooter className="mt-auto">
         <Button
           className="w-full"
           onClick={handleAddToCart}
