@@ -6,7 +6,11 @@ import { RefreshCw } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/components/ui/use-toast"
 
-export function RefreshButton() {
+interface RefreshButtonProps {
+  onClick?: () => void
+}
+
+export function RefreshButton({ onClick }: RefreshButtonProps) {
   const [isRefreshing, setIsRefreshing] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
@@ -15,40 +19,52 @@ export function RefreshButton() {
     setIsRefreshing(true)
     
     try {
-      // Try to refresh the inventory data
-      const response = await fetch("/api/refresh-inventory", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      
-      if (response.ok) {
-        // Refresh the page data
+      if (onClick) {
+        // Use custom refresh function if provided
+        onClick()
         router.refresh()
         
         toast({
-          title: "Inventory Refreshed",
-          description: "The latest inventory data has been loaded.",
+          title: "Refreshing Content",
+          description: "The latest data is being loaded.",
           duration: 3000,
         })
       } else {
-        const error = await response.text()
-        console.error("Failed to refresh inventory:", error)
-        
-        toast({
-          title: "Refresh Failed",
-          description: "Could not refresh inventory data. Please try again.",
-          variant: "destructive",
-          duration: 3000,
+        // Default behavior: call the API
+        const response = await fetch("/api/refresh-inventory", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
         })
+        
+        if (response.ok) {
+          // Refresh the page data
+          router.refresh()
+          
+          toast({
+            title: "Inventory Refreshed",
+            description: "The latest inventory data has been loaded.",
+            duration: 3000,
+          })
+        } else {
+          const error = await response.text()
+          console.error("Failed to refresh inventory:", error)
+          
+          toast({
+            title: "Refresh Failed",
+            description: "Could not refresh inventory data. Please try again.",
+            variant: "destructive",
+            duration: 3000,
+          })
+        }
       }
     } catch (error) {
       console.error("Error refreshing inventory:", error)
       
       toast({
         title: "Refresh Error",
-        description: "An error occurred while refreshing inventory data.",
+        description: "An error occurred while refreshing data.",
         variant: "destructive",
         duration: 3000,
       })

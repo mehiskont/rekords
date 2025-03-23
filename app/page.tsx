@@ -1,9 +1,8 @@
 import { Suspense } from "react"
 import { SearchBar } from "@/components/search-bar"
 import { NewArrivals } from "@/components/new-arrivals"
-import { RecordGrid } from "@/components/record-grid"
 import { RecordGridSkeleton } from "@/components/record-grid-skeleton"
-import { RefreshButton } from "@/components/refresh-button"
+import { AllRecordsSection } from "@/components/client-components/all-records-section"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import Link from "next/link"
 import { getDiscogsInventory } from "@/lib/discogs"
@@ -12,7 +11,11 @@ import { getDiscogsInventory } from "@/lib/discogs"
 export const dynamic = 'force-dynamic'
 export const revalidate = 0 // Do not cache this page
 
-export default async function HomePage() {
+interface HomePageProps {
+  searchParams?: { [key: string]: string | string[] | undefined }
+}
+
+export default async function HomePage({ searchParams = {} }: HomePageProps) {
   // Fetch all inventory data to sum up the total available quantity
   const { records } = await getDiscogsInventory(undefined, undefined, 1, 100)
   
@@ -40,19 +43,7 @@ export default async function HomePage() {
       </section>
 
       {/* All Records Section */}
-      <section className="py-20 bg-gradient-to-b from-background to-muted/20 dark:from-[#121317] dark:to-black/80">
-        <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="text-3xl font-bold flex items-center gap-2">
-              All Records
-            </h2>
-            <RefreshButton />
-          </div>
-          <Suspense fallback={<RecordGridSkeleton />}>
-            <RecordGrid />
-          </Suspense>
-        </div>
-      </section>
+      <AllRecordsSection />
     </div>
   )
 }

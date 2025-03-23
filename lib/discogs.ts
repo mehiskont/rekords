@@ -619,7 +619,7 @@ export async function getDiscogsInventory(
   page = 1,
   perPage = 50,
   options: DiscogsInventoryOptions = {},
-): Promise<{ records: DiscogsRecord[]; totalPages: number }> {
+): Promise<{ records: DiscogsRecord[]; totalPages: number; pagination?: any }> {
   // Generate cache key based on request parameters
   const cacheKey = `inventory:${search || "all"}:${sort || "default"}:${page}:${perPage}:${options.category || "all"}:${options.sort || ""}:${options.sort_order || ""}`;
   
@@ -654,19 +654,25 @@ export async function getDiscogsInventory(
       params.append("sort", options.sort)
     } else if (sort) {
       const sortMap: { [key: string]: string } = {
-        date_desc: "listed",
-        price_asc: "price",
-        price_desc: "price",
-        title_asc: "item",
-        title_desc: "item",
+        "date-desc": "listed",
+        "date-asc": "listed",
+        "price-asc": "price",
+        "price-desc": "price",
+        "title-asc": "item",
+        "title-desc": "item",
       }
       params.append("sort", sortMap[sort] || "listed")
     }
 
     if (options.sort_order) {
       params.append("sort_order", options.sort_order)
-    } else if (sort?.includes("desc")) {
-      params.append("sort_order", "desc")
+    } else if (sort) {
+      // Set sort order based on the sort parameter
+      if (sort.endsWith("-desc")) {
+        params.append("sort_order", "desc")
+      } else if (sort.endsWith("-asc")) {
+        params.append("sort_order", "asc")
+      }
     }
 
     if (search) {
@@ -842,13 +848,20 @@ export async function getDiscogsInventory(
     }
 
     let filteredRecords = allRecords;
-    if (options.category && options.category !== "everything") {
-      filteredRecords = filterRecordsByCategory(allRecords, search || "", options.category);
+    // Apply category and genre filtering
+    if ((options.category && options.category !== "everything") || options.genre) {
+      filteredRecords = filterRecordsByCategory(allRecords, search || "", options.category || "everything", options.genre);
     }
 
     const result = {
       records: filteredRecords,
       totalPages: Math.ceil(data.pagination.items / perPage),
+      pagination: {
+        total: data.pagination.items,
+        pages: Math.ceil(data.pagination.items / perPage),
+        currentPage: page,
+        perPage: perPage
+      }
     }
 
     // Cache the result for a short time (5 minutes)
@@ -979,9 +992,11 @@ export async function getDiscogsRecord(
   }
 }
 
-function filterRecordsByCategory(records: DiscogsRecord[], searchTerm: string, category: string): DiscogsRecord[] {
+function filterRecordsByCategory(records: DiscogsRecord[], searchTerm: string, category: string, genre?: string): DiscogsRecord[] {
   const term = searchTerm.toLowerCase()
-  return records.filter((record) => {
+  
+  // First filter by category
+  let filteredRecords = records.filter((record) => {
     const isVariousArtist =
       record.artist.toLowerCase() === "various" ||
       record.artist.toLowerCase() === "various artists" ||
@@ -1009,5 +1024,16 @@ function filterRecordsByCategory(records: DiscogsRecord[], searchTerm: string, c
         )
     }
   })
+  
+  // Then filter by genre if specified
+  if (genre && genre !== "all") {
+    filteredRecords = filteredRecords.filter(record => {
+      // Check if the record has the specified genre
+      return (record.genres && record.genres.some(g => g.toLowerCase() === genre.toLowerCase())) ||
+             (record.styles && record.styles.some(s => s.toLowerCase() === genre.toLowerCase()));
+    });
+  }
+  
+  return filteredRecords;
 }
 

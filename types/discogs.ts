@@ -55,6 +55,7 @@ export interface DiscogsApiResponse {
 
 export interface DiscogsInventoryOptions {
   category?: string
+  genre?: string
   sort?: string
   sort_order?: string
   fetchFullReleaseData?: boolean
