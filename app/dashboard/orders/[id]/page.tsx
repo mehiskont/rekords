@@ -229,34 +229,32 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
                 </div>
               </div>
 
-              {/* Order Total Section */}
-              <div className="mt-6 pt-6 border-t">
-                <h3 className="font-medium mb-2">Order Total</h3>
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Subtotal</span>
-                    <span>${order.items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0).toFixed(2)}</span>
-                  </div>
-                  
-                  <div className="flex justify-between text-sm">
-                    <span>Shipping</span>
-                    {order.billingAddress?.localPickup === "true" ? (
-                      <span className="text-green-600 font-medium">Free (Local pick-up)</span>
-                    ) : (
-                      <span>
-                        ${(order.total - order.items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0)).toFixed(2)}
-                      </span>
-                    )}
-                  </div>
-                  
-                  <div className="flex justify-between font-medium text-lg pt-2 border-t mt-2">
-                    <span>Total</span>
-                    <span>${order.total.toFixed(2)}</span>
-                  </div>
-                </div>
-              </div>
             </CardContent>
           </Card>
+          
+          {/* Tax Details Card (shown only if tax details are available) */}
+          {order.billingAddress?.taxDetails === "true" && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Tax Details</CardTitle>
+                <CardDescription>
+                  Information for tax and accounting purposes
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="grid grid-cols-[140px_1fr] gap-1">
+                    <span className="text-gray-500 font-medium">Organization:</span>
+                    <span>{order.billingAddress.organization}</span>
+                  </div>
+                  <div className="grid grid-cols-[140px_1fr] gap-1">
+                    <span className="text-gray-500 font-medium">Tax ID:</span>
+                    <span>{order.billingAddress.taxId}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          )}
           
           {/* Order Items Card with Order Total */}
           <Card>
@@ -317,30 +315,6 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
               </div>
             </CardFooter>
           </Card>
-          
-          {/* Tax Details Card (shown only if tax details are available) */}
-          {order.billingAddress?.taxDetails === "true" && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Tax Details</CardTitle>
-                <CardDescription>
-                  Information for tax and accounting purposes
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-2">
-                  <div className="grid grid-cols-[140px_1fr] gap-1">
-                    <span className="text-gray-500 font-medium">Organization:</span>
-                    <span>{order.billingAddress.organization}</span>
-                  </div>
-                  <div className="grid grid-cols-[140px_1fr] gap-1">
-                    <span className="text-gray-500 font-medium">Tax ID:</span>
-                    <span>{order.billingAddress.taxId}</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
           
         </div>
       )}
