@@ -968,8 +968,8 @@ export async function getDiscogsRecord(
           // Ensure "For Sale" status
           relatedRecord.status === "For Sale"
       )
-      // Limit to 4 related records
-      .slice(0, 4)
+      // Limit to 6 related records
+      .slice(0, 6)
       
     // Log the related records for debugging
     log(`Found ${relatedRecords.length} related records for ${record.title}`, 

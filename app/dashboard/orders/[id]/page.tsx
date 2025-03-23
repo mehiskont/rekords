@@ -7,12 +7,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Download } from "lucide-react";
 
 // Client component to avoid server-side data fetching issues
 export default function OrderDetailsPage({ params }: { params: { id: string } }) {
   const [order, setOrder] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [generatingPdf, setGeneratingPdf] = useState(false);
   const orderId = params.id;
 
   useEffect(() => {
@@ -81,13 +83,50 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
     );
   }
 
+  // Handle PDF download
+  const handleDownloadPdf = async () => {
+    try {
+      setGeneratingPdf(true);
+      const response = await fetch(`/api/orders/download-pdf?id=${orderId}`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to generate PDF');
+      }
+      
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `order-${orderId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (err) {
+      console.error('Error generating PDF:', err);
+      alert('Failed to generate PDF. Please try again later.');
+    } finally {
+      setGeneratingPdf(false);
+    }
+  };
+
   return (
     <div className="space-y-6 py-8">
       <div className="flex items-center justify-between">
         <h2 className="text-3xl font-bold tracking-tight">Order Details</h2>
-        <Button variant="outline" asChild>
-          <Link href="/dashboard/orders">Back to Orders</Link>
-        </Button>
+        <div className="flex gap-2">
+          <Button 
+            variant="outline" 
+            onClick={handleDownloadPdf}
+            disabled={loading || generatingPdf}
+          >
+            <Download className="mr-2 h-4 w-4" />
+            {generatingPdf ? "Generating..." : "Download PDF"}
+          </Button>
+          <Button variant="outline" asChild>
+            <Link href="/dashboard/orders">Back to Orders</Link>
+          </Button>
+        </div>
       </div>
       
       {error ? (
@@ -126,7 +165,7 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
         </Card>
       ) : (
         <div className="grid gap-6">
-          {/* Order Summary Card */}
+          {/* Order Summary Card with Order Total */}
           <Card>
             <CardHeader>
               <CardTitle>Order Summary</CardTitle>
@@ -151,9 +190,6 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
                     
                     <dt className="text-gray-500 dark:text-gray-400">Date:</dt>
                     <dd>{formatDate(order.createdAt)}</dd>
-                    
-                    <dt className="text-gray-500 dark:text-gray-400">Total:</dt>
-                    <dd className="font-medium">${order.total.toFixed(2)}</dd>
                   </dl>
                 </div>
                 
@@ -190,13 +226,39 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
                       <p className="text-sm text-gray-500">No shipping address available</p>
                     )}
                   </div>
+                </div>
+              </div>
+
+              {/* Order Total Section */}
+              <div className="mt-6 pt-6 border-t">
+                <h3 className="font-medium mb-2">Order Total</h3>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span>Subtotal</span>
+                    <span>${order.items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0).toFixed(2)}</span>
+                  </div>
                   
+                  <div className="flex justify-between text-sm">
+                    <span>Shipping</span>
+                    {order.billingAddress?.localPickup === "true" ? (
+                      <span className="text-green-600 font-medium">Free (Local pick-up)</span>
+                    ) : (
+                      <span>
+                        ${(order.total - order.items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0)).toFixed(2)}
+                      </span>
+                    )}
+                  </div>
+                  
+                  <div className="flex justify-between font-medium text-lg pt-2 border-t mt-2">
+                    <span>Total</span>
+                    <span>${order.total.toFixed(2)}</span>
+                  </div>
                 </div>
               </div>
             </CardContent>
           </Card>
           
-          {/* Order Items Card */}
+          {/* Order Items Card with Order Total */}
           <Card>
             <CardHeader>
               <CardTitle>Order Items</CardTitle>
@@ -228,12 +290,30 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
                 </TableBody>
               </Table>
             </CardContent>
-            <CardFooter className="flex justify-between border-t p-6">
-              <div className="text-sm text-gray-500 dark:text-gray-400">
-                Subtotal ({order.items.reduce((acc: number, item: any) => acc + item.quantity, 0)} items)
+            <CardFooter className="flex flex-col border-t p-6 space-y-4">
+              <div className="flex justify-between w-full">
+                <div className="text-sm text-gray-500 dark:text-gray-400">
+                  Subtotal ({order.items.reduce((acc: number, item: any) => acc + item.quantity, 0)} items)
+                </div>
+                <div className="font-medium">
+                  ${order.items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0).toFixed(2)}
+                </div>
               </div>
-              <div className="font-medium">
-                ${order.items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0).toFixed(2)}
+              
+              <div className="flex justify-between w-full">
+                <div className="text-sm text-gray-500 dark:text-gray-400">Shipping</div>
+                {order.billingAddress?.localPickup === "true" ? (
+                  <div className="text-green-600 font-medium">Free (Local pick-up)</div>
+                ) : (
+                  <div>
+                    ${(order.total - order.items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0)).toFixed(2)}
+                  </div>
+                )}
+              </div>
+              
+              <div className="flex justify-between w-full pt-4 border-t">
+                <div className="font-medium text-lg">Total</div>
+                <div className="font-medium text-lg">${order.total.toFixed(2)}</div>
               </div>
             </CardFooter>
           </Card>
@@ -262,36 +342,6 @@ export default function OrderDetailsPage({ params }: { params: { id: string } })
             </Card>
           )}
           
-          {/* Order Total Card */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Order Total</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>Subtotal</span>
-                  <span>${order.items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0).toFixed(2)}</span>
-                </div>
-                
-                <div className="flex justify-between text-sm">
-                  <span>Shipping</span>
-                  {order.billingAddress?.localPickup === "true" ? (
-                    <span className="text-green-600 font-medium">Free (Local pick-up)</span>
-                  ) : (
-                    <span>
-                      ${(order.total - order.items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0)).toFixed(2)}
-                    </span>
-                  )}
-                </div>
-                
-                <div className="flex justify-between font-medium text-lg pt-2 border-t">
-                  <span>Total</span>
-                  <span>${order.total.toFixed(2)}</span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
         </div>
       )}
     </div>
