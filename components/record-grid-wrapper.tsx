@@ -9,11 +9,13 @@ import { RecordGridSkeleton } from "@/components/record-grid-skeleton"
 interface RecordGridWrapperProps {
   searchParams?: { [key: string]: string | string[] | undefined }
   showFilter?: boolean
+  viewMode?: 'grid' | 'list'
 }
 
 export default function RecordGridWrapper({ 
   searchParams = {}, 
-  showFilter = false 
+  showFilter = false,
+  viewMode = 'grid'
 }: RecordGridWrapperProps) {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -35,6 +37,7 @@ export default function RecordGridWrapper({
         const genre = typeof searchParams.genre === "string" ? searchParams.genre : ""
         const sort = typeof searchParams.sort === "string" ? searchParams.sort : "date-desc"
         const page = typeof searchParams.page === "string" ? parseInt(searchParams.page) : 1
+        const view = typeof searchParams.view === "string" ? searchParams.view as 'grid' | 'list' : 'grid'
         
         // Create query string
         const params = new URLSearchParams()
@@ -80,7 +83,7 @@ export default function RecordGridWrapper({
         />
       )}
       
-      <RecordGridClient records={records} />
+      <RecordGridClient records={records} viewMode={viewMode} />
       
       {showFilter && totalPages > 1 && (
         <div className="mt-8">

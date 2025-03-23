@@ -2,14 +2,20 @@
 
 import type { DiscogsRecord } from "@/types/discogs"
 import { ClientRecordCard } from "../client-record-card"
+import RecordListView from "./record-list-view"
 
 interface RecordGridClientProps {
   records: DiscogsRecord[]
+  viewMode?: 'grid' | 'list'
 }
 
-export default function RecordGridClient({ records }: RecordGridClientProps) {
+export default function RecordGridClient({ records, viewMode = 'grid' }: RecordGridClientProps) {
   if (!records || records.length === 0) {
     return <p className="text-center text-lg">No records found.</p>
+  }
+
+  if (viewMode === 'list') {
+    return <RecordListView records={records} />
   }
 
   return (

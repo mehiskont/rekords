@@ -7,6 +7,7 @@ import { RecordGridSkeleton } from "@/components/record-grid-skeleton"
 import RecordGridClient from "./record-grid-client"
 import { RecordFilter } from "@/components/record-filter"
 import { ApiUnavailable } from "@/components/api-unavailable"
+import { ViewToggle } from "@/components/view-toggle"
 
 export function AllRecordsSection() {
   const router = useRouter()
@@ -19,6 +20,7 @@ export function AllRecordsSection() {
   const [totalRecords, setTotalRecords] = useState(0)
   const [totalPages, setTotalPages] = useState(1)
   const [currentPage, setCurrentPage] = useState(1)
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
 
   // Get the current search parameters
   const search = searchParams.get("q") || ""
@@ -26,6 +28,7 @@ export function AllRecordsSection() {
   const genre = searchParams.get("genre") || ""
   const sort = searchParams.get("sort") || "date-desc"
   const page = parseInt(searchParams.get("page") || "1")
+  const view = searchParams.get("view") as 'grid' | 'list' || 'grid'
   
   useEffect(() => {
     async function fetchRecords() {
@@ -64,11 +67,30 @@ export function AllRecordsSection() {
     fetchRecords()
   }, [search, category, genre, sort, page])
 
+  // Set view mode from URL when page loads
+  useEffect(() => {
+    if (view === 'list' || view === 'grid') {
+      setViewMode(view)
+    }
+  }, [view])
+
   // Function to refresh the records with a new cache buster
   const refreshRecords = () => {
     const params = new URLSearchParams(searchParams.toString())
     params.set("refresh", Date.now().toString())
     router.push(`${pathname}?${params.toString()}`)
+  }
+
+  // Function to update the view mode
+  const handleViewModeChange = (newViewMode: string) => {
+    if (newViewMode === 'grid' || newViewMode === 'list') {
+      setViewMode(newViewMode as 'grid' | 'list')
+      
+      // Update URL to persist the view preference
+      const params = new URLSearchParams(searchParams.toString())
+      params.set("view", newViewMode)
+      router.push(`${pathname}?${params.toString()}`, { scroll: false })
+    }
   }
 
   return (
@@ -78,7 +100,10 @@ export function AllRecordsSection() {
           <h2 className="text-3xl font-bold flex items-center gap-2">
             All Records
           </h2>
-          <RefreshButton onClick={refreshRecords} />
+          <div className="flex items-center gap-4">
+            <ViewToggle viewMode={viewMode} onViewModeChange={handleViewModeChange} />
+            <RefreshButton onClick={refreshRecords} />
+          </div>
         </div>
         
         {isLoading ? (
@@ -93,7 +118,7 @@ export function AllRecordsSection() {
               totalPages={totalPages}
             />
             
-            <RecordGridClient records={records} />
+            <RecordGridClient records={records} viewMode={viewMode} />
             
             {totalPages > 1 && (
               <div className="mt-8">
