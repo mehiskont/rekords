@@ -85,7 +85,7 @@ export function NavBar() {
             </div>
           </div>
 
-          <div className="hidden md:flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-4 z-50">
             <ThemeToggle />
             <Button variant="ghost" size="icon" className="relative" onClick={handleCartClick}>
               <ShoppingCart className="h-5 w-5" />
