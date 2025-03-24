@@ -41,12 +41,19 @@ export function RecordDetails({ record }: RecordDetailsProps) {
 
   const labelDisplay = record.catalogNumber ? `${record.label} [${record.catalogNumber}]` : record.label
   const formatDisplay = Array.isArray(record.format) ? record.format.join(", ") : record.format
+  
+  // Calculate if there are any tracks or videos available
+  const hasTracksOrVideos = Boolean(
+    (record.tracks && record.tracks.length > 0) || 
+    (record.videos && record.videos.length > 0)
+  )
 
   return (
     <>
       <div className="flex flex-col md:flex-row gap-6 mb-8">
-        {/* Image - reduced size */}
+        {/* Image column */}
         <div className="md:w-1/3 lg:w-1/4">
+          {/* Image */}
           <div className="relative aspect-square">
             <Image
               src={record.cover_image || "/placeholder.svg"}
@@ -61,69 +68,73 @@ export function RecordDetails({ record }: RecordDetailsProps) {
           </div>
         </div>
         
-        {/* Record info - more compact layout */}
+        {/* Content column - now with tracklist */}
         <div className="flex-1 flex flex-col">
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
-            <div>
-              <h1 className="text-2xl font-bold">{record.title}</h1>
-              <p className="text-lg">{record.artist}</p>
+          {/* Record details section */}
+          <div className="flex flex-col mb-6">
+            {/* Title, artist, price section */}
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+              <div>
+                <h1 className="text-2xl font-bold">{record.title}</h1>
+                <p className="text-lg">{record.artist}</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <p className="text-xl font-bold">${(record.price || 0).toFixed(2)}</p>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={handleAddToCart}
+                  disabled={isMaxQuantity || record.quantity_available === 0}
+                  className="whitespace-nowrap"
+                >
+                  <ShoppingCart className="mr-1 h-4 w-4" />
+                  {record.quantity_available === 0
+                    ? "Out of Stock"
+                    : isMaxQuantity
+                      ? `Max (${record.quantity_available})`
+                      : "Add to Cart"}
+                </Button>
+              </div>
             </div>
-            <div className="flex items-center gap-3">
-              <p className="text-xl font-bold">${(record.price || 0).toFixed(2)}</p>
-              <Button
-                size="sm"
-                variant="secondary"
-                onClick={handleAddToCart}
-                disabled={isMaxQuantity || record.quantity_available === 0}
-                className="whitespace-nowrap"
-              >
-                <ShoppingCart className="mr-1 h-4 w-4" />
-                {record.quantity_available === 0
-                  ? "Out of Stock"
-                  : isMaxQuantity
-                    ? `Max (${record.quantity_available})`
-                    : "Add to Cart"}
-              </Button>
-            </div>
-          </div>
 
-          {/* Details grid - compact 2-column layout */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-sm mt-2">
-            <div className="flex gap-2">
-              <span className="font-medium">Condition:</span>
-              <span>{record.condition}</span>
-            </div>
-            <div className="flex gap-2">
-              <span className="font-medium">Format:</span>
-              <span>{formatDisplay}</span>
-            </div>
-            <div className="flex gap-2">
-              <span className="font-medium">Label:</span>
-              <span className="truncate">{labelDisplay}</span>
-            </div>
-            {record.released && (
+            {/* All details in one grid - Format, Released, Stock now at the top */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-sm mt-4">
               <div className="flex gap-2">
-                <span className="font-medium">Released:</span>
-                <span>{record.released}</span>
+                <span className="font-medium">Format:</span>
+                <span>{formatDisplay}</span>
               </div>
-            )}
-            {record.country && (
+              {record.released && (
+                <div className="flex gap-2">
+                  <span className="font-medium">Released:</span>
+                  <span>{record.released}</span>
+                </div>
+              )}
+              {record.quantity_available > 0 && (
+                <div className="flex gap-2 text-muted-foreground">
+                  <span className="font-medium">Stock:</span>
+                  <span>{record.quantity_available} unit{record.quantity_available > 1 ? "s" : ""}</span>
+                </div>
+              )}
               <div className="flex gap-2">
-                <span className="font-medium">Country:</span>
-                <span>{record.country}</span>
+                <span className="font-medium">Condition:</span>
+                <span>{record.condition}</span>
               </div>
-            )}
-            {record.quantity_available > 0 && (
-              <div className="flex gap-2 text-muted-foreground">
-                <span className="font-medium">Stock:</span>
-                <span>{record.quantity_available} unit{record.quantity_available > 1 ? "s" : ""}</span>
+              <div className="flex gap-2">
+                <span className="font-medium">Label:</span>
+                <span className="truncate">{labelDisplay}</span>
               </div>
-            )}
+              {record.country && (
+                <div className="flex gap-2">
+                  <span className="font-medium">Country:</span>
+                  <span>{record.country}</span>
+                </div>
+              )}
+            </div>
           </div>
           
           {/* Styles as badges */}
           {record.styles && record.styles.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-4">
+            <div className="flex flex-wrap gap-1 mb-4">
               {record.styles.map((style, index) => (
                 <span key={index} className="px-2 py-0.5 bg-secondary text-secondary-foreground rounded-full text-xs">
                   {style}
@@ -131,22 +142,22 @@ export function RecordDetails({ record }: RecordDetailsProps) {
               ))}
             </div>
           )}
+          
+          {/* Track listing moved here */}
+          {hasTracksOrVideos && (
+            <div>
+              <TrackListing tracks={record.tracks || []} videos={record.videos || []} />
+            </div>
+          )}
+          
+          {/* No-tracks message */}
+          {!hasTracksOrVideos && (
+            <div className="mt-2 p-3 border border-dashed rounded-md text-center bg-secondary/10">
+              <p className="text-sm text-muted-foreground">No audio previews available for this release</p>
+            </div>
+          )}
         </div>
       </div>
-      
-      {/* Track listing with reduced margins */}
-      {((record.tracks && record.tracks.length > 0) || (record.videos && record.videos.length > 0)) && (
-        <div className="mt-4">
-          <TrackListing tracks={record.tracks || []} videos={record.videos || []} />
-        </div>
-      )}
-      
-      {/* Compact no-tracks message */}
-      {!(record.tracks?.length > 0 || record.videos?.length > 0) && (
-        <div className="mt-4 p-3 border border-dashed rounded-md text-center bg-secondary/10">
-          <p className="text-sm text-muted-foreground">No audio previews available for this release</p>
-        </div>
-      )}
     </>
   )
 }

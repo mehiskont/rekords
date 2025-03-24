@@ -159,7 +159,7 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
       {/* Show categories when input is focused in compact mode or always in full mode */}
       {(!isCompact || (isCompact && showResults)) && (
         <div className={cn(
-          isCompact ? "bg-card dark:bg-[#121318] border border-primary/10 dark:border-white/10" : "bg-transparent", 
+          isCompact ? "bg-card dark:bg-[#121318] border border-primary/20 dark:border-white/10" : "bg-transparent", 
           isCompact && showResults ? "p-2 border-t-0" : "",
           "rounded-b-md -mt-2"
         )}>
