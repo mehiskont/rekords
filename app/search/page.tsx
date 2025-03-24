@@ -3,6 +3,7 @@ import { Suspense } from "react"
 import { SearchBar } from "@/components/search-bar"
 import { RecordGrid } from "@/components/record-grid"
 import { RecordGridSkeleton } from "@/components/record-grid-skeleton"
+import { RefreshButton } from "@/components/refresh-button"
 
 export const metadata: Metadata = {
   title: "Search Records",
@@ -13,6 +14,7 @@ interface SearchPageProps {
   searchParams?: {
     q?: string
     category?: string
+    refresh?: string
   }
 }
 
@@ -26,15 +28,18 @@ export default function SearchPage({ searchParams = {} }: SearchPageProps) {
         <SearchBar initialQuery={query} initialCategory={category} />
       </div>
       <div>
-        <h1 className="text-2xl font-bold mb-6">
-          {query ? (
-            <>
-              Search results for "{query}"{category !== "everything" && ` in ${category}`}
-            </>
-          ) : (
-            "All Records"
-          )}
-        </h1>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="text-2xl font-bold">
+            {query ? (
+              <>
+                Search results for "{query}"{category !== "everything" && ` in ${category}`}
+              </>
+            ) : (
+              "All Records"
+            )}
+          </h1>
+          <RefreshButton />
+        </div>
         <Suspense fallback={<RecordGridSkeleton />}>
           <RecordGrid searchParams={searchParams} />
         </Suspense>

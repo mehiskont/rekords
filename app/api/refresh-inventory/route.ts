@@ -1,34 +1,42 @@
 import { NextResponse } from "next/server"
 import { getDiscogsInventory } from "@/lib/discogs"
-import { clearCachedData } from "@/lib/redis"
+import { flushCache } from "@/lib/redis"
 import { log } from "@/lib/logger"
 
 export async function POST() {
   try {
-    // Fetch fresh data for main views - no cache anymore
-    log("Fetching latest inventory data")
+    // First clear all inventory caches
+    log("Clearing inventory cache")
+    const clearedKeys = await flushCache("inventory:*")
     
-    // Don't use cache anymore - always fetch fresh data
+    // Also clear view caches
+    await flushCache("view:*")
+    
+    log(`Cleared ${clearedKeys} cached inventory keys`)
+    
+    // Fetch fresh data with cacheBuster to ensure we get latest data
     const timestamp = Date.now().toString()
     
     // Fetch new arrivals (most recently listed)
-    await getDiscogsInventory(undefined, undefined, 1, 20, {
-      sort: "listed", 
-      sort_order: "desc",
+    const newArrivals = await getDiscogsInventory(undefined, "date-desc", 1, 20, {
+      cacheBuster: timestamp,
       fetchFullReleaseData: true
     })
     
     // Fetch all records (main page view)
-    await getDiscogsInventory(undefined, undefined, 1, 50, {
+    const allRecords = await getDiscogsInventory(undefined, undefined, 1, 50, {
+      cacheBuster: timestamp,
       fetchFullReleaseData: true
     })
     
-    log("Inventory refresh complete - fresh data fetched")
+    log(`Inventory refresh complete - found ${newArrivals.records.length} new arrivals and ${allRecords.records.length} total records`)
     
     return NextResponse.json({ 
       success: true,
       message: "Inventory refreshed successfully",
-      timestamp: Date.now()
+      recordCount: allRecords.records.length,
+      newArrivalsCount: newArrivals.records.length,
+      timestamp: timestamp
     })
     
   } catch (error) {

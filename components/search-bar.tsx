@@ -92,7 +92,8 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
     
     // Navigate to search page only if not prevented
     if (!preventRedirect) {
-      router.push(`/search?q=${encodeURIComponent(query)}&category=${category}`)
+      // Add refresh=true parameter to ensure we get fresh results
+      router.push(`/search?q=${encodeURIComponent(query)}&category=${category}&refresh=true`)
     }
   }
 
@@ -101,7 +102,8 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
     
     // Only navigate to search page when not in compact mode and not prevented
     if (query && !isCompact && !preventRedirect) {
-      router.push(`/search?q=${encodeURIComponent(query)}&category=${newCategory}`)
+      // Add refresh=true parameter to ensure we get fresh results
+      router.push(`/search?q=${encodeURIComponent(query)}&category=${newCategory}&refresh=true`)
     } else if (preventRedirect) {
       // When using preventRedirect, keep the results open and show the filtered results
       setShowResults(true)

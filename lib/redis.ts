@@ -149,9 +149,31 @@ export async function setCachedData(key: string, value: string, ttl: number) {
   }
 }
 
+export async function flushCache(pattern: string = "*") {
+  return clearCachedData(pattern);
+}
+
 export async function clearCachedData(pattern: string = "*") {
   try {
-    // If Redis is disabled, return 0 immediately
+    // Clear memory cache items that match pattern
+    if (pattern === "*") {
+      // Clear all memory cache
+      memoryCache.clear();
+    } else {
+      // Convert Redis pattern to regex pattern
+      const regexPattern = new RegExp(
+        "^" + pattern.replace(/\*/g, ".*").replace(/\?/g, ".") + "$"
+      );
+      
+      // Clear matching memory cache entries
+      for (const key of memoryCache.keys()) {
+        if (regexPattern.test(key)) {
+          memoryCache.delete(key);
+        }
+      }
+    }
+    
+    // If Redis is disabled, return after clearing memory cache
     if (!redisClient) return 0;
     
     await ensureConnection();

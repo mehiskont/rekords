@@ -47,6 +47,11 @@ export default function RecordGridWrapper({
         if (sort) params.set("sort", sort)
         params.set("page", page.toString())
         
+        // Add refresh parameter if requested to bypass cache
+        if (searchParams.refresh === "true") {
+          params.set("refresh", "true")
+        }
+        
         const response = await fetch(`/api/records?${params.toString()}`)
         
         if (!response.ok) {
