@@ -29,7 +29,7 @@ export default async function HomePage({ searchParams = {} }: HomePageProps) {
       <section className="relative py-24 bg-background">
         <div className="container max-w-6xl mx-auto px-4 mt-12">
           {/* <h2 className="text-xl md:text-2xl font-medium text-center mb-8">{recordCount} records currently in our library</h2> */}
-          <SearchBar preventRedirect={true} />
+          <SearchBar preventRedirect={false} />
         </div>
       </section>
 

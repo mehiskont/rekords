@@ -13,6 +13,17 @@ export async function GET(request: NextRequest) {
   const page = parseInt(searchParams.get('page') || "1")
   const perPage = 20
   const refresh = searchParams.get('refresh') || undefined
+  const includeAllFields = searchParams.get('include_all_fields') === 'true'
+  
+  // Log all search parameters for debugging
+  log(`Records API called with params:`, { 
+    search, 
+    category, 
+    genre, 
+    sort, 
+    page, 
+    includeAllFields 
+  }, "info")
 
   // Create a unique cache key for this view
   const viewCacheKey = `view:${search || "all"}:${category}:${genre || "all"}:${sort}:${page}:${perPage}`;

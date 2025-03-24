@@ -53,6 +53,15 @@ export default function RecordGridWrapper({
         // Update timestamp to ensure we break through browser cache
         params.set("_ts", Date.now().toString())
         
+        // If searching for specific terms that might be in catalog numbers
+        if (search && (search.toUpperCase().includes('SURLTD') || search.includes('SUR'))) {
+          // Make sure we search all fields
+          params.set("include_catalog", "true")
+          params.set("include_release", "true")
+          params.set("include_all_fields", "true")
+          console.log("Special search for catalog/release ID:", search)
+        }
+        
         console.log("Fetching records with params:", params.toString())
         
         const response = await fetch(`/api/records?${params.toString()}`, {

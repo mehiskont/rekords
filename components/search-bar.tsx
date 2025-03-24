@@ -139,13 +139,14 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
           ? "rounded-md shadow" 
           : "rounded-xl shadow-xl"
       )}>
-        <form onSubmit={handleSubmit} className="relative">
+        <form onSubmit={handleSubmit} className="relative" action="/search">
           <Search className={cn(
             "absolute left-3 top-1/2 -translate-y-1/2 text-primary dark:text-primary",
             isCompact ? "h-4 w-4" : "h-5 w-5"
           )} />
           <Input
             type="search"
+            name="q"
             placeholder="Search records..."
             value={query}
             onChange={(e) => {
@@ -158,7 +159,11 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
             }}
             onKeyDown={(e) => {
               if (e.key === "Enter") {
-                handleSubmit(e)
+                console.log("Enter key pressed! Submitting form");
+                // Manual form submission for Enter key
+                if (!preventRedirect && query) {
+                  window.location.href = `/search?q=${encodeURIComponent(query)}&category=${category}&refresh=true`;
+                }
               }
             }}
             className={cn(
@@ -168,6 +173,8 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
                 : "pl-12 py-6 h-14 text-lg"
             )}
           />
+          <input type="hidden" name="category" value={category} />
+          <input type="hidden" name="refresh" value="true" />
         </form>
       </div>
       

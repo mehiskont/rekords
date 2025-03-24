@@ -45,6 +45,38 @@ export async function GET(request: Request) {
           (title.includes(searchTerm) || artist.includes(searchTerm)));
       }
 
+      // Add debugging for this specific record
+      if (record.title === 'SURLTD02' || record.title?.includes('SURLTD')) {
+        console.log('Found SURLTD record:', record);
+        console.log('Searching for term:', searchTerm);
+        console.log('Record title:', title);
+        console.log('Record artist:', artist);
+        console.log('Record label:', label);
+        console.log('Record catalog:', catalogNumber);
+        // Additional fields that might contain the search term
+        console.log('Record id:', record.id);
+        console.log('Record release:', record.release);
+      }
+
+      // For reference, get all keys available on the record
+      const allKeys = Object.keys(record);
+      
+      // Create a single string with all searchable fields for more comprehensive search
+      const allSearchableText = [
+        title,
+        artist,
+        label,
+        catalogNumber,
+        record.release?.toString().toLowerCase() || '',
+        record.format?.join(' ').toLowerCase() || '',
+        record.styles?.join(' ').toLowerCase() || '',
+        record.genres?.join(' ').toLowerCase() || '',
+        record.country?.toLowerCase() || '',
+      ].join(' ');
+      
+      // First check if any field contains the exact search term
+      const exactMatch = allSearchableText.includes(searchTerm);
+      
       switch (category) {
         case "artists":
           return artist.includes(searchTerm)
@@ -53,8 +85,9 @@ export async function GET(request: Request) {
         case "labels":
           return label.includes(searchTerm)
         default:
-          // "everything" - search across all fields
+          // "everything" - search across all fields including the combined text
           return (
+            exactMatch || 
             title.includes(searchTerm) ||
             artist.includes(searchTerm) ||
             label.includes(searchTerm) ||

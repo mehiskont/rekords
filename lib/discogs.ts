@@ -1015,6 +1015,31 @@ function filterRecordsByCategory(records: DiscogsRecord[], searchTerm: string, c
     const label = record.label?.toLowerCase() || "";
     const catalogNumber = record.catalogNumber?.toLowerCase() || "";
 
+    // Debug SURLTD records
+    if (record.title === 'SURLTD02' || record.title?.includes('SURLTD')) {
+      log(`Found SURLTD record in filtering: ${record.title}`, {
+        searchTerm: term,
+        category,
+        recordId: record.id
+      }, "info");
+    }
+    
+    // Create a single searchable text combining all fields
+    const allSearchableText = [
+      title,
+      artist,
+      label,
+      catalogNumber,
+      record.release?.toString().toLowerCase() || '',
+      record.format?.join(' ').toLowerCase() || '',
+      record.styles?.join(' ').toLowerCase() || '',
+      record.genres?.join(' ').toLowerCase() || '',
+      record.country?.toLowerCase() || '',
+    ].join(' ');
+    
+    // Check if any field contains the search term
+    const exactMatch = allSearchableText.includes(term);
+    
     switch (category) {
       case "artists":
         return artist.includes(term);
@@ -1025,6 +1050,7 @@ function filterRecordsByCategory(records: DiscogsRecord[], searchTerm: string, c
       default:
         // "everything" - search across all fields
         return (
+          exactMatch ||
           title.includes(term) ||
           artist.includes(term) ||
           label.includes(term) ||
