@@ -194,7 +194,7 @@ export function AllRecordsSection() {
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
           <h2 className="text-3xl font-bold">
             All Records
             <span className="ml-2 text-sm font-normal text-muted-foreground">
