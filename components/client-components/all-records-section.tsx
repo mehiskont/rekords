@@ -254,7 +254,7 @@ export function AllRecordsSection() {
                               params.set("page", String(page))
                               router.push(`${pathname}?${params.toString()}`)
                             }}
-                            className={page === currentPage ? "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground" : "hover:bg-accent hover:text-accent-foreground"}
+                            className={page === currentPage ? "bg-secondary text-secondary-foreground hover:bg-secondary hover:text-secondary-foreground font-semibold" : "hover:bg-accent hover:text-accent-foreground"}
                           >
                             {page}
                           </PaginationLink>

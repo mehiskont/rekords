@@ -77,7 +77,7 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
       {getPageNumbers().map((page) => (
         <Button
           key={page}
-          variant={page === currentPage ? "default" : "outline"}
+          variant={page === currentPage ? "secondary" : "outline"}
           size="icon"
           className="w-8 h-8"
           disabled={isPending}
