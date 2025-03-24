@@ -52,7 +52,7 @@ export function RecordDetails({ record }: RecordDetailsProps) {
     <>
       <div className="flex flex-col md:flex-row gap-6 mb-8">
         {/* Image column */}
-        <div className="md:w-1/3 lg:w-1/4">
+        <div className="md:w-2/5 lg:w-1/3">
           {/* Image */}
           <div className="relative aspect-square">
             <Image
@@ -60,7 +60,7 @@ export function RecordDetails({ record }: RecordDetailsProps) {
               alt={record.title}
               fill
               className="object-contain rounded-md shadow-sm"
-              sizes="(max-width: 768px) 100vw, 33vw"
+              sizes="(max-width: 768px) 100vw, 40vw"
               quality={90}
               priority
               loading="eager"

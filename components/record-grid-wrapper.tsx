@@ -52,7 +52,27 @@ export default function RecordGridWrapper({
           params.set("refresh", "true")
         }
         
-        const response = await fetch(`/api/records?${params.toString()}`)
+        // First clear all caches if refresh parameter is set
+        if (searchParams.refresh === "true") {
+          try {
+            await fetch("/api/force-refresh", { 
+              method: "GET",
+              cache: "no-store"
+            });
+            console.log("Force refreshed caches");
+          } catch (e) {
+            console.error("Failed to force refresh:", e);
+          }
+        }
+        
+        const response = await fetch(`/api/records?${params.toString()}`, {
+          cache: "no-store",
+          headers: {
+            "Cache-Control": "no-cache, no-store, must-revalidate",
+            "Pragma": "no-cache",
+            "Expires": "0"
+          }
+        })
         
         if (!response.ok) {
           throw new Error("Failed to fetch records")

@@ -22,34 +22,8 @@ export async function GET(request: NextRequest) {
   let usedCache = false;
 
   try {
-    // Skip cache if refresh parameter is provided
-    if (!refresh) {
-      // First try to get from cache
-      const cachedView = await getCachedData(viewCacheKey);
-      if (cachedView) {
-        try {
-          const parsed = JSON.parse(cachedView);
-          if (parsed?.data?.length > 0) {
-            records = parsed.data;
-            totalRecords = parsed.totalRecords || 0;
-            totalPages = parsed.totalPages || 1;
-            usedCache = true;
-            log(`Using cached view data for ${viewCacheKey}`, {}, "info");
-            
-            // Return cached data immediately
-            return NextResponse.json({
-              records,
-              totalRecords,
-              totalPages,
-              page,
-              fromCache: true
-            });
-          }
-        } catch (error) {
-          log(`Error parsing cached view data`, error, "warn");
-        }
-      }
-    }
+    // Always use fresh data, disable all caching
+    log(`Fetching fresh data for ${viewCacheKey}`, {}, "info");
 
     // Always use fresh data with cacheBuster
     const options = {
@@ -66,14 +40,8 @@ export async function GET(request: NextRequest) {
     totalRecords = result.pagination?.total || records.length;
     totalPages = result.pagination?.pages || Math.ceil(totalRecords / perPage);
     
-    // Cache this view for a short time (2 minutes)
-    if (records.length > 0 && !refresh) {
-      setCachedData(viewCacheKey, JSON.stringify({
-        data: records,
-        totalRecords,
-        totalPages
-      }), 120);
-    }
+    // Disable caching completely
+    log(`Skipping view cache for ${viewCacheKey}`, {}, "info");
 
     // Return fresh data
     return NextResponse.json({

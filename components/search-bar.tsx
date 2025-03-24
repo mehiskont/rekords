@@ -59,7 +59,14 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
       })
 
       console.log("Fetching search results:", `/api/search?${params.toString()}`)
-      const response = await fetch(`/api/search?${params.toString()}`)
+      const response = await fetch(`/api/search?${params.toString()}`, {
+        cache: "no-store",
+        headers: {
+          "Cache-Control": "no-cache, no-store, must-revalidate",
+          "Pragma": "no-cache",
+          "Expires": "0"
+        }
+      })
 
       if (!response.ok) {
         throw new Error("Failed to fetch results")

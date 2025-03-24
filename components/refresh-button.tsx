@@ -30,12 +30,19 @@ export function RefreshButton({ onClick }: RefreshButtonProps) {
           duration: 3000,
         })
       } else {
-        // Default behavior: call the API
+        // First clear all caches 
+        await fetch("/api/force-refresh", {
+          method: "GET",
+          cache: "no-store",
+        });
+        
+        // Then call normal refresh for inventory
         const response = await fetch("/api/refresh-inventory", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
+          cache: "no-store",
         })
         
         if (response.ok) {

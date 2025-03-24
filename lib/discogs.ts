@@ -623,10 +623,11 @@ export async function getDiscogsInventory(
   // Generate cache key based on request parameters
   const cacheKey = `inventory:${search || "all"}:${sort || "default"}:${page}:${perPage}:${options.category || "all"}:${options.sort || ""}:${options.sort_order || ""}`;
   
-  // Skip cache if explicitly requested
-  const useCache = !options.cacheBuster;
+  // Always skip cache for search or when explicitly requested
+  const useCache = !options.cacheBuster && !search;
   
-  if (useCache) {
+  // Skip cache completely
+  if (false) {
     try {
       // Try to get cached data first
       const cachedData = await getCachedData(cacheKey);
@@ -864,11 +865,8 @@ export async function getDiscogsInventory(
       }
     }
 
-    // Cache the result for a short time (5 minutes)
-    // This will use both memory cache and Redis from our improved redis.ts
-    if (filteredRecords.length > 0) {
-      setCachedData(cacheKey, JSON.stringify(result), 300); // 5 minute cache
-    }
+    // Disable caching
+    log(`Skipping cache for discogs inventory data`, {}, "info");
 
     return result;
   } catch (error) {

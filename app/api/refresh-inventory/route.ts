@@ -6,13 +6,16 @@ import { log } from "@/lib/logger"
 export async function POST() {
   try {
     // First clear all inventory caches
-    log("Clearing inventory cache")
-    const clearedKeys = await flushCache("inventory:*")
+    log("Clearing all caches")
+    const clearedInventory = await flushCache("inventory:*")
     
     // Also clear view caches
-    await flushCache("view:*")
+    const clearedViews = await flushCache("view:*")
     
-    log(`Cleared ${clearedKeys} cached inventory keys`)
+    // Clear memory cache completely
+    await flushCache("*")
+    
+    log(`Cleared ${clearedInventory} inventory keys and ${clearedViews} view keys`)
     
     // Fetch fresh data with cacheBuster to ensure we get latest data
     const timestamp = Date.now().toString()
