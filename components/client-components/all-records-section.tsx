@@ -9,6 +9,15 @@ import { ApiUnavailable } from "@/components/api-unavailable"
 import { ViewToggle } from "@/components/view-toggle"
 import { Button } from "@/components/ui/button"
 import { ChevronDown, ChevronUp } from "lucide-react"
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination"
 
 // Define our sortable columns
 type SortableColumn = {
@@ -141,6 +150,46 @@ export function AllRecordsSection() {
       <ChevronDown className="ml-1 h-4 w-4" />
     );
   }
+  
+  // Generate page numbers to display
+  const getPageNumbers = () => {
+    const pageNumbers = []
+    
+    if (totalPages <= 7) {
+      // Show all pages if there are 7 or fewer
+      for (let i = 1; i <= totalPages; i++) {
+        pageNumbers.push(i)
+      }
+    } else {
+      // Complex logic for many pages
+      if (currentPage <= 3) {
+        // Near the start
+        for (let i = 1; i <= 5; i++) {
+          pageNumbers.push(i)
+        }
+        pageNumbers.push('ellipsis')
+        pageNumbers.push(totalPages)
+      } else if (currentPage >= totalPages - 2) {
+        // Near the end
+        pageNumbers.push(1)
+        pageNumbers.push('ellipsis')
+        for (let i = totalPages - 4; i <= totalPages; i++) {
+          pageNumbers.push(i)
+        }
+      } else {
+        // In the middle
+        pageNumbers.push(1)
+        pageNumbers.push('ellipsis')
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pageNumbers.push(i)
+        }
+        pageNumbers.push('ellipsis')
+        pageNumbers.push(totalPages)
+      }
+    }
+    
+    return pageNumbers
+  }
 
   return (
     <section className="py-20 bg-background">
@@ -169,38 +218,66 @@ export function AllRecordsSection() {
             
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="mt-8 flex justify-center">
-                <div className="flex space-x-2">
-                  <Button
-                    variant="outline"
-                    disabled={currentPage === 1}
-                    onClick={() => {
-                      const params = new URLSearchParams(searchParams.toString())
-                      params.set("page", String(currentPage - 1))
-                      router.push(`${pathname}?${params.toString()}`)
-                    }}
-                  >
-                    Previous
-                  </Button>
-                  
-                  <div className="flex items-center px-4">
-                    <span className="text-sm">
-                      Page {currentPage} of {totalPages}
-                    </span>
-                  </div>
-                  
-                  <Button
-                    variant="outline"
-                    disabled={currentPage === totalPages}
-                    onClick={() => {
-                      const params = new URLSearchParams(searchParams.toString())
-                      params.set("page", String(currentPage + 1))
-                      router.push(`${pathname}?${params.toString()}`)
-                    }}
-                  >
-                    Next
-                  </Button>
+              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-2">
+                <div className="text-sm text-muted-foreground">
+                  Showing {(currentPage - 1) * 24 + 1}-{Math.min(currentPage * 24, totalRecords)} of {totalRecords} records
                 </div>
+                
+                <Pagination className="w-full sm:w-auto justify-center sm:justify-end">
+                  <PaginationContent className="bg-card rounded-md border shadow-sm">
+                    {currentPage > 1 && (
+                      <PaginationItem>
+                        <PaginationPrevious 
+                          href="#" 
+                          onClick={(e) => {
+                            e.preventDefault()
+                            const params = new URLSearchParams(searchParams.toString())
+                            params.set("page", String(currentPage - 1))
+                            router.push(`${pathname}?${params.toString()}`)
+                          }}
+                          className="hover:bg-accent hover:text-accent-foreground"
+                        />
+                      </PaginationItem>
+                    )}
+                    
+                    {getPageNumbers().map((page, index) => (
+                      <PaginationItem key={index}>
+                        {page === 'ellipsis' ? (
+                          <PaginationEllipsis />
+                        ) : (
+                          <PaginationLink 
+                            href="#" 
+                            isActive={page === currentPage}
+                            onClick={(e) => {
+                              e.preventDefault()
+                              const params = new URLSearchParams(searchParams.toString())
+                              params.set("page", String(page))
+                              router.push(`${pathname}?${params.toString()}`)
+                            }}
+                            className={page === currentPage ? "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground" : "hover:bg-accent hover:text-accent-foreground"}
+                          >
+                            {page}
+                          </PaginationLink>
+                        )}
+                      </PaginationItem>
+                    ))}
+                    
+                    {currentPage < totalPages && (
+                      <PaginationItem>
+                        <PaginationNext 
+                          href="#" 
+                          onClick={(e) => {
+                            e.preventDefault()
+                            const params = new URLSearchParams(searchParams.toString())
+                            params.set("page", String(currentPage + 1))
+                            router.push(`${pathname}?${params.toString()}`)
+                          }}
+                          className="hover:bg-accent hover:text-accent-foreground"
+                        />
+                      </PaginationItem>
+                    )}
+                  </PaginationContent>
+                </Pagination>
               </div>
             )}
           </div>
