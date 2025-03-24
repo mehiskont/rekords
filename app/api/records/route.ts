@@ -46,10 +46,79 @@ export async function GET(request: NextRequest) {
 
     const result = await getDiscogsInventory(search, sort, page, perPage, options);
     
+    // Get all records from the inventory
+    const allRecords = result.records || [];
+    
+    // If we have a search query, perform additional filtering to ensure we only return relevant results
+    let filteredRecords = allRecords;
+    if (search) {
+      const searchTerm = search.toLowerCase();
+      log(`Filtering ${allRecords.length} records for search term "${searchTerm}"`, {}, "info");
+      
+      // Apply more strict filtering to ensure only relevant records are shown
+      filteredRecords = allRecords.filter(record => {
+        if (!record.title || !record.artist) {
+          return false;
+        }
+        
+        // Prepare all searchable fields
+        const artist = record.artist.toLowerCase();
+        const title = record.title.toLowerCase();
+        const label = record.label?.toLowerCase() || "";
+        const catalogNumber = record.catalogNumber?.toLowerCase() || "";
+        
+        // Create combined text of all searchable fields
+        const allSearchableText = [
+          title,
+          artist,
+          label,
+          catalogNumber,
+          record.release?.toString().toLowerCase() || '',
+          record.format?.join(' ').toLowerCase() || '',
+          record.styles?.join(' ').toLowerCase() || '',
+          record.genres?.join(' ').toLowerCase() || '',
+          record.country?.toLowerCase() || '',
+        ].join(' ');
+        
+        // Check if this record is relevant to the search
+        const matchesSearch = allSearchableText.includes(searchTerm);
+        
+        // For special IDs like catalog numbers, do more specific checks
+        const isSpecialId = (
+          searchTerm.toUpperCase().includes('SURLTD') || 
+          (searchTerm.includes('SUR') && !isNaN(parseInt(searchTerm.replace('SUR', ''))))
+        );
+        
+        if (isSpecialId && (
+          catalogNumber.includes(searchTerm) || 
+          title.includes(searchTerm)
+        )) {
+          log(`Found special ID match: ${record.title}`, { id: record.id }, "info");
+          return true;
+        }
+        
+        // Check for exact matches in title/artist/label
+        if (
+          title === searchTerm || 
+          artist === searchTerm ||
+          label === searchTerm ||
+          catalogNumber === searchTerm
+        ) {
+          log(`Found exact match: ${record.title}`, { id: record.id }, "info");
+          return true;
+        }
+        
+        // Return based on overall match
+        return matchesSearch;
+      });
+      
+      log(`Filtered to ${filteredRecords.length} relevant records`, {}, "info");
+    }
+    
     // Serialize records before returning
-    records = result.records ? result.records.map((record) => serializeForClient(record)) : [];
-    totalRecords = result.pagination?.total || records.length;
-    totalPages = result.pagination?.pages || Math.ceil(totalRecords / perPage);
+    records = filteredRecords.map((record) => serializeForClient(record));
+    totalRecords = records.length;
+    totalPages = Math.ceil(totalRecords / perPage);
     
     // Disable caching completely
     log(`Skipping view cache for ${viewCacheKey}`, {}, "info");

@@ -40,6 +40,13 @@ export default function SearchPage({ searchParams = {} }: SearchPageProps) {
           </h1>
           <RefreshButton />
         </div>
+        
+        {query && (
+          <p className="text-muted-foreground mb-4">
+            Showing records matching your search query. Results are sorted by relevance.
+          </p>
+        )}
+        
         <Suspense fallback={<RecordGridSkeleton />}>
           <RecordGrid searchParams={searchParams} />
         </Suspense>
