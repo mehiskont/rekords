@@ -25,18 +25,37 @@ body {
   /* Mobile menu overlay styles */
   .mobile-menu-overlay {
     background-color: hsl(var(--background));
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 9999;
+    margin: 0;
+    padding-top: 60px;
   }
   
   /* Mobile menu animation */
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   
   .mobile-menu-animate {
-    animation: fadeIn 0.2s ease-in-out;
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  /* Make search filters more compact on very small screens */
+  @media (max-width: 360px) {
+    .navbar-searchbar button, 
+    .navbar-searchbar a {
+      font-size: 0.6rem !important;
+      padding: 0.125rem 0.5rem !important;
+    }
   }
 }
 

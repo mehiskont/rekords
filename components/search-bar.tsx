@@ -157,7 +157,7 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
       {(!isCompact || (isCompact && showResults)) && (
         <div className={cn(
           isCompact ? "bg-[#121318] border border-primary/10 dark:border-white/10" : "bg-transparent", 
-          isCompact && showResults ? "p-3 border-t-0" : "",
+          isCompact && showResults ? "p-2 border-t-0" : "",
           "rounded-b-md -mt-2"
         )}>
           <SearchCategories 

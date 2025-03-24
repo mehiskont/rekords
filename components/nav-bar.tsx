@@ -48,7 +48,7 @@ export function NavBar() {
   }
 
   return (
-    <nav className="sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
+    <nav className="sticky top-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
       <div className="container mx-auto">
         <div className="flex h-16 items-center justify-between">
           <div className="flex items-center gap-8">
@@ -152,112 +152,129 @@ export function NavBar() {
         </div>
 
         {isMenuOpen && (
-          <div className="md:hidden fixed top-16 left-0 right-0 bottom-0 bg-background/95 backdrop-blur mobile-menu-overlay z-40 flex flex-col p-6 overflow-y-auto mobile-menu-animate">
-            {/* Show search bar in mobile menu when not on homepage and not on search page */}
-            {shouldShowSearchBar && (
-              <div className="mb-6">
-                <SearchBar isCompact={false} />
-              </div>
-            )}
+          <div className="mobile-menu-overlay flex flex-col overflow-y-auto mobile-menu-animate">
             
-            
-            <div className="flex-1 flex flex-col justify-center mb-10">
-              <div className="flex justify-center mb-6">
+            <div className="flex-1 flex flex-col p-6">
+              {/* Search bar - only when not on homepage or search page */}
+              {shouldShowSearchBar && (
+                <div className="mb-6 px-1">
+                  <SearchBar isCompact={false} />
+                </div>
+              )}
+              
+              {/* Main navigation links */}
+              <div className="flex flex-col gap-4 mb-8">
+                <Link href="/" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start text-lg font-medium">
+                    <Home className="h-5 w-5 mr-3" />
+                    Home
+                  </Button>
+                </Link>
                 <Link href="/search" onClick={() => setIsMenuOpen(false)}>
-                  <Button variant="outline" size="lg" className="w-full mx-2">
+                  <Button variant="ghost" className="w-full justify-start text-lg font-medium">
                     All Records
                   </Button>
                 </Link>
-              </div>
-            </div>
-            
-            <div className="mt-auto pt-6 border-t">
-              <div className="flex items-center justify-between mb-6">
-                <ThemeToggle />
-                <Button variant="outline" size="icon" className="relative" onClick={handleCartClick}>
-                  <ShoppingCart className="h-5 w-5" />
-                  {cartItemCount > 0 && (
-                    <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-[11px] font-medium flex items-center justify-center text-primary-foreground">
-                      {cartItemCount}
-                    </span>
-                  )}
-                </Button>
+                <Link href="/shipping" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="ghost" className="w-full justify-start text-lg font-medium">
+                    <Info className="h-5 w-5 mr-3" />
+                    Shipping Info
+                  </Button>
+                </Link>
               </div>
               
-              {!mounted ? null : status === "loading" ? (
-                <div className="flex justify-center">
-                  <Button variant="ghost" size="sm" disabled>
-                    <User className="h-4 w-4 mr-2 opacity-50" />
-                    <span>Loading...</span>
+              {/* Cart and account section */}
+              <div className="mt-auto pt-6 border-t">
+                <div className="flex items-center justify-between mb-6">
+                  <ThemeToggle />
+                  <Button variant="outline" size="icon" className="relative" onClick={() => {
+                    handleCartClick();
+                    setIsMenuOpen(false);
+                  }}>
+                    <ShoppingCart className="h-5 w-5" />
+                    {cartItemCount > 0 && (
+                      <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-[11px] font-medium flex items-center justify-center text-primary-foreground">
+                        {cartItemCount}
+                      </span>
+                    )}
                   </Button>
                 </div>
-              ) : session ? (
-                <div className="flex flex-col gap-4">
-                  <div className="flex items-center gap-3 py-2">
-                    <User className="h-5 w-5" />
-                    <div className="flex flex-col">
-                      <span className="font-medium">{session.user.name}</span>
-                      <span className="text-sm text-muted-foreground truncate max-w-[250px]">{session.user.email}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="grid grid-cols-1 gap-3 pt-4">
-                    <Link 
-                      href="/dashboard" 
-                      className="w-full"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <Button variant="outline" className="w-full justify-start">
-                        Dashboard
-                      </Button>
-                    </Link>
-                    <Link 
-                      href="/dashboard/orders" 
-                      className="w-full"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <Button variant="outline" className="w-full justify-start">
-                        Orders
-                      </Button>
-                    </Link>
-                    <Link 
-                      href="/dashboard/profile" 
-                      className="w-full"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      <Button variant="outline" className="w-full justify-start">
-                        Profile
-                      </Button>
-                    </Link>
-                    
-                    <Button 
-                      variant="destructive"
-                      className="w-full justify-start mt-3"
-                      onClick={() => {
-                        // Clear UI cart only without syncing to server
-                        dispatch({ type: "CLEAR_UI_CART" });
-                        // Remove cart from localStorage
-                        if (typeof window !== 'undefined') {
-                          localStorage.removeItem('plastik-cart');
-                        }
-                        signOut({ callbackUrl: '/' });
-                      }}
-                    >
-                      <LogOut className="h-4 w-4 mr-2" />
-                      <span>Sign out</span>
+                
+                {!mounted ? null : status === "loading" ? (
+                  <div className="flex justify-center">
+                    <Button variant="ghost" size="sm" disabled>
+                      <User className="h-4 w-4 mr-2 opacity-50" />
+                      <span>Loading...</span>
                     </Button>
                   </div>
-                </div>
-              ) : (
-                <div className="flex flex-col gap-4 items-center">
-                  <Link href="/auth/signin" onClick={() => setIsMenuOpen(false)} className="w-full">
-                    <Button variant="primary" size="lg" className="w-full">Sign In</Button>
-                  </Link>
-                  <Link href="/auth/signup" onClick={() => setIsMenuOpen(false)} className="w-full">
-                    <Button variant="outline" size="lg" className="w-full">Sign Up</Button>
-                  </Link>
-                </div>
-              )}
+                ) : session ? (
+                  <div className="flex flex-col gap-4">
+                    <div className="flex items-center gap-3 py-2">
+                      <User className="h-5 w-5" />
+                      <div className="flex flex-col">
+                        <span className="font-medium">{session.user.name}</span>
+                        <span className="text-sm text-muted-foreground truncate max-w-[250px]">{session.user.email}</span>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 gap-3 pt-4">
+                      <Link 
+                        href="/dashboard" 
+                        className="w-full"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <Button variant="outline" className="w-full justify-start">
+                          Dashboard
+                        </Button>
+                      </Link>
+                      <Link 
+                        href="/dashboard/orders" 
+                        className="w-full"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <Button variant="outline" className="w-full justify-start">
+                          Orders
+                        </Button>
+                      </Link>
+                      <Link 
+                        href="/dashboard/profile" 
+                        className="w-full"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        <Button variant="outline" className="w-full justify-start">
+                          Profile
+                        </Button>
+                      </Link>
+                      
+                      <Button 
+                        variant="destructive"
+                        className="w-full justify-start mt-3"
+                        onClick={() => {
+                          // Clear UI cart only without syncing to server
+                          dispatch({ type: "CLEAR_UI_CART" });
+                          // Remove cart from localStorage
+                          if (typeof window !== 'undefined') {
+                            localStorage.removeItem('plastik-cart');
+                          }
+                          signOut({ callbackUrl: '/' });
+                        }}
+                      >
+                        <LogOut className="h-4 w-4 mr-2" />
+                        <span>Sign out</span>
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-4 items-center">
+                    <Link href="/auth/signin" onClick={() => setIsMenuOpen(false)} className="w-full">
+                      <Button variant="primary" size="lg" className="w-full">Sign In</Button>
+                    </Link>
+                    <Link href="/auth/signup" onClick={() => setIsMenuOpen(false)} className="w-full">
+                      <Button variant="outline" size="lg" className="w-full">Sign Up</Button>
+                    </Link>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}
