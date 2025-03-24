@@ -154,7 +154,7 @@ export function NavBar() {
         {isMenuOpen && (
           <div className="mobile-menu-overlay flex flex-col overflow-y-auto mobile-menu-animate">
             
-            <div className="flex-1 flex flex-col p-6">
+            <div className="flex-1 flex flex-col pt-6">
               {/* Search bar - only when not on homepage or search page */}
               {shouldShowSearchBar && (
                 <div className="mb-6 px-1">
