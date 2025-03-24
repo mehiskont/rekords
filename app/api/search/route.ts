@@ -21,7 +21,7 @@ export async function GET(request: Request) {
     // Normalize search query - remove extra spaces and convert to lowercase
     const normalizedQuery = query.trim().toLowerCase()
 
-    // No need to use fetch here, just directly use the getDiscogsInventory with cacheBuster
+    // Fetch records from Discogs
     const { records, totalPages } = await getDiscogsInventory(normalizedQuery, undefined, page, perPage, {
       category,
       fetchFullReleaseData: true,
@@ -33,137 +33,89 @@ export async function GET(request: Request) {
 
     // Filter records based on search term and category
     const searchTerm = normalizedQuery
+    
+    // A more robust approach to searching through records
     const filteredRecords = records.filter((record) => {
-      // Skip records with missing critical data
-      if (!record.title || !record.artist) {
-        console.log("Skipping record with missing data:", record.id);
-        return false;
-      }
-      
-      const artist = record.artist?.toLowerCase() || ""
-      const title = record.title?.toLowerCase() || ""
-      const label = record.label?.toLowerCase() || ""
-      const catalogNumber = record.catalogNumber?.toLowerCase() || ""
-      const id = record.id?.toString().toLowerCase() || ""
-      
-      // Handle potentially null/undefined fields with safer conversions
-      let release = ""
-      let format = ""
-      let styles = ""
-      let genres = ""
+      // Skip empty records
+      if (!record) return false;
       
       try {
-        release = String(record.release || "").toLowerCase()
+        // These fields should exist on most records
+        const fieldsToSearch = {
+          // Standard expected fields 
+          title: record.title,
+          artist: record.artist,
+          label: record.label,
+          id: record.id,
+          catalogNumber: record.catalogNumber,
+          
+          // Extended fields that might contain the search term
+          release: record.release,
+          country: record.country,
+          
+          // Handle array fields with join if they exist
+          format: Array.isArray(record.format) ? record.format.join(' ') : record.format,
+          styles: Array.isArray(record.styles) ? record.styles.join(' ') : record.styles,
+          genres: Array.isArray(record.genres) ? record.genres.join(' ') : record.genres
+        };
         
-        if (Array.isArray(record.format)) {
-          format = record.format.join(' ').toLowerCase()
-        } else if (record.format) {
-          format = String(record.format).toLowerCase()
-        }
+        // Build a comprehensive search text that includes all available fields
+        const allValuesText = Object.entries(fieldsToSearch)
+          .filter(([_, value]) => value !== undefined && value !== null)
+          .map(([_, value]) => String(value).toLowerCase())
+          .join(' ');
         
-        if (Array.isArray(record.styles)) {
-          styles = record.styles.join(' ').toLowerCase()
-        } else if (record.styles) {
-          styles = String(record.styles).toLowerCase()
-        }
+        // Check all text-based fields for the search term
+        const hasMatch = allValuesText.includes(searchTerm);
         
-        if (Array.isArray(record.genres)) {
-          genres = record.genres.join(' ').toLowerCase()
-        } else if (record.genres) {
-          genres = String(record.genres).toLowerCase()
+        // Check for partial matches in important identifiers
+        // This is especially important for catalog numbers and IDs
+        const idFields = [
+          String(record.id || '').toLowerCase(),
+          String(record.catalogNumber || '').toLowerCase(),
+          String(record.release || '').toLowerCase()
+        ];
+        
+        // If any ID field contains OR is contained by the search term, it's a partial match
+        const hasPartialIdMatch = idFields.some(field => 
+          (field.length >= 2 && field.includes(searchTerm)) || 
+          (searchTerm.length >= 3 && searchTerm.includes(field))
+        );
+        
+        // If search term appears to be an ID or catalog number
+        const searchLooksLikeId = /^[a-z0-9]{3,}$/i.test(searchTerm);
+        
+        // For ID-like searches, prioritize ID field matching
+        const idMatching = searchLooksLikeId && 
+          idFields.some(field => field.includes(searchTerm) || searchTerm.includes(field));
+          
+        // Apply category-specific filtering
+        switch (category) {
+          case "artists":
+            return String(record.artist || '').toLowerCase().includes(searchTerm);
+          case "releases":
+            return String(record.title || '').toLowerCase().includes(searchTerm) || hasPartialIdMatch;
+          case "labels":
+            return String(record.label || '').toLowerCase().includes(searchTerm);
+          default:
+            // "everything" - use our comprehensive search approach
+            return hasMatch || hasPartialIdMatch || idMatching;
         }
-      } catch (e) {
-        console.error("Error processing record fields:", e)
+      } catch (error) {
+        console.error("Error filtering record:", error);
+        log("Error filtering record", { error, recordId: record.id }, "error");
+        return false;
       }
-      
-      // Debug record details
-      if (title.includes(searchTerm) || artist.includes(searchTerm) || id.includes(searchTerm)) {
-        console.log(`Potential match: "${title}" by "${artist}" (ID: ${id}) - includes "${searchTerm}"? ` + 
-          (title.includes(searchTerm) || artist.includes(searchTerm) || id.includes(searchTerm)));
-      }
-
-      // Add debugging for this specific record
-      if (record.title === 'SURLTD02' || record.title?.includes('SURLTD') || id.includes('surltd')) {
-        console.log('Found SURLTD record:', record);
-        console.log('Searching for term:', searchTerm);
-        console.log('Record title:', title);
-        console.log('Record artist:', artist);
-        console.log('Record label:', label);
-        console.log('Record catalog:', catalogNumber);
-        console.log('Record id:', id);
-        console.log('Record release:', release);
-      }
-      
-      // Create a single string with all searchable fields for more comprehensive search
-      const allSearchableText = [
-        title,
-        artist,
-        label,
-        catalogNumber,
-        id,
-        release,
-        format,
-        styles,
-        genres,
-        record.country?.toLowerCase() || '',
-      ].join(' ');
-      
-      // Check if any field contains the exact search term
-      const exactMatch = allSearchableText.includes(searchTerm);
-      
-      // Check for partial matches in catalog numbers and IDs
-      // This helps with cases where someone searches for part of a catalog number
-      const partialIdMatch = (
-        (catalogNumber && searchTerm.length > 2 && (
-          catalogNumber.includes(searchTerm) || 
-          searchTerm.includes(catalogNumber)
-        )) ||
-        (id && searchTerm.length > 2 && (
-          id.includes(searchTerm) || 
-          searchTerm.includes(id)
-        ))
-      );
-      
-      // If searching for something that looks like a catalog number or ID,
-      // prioritize matching in those fields
-      const searchLooksLikeId = /^[a-z0-9]{3,}$/i.test(searchTerm);
-      
-      switch (category) {
-        case "artists":
-          return artist.includes(searchTerm)
-        case "releases":
-          return title.includes(searchTerm) || id.includes(searchTerm) || partialIdMatch
-        case "labels":
-          return label.includes(searchTerm)
-        default:
-          // "everything" - search across all fields including the combined text
-          return (
-            exactMatch || 
-            title.includes(searchTerm) ||
-            artist.includes(searchTerm) ||
-            label.includes(searchTerm) ||
-            catalogNumber.includes(searchTerm) ||
-            id.includes(searchTerm) ||
-            release.includes(searchTerm) ||
-            partialIdMatch ||
-            (searchLooksLikeId && (
-              id.includes(searchTerm) || 
-              catalogNumber.includes(searchTerm) ||
-              searchTerm.includes(id) || 
-              searchTerm.includes(catalogNumber)
-            ))
-          )
-      }
-    })
+    });
 
     // Log the results for debugging
-    console.log(`Filtered to ${filteredRecords.length} records after category filtering`)
+    console.log(`Filtered to ${filteredRecords.length} records after category filtering`);
     if (filteredRecords.length > 0) {
       console.log("First match:", {
         title: filteredRecords[0].title,
         artist: filteredRecords[0].artist,
         label: filteredRecords[0].label,
-      })
+      });
       log("Search results found", {
         query: normalizedQuery,
         category,
@@ -173,26 +125,57 @@ export async function GET(request: Request) {
           artist: filteredRecords[0].artist,
           id: filteredRecords[0].id
         }
-      }, "info")
+      }, "info");
     } else {
-      // Log when searches return no results - this helps identify patterns of failed searches
+      // Log when searches return no results
       log("Search returned no results", {
         query: normalizedQuery,
         category,
         originalRecordsCount: records.length
-      }, "warn")
+      }, "warn");
+      
+      // If we found records but filtered them all out, use a more permissive search
+      // as a fallback to ensure users see something relevant
+      if (records.length > 0) {
+        log("Applying fallback search with more permissive matching", {}, "info");
+        
+        // More permissive search that checks if ANY field contains the search term
+        // or if the search term is contained within ANY field
+        const fallbackResults = records.slice(0, 5).filter(record => {
+          try {
+            // Convert record to string representation of all values
+            const recordAsString = JSON.stringify(record).toLowerCase();
+            
+            // If record string contains search term or vice versa
+            return recordAsString.includes(searchTerm) || 
+                  (searchTerm.length >= 3 && Object.keys(record).some(key => 
+                     searchTerm.includes(String((record as any)[key] || '').toLowerCase())
+                  ));
+          } catch (e) {
+            return false;
+          }
+        });
+        
+        if (fallbackResults.length > 0) {
+          log("Found results using fallback search method", { count: fallbackResults.length }, "info");
+          return NextResponse.json({
+            records: fallbackResults,
+            totalPages: 1,
+          });
+        }
+      }
     }
 
     return NextResponse.json({
       records: filteredRecords,
       totalPages: Math.ceil(filteredRecords.length / perPage),
-    })
+    });
   } catch (error) {
-    console.error("Search error:", error)
+    console.error("Search error:", error);
     return NextResponse.json(
       { error: "Failed to search records", details: error instanceof Error ? error.message : String(error) },
       { status: 500 },
-    )
+    );
   }
 }
 
