@@ -865,8 +865,17 @@ export async function getDiscogsInventory(
       }
     }
 
-    // Disable caching
-    log(`Skipping cache for discogs inventory data`, {}, "info");
+    // Disable caching and log results
+    log(`Got ${result.records.length} records from Discogs (no caching)`, {}, "info");
+    
+    // Log first 3 records for debugging
+    if (result.records.length > 0) {
+      log(`Sample records:`, result.records.slice(0, 3).map(r => ({
+        id: r.id,
+        title: r.title,
+        artist: r.artist
+      })), "info");
+    }
 
     return result;
   } catch (error) {
@@ -1005,17 +1014,9 @@ function filterRecordsByCategory(records: DiscogsRecord[], searchTerm: string, c
     const title = record.title.toLowerCase();
     const label = record.label?.toLowerCase() || "";
     const catalogNumber = record.catalogNumber?.toLowerCase() || "";
-    
-    const isVariousArtist =
-      artist === "various" ||
-      artist === "various artists" ||
-      title.includes("various");
 
     switch (category) {
       case "artists":
-        if (term === "various") {
-          return isVariousArtist;
-        }
         return artist.includes(term);
       case "releases":
         return title.includes(term);
@@ -1023,9 +1024,6 @@ function filterRecordsByCategory(records: DiscogsRecord[], searchTerm: string, c
         return label.includes(term);
       default:
         // "everything" - search across all fields
-        if (term === "various") {
-          return isVariousArtist;
-        }
         return (
           title.includes(term) ||
           artist.includes(term) ||

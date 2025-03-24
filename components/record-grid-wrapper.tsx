@@ -47,23 +47,13 @@ export default function RecordGridWrapper({
         if (sort) params.set("sort", sort)
         params.set("page", page.toString())
         
-        // Add refresh parameter if requested to bypass cache
-        if (searchParams.refresh === "true") {
-          params.set("refresh", "true")
-        }
+        // Always force refresh for search queries
+        params.set("refresh", "true")
         
-        // First clear all caches if refresh parameter is set
-        if (searchParams.refresh === "true") {
-          try {
-            await fetch("/api/force-refresh", { 
-              method: "GET",
-              cache: "no-store"
-            });
-            console.log("Force refreshed caches");
-          } catch (e) {
-            console.error("Failed to force refresh:", e);
-          }
-        }
+        // Update timestamp to ensure we break through browser cache
+        params.set("_ts", Date.now().toString())
+        
+        console.log("Fetching records with params:", params.toString())
         
         const response = await fetch(`/api/records?${params.toString()}`, {
           cache: "no-store",

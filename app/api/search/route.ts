@@ -16,10 +16,7 @@ export async function GET(request: Request) {
       return NextResponse.json({ records: [], totalPages: 0 })
     }
 
-    // Force deep refresh to ensure we get the latest records
-    // The extra await here ensures that we get fresh data from the API
-    await fetch('/api/force-refresh', { cache: 'no-store' });
-    
+    // No need to use fetch here, just directly use the getDiscogsInventory with cacheBuster
     const { records, totalPages } = await getDiscogsInventory(query, undefined, page, perPage, {
       category,
       fetchFullReleaseData: true,
@@ -42,8 +39,6 @@ export async function GET(request: Request) {
       const label = record.label?.toLowerCase() || ""
       const catalogNumber = record.catalogNumber?.toLowerCase() || ""
 
-      const isVariousArtist = artist === "various" || artist === "various artists" || title.includes("various")
-
       // Debug record details
       if (title.includes(searchTerm) || artist.includes(searchTerm)) {
         console.log(`Potential match: "${title}" by "${artist}" - includes "${searchTerm}"? ` + 
@@ -52,9 +47,6 @@ export async function GET(request: Request) {
 
       switch (category) {
         case "artists":
-          if (searchTerm === "various") {
-            return isVariousArtist
-          }
           return artist.includes(searchTerm)
         case "releases":
           return title.includes(searchTerm)
@@ -62,9 +54,6 @@ export async function GET(request: Request) {
           return label.includes(searchTerm)
         default:
           // "everything" - search across all fields
-          if (searchTerm === "various") {
-            return isVariousArtist
-          }
           return (
             title.includes(searchTerm) ||
             artist.includes(searchTerm) ||

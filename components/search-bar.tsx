@@ -96,12 +96,15 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
     e.preventDefault()
     if (!query) return
 
+    console.log("Search form submitted with query:", query, "category:", category)
     setShowResults(false)
     
     // Navigate to search page only if not prevented
     if (!preventRedirect) {
       // Add refresh=true parameter to ensure we get fresh results
-      router.push(`/search?q=${encodeURIComponent(query)}&category=${category}&refresh=true`)
+      const searchURL = `/search?q=${encodeURIComponent(query)}&category=${category}&refresh=true`;
+      console.log("Navigating to:", searchURL);
+      router.push(searchURL)
     }
   }
 
