@@ -35,9 +35,15 @@ export default async function RecordPage({ params }: { params: { id: string } })
               <h2 className="text-lg font-semibold">Related Records</h2>
               <span className="text-xs text-muted-foreground">{serializedRelatedRecords.length} items</span>
             </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+            {/* Horizontal scrolling container with hidden scrollbar */}
+            <div className="flex space-x-4 overflow-x-auto pb-4 scrollbar-hide">
               {serializedRelatedRecords.map((relatedRecord) => (
-                <ClientRecordCard key={relatedRecord.id} record={relatedRecord} />
+                <div 
+                  key={relatedRecord.id} 
+                  className="w-64 flex-shrink-0"
+                >
+                  <ClientRecordCard record={relatedRecord} />
+                </div>
               ))}
             </div>
           </div>
