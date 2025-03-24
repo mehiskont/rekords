@@ -623,10 +623,10 @@ export async function getDiscogsInventory(
   // Generate cache key based on request parameters
   const cacheKey = `inventory:${search || "all"}:${sort || "default"}:${page}:${perPage}:${options.category || "all"}:${options.sort || ""}:${options.sort_order || ""}`;
   
-  // Always skip cache for search or when explicitly requested
-  const useCache = !options.cacheBuster && !search;
+  // Always skip cache - we want fresh data every time
+  const useCache = false;
   
-  // Skip cache completely
+  // This code never runs, but kept for historical reference
   if (false) {
     try {
       // Try to get cached data first
@@ -995,31 +995,43 @@ function filterRecordsByCategory(records: DiscogsRecord[], searchTerm: string, c
   
   // First filter by category
   let filteredRecords = records.filter((record) => {
+    // Skip records with missing critical data
+    if (!record.title || !record.artist) {
+      log(`Skipping record with missing data: ${record.id}`, {}, "warn");
+      return false;
+    }
+
+    const artist = record.artist.toLowerCase();
+    const title = record.title.toLowerCase();
+    const label = record.label?.toLowerCase() || "";
+    const catalogNumber = record.catalogNumber?.toLowerCase() || "";
+    
     const isVariousArtist =
-      record.artist.toLowerCase() === "various" ||
-      record.artist.toLowerCase() === "various artists" ||
-      record.title.toLowerCase().includes("various")
+      artist === "various" ||
+      artist === "various artists" ||
+      title.includes("various");
 
     switch (category) {
       case "artists":
         if (term === "various") {
-          return isVariousArtist
+          return isVariousArtist;
         }
-        return record.artist.toLowerCase().includes(term)
+        return artist.includes(term);
       case "releases":
-        return record.title.toLowerCase().includes(term)
+        return title.includes(term);
       case "labels":
-        return record.label?.toLowerCase().includes(term)
+        return label.includes(term);
       default:
+        // "everything" - search across all fields
         if (term === "various") {
-          return isVariousArtist
+          return isVariousArtist;
         }
         return (
-          record.title.toLowerCase().includes(term) ||
-          record.artist.toLowerCase().includes(term) ||
-          record.label?.toLowerCase().includes(term) ||
-          record.catalogNumber?.toLowerCase().includes(term)
-        )
+          title.includes(term) ||
+          artist.includes(term) ||
+          label.includes(term) ||
+          catalogNumber.includes(term)
+        );
     }
   })
   

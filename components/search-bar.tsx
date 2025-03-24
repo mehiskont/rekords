@@ -153,6 +153,11 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
               setIsFocused(true)
               setShowResults(true) // Show results when focused
             }}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleSubmit(e)
+              }
+            }}
             className={cn(
               "bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0",
               isCompact 

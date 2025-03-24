@@ -16,6 +16,10 @@ export async function GET(request: Request) {
       return NextResponse.json({ records: [], totalPages: 0 })
     }
 
+    // Force deep refresh to ensure we get the latest records
+    // The extra await here ensures that we get fresh data from the API
+    await fetch('/api/force-refresh', { cache: 'no-store' });
+    
     const { records, totalPages } = await getDiscogsInventory(query, undefined, page, perPage, {
       category,
       fetchFullReleaseData: true,
@@ -58,6 +62,9 @@ export async function GET(request: Request) {
           return label.includes(searchTerm)
         default:
           // "everything" - search across all fields
+          if (searchTerm === "various") {
+            return isVariousArtist
+          }
           return (
             title.includes(searchTerm) ||
             artist.includes(searchTerm) ||
