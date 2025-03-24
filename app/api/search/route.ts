@@ -19,6 +19,7 @@ export async function GET(request: Request) {
     const { records, totalPages } = await getDiscogsInventory(query, undefined, page, perPage, {
       category,
       fetchFullReleaseData: true,
+      cacheBuster: Date.now().toString(), // Always fetch fresh data
     })
 
     console.log(`Search found ${records.length} records for query "${query}"`)

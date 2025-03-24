@@ -51,14 +51,12 @@ export async function GET(request: NextRequest) {
       }
     }
 
-    // If no cache or refresh requested, fetch fresh data
-    const needsFreshData = search?.includes("admin") || !!refresh;
-    
+    // Always use fresh data with cacheBuster
     const options = {
       category,
       genre,
       fetchFullReleaseData: true,
-      ...(needsFreshData ? { cacheBuster: Date.now().toString() } : {})
+      cacheBuster: Date.now().toString()
     };
 
     const result = await getDiscogsInventory(search, sort, page, perPage, options);

@@ -19,7 +19,7 @@ export function SearchResults({ results, isLoading, query, category, onClose, is
   const displayResults = results.slice(0, 5)
 
   return (
-    <div className={`absolute z-[100] mt-2 ${isCompact ? "bg-white dark:bg-black/40" : "bg-background/90"} backdrop-blur supports-[backdrop-filter]:${isCompact ? "bg-white/95 dark:bg-black/40" : "bg-background/90"} border border-primary/10 dark:border-white/10 rounded-lg shadow-lg overflow-hidden ${isCompact ? "w-80 sm:w-96" : "left-0 right-0"}`} 
+    <div className={`absolute z-[100] mt-2 ${isCompact ? "bg-card dark:bg-black/40" : "bg-background/90"} backdrop-blur supports-[backdrop-filter]:${isCompact ? "bg-card/95 dark:bg-black/40" : "bg-background/90"} border border-primary/10 dark:border-white/10 rounded-lg shadow-lg overflow-hidden ${isCompact ? "w-80 sm:w-96" : "left-0 right-0"}`} 
       style={{ 
         position: 'absolute', 
         top: '100%', 
@@ -70,7 +70,7 @@ export function SearchResults({ results, isLoading, query, category, onClose, is
           {results.length > 5 && (
             <div className={isCompact ? "p-3 border-t border-primary/10 dark:border-white/10" : "p-4 border-t border-primary/10 dark:border-white/10"}>
               <Link
-                href={`/search?q=${encodeURIComponent(query)}&category=${category}`}
+                href={`/search?q=${encodeURIComponent(query)}&category=${category}&refresh=true`}
                 className={`block w-full text-center text-muted-foreground/70 hover:text-foreground ${isCompact ? "text-xs" : "text-sm"}`}
                 onClick={onClose}
               >
