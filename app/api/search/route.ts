@@ -27,12 +27,24 @@ export async function GET(request: Request) {
     // Filter records based on search term and category
     const searchTerm = query.toLowerCase()
     const filteredRecords = records.filter((record) => {
+      // Skip records with missing critical data
+      if (!record.title || !record.artist) {
+        console.log("Skipping record with missing data:", record.id);
+        return false;
+      }
+      
       const artist = record.artist?.toLowerCase() || ""
       const title = record.title?.toLowerCase() || ""
       const label = record.label?.toLowerCase() || ""
       const catalogNumber = record.catalogNumber?.toLowerCase() || ""
 
       const isVariousArtist = artist === "various" || artist === "various artists" || title.includes("various")
+
+      // Debug record details
+      if (title.includes(searchTerm) || artist.includes(searchTerm)) {
+        console.log(`Potential match: "${title}" by "${artist}" - includes "${searchTerm}"? ` + 
+          (title.includes(searchTerm) || artist.includes(searchTerm)));
+      }
 
       switch (category) {
         case "artists":
