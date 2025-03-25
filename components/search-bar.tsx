@@ -51,25 +51,25 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
 
     setIsLoading(true)
     try {
-      // Special handling for SUR search to ensure consistent results
-      const isSurSearch = debouncedQuery.toLowerCase() === "sur" || 
-                         debouncedQuery.toLowerCase() === "surl" || 
-                         debouncedQuery.toLowerCase() === "surltd";
+      // Determine if this is a short query (3 chars or less)
+      // Short queries may need special handling to ensure good results
+      const isShortQuery = debouncedQuery.trim().length <= 3;
       
-      // Use more aggressive caching prevention for SUR searches
-      const cacheParams = isSurSearch ? 
-        `&cacheBuster=${Date.now()}` : 
-        "";
-        
+      // Add cache prevention and use larger page size for short queries
+      // This improves result quality for short catalog numbers and IDs
       const params = new URLSearchParams({
         q: debouncedQuery,
         category,
-        per_page: isSurSearch ? "50" : "20", // Use larger page size for SUR searches
+        per_page: isShortQuery ? "50" : "20", // More results for short queries
         refresh: "true", // Always fetch fresh results
       })
+      
+      // Add cache buster for short queries to prevent stale results
+      // Short queries are more sensitive to caching issues
+      const cacheBuster = isShortQuery ? `&cacheBuster=${Date.now()}` : "";
 
-      console.log("Fetching search results:", `/api/search?${params.toString()}${cacheParams}`)
-      const response = await fetch(`/api/search?${params.toString()}${cacheParams}`, {
+      console.log("Fetching search results:", `/api/search?${params.toString()}${cacheBuster}`)
+      const response = await fetch(`/api/search?${params.toString()}${cacheBuster}`, {
         cache: "no-store",
         headers: {
           "Cache-Control": "no-cache, no-store, must-revalidate",
@@ -89,35 +89,14 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
         throw new Error(data.error)
       }
 
-      // For SUR searches, make sure SURLTD02 records are prioritized in the results
-      if (isSurSearch) {
-        const surltdRecords = data.records.filter((record: any) => {
-          if (!record) return false;
-          try {
-            const title = String(record.title || '').toLowerCase();
-            const catalogNum = String(record.catalogNumber || '').toLowerCase();
-            const id = String(record.id || '').toLowerCase();
-            
-            return title.includes('surltd') || 
-                  catalogNum.includes('surltd') || 
-                  id.includes('surltd') ||
-                  title === 'surltd02';
-          } catch (e) {
-            return false;
-          }
-        });
+      // For short queries, especially catalog-number-like searches,
+      // prioritize exact and prefix matches in the results
+      if (isShortQuery && /^[a-z0-9]{2,3}$/i.test(debouncedQuery.trim())) {
+        const shortQueryMatches = sortResultsByRelevance(data.records, debouncedQuery);
         
-        // If we found SURLTD records, make sure they come first in the results
-        if (surltdRecords.length > 0) {
-          console.log(`Found ${surltdRecords.length} SURLTD records, prioritizing them`);
-          
-          // Remove the SURLTD records from the original results to avoid duplicates
-          const otherRecords = data.records.filter((record: any) => 
-            !surltdRecords.some((surRecord: any) => surRecord.id === record.id)
-          );
-          
-          // Combine the SURLTD records with the other records
-          setResults([...surltdRecords, ...otherRecords]);
+        if (shortQueryMatches.length > 0) {
+          console.log(`Prioritizing ${shortQueryMatches.length} relevant records for short query`);
+          setResults(shortQueryMatches);
           return;
         }
       }
@@ -130,6 +109,59 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
       setIsLoading(false)
     }
   }, [debouncedQuery, category])
+
+  // Helper function to sort results by relevance for short queries
+  const sortResultsByRelevance = (records: DiscogsRecord[], query: string): DiscogsRecord[] => {
+    if (!records || records.length === 0) return [];
+    
+    const normalizedQuery = query.trim().toLowerCase();
+    
+    // Create a copy to avoid mutating the original
+    const sortedRecords = [...records];
+    
+    // Sort by relevance
+    return sortedRecords.sort((a, b) => {
+      // Extract key fields for comparison
+      const aTitle = String(a.title || '').toLowerCase();
+      const bTitle = String(b.title || '').toLowerCase();
+      const aCatalog = String(a.catalogNumber || '').toLowerCase();
+      const bCatalog = String(b.catalogNumber || '').toLowerCase();
+      const aId = String(a.id || '').toLowerCase();
+      const bId = String(b.id || '').toLowerCase();
+      
+      // Exact matches have highest priority
+      const aExactMatch = aTitle === normalizedQuery || aCatalog === normalizedQuery || aId === normalizedQuery;
+      const bExactMatch = bTitle === normalizedQuery || bCatalog === normalizedQuery || bId === normalizedQuery;
+      
+      if (aExactMatch && !bExactMatch) return -1;
+      if (!aExactMatch && bExactMatch) return 1;
+      
+      // Then prioritize prefix matches (starts with)
+      const aStartsWithMatch = aTitle.startsWith(normalizedQuery) || 
+                             aCatalog.startsWith(normalizedQuery) ||
+                             aId.startsWith(normalizedQuery);
+      const bStartsWithMatch = bTitle.startsWith(normalizedQuery) || 
+                             bCatalog.startsWith(normalizedQuery) ||
+                             bId.startsWith(normalizedQuery);
+      
+      if (aStartsWithMatch && !bStartsWithMatch) return -1;
+      if (!aStartsWithMatch && bStartsWithMatch) return 1;
+      
+      // Finally prioritize contains matches
+      const aContainsMatch = aTitle.includes(normalizedQuery) || 
+                           aCatalog.includes(normalizedQuery) ||
+                           aId.includes(normalizedQuery);
+      const bContainsMatch = bTitle.includes(normalizedQuery) || 
+                           bCatalog.includes(normalizedQuery) ||
+                           bId.includes(normalizedQuery);
+                           
+      if (aContainsMatch && !bContainsMatch) return -1;
+      if (!aContainsMatch && bContainsMatch) return 1;
+      
+      // If all else is equal, maintain original order
+      return 0;
+    });
+  };
 
   useEffect(() => {
     fetchResults()
