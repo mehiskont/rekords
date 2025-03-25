@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getDiscogsInventory } from "@/lib/discogs"
+import { getDiscogsInventory, invalidateInventoryCache } from "@/lib/discogs"
 import { serializeForClient } from "@/lib/utils"
 import { getCachedData, setCachedData } from "@/lib/redis"
 import { log } from "@/lib/logger"
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
   const sort = searchParams.get('sort') || "date-desc"
   const page = parseInt(searchParams.get('page') || "1")
   const perPage = 20
-  const refresh = searchParams.get('refresh') || undefined
+  const refresh = searchParams.get('refresh') === 'true'
   const includeAllFields = searchParams.get('include_all_fields') === 'true'
   
   // Log all search parameters for debugging
@@ -21,28 +21,28 @@ export async function GET(request: NextRequest) {
     category, 
     genre, 
     sort, 
-    page, 
+    page,
+    refresh,
     includeAllFields 
   }, "info")
-
+  
   // Create a unique cache key for this view
   const viewCacheKey = `view:${search || "all"}:${category}:${genre || "all"}:${sort}:${page}:${perPage}`;
-  let records = [];
-  let totalRecords = 0;
-  let totalPages = 1;
-  let usedCache = false;
 
   try {
-    // Always use fresh data, disable all caching
-    log(`Fetching fresh data for ${viewCacheKey}`, {}, "info");
-
-    // Always use fresh data with cacheBuster
+    // Use central inventory cache via getDiscogsInventory
+    // The refresh parameter will bypass cache if needed
     const options = {
       category,
       genre,
       fetchFullReleaseData: true,
-      cacheBuster: Date.now().toString()
+      skipCache: refresh // Only skip cache if refresh parameter is true
     };
+
+    // If this is a search and refresh parameter is set, invalidate the cache
+    if (search && refresh) {
+      log(`Force refreshing cache for search: ${search}`, {}, "info");
+    }
 
     const result = await getDiscogsInventory(search, sort, page, perPage, options);
     
@@ -116,20 +116,17 @@ export async function GET(request: NextRequest) {
     }
     
     // Serialize records before returning
-    records = filteredRecords.map((record) => serializeForClient(record));
-    totalRecords = records.length;
-    totalPages = Math.ceil(totalRecords / perPage);
+    const serializedRecords = filteredRecords.map((record) => serializeForClient(record));
+    const totalRecords = serializedRecords.length;
+    const totalPages = Math.ceil(totalRecords / perPage);
     
-    // Disable caching completely
-    log(`Skipping view cache for ${viewCacheKey}`, {}, "info");
-
-    // Return fresh data
+    // Return the data with cache information
     return NextResponse.json({
-      records,
+      records: serializedRecords,
       totalRecords,
       totalPages,
       page,
-      fromCache: false
+      fromCache: !refresh && !options.skipCache
     });
   } catch (error) {
     log("Failed to fetch records:", error, "error");

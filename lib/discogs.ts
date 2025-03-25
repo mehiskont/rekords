@@ -7,6 +7,19 @@ import { prisma } from "@/lib/prisma"
 const CACHE_TTL = 86400 // 24 hours
 const BASE_URL = "https://api.discogs.com"
 
+// Central data store - keeps the latest inventory in memory for filtering across components
+let centralInventoryCache: {
+  records: DiscogsRecord[];
+  lastUpdated: number;
+  updating: boolean;
+  totalPages: number;
+} = {
+  records: [],
+  lastUpdated: 0,
+  updating: false,
+  totalPages: 0
+};
+
 // Create a batch processor for shipping price requests with improved caching and rate limiting
 const shippingPriceProcessor = new BatchProcessor<string, number>(
   async (listingIds) => {
@@ -359,6 +372,26 @@ function logApiError(endpoint: string, error: any) {
   })
 }
 
+export async function invalidateInventoryCache() {
+  log("Invalidating inventory cache after purchase", {}, "info");
+  // Clear the central inventory cache
+  centralInventoryCache = {
+    records: [],
+    lastUpdated: 0,
+    updating: false,
+    totalPages: 0
+  };
+  
+  // Clear Redis caches for inventory
+  await setCachedData('inventory:cache_status', JSON.stringify({
+    invalidated: true,
+    timestamp: Date.now()
+  }), 3600); // Store invalidation flag for 1 hour
+  
+  // Clear all inventory-related caches
+  return getCachedData('inventory:*');
+}
+
 export async function removeFromDiscogsInventory(listingId: string): Promise<boolean> {
   log(`Attempting to remove listing ${listingId} from Discogs inventory`)
 
@@ -380,6 +413,8 @@ export async function removeFromDiscogsInventory(listingId: string): Promise<boo
 
     if (response.ok) {
       log(`Successfully removed listing ${listingId} from Discogs inventory`)
+      // Invalidate cache after successful removal
+      await invalidateInventoryCache();
       return true
     } else {
       const errorText = await response.text()
@@ -479,6 +514,8 @@ export async function updateDiscogsInventory(
             
             if (oauthResult) {
               log(`✅ Successfully deleted listing ${listingId} using OAuth fallback`)
+              // Invalidate cache after successful removal
+              await invalidateInventoryCache();
               return true
             }
           } catch (oauthError) {
@@ -489,6 +526,8 @@ export async function updateDiscogsInventory(
         }
         
         log(`✅ Successfully deleted listing ${listingId}`)
+        // Invalidate cache after successful deletion
+        await invalidateInventoryCache();
         return true
       } else {
         // Update quantity - critical to get this right
@@ -533,6 +572,8 @@ export async function updateDiscogsInventory(
             
             if (oauthResult) {
               log(`✅ Successfully updated listing ${listingId} using OAuth fallback`)
+              // Invalidate cache after successful update  
+              await invalidateInventoryCache();
               return true
             }
           } catch (oauthError) {
@@ -551,6 +592,8 @@ export async function updateDiscogsInventory(
         }
         
         log(`✅ Successfully updated listing ${listingId} quantity to ${newQuantity}`)
+        // Invalidate cache after successful update
+        await invalidateInventoryCache();
         return true
       }
     } catch (error) {
@@ -576,6 +619,9 @@ export async function updateDiscogsInventory(
           const deleteResult = await deleteDiscogsListing(listingId);
           log(deleteResult ? `✅ OAuth fallback: successfully deleted listing ${listingId}` : 
                            `❌ OAuth fallback: failed to delete listing ${listingId}`)
+          if (deleteResult) {
+            await invalidateInventoryCache();
+          }
           return deleteResult
         } else {
           // Update quantity
@@ -584,6 +630,9 @@ export async function updateDiscogsInventory(
           const updateResult = await updateDiscogsListingQuantity(listingId, newQty);
           log(updateResult ? `✅ OAuth fallback: successfully updated listing ${listingId}` : 
                            `❌ OAuth fallback: failed to update listing ${listingId}`)
+          if (updateResult) {
+            await invalidateInventoryCache();
+          }
           return updateResult
         }
       } catch (oauthError) {
@@ -613,7 +662,82 @@ async function fetchWithAuth(url: string, options: RequestInit = {}) {
   })
 }
 
-export async function getDiscogsInventory(
+// Helper function to fetch and refresh the central inventory cache
+async function refreshCentralInventory(forceRefresh = false): Promise<boolean> {
+  // If we're already updating, don't start another update
+  if (centralInventoryCache.updating) {
+    return false;
+  }
+  
+  // Check if we need to refresh
+  const now = Date.now();
+  const cacheAge = now - centralInventoryCache.lastUpdated;
+  const needsRefresh = forceRefresh || 
+                       centralInventoryCache.records.length === 0 || 
+                       cacheAge > 5 * 60 * 1000; // 5 minutes
+  
+  if (!needsRefresh) {
+    return false; // Cache is still fresh
+  }
+  
+  // Check if cache was invalidated
+  try {
+    const invalidationStatus = await getCachedData('inventory:cache_status');
+    if (invalidationStatus) {
+      const status = JSON.parse(invalidationStatus);
+      if (status.invalidated && (now - status.timestamp < 60 * 60 * 1000)) { // Within the last hour
+        // Cache was explicitly invalidated, force refresh
+        forceRefresh = true;
+      }
+    }
+  } catch (error) {
+    // Ignore errors reading invalidation status
+  }
+  
+  try {
+    centralInventoryCache.updating = true;
+    
+    // Fetch all inventory
+    log("Refreshing central inventory cache", { forceRefresh }, "info");
+    
+    const result = await getDiscogsInventoryDirectly(undefined, "date-desc", 1, 100, {
+      fetchFullReleaseData: true,
+      skipCache: forceRefresh,
+    });
+    
+    // Filter to ensure only available records
+    const filteredRecords = result.records.filter(record => 
+      record && 
+      record.quantity_available > 0 && 
+      record.status === "For Sale" &&
+      record.price > 0
+    );
+    
+    centralInventoryCache = {
+      records: filteredRecords,
+      lastUpdated: now,
+      updating: false,
+      totalPages: result.totalPages
+    };
+    
+    // If cache was invalidated, mark it as valid again
+    await setCachedData('inventory:cache_status', JSON.stringify({
+      invalidated: false,
+      timestamp: now
+    }), 3600);
+    
+    log(`Central inventory cache refreshed with ${filteredRecords.length} records`, {}, "info");
+    return true;
+  } catch (error) {
+    log("Error refreshing central inventory", error, "error");
+    centralInventoryCache.updating = false;
+    return false;
+  }
+}
+
+// Direct API call to Discogs without going through central cache
+// This is used by the central cache refresh mechanism
+async function getDiscogsInventoryDirectly(
   search?: string,
   sort?: string,
   page = 1,
@@ -623,11 +747,12 @@ export async function getDiscogsInventory(
   // Generate cache key based on request parameters
   const cacheKey = `inventory:${search || "all"}:${sort || "default"}:${page}:${perPage}:${options.category || "all"}:${options.sort || ""}:${options.sort_order || ""}`;
   
-  // Always skip cache - we want fresh data every time
-  const useCache = false;
+  // Use cache by default with shorter TTL for better performance
+  // Set skipCache to true to bypass cache
+  const useCache = !(options.cacheBuster || options.skipCache);
+  const cacheTTL = 300; // 5 minutes TTL for inventory data
   
-  // This code never runs, but kept for historical reference
-  if (false) {
+  if (useCache) {
     try {
       // Try to get cached data first
       const cachedData = await getCachedData(cacheKey);
@@ -865,8 +990,11 @@ export async function getDiscogsInventory(
       }
     }
 
-    // Disable caching and log results
-    log(`Got ${result.records.length} records from Discogs (no caching)`, {}, "info");
+    // Cache the result with a short TTL
+    if (!options.skipCache) {
+      log(`Caching inventory result with ${result.records.length} records for ${cacheTTL} seconds`, {}, "info");
+      setCachedData(cacheKey, JSON.stringify(result), cacheTTL);
+    }
     
     // Log first 3 records for debugging
     if (result.records.length > 0) {
@@ -890,19 +1018,172 @@ export async function getDiscogsInventory(
   }
 }
 
+// Main function that uses the central inventory cache
+export async function getDiscogsInventory(
+  search?: string,
+  sort?: string,
+  page = 1,
+  perPage = 50,
+  options: DiscogsInventoryOptions = {},
+): Promise<{ records: DiscogsRecord[]; totalPages: number; pagination?: any }> {
+  try {
+    // Special case for search with force refresh parameter
+    if (options.cacheBuster || options.skipCache) {
+      // Bypass central cache and go directly to the API
+      return getDiscogsInventoryDirectly(search, sort, page, perPage, options);
+    }
+    
+    // Ensure central inventory is loaded and fresh
+    // This will only refresh if needed (older than 5 minutes)
+    await refreshCentralInventory(false);
+    
+    if (centralInventoryCache.records.length === 0) {
+      // If central cache is still empty after refresh attempt, go directly to API
+      return getDiscogsInventoryDirectly(search, sort, page, perPage, options);
+    }
+    
+    // Use the central cache and filter/sort locally
+    let filteredRecords = [...centralInventoryCache.records];
+    
+    // Apply search filtering if needed
+    if (search) {
+      const searchTerm = search.toLowerCase();
+      filteredRecords = filteredRecords.filter(record => {
+        // Build searchable text from all record fields
+        const allFieldsText = [
+          record.title.toLowerCase(),
+          record.artist.toLowerCase(),
+          record.label?.toLowerCase() || "",
+          record.catalogNumber?.toLowerCase() || "",
+          record.release?.toString().toLowerCase() || "",
+          record.country?.toLowerCase() || "",
+          record.format?.join(" ").toLowerCase() || "",
+          record.styles?.join(" ").toLowerCase() || "",
+          record.genres?.join(" ").toLowerCase() || ""
+        ].join(" ");
+        
+        return allFieldsText.includes(searchTerm);
+      });
+    }
+    
+    // Apply category and genre filtering
+    if ((options.category && options.category !== "everything") || options.genre) {
+      filteredRecords = filterRecordsByCategory(filteredRecords, search || "", options.category || "everything", options.genre);
+    }
+    
+    // Apply sorting
+    if (sort) {
+      const sortOrder = sort.endsWith("-desc") ? -1 : 1;
+      
+      if (sort.startsWith("date")) {
+        filteredRecords.sort((a, b) => {
+          const dateA = new Date(a.date_added || 0).getTime();
+          const dateB = new Date(b.date_added || 0).getTime();
+          return (dateB - dateA) * sortOrder;
+        });
+      } else if (sort.startsWith("price")) {
+        filteredRecords.sort((a, b) => {
+          const priceA = a.price || 0;
+          const priceB = b.price || 0;
+          return (priceA - priceB) * sortOrder;
+        });
+      } else if (sort.startsWith("title")) {
+        filteredRecords.sort((a, b) => {
+          const titleA = a.title.toLowerCase();
+          const titleB = b.title.toLowerCase();
+          return titleA.localeCompare(titleB) * sortOrder;
+        });
+      }
+    } else {
+      // Default sort is by date, newest first
+      filteredRecords.sort((a, b) => {
+        const dateA = new Date(a.date_added || 0).getTime();
+        const dateB = new Date(b.date_added || 0).getTime();
+        return dateB - dateA;
+      });
+    }
+    
+    // Paginate results
+    const totalRecords = filteredRecords.length;
+    const totalPages = Math.ceil(totalRecords / perPage);
+    const start = (page - 1) * perPage;
+    const end = start + perPage;
+    const pageRecords = filteredRecords.slice(start, end);
+    
+    log(`Served ${pageRecords.length} records from central cache (filtered from ${totalRecords} total)`, {}, "info");
+    
+    return {
+      records: pageRecords,
+      totalPages,
+      pagination: {
+        total: totalRecords,
+        pages: totalPages,
+        currentPage: page,
+        perPage
+      }
+    };
+  } catch (error) {
+    // If anything goes wrong with the central cache, fall back to direct API call
+    log("Error using central cache, falling back to direct API call", error, "warn");
+    return getDiscogsInventoryDirectly(search, sort, page, perPage, options);
+  }
+}
+
 export async function getDiscogsRecord(
   id: string,
   options?: { skipCache?: boolean }
 ): Promise<{ record: DiscogsRecord | null; relatedRecords: DiscogsRecord[] }> {
-  // Always fetch fresh record data - no caching
+  const useCache = !(options?.skipCache);
+  const cacheKey = `record:${id}`;
 
   try {
+    // Try central inventory cache first for better performance
+    await refreshCentralInventory(false);
+    
+    // Look for the record in the central cache
+    const recordFromCache = centralInventoryCache.records.find(r => r.id === Number(id));
+    
+    if (recordFromCache) {
+      log(`Found record ${id} in central cache`, {}, "info");
+      
+      // Get related records from the central cache
+      const relatedRecords = centralInventoryCache.records
+        .filter(r => 
+          r.id !== recordFromCache.id &&
+          r.release !== recordFromCache.release &&
+          r.quantity_available > 0 &&
+          r.status === "For Sale"
+        )
+        .slice(0, 6);
+      
+      log(`Found ${relatedRecords.length} related records from central cache`, {}, "info");
+      
+      return { record: recordFromCache, relatedRecords };
+    }
+    
+    // If not in central cache, check Redis cache
+    if (useCache) {
+      const cachedData = await getCachedData(cacheKey);
+      if (cachedData) {
+        try {
+          const parsed = JSON.parse(cachedData);
+          if (parsed && typeof parsed === 'object' && parsed.record) {
+            log(`Using cached record data for ${id}`, {}, "info");
+            return parsed;
+          }
+        } catch (error) {
+          log(`Error parsing cached record data for ${id}`, error, "warn");
+        }
+      }
+    }
+    
+    // If nothing found in caches, fetch from API
     const response = await fetchWithRetry(`${BASE_URL}/marketplace/listings/${id}`, {
       headers: {
         Authorization: `Discogs token=${process.env.DISCOGS_API_TOKEN}`,
         "User-Agent": "PlastikRecordStore/1.0",
       },
-    })
+    });
 
     // Check for circuit breaker synthetic response
     const isCircuitBreaker = response.headers.get("X-Circuit-Breaker") === "true";
@@ -910,97 +1191,92 @@ export async function getDiscogsRecord(
     if (isCircuitBreaker) {
       log("Circuit breaker active for Discogs API when fetching record - attempting fallback", {}, "warn");
       // Try to get a cached version if available
-      const cacheKey = `record:${id}`
-      const cachedData = await getCachedData(cacheKey)
+      const cachedData = await getCachedData(cacheKey);
       if (cachedData) {
         try {
-          const parsed = JSON.parse(cachedData)
+          const parsed = JSON.parse(cachedData);
           if (parsed && typeof parsed === 'object' && parsed.record) {
-            log(`Using cached record data for ${id} due to circuit breaker`, {}, "info")
-            return parsed
+            log(`Using cached record data for ${id} due to circuit breaker`, {}, "info");
+            return parsed;
           }
         } catch (parseError) {
           // Continue with null response if cache parsing fails
-          log(`Error parsing cached record data for ${id}`, parseError, "warn")
+          log(`Error parsing cached record data for ${id}`, parseError, "warn");
         }
       }
       // If no cache or invalid cache, return null record
-      return { record: null, relatedRecords: [] }
+      return { record: null, relatedRecords: [] };
     }
     
-    const data = await response.json()
+    const data = await response.json();
 
     if (!response.ok || data.status !== "For Sale" || data.quantity === 0) {
-      return { record: null, relatedRecords: [] }
+      return { record: null, relatedRecords: [] };
     }
 
     // Get full release data which contains videos and tracklist
-    const fullRelease = await fetchFullReleaseData(data.release.id.toString())
+    const fullRelease = await fetchFullReleaseData(data.release.id.toString());
     
     // Log release data to debug videos and tracklist
     log(`Release data for ${id}:`, {
       has_videos: fullRelease.videos ? fullRelease.videos.length : 0,
       has_tracklist: fullRelease.tracklist ? fullRelease.tracklist.length : 0,
       has_processed_tracks: fullRelease.processedTracks ? fullRelease.processedTracks.length : 0,
-    }, "info")
+    }, "info");
     
     const record = await mapListingToRecord({
       ...data,
       release: { ...data.release, ...fullRelease },
-    })
+    });
     
-    // Log the final record object to see if tracks and videos are included
-    log(`Final record for ${id}:`, {
-      has_videos: record.videos ? record.videos.length : 0,
-      has_tracks: record.tracks ? record.tracks.length : 0,
-    }, "info")
-
-    // Get related records using a simpler query with minimal fields
-    // We'll fetch a fresh copy of inventory to ensure we have the latest available items
-    const { records: allRelatedRecords } = await getDiscogsInventory(undefined, undefined, 1, 20, {
-      fetchFullReleaseData: false, // Don't fetch full release data for related records
-      cacheBuster: Date.now().toString() // Bypass cache to get fresh inventory
-    })
+    // Get related records from central inventory cache if available
+    let relatedRecords: DiscogsRecord[] = [];
     
-    // Apply more strict filtering to ensure we're only showing available records
-    const relatedRecords = allRelatedRecords
-      .filter(
-        (relatedRecord) =>
-          // Don't show the current record
-          relatedRecord.id !== record.id &&
-          // Don't show records from the same release
-          relatedRecord.release !== record.release &&
-          // Ensure the record is actually available
-          relatedRecord.quantity_available > 0 &&
-          // Ensure "For Sale" status
-          relatedRecord.status === "For Sale"
-      )
-      // Limit to 6 related records
-      .slice(0, 6)
+    if (centralInventoryCache.records.length > 0) {
+      relatedRecords = centralInventoryCache.records
+        .filter(r => 
+          r.id !== record.id &&
+          r.release !== record.release &&
+          r.quantity_available > 0 &&
+          r.status === "For Sale"
+        )
+        .slice(0, 6);
       
-    // Log the related records for debugging
-    log(`Found ${relatedRecords.length} related records for ${record.title}`, 
-      relatedRecords.map(r => ({id: r.id, title: r.title, qty: r.quantity_available}))
-    )
+      log(`Found ${relatedRecords.length} related records from central cache`, {}, "info");
+    } else {
+      // If central cache is empty, fetch related records via API
+      const { records: allRelatedRecords } = await getDiscogsInventoryDirectly(undefined, undefined, 1, 20, {
+        skipCache: false
+      });
+      
+      relatedRecords = allRelatedRecords
+        .filter(
+          (relatedRecord) =>
+            relatedRecord.id !== record.id &&
+            relatedRecord.release !== record.release &&
+            relatedRecord.quantity_available > 0 &&
+            relatedRecord.status === "For Sale"
+        )
+        .slice(0, 6);
+    }
 
-    const result = { record, relatedRecords }
+    const result = { record, relatedRecords };
 
-    // Cache record data for 30 minutes to provide a fallback during circuit breaker activation
-    const cacheKey = `record:${id}`
-    setCachedData(cacheKey, JSON.stringify(result), 30 * 60)  // 30 minutes
+    // Cache record data for 5 minutes
+    setCachedData(cacheKey, JSON.stringify(result), 5 * 60);
 
-    return result
+    return result;
   } catch (error) {
     // Log the error
-    log("Error fetching record details: " + (error instanceof Error ? error.message : String(error)), {}, "error")
+    log("Error fetching record details: " + (error instanceof Error ? error.message : String(error)), {}, "error");
     
     // Return empty result
-    return { record: null, relatedRecords: [] }
+    return { record: null, relatedRecords: [] };
   }
 }
 
 function filterRecordsByCategory(records: DiscogsRecord[], searchTerm: string, category: string, genre?: string): DiscogsRecord[] {
-  const term = searchTerm.toLowerCase()
+  const term = searchTerm.toLowerCase();
   
   // First filter by category
   let filteredRecords = records.filter((record) => {
@@ -1057,7 +1333,7 @@ function filterRecordsByCategory(records: DiscogsRecord[], searchTerm: string, c
           catalogNumber.includes(term)
         );
     }
-  })
+  });
   
   // Then filter by genre if specified
   if (genre && genre !== "all") {
@@ -1070,4 +1346,3 @@ function filterRecordsByCategory(records: DiscogsRecord[], searchTerm: string, c
   
   return filteredRecords;
 }
-

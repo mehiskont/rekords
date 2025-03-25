@@ -9,15 +9,14 @@ export async function NewArrivals() {
   let serializedRecords = [];
 
   try {
-    // Always fetch fresh data for new arrivals
-    log("Fetching fresh new arrivals data", {}, "info");
+    // Use the regular getDiscogsInventory which will use central cache
+    log("Fetching new arrivals data from central cache", {}, "info");
     
-    // Force fresh data with cacheBuster
-    const { records } = await getDiscogsInventory(undefined, undefined, 1, 15, {
+    const { records } = await getDiscogsInventory(undefined, "date-desc", 1, 15, {
+      // No need to set cacheBuster since central cache is already refreshed periodically
       sort: "listed",
       sort_order: "desc",
       fetchFullReleaseData: true,
-      cacheBuster: Date.now().toString() // Force fresh data
     });
 
     if (!records || records.length === 0) {

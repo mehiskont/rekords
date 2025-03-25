@@ -1,5 +1,40 @@
 # Plastik
 
+## Supabase Integration
+
+This project supports integration with Supabase for database and authentication services.
+
+### Setting up Supabase
+
+1. Create a Supabase project at [supabase.com](https://supabase.com)
+2. Copy your Supabase URL and anon key from the project settings
+3. Update the `.env.supabase` file with your credentials:
+
+```
+NEXT_PUBLIC_SUPABASE_URL=your-project-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+DATABASE_URL=postgresql://postgres:password@db.your-project-id.supabase.co:6543/postgres?pgbouncer=true
+DIRECT_URL=postgresql://postgres:password@db.your-project-id.supabase.co:5432/postgres
+```
+
+4. To switch to Supabase, update your environment configuration:
+
+```bash
+cp .env.supabase .env.local
+```
+
+5. Test the connection:
+
+```bash
+npx ts-node scripts/test-supabase-connection.ts
+```
+
+### Using the MCP Supabase Tool
+
+The project includes a Model Control Plane (MCP) tool for Claude to interact with Supabase. This tool provides functions for querying, inserting, updating, and deleting data.
+
+See the `MCP-SUPABASE-TOOL.md` file for detailed documentation on using this tool.
+
 ## Environment Variables Setup
 
 This project uses environment variables for configuration. Follow these guidelines for proper setup:
@@ -105,12 +140,5 @@ This application supports automated deployments using GitHub webhooks. When set 
 
 ### Manual Scripts
 ```bash
-# Add cart tables if migrations failed
-node scripts/add-cart-tables.js
-```
-
-# tax info fixes for production
- 1. First run the simple fix to ensure billing address data is correctly formatted:
-  node scripts/fix-tax-details.js
-  2. If you want to verify against Stripe data, run the metadata check script (requires Stripe API key):
-  node scripts/fix-tax-metadata.js
+# with supabase
+npm run dev:supabase

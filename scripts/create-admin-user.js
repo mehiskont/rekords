@@ -11,8 +11,8 @@ async function createAdminUser() {
       where: { email: 'admin@example.com' }
     });
     
-    // Create new admin user
-    const hashedPassword = await bcrypt.hash('admin123', 10);
+    // Create new admin user with a secure password (should be changed immediately)
+    const hashedPassword = await bcrypt.hash('ADMIN_PASSWORD_PLACEHOLDER', 10);
     const adminUser = await prisma.user.create({
       data: {
         name: 'Admin User',

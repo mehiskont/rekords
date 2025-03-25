@@ -17,9 +17,9 @@ git pull origin main
 echo "Installing dependencies..."
 npm install --legacy-peer-deps
 
-# Run database migrations
-echo "Running database migrations..."
-npx prisma migrate deploy
+# Run database migrations (using Supabase schema)
+echo "Running database migrations with Supabase schema..."
+npx prisma db push --schema=./prisma/schema.supabase.prisma
 
 # Build the application
 echo "Building application..."

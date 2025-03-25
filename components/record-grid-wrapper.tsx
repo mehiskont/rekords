@@ -47,11 +47,15 @@ export default function RecordGridWrapper({
         if (sort) params.set("sort", sort)
         params.set("page", page.toString())
         
-        // Always force refresh for search queries
-        params.set("refresh", "true")
-        
-        // Update timestamp to ensure we break through browser cache
-        params.set("_ts", Date.now().toString())
+        // Only force refresh on explicit user action (like search)
+        // This helps with performance by using the central cache
+        const isSearchAction = search && search.trim().length > 0
+        if (isSearchAction) {
+          params.set("refresh", "true")
+        } else {
+          // For regular browsing, use cached data
+          params.set("refresh", "false")
+        }
         
         // If searching for specific terms that might be in catalog numbers
         if (search && (search.toUpperCase().includes('SURLTD') || search.includes('SUR'))) {
@@ -64,14 +68,7 @@ export default function RecordGridWrapper({
         
         console.log("Fetching records with params:", params.toString())
         
-        const response = await fetch(`/api/records?${params.toString()}`, {
-          cache: "no-store",
-          headers: {
-            "Cache-Control": "no-cache, no-store, must-revalidate",
-            "Pragma": "no-cache",
-            "Expires": "0"
-          }
-        })
+        const response = await fetch(`/api/records?${params.toString()}`)
         
         if (!response.ok) {
           throw new Error("Failed to fetch records")

@@ -4,12 +4,17 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:supabase": "node start-supabase.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "test:db": "node -r dotenv/config scripts/verify-db.js",
     "test:connections": "node -r dotenv/config scripts/test-connections.js",
     "test:final": "node -r dotenv/config scripts/verify-final.js",
+    "test:supabase": "node scripts/test-supabase-connection.ts",
+    "supabase:setup": "node scripts/setup-supabase.js",
+    "supabase:schema": "prisma db push --schema=./prisma/schema.supabase.prisma",
+    "supabase:test-mcp": "node scripts/test-mcp-js.js",
     "fix:migrations": "node scripts/fix-migrations.js",
     "postinstall": "prisma generate",
     "prisma:deploy": "prisma migrate deploy"
@@ -48,6 +53,7 @@
     "@radix-ui/react-tooltip": "^1.1.6",
     "@stripe/react-stripe-js": "^3.1.1",
     "@stripe/stripe-js": "^5.6.0",
+    "@supabase/supabase-js": "^2.49.3",
     "@types/react": "latest",
     "@types/react-dom": "latest",
     "@upstash/redis": "^1.34.4",
@@ -97,6 +103,7 @@
     "@types/react-dom": "^18",
     "postcss": "^8",
     "tailwindcss": "^3.4.17",
+    "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5"
   }
