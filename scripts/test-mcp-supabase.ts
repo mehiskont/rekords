@@ -60,7 +60,7 @@ async function testMcpSupabaseTool() {
   console.log("\nMCP Supabase Tool tests completed!");
 }
 
-// Run the tests
+// Run the tests  !
 testMcpSupabaseTool().catch(error => {
   console.error("Error during tests:", error);
   process.exit(1);
