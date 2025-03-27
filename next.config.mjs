@@ -30,6 +30,14 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  env: {
+    // Ensure Supabase variables are available during build
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    
+    // Add fallback for build process
+    BUILD_DATABASE_FALLBACK: 'true'
+  },
 }
 
 mergeConfig(nextConfig, userConfig)

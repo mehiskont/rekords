@@ -1,9 +1,24 @@
 import { NextResponse } from 'next/server';
-import supabase from '../../../lib/supabase';
 import { db } from '../../../lib/database';
 
 export async function GET() {
   try {
+    // Check if Supabase credentials are available
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
+      return NextResponse.json({ 
+        success: false, 
+        error: 'Missing Supabase credentials',
+        requiredEnvVars: [
+          'NEXT_PUBLIC_SUPABASE_URL', 
+          'NEXT_PUBLIC_SUPABASE_ANON_KEY'
+        ],
+        envValues: {
+          NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ? 'SET' : 'MISSING',
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ? 'SET' : 'MISSING',
+        }
+      }, { status: 500 });
+    }
+    
     // Try using our database helper that handles fallbacks
     const users = await db.getUsers();
     
@@ -18,32 +33,13 @@ export async function GET() {
   } catch (error) {
     console.error('Database connection error:', error);
     
-    // Fallback to direct Supabase test if db helper fails
-    try {
-      const { data, error: supabaseError } = await supabase.from('users').select('count');
-      
-      if (supabaseError) {
-        return NextResponse.json(
-          { success: false, error: supabaseError.message },
-          { status: 500 }
-        );
-      }
-      
-      return NextResponse.json({ 
-        success: true, 
-        message: 'Supabase connection successful (direct)',
-        data
-      });
-    } catch (supabaseError) {
-      return NextResponse.json(
-        { 
-          success: false, 
-          error: 'Both database connection methods failed',
-          primaryError: error.message,
-          supabaseError: supabaseError.message
-        },
-        { status: 500 }
-      );
-    }
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: 'Database connection failed',
+        message: error.message
+      },
+      { status: 500 }
+    );
   }
 } 

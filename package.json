@@ -6,6 +6,7 @@
     "dev": "next dev",
     "dev:supabase": "node start-supabase.js",
     "build": "next build",
+    "build:fallback": "node build-with-fallback.js",
     "start": "next start",
     "lint": "next lint",
     "test:db": "node -r dotenv/config scripts/verify-db.js",
