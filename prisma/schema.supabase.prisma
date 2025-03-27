@@ -7,10 +7,10 @@ generator client {
 
 datasource db {
   provider  = "postgresql"
-  // Use the direct URL for migrations, schema push, etc.
-  url       = env("DIRECT_URL")
-  // Use the connection pooling URL for the Prisma client
-  directUrl = env("DIRECT_URL")
+  // Use only the connection pooling URL (port 6543) for all operations
+  url       = env("DATABASE_URL")
+  // Comment out directUrl temporarily to force using only the pooler URL
+  // directUrl = env("DIRECT_URL")
 }
 
 // User model 
