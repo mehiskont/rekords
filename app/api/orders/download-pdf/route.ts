@@ -1,13 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '@/lib/auth';
-import { getOrderById } from '@/lib/orders';
 import { log } from '@/lib/logger';
 import { formatDate } from '@/lib/utils';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 
+const EXTERNAL_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export async function GET(request: NextRequest) {
+  if (!EXTERNAL_API_URL) {
+     log("External API URL not configured", "error");
+     return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
+  }
+
   try {
     // Check if user is authenticated
     const session = await getServerSession(authOptions);
@@ -29,28 +35,70 @@ export async function GET(request: NextRequest) {
       });
     }
 
-    // Fetch order data
-    const order = await getOrderById(orderId);
+    let order;
+    try {
+      // Fetch order data from external API
+      // TODO: Add appropriate Authorization header using session token if required by the external API
+      const response = await fetch(`${EXTERNAL_API_URL}/api/orders/${orderId}`, {
+         method: 'GET',
+         headers: {
+            'Content-Type': 'application/json',
+            // Example Authorization header (adjust based on your auth strategy):
+            // 'Authorization': `Bearer ${session.accessToken}`
+         }
+      });
 
+      if (response.status === 404) {
+        log(`Order not found in external API: ${orderId}`, "warn");
+        return new NextResponse(JSON.stringify({ error: 'Order not found' }), {
+          status: 404,
+          headers: { 'Content-Type': 'application/json' }
+        });
+      }
+
+      if (!response.ok) {
+         const errorBody = await response.text();
+         log(`Failed to fetch order ${orderId} from external API: ${response.status} - ${errorBody}`, "error");
+         throw new Error(`Failed to fetch order: ${response.statusText}`);
+      }
+
+      order = await response.json();
+      // TODO: Validate the structure of 'order' fetched from the API
+      // Ensure it matches the structure expected by generateOrderPdf
+      log(`Fetched order ${orderId} from external API successfully.`);
+
+    } catch (fetchError) {
+       log(`Error fetching order ${orderId} from external API: ${fetchError instanceof Error ? fetchError.message : String(fetchError)}`, "error");
+       return new NextResponse(JSON.stringify({ error: 'Failed to retrieve order details' }), {
+          status: 500, // Internal Server Error or appropriate status
+          headers: { 'Content-Type': 'application/json' }
+       });
+    }
+
+    // Ensure order data was actually fetched and parsed
     if (!order) {
-      return new NextResponse(JSON.stringify({ error: 'Order not found' }), {
-        status: 404,
+      // This case should ideally be caught by the fetch error handling, but as a safeguard:
+      log(`Order data object is unexpectedly null/undefined after fetch for order ID: ${orderId}`, "error");
+      return new NextResponse(JSON.stringify({ error: 'Failed to process order data' }), {
+        status: 500,
         headers: { 'Content-Type': 'application/json' }
       });
     }
 
-    // Check if order belongs to the current user
+
+    // Check if order belongs to the current user (using userId from fetched order)
+    // Important: Ensure the external API includes userId in the response
     if (order.userId !== session.user.id) {
       log(`Unauthorized PDF download attempt: ${orderId}, user: ${session.user.id}`, "warn");
       return new NextResponse(JSON.stringify({ error: 'You don\'t have permission to access this order' }), {
-        status: 403,
+        status: 403, // Forbidden
         headers: { 'Content-Type': 'application/json' }
       });
     }
 
     // Generate PDF
-    const pdf = generateOrderPdf(order);
-    
+    const pdf = generateOrderPdf(order); // Use the order fetched from API
+
     // Return PDF document
     return new NextResponse(pdf, {
       status: 200,
@@ -60,7 +108,8 @@ export async function GET(request: NextRequest) {
       }
     });
   } catch (error) {
-    log('Error generating PDF:', error);
+    log(`Error generating PDF for order: ${error instanceof Error ? error.message : String(error)}`, 'error');
+    // Avoid leaking specific error details in production
     return new NextResponse(JSON.stringify({ error: 'Failed to generate PDF' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
@@ -73,14 +122,17 @@ function generateOrderPdf(order: any) {
   const doc = new jsPDF();
   
   // Function to format currency
-  const formatCurrency = (amount: number) => `$${amount.toFixed(2)}`;
+  const formatCurrency = (amount: number | string | null | undefined): string => {
+     const num = Number(amount); // Convert potential string amounts
+     return !isNaN(num) ? `$${num.toFixed(2)}` : '$0.00';
+  };
   
   // Detect pickup or delivery
   const isLocalPickup = order.billingAddress?.localPickup === true || order.billingAddress?.localPickup === "true";
   
   // Calculate subtotal and shipping
-  const subtotal = order.items.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0);
-  const shipping = order.total - subtotal;
+  const subtotal = order.items?.reduce((acc: number, item: any) => acc + (Number(item.price || 0) * Number(item.quantity || 0)), 0) || 0;
+  const shipping = (Number(order.total || 0)) - subtotal;
 
   // Add header
   doc.setFontSize(20);
@@ -93,9 +145,9 @@ function generateOrderPdf(order: any) {
   doc.setFontSize(12);
   doc.text('Order Information', 20, 45);
   doc.setFontSize(10);
-  doc.text(`Order ID: ${order.id}`, 20, 55);
-  doc.text(`Date: ${formatDate(order.createdAt)}`, 20, 62);
-  doc.text(`Status: ${order.status}`, 20, 69);
+  doc.text(`Order ID: ${String(order.id ?? 'N/A')}`, 20, 55);
+  doc.text(`Date: ${order.createdAt ? formatDate(order.createdAt) : 'N/A'}`, 20, 62);
+  doc.text(`Status: ${String(order.status ?? 'N/A')}`, 20, 69);
   
   // Add shipping information
   doc.setFontSize(12);
@@ -108,11 +160,22 @@ function generateOrderPdf(order: any) {
     doc.text('Location: Plastik Records, 5 Main Street, Tallinn, Estonia', 120, 69);
     doc.text('Store Hours: Monday-Friday 10am-7pm, Saturday 11am-5pm', 120, 76);
   } else if (order.shippingAddress) {
-    const shippingLines = [];
-    if (order.shippingAddress.name) shippingLines.push(order.shippingAddress.name);
-    if (order.shippingAddress.email) shippingLines.push(order.shippingAddress.email);
-    if (order.shippingAddress.address) shippingLines.push(order.shippingAddress.address);
-    
+    const sa = order.shippingAddress;
+    const shippingLines: string[] = [];
+    if (sa.name) shippingLines.push(String(sa.name));
+    if (sa.email) shippingLines.push(String(sa.email));
+    // Combine address lines safely
+    const addressLine1 = sa.address?.line1 ?? sa.line1 ?? sa.address ?? ''; // Check multiple common variations
+    const addressLine2 = sa.address?.line2 ?? sa.line2 ?? '';
+    if (addressLine1) shippingLines.push(String(addressLine1));
+    if (addressLine2) shippingLines.push(String(addressLine2)); // Add line 2 if present
+    const cityStateZip = [sa.address?.city ?? sa.city, sa.address?.state ?? sa.state, sa.address?.postal_code ?? sa.postal_code]
+      .filter(Boolean) // Remove null/undefined/empty strings
+      .join(', ');
+    if (cityStateZip) shippingLines.push(String(cityStateZip));
+    const country = sa.address?.country ?? sa.country;
+    if (country) shippingLines.push(String(country));
+
     if (shippingLines.length > 0) {
       let yPos = 55;
       shippingLines.forEach(line => {
@@ -132,32 +195,48 @@ function generateOrderPdf(order: any) {
   
   // Prepare table data
   const tableHeaders = [['Item', 'Condition', 'Price', 'Qty', 'Subtotal']];
-  const tableData = order.items.map((item: any) => [
-    item.title,
-    item.condition || 'N/A',
+  const tableData = order.items?.map((item: any) => [
+    String(item.title || 'N/A'),
+    String(item.condition || 'N/A'),
     formatCurrency(item.price),
-    item.quantity.toString(),
-    formatCurrency(item.price * item.quantity)
-  ]);
+    String(item.quantity || 0),
+    formatCurrency(Number(item.price || 0) * Number(item.quantity || 0))
+  ]) || []; // Default to empty array if items is null/undefined
   
   // Add table
-  autoTable(doc, {
-    head: tableHeaders,
-    body: tableData,
-    startY: 95,
-    theme: 'grid',
-    headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0] },
-    styles: { fontSize: 9 },
-    columnStyles: {
-      0: { cellWidth: 70 },
-      2: { halign: 'right' },
-      3: { halign: 'right' },
-      4: { halign: 'right' }
-    }
-  });
+  if (tableData.length > 0) {
+     autoTable(doc, {
+       head: tableHeaders,
+       body: tableData,
+       startY: 95,
+       theme: 'grid',
+       headStyles: { fillColor: [240, 240, 240], textColor: [0, 0, 0] },
+       styles: { fontSize: 9 },
+       columnStyles: {
+         0: { cellWidth: 70 },
+         2: { halign: 'right' },
+         3: { halign: 'right' },
+         4: { halign: 'right' }
+       }
+     });
+  } else {
+     doc.text("No items found in order.", 20, 95);
+  }
   
   // Get the final Y position after the table
-  const finalY = (doc as any).lastAutoTable.finalY + 10;
+  // Need to handle case where table wasn't drawn or finalY is not a number
+  let finalY = 105; // Default start position if no table
+  if (tableData.length > 0 && (doc as any).lastAutoTable) {
+     const tableEndY = (doc as any).lastAutoTable.finalY;
+     if (typeof tableEndY === 'number') {
+        finalY = tableEndY + 10;
+     } else {
+         // Fallback if finalY is not a number, log a warning
+         log("jspdf-autotable finalY was not a number, using default positioning.", "warn");
+         // Keep finalY = 105 or adjust slightly if needed
+         finalY = (typeof (doc as any).lastAutoTable?.startY === 'number' ? (doc as any).lastAutoTable.startY : 95) + 20; // Fallback positioning relative to table startY
+     }
+  }
   
   // Add order totals
   doc.setFontSize(10);
@@ -181,13 +260,18 @@ function generateOrderPdf(order: any) {
   doc.text(formatCurrency(order.total), 190, finalY + 17, { align: 'right' });
   doc.setFont(undefined, 'normal');
   
-  // Add tax details if applicable
+  // Add tax details if applicable (safe access)
   if (order.billingAddress?.taxDetails === true || order.billingAddress?.taxDetails === "true") {
     doc.setFontSize(12);
     doc.text('Tax Details', 20, finalY + 30);
     doc.setFontSize(10);
-    doc.text(`Organization: ${order.billingAddress.organization || 'N/A'}`, 20, finalY + 37);
-    doc.text(`Tax ID: ${order.billingAddress.taxId || 'N/A'}`, 20, finalY + 44);
+    // Access organization/taxId safely and construct strings separately
+    const org = order.billingAddress?.organization;
+    const taxId = order.billingAddress?.taxId;
+    const orgText = `Organization: ${String(org ?? 'N/A')}`;
+    const taxIdText = `Tax ID: ${String(taxId ?? 'N/A')}`;
+    doc.text(orgText, 20, finalY + 37);
+    doc.text(taxIdText, 20, finalY + 44);
   }
   
   // Add footer

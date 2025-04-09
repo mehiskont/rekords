@@ -14,32 +14,7 @@ import { useState, useMemo, useEffect } from "react"
 import Select from "react-select"
 import countryList from "react-select-country-list"
 import { useRouter } from "next/navigation"
-
-interface CustomerInfo {
-  firstName: string
-  lastName: string
-  email: string
-  phone: string
-  address: string
-  apartment: string
-  city: string
-  postalCode: string
-  state: string
-  country: string
-  shippingAddress: string
-  shippingApartment: string
-  shippingCity: string
-  shippingPostalCode: string
-  shippingState: string
-  shippingCountry: string
-  shippingAddressSameAsBilling: boolean
-  localPickup: boolean
-  acceptTerms: boolean
-  subscribe: boolean
-  taxDetails: boolean
-  organization: string
-  taxId: string
-}
+import type { CustomerInfo } from "@/types/checkout"
 
 interface CartReviewProps {
   onNext: (data: CustomerInfo) => void

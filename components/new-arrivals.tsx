@@ -63,19 +63,24 @@ export async function NewArrivals() {
 
     // Map coverImage to cover_image before passing to client component
     const rawRecords = data.data || [];
-    records = rawRecords.map((record: any) => ({
+    const mappedRecords = rawRecords.map((record: any) => ({
       ...record,
       cover_image: record.coverImage, // Map the field
     }));
 
-    if (!records || records.length === 0) {
-      log("[Server Log] No records found or data.data was empty/null after fetch.", {}, "info");
-      return <p className="text-center text-lg">No new arrivals at the moment. Check back soon!</p>
+    // Filter for "FOR_SALE" status
+    const forSaleRecords = mappedRecords.filter(
+      (record: any) => record.status === "FOR_SALE"
+    );
+
+    if (!forSaleRecords || forSaleRecords.length === 0) {
+      log("[Server Log] No 'FOR_SALE' records found after filtering.", {}, "info");
+      return <p className="text-center text-lg">No new arrivals currently for sale. Check back soon!</p>
     }
     
-    log(`[Server Log] Fetched ${records.length} new arrivals from API`, {}, "info");
+    log(`[Server Log] Fetched ${forSaleRecords.length} 'FOR_SALE' new arrivals from API`, {}, "info");
 
-    return <NewArrivalsClient records={records} />
+    return <NewArrivalsClient records={forSaleRecords} /> // Pass filtered records
 
   } catch (error) {
     log("[Server Error] Error in NewArrivals fetch/process:", error, "error");

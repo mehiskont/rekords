@@ -1,63 +1,90 @@
 import { getServerSession } from "next-auth/next"
 import { authOptions } from "@/lib/auth"
-import { getUserProfile } from "@/lib/user"
 import { ProfileForm } from "@/components/dashboard/profile-form"
+import { log } from "@/lib/logger"
+
+const EXTERNAL_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default async function ProfilePage() {
   const session = await getServerSession(authOptions)
   let userProfile = null;
-  let dbError = false;
+  let apiError = false;
 
-  if (!session) {
-    return null // This should be handled by the layout, but just in case
+  if (!session?.user?.id) {
+    log("Profile page: No session or user ID found.", "warn");
+    return (
+       <div className="space-y-6 pb-8 pt-6">
+         <h2 className="text-3xl font-bold tracking-tight">Your Profile</h2>
+         <p>Please log in to view your profile.</p>
+       </div>
+    );
   }
 
-  try {
-    userProfile = await getUserProfile(session.user.id);
-    console.log("User profile data loaded:", userProfile);
-    
-    // Make sure to provide default values for missing fields
-    if (userProfile) {
-      userProfile = {
-        name: userProfile.name || session.user.name || '',
-        email: userProfile.email || session.user.email || '',
-        phone: userProfile.phone || '',
-        address: userProfile.address || '',
-        city: userProfile.city || '',
-        state: userProfile.state || '',
-        country: userProfile.country || '',
-        postalCode: userProfile.postalCode || '',
-      };
-    }
-  } catch (error) {
-    console.error("Error fetching user profile:", error);
-    dbError = true;
+  if (EXTERNAL_API_URL) {
+     try {
+       const response = await fetch(`${EXTERNAL_API_URL}/api/users/me/profile`, {
+         method: 'GET',
+         headers: {
+           'Content-Type': 'application/json',
+         },
+         cache: 'no-store'
+       });
+
+       if (!response.ok) {
+         const errorBody = await response.text();
+         log(`Failed to fetch profile from external API: ${response.status} - ${errorBody}`, "error");
+         throw new Error(`API error: ${response.statusText}`);
+       }
+
+       const fetchedProfile = await response.json();
+       log("User profile data loaded from API:", fetchedProfile);
+
+       userProfile = {
+         name: fetchedProfile.name || session.user.name || '',
+         email: fetchedProfile.email || session.user.email || '',
+         phone: fetchedProfile.phone || '',
+         address: fetchedProfile.address || '',
+         city: fetchedProfile.city || '',
+         state: fetchedProfile.state || '',
+         country: fetchedProfile.country || '',
+         postalCode: fetchedProfile.postalCode || '',
+       };
+
+     } catch (error) {
+       log(`Error fetching user profile from external API: ${error instanceof Error ? error.message : String(error)}`, "error");
+       apiError = true;
+     }
+  } else {
+     log("External API URL is not configured", "error");
+     apiError = true;
   }
+
+  const initialFormData = userProfile || {
+     name: session.user.name || '',
+     email: session.user.email || '',
+     phone: '',
+     address: '',
+     city: '',
+     state: '',
+     country: '',
+     postalCode: '',
+  };
 
   return (
     <div className="space-y-6 pb-8 pt-6">
       <h2 className="text-3xl font-bold tracking-tight">Your Profile</h2>
       
-      {dbError ? (
+      {apiError ? (
         <div className="rounded-lg border border-yellow-200 bg-yellow-50 dark:bg-yellow-950/20 dark:border-yellow-900 p-6">
           <p className="text-yellow-800 dark:text-yellow-400">
-            We're having trouble connecting to the database right now. Profile editing is temporarily unavailable.
+            We're having trouble loading your profile information right now.
           </p>
           <p className="text-yellow-700 dark:text-yellow-500 text-sm mt-2">
-            Try refreshing the page in a few moments.
+            Please try refreshing the page in a few moments.
           </p>
         </div>
       ) : (
-        <ProfileForm initialData={userProfile || {
-          name: session.user.name || '',
-          email: session.user.email || '',
-          phone: '',
-          address: '',
-          city: '',
-          state: '',
-          country: '',
-          postalCode: ''
-        }} />
+        <ProfileForm initialData={initialFormData} />
       )}
     </div>
   )

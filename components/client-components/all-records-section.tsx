@@ -111,8 +111,13 @@ export function AllRecordsSection() {
           cover_image: record.coverImage, // Map the field
         }));
 
-        setRecords(mappedRecords); // Use mapped records
-        setTotalRecords(data.totalRecords || 0)
+        // Filter records to only show those 'For Sale'
+        const forSaleRecords = mappedRecords.filter(
+          (record: any) => record.status === "FOR_SALE"
+        );
+
+        setRecords(forSaleRecords); // Use filtered records
+        setTotalRecords(data.totalRecords || 0) // Keep original total for pagination (might be inaccurate for display)
         setTotalPages(data.totalPages || 1)
         setCurrentPage(data.page || 1)
       } catch (err) {
@@ -223,6 +228,14 @@ export function AllRecordsSection() {
     return pageNumbers
   }
 
+  // Function to handle page changes
+  const handlePageChange = (newPage: number) => {
+    if (newPage < 1 || newPage > totalPages) return;
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", newPage.toString());
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   return (
     <section className="py-20 bg-background">
       <div className="container mx-auto px-4">
@@ -250,67 +263,50 @@ export function AllRecordsSection() {
             
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 pt-2">
-                <div className="text-sm text-muted-foreground">
-                  Showing {(currentPage - 1) * 24 + 1}-{Math.min(currentPage * 24, totalRecords)} of {totalRecords} records
-                </div>
-                
-                <Pagination className="w-full sm:w-auto justify-center sm:justify-end">
-                  <PaginationContent className="bg-card rounded-md border shadow-sm">
-                    {currentPage > 1 && (
-                      <PaginationItem>
-                        <PaginationPrevious 
-                          href="#" 
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handlePageChange(currentPage - 1);
+                      }}
+                      aria-disabled={currentPage === 1}
+                      className={currentPage === 1 ? "pointer-events-none opacity-50" : undefined}
+                    />
+                  </PaginationItem>
+                  {getPageNumbers().map((pageNumber, index) => (
+                    <PaginationItem key={index}>
+                      {pageNumber === 'ellipsis' ? (
+                        <PaginationEllipsis />
+                      ) : (
+                        <PaginationLink
+                          href="#"
                           onClick={(e) => {
-                            e.preventDefault()
-                            const params = new URLSearchParams(searchParams.toString())
-                            params.set("page", String(currentPage - 1))
-                            router.push(`${pathname}?${params.toString()}`)
+                            e.preventDefault();
+                            handlePageChange(pageNumber as number);
                           }}
-                          className="hover:bg-accent hover:text-accent-foreground"
-                        />
-                      </PaginationItem>
-                    )}
-                    
-                    {getPageNumbers().map((page, index) => (
-                      <PaginationItem key={index}>
-                        {page === 'ellipsis' ? (
-                          <PaginationEllipsis />
-                        ) : (
-                          <PaginationLink 
-                            href="#" 
-                            isActive={page === currentPage}
-                            onClick={(e) => {
-                              e.preventDefault()
-                              const params = new URLSearchParams(searchParams.toString())
-                              params.set("page", String(page))
-                              router.push(`${pathname}?${params.toString()}`)
-                            }}
-                            className={page === currentPage ? "bg-secondary text-secondary-foreground hover:bg-secondary hover:text-secondary-foreground font-semibold" : "hover:bg-accent hover:text-accent-foreground"}
-                          >
-                            {page}
-                          </PaginationLink>
-                        )}
-                      </PaginationItem>
-                    ))}
-                    
-                    {currentPage < totalPages && (
-                      <PaginationItem>
-                        <PaginationNext 
-                          href="#" 
-                          onClick={(e) => {
-                            e.preventDefault()
-                            const params = new URLSearchParams(searchParams.toString())
-                            params.set("page", String(currentPage + 1))
-                            router.push(`${pathname}?${params.toString()}`)
-                          }}
-                          className="hover:bg-accent hover:text-accent-foreground"
-                        />
-                      </PaginationItem>
-                    )}
-                  </PaginationContent>
-                </Pagination>
-              </div>
+                          isActive={currentPage === pageNumber}
+                        >
+                          {pageNumber}
+                        </PaginationLink>
+                      )}
+                    </PaginationItem>
+                  ))}
+                  <PaginationItem>
+                    <PaginationNext
+                      href="#"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handlePageChange(currentPage + 1);
+                      }}
+                      aria-disabled={currentPage === totalPages}
+                      className={currentPage === totalPages ? "pointer-events-none opacity-50" : undefined}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
             )}
           </div>
         )}

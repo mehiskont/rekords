@@ -121,10 +121,10 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
           size="sm"
           variant="secondary"
           onClick={handleAddToCart}
-          disabled={isMaxQuantity || (record.quantity_available || 0) === 0}
+          disabled={isMaxQuantity || (record.quantity_available || 0) === 0 || record.status !== "FOR_SALE"}
         >
           <ShoppingCart className="mr-1 h-3 w-3" />
-          {(record.quantity_available || 0) === 0
+          {(record.quantity_available || 0) === 0 || record.status !== "FOR_SALE"
             ? "Out of Stock"
             : "Add to Cart"}
         </Button>

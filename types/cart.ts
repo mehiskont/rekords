@@ -1,6 +1,6 @@
-import type { DiscogsRecord } from "./discogs"
+import type { Record } from "./record";
 
-export interface CartItem extends DiscogsRecord {
+export interface CartItem extends Record {
   quantity: number
 }
 

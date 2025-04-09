@@ -9,35 +9,10 @@ import { PaymentForm } from "@/components/checkout/PaymentForm"
 import { calculatePriceWithoutFees } from "@/lib/price-calculator"
 import { toast } from "@/components/ui/use-toast"
 import { calculateShippingCost, calculateTotalWeight } from "@/lib/shipping-calculator"
-import { profileToCheckoutInfo, CheckoutInfo } from "@/lib/user"
+import type { CustomerInfo } from "@/types/checkout" // Import shared type
 
 const steps = ["DETAILS", "PAYMENT"]
 const STORAGE_KEY = "checkout_current_step"
-
-export interface CustomerInfo {
-  firstName: string
-  lastName: string
-  email: string
-  phone: string
-  address: string
-  apartment: string
-  city: string
-  postalCode: string
-  state: string
-  country: string
-  shippingAddress: string
-  shippingApartment: string
-  shippingCity: string
-  shippingPostalCode: string
-  shippingState: string
-  shippingCountry: string
-  shippingAddressSameAsBilling: boolean
-  acceptTerms: boolean
-  subscribe: boolean
-  taxDetails: boolean
-  organization: string
-  taxId: string
-}
 
 export function CheckoutFlow() {
   const [currentStep, setCurrentStep] = useState(0)
@@ -51,6 +26,7 @@ export function CheckoutFlow() {
   const router = useRouter()
   const { state: cartState, dispatch: cartDispatch } = useCart()
   const { data: session, status } = useSession()
+  const EXTERNAL_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   // Early check for empty cart - redirect immediately if cart is empty and not in payment step
   // Only do this if we've completed initial loading (otherwise cart may appear empty before loading)
@@ -103,15 +79,13 @@ export function CheckoutFlow() {
   // Load user profile data if logged in
   useEffect(() => {
     async function loadUserProfile() {
-      if (status === 'authenticated' && session.user) {
+      if (status === 'authenticated' && session.user && EXTERNAL_API_URL) {
         try {
-          setLoadingProfile(true)
-          
-          // First, try to load from localStorage (most recent)
-          const savedData = localStorage.getItem("checkout_customer_info")
+          setLoadingProfile(true);
+          const savedData = localStorage.getItem("checkout_customer_info");
           if (savedData) {
-            const parsedData = JSON.parse(savedData)
-            // Ensure all required fields have values
+            const parsedData = JSON.parse(savedData);
+            // Ensure all required fields are present, including localPickup
             setCustomerInfo({
               firstName: parsedData.firstName || '',
               lastName: parsedData.lastName || '',
@@ -129,66 +103,95 @@ export function CheckoutFlow() {
               shippingState: parsedData.shippingState || parsedData.state || '',
               shippingPostalCode: parsedData.shippingPostalCode || parsedData.postalCode || '',
               shippingCountry: parsedData.shippingCountry || parsedData.country || '',
-              shippingAddressSameAsBilling: parsedData.shippingAddressSameAsBilling || true,
+              shippingAddressSameAsBilling: parsedData.shippingAddressSameAsBilling ?? true,
+              localPickup: parsedData.localPickup || false, // Add localPickup from saved data
               acceptTerms: parsedData.acceptTerms || false,
               subscribe: parsedData.subscribe || false,
               taxDetails: parsedData.taxDetails || false,
               organization: parsedData.organization || '',
               taxId: parsedData.taxId || ''
-            })
-            setLoadingProfile(false)
-            return
+            });
+            setLoadingProfile(false);
+            return;
           }
-          
-          // If no saved data, load from user profile
-          const response = await fetch("/api/user/profile")
+
+          const response = await fetch(`${EXTERNAL_API_URL}/api/users/me/profile`);
           if (response.ok) {
-            const profile = await response.json()
-            const checkoutInfo = profileToCheckoutInfo(profile)
-            
-            // Set the checkout form data from user profile
-            if (Object.keys(checkoutInfo).length > 0) {
-              // Convert to the full CustomerInfo type with required fields
+            const profile = await response.json();
+            if (profile && typeof profile === 'object') {
+              // Map profile to CustomerInfo, including localPickup (default to false)
               setCustomerInfo({
-                ...checkoutInfo,
-                // Fill required fields that might be missing with defaults
-                firstName: checkoutInfo.firstName || '',
-                lastName: checkoutInfo.lastName || '',
-                email: checkoutInfo.email || '',
-                phone: checkoutInfo.phone || '',
-                address: checkoutInfo.address || '',
-                apartment: checkoutInfo.apartment || '',
-                city: checkoutInfo.city || '',
-                state: checkoutInfo.state || '',
-                postalCode: checkoutInfo.postalCode || '',
-                country: checkoutInfo.country || '',
-                // Add shipping fields with defaults
-                shippingAddress: checkoutInfo.address || '',
-                shippingApartment: checkoutInfo.apartment || '',
-                shippingCity: checkoutInfo.city || '',
-                shippingState: checkoutInfo.state || '',
-                shippingPostalCode: checkoutInfo.postalCode || '',
-                shippingCountry: checkoutInfo.country || '',
-                // Add missing fields with defaults
+                firstName: profile.firstName || profile.name?.split(' ')[0] || '',
+                lastName: profile.lastName || profile.name?.split(' ').slice(1).join(' ') || '',
+                email: profile.email || '',
+                phone: profile.phone || '',
+                address: profile.address || '',
+                apartment: profile.apartment || '',
+                city: profile.city || '',
+                state: profile.state || '',
+                postalCode: profile.postalCode || '',
+                country: profile.country || '',
+                shippingAddress: profile.address || '',
+                shippingApartment: profile.apartment || '',
+                shippingCity: profile.city || '',
+                shippingState: profile.state || '',
+                shippingPostalCode: profile.postalCode || '',
+                shippingCountry: profile.country || '',
                 shippingAddressSameAsBilling: true,
+                localPickup: profile.localPickup || false, // Add localPickup, default false
                 acceptTerms: false,
                 subscribe: false,
-                taxDetails: false,
-                organization: '',
-                taxId: ''
-              })
+                taxDetails: profile.taxDetails || false,
+                organization: profile.organization || '',
+                taxId: profile.taxId || ''
+              });
+            } else {
+              // Initialize with defaults, including localPickup
+              setCustomerInfo({
+                firstName: '', lastName: '', email: '', phone: '',
+                address: '', apartment: '', city: '', state: '', postalCode: '', country: '',
+                shippingAddress: '', shippingApartment: '', shippingCity: '', shippingState: '', shippingPostalCode: '', shippingCountry: '',
+                shippingAddressSameAsBilling: true, localPickup: false, acceptTerms: false, subscribe: false,
+                taxDetails: false, organization: '', taxId: ''
+              });
             }
+          } else {
+            console.error("Failed to fetch user profile:", response.status, await response.text());
+            // Initialize with defaults on error, including localPickup
+            setCustomerInfo({
+              firstName: '', lastName: '', email: '', phone: '',
+              address: '', apartment: '', city: '', state: '', postalCode: '', country: '',
+              shippingAddress: '', shippingApartment: '', shippingCity: '', shippingState: '', shippingPostalCode: '', shippingCountry: '',
+              shippingAddressSameAsBilling: true, localPickup: false, acceptTerms: false, subscribe: false,
+              taxDetails: false, organization: '', taxId: ''
+            });
           }
         } catch (error) {
-          console.error("Error loading user profile:", error)
+          console.error("Error loading user profile:", error);
+          // Initialize with defaults on exception, including localPickup
+          setCustomerInfo({
+            firstName: '', lastName: '', email: '', phone: '',
+            address: '', apartment: '', city: '', state: '', postalCode: '', country: '',
+            shippingAddress: '', shippingApartment: '', shippingCity: '', shippingState: '', shippingPostalCode: '', shippingCountry: '',
+            shippingAddressSameAsBilling: true, localPickup: false, acceptTerms: false, subscribe: false,
+            taxDetails: false, organization: '', taxId: ''
+          });
         } finally {
-          setLoadingProfile(false)
+          setLoadingProfile(false);
         }
+      } else if (status !== 'loading') {
+        // Initialize with defaults if not authenticated, including localPickup
+        setCustomerInfo({
+          firstName: '', lastName: '', email: '', phone: '',
+          address: '', apartment: '', city: '', state: '', postalCode: '', country: '',
+          shippingAddress: '', shippingApartment: '', shippingCity: '', shippingState: '', shippingPostalCode: '', shippingCountry: '',
+          shippingAddressSameAsBilling: true, localPickup: false, acceptTerms: false, subscribe: false,
+          taxDetails: false, organization: '', taxId: ''
+        });
       }
     }
-    
-    loadUserProfile()
-  }, [status, session])
+    loadUserProfile();
+  }, [status, session, EXTERNAL_API_URL]);
 
   // Save current step whenever it changes
   useEffect(() => {
@@ -250,34 +253,52 @@ export function CheckoutFlow() {
   }, [currentStep, clientSecret, paymentInitTime])
 
   const handleDetailsSubmit = async (data: CustomerInfo) => {
-    setIsLoading(true)
-    setCustomerInfo(data)
-    
+    setIsLoading(true);
+    setCustomerInfo(data);
+
     // Save checkout info to localStorage for next time
-    localStorage.setItem("checkout_customer_info", JSON.stringify(data))
-    
-    // If user is logged in, save checkout info to their profile
-    if (session?.user) {
+    localStorage.setItem("checkout_customer_info", JSON.stringify(data));
+
+    // If user is logged in, save checkout info to their profile via EXTERNAL API
+    if (session?.user && EXTERNAL_API_URL) {
       try {
-        await fetch("/api/user/profile", {
-          method: "POST",
+        // Use PUT method for updating existing resource
+        // TODO: Add authentication headers if needed by the external API
+        const response = await fetch(`${EXTERNAL_API_URL}/api/users/me/profile`, {
+          method: "PUT", // Changed from POST to PUT for update
           headers: {
             "Content-Type": "application/json",
+            // Add Authorization header if required:
+            // "Authorization": `Bearer ${session.accessToken}`
           },
+          // Send the relevant parts of the form data
+          // Adjust the body structure based on what the external API expects
           body: JSON.stringify({
             firstName: data.firstName,
             lastName: data.lastName,
-            email: data.email,
+            // Avoid sending email if it shouldn't be updated here, or ensure API handles it
+            // email: data.email,
+            phone: data.phone,
             address: data.address,
+            apartment: data.apartment,
             city: data.city,
             state: data.state,
             country: data.country,
             postalCode: data.postalCode,
+            // Include other fields like taxDetails, organization, taxId if the API expects them
+            taxDetails: data.taxDetails,
+            organization: data.organization,
+            taxId: data.taxId
           }),
-        })
-        console.log("Saved checkout info to user profile")
+        });
+        if (response.ok) {
+          console.log("Saved checkout info to user profile via external API");
+        } else {
+           console.error("Error saving checkout info to external profile API:", response.status, await response.text());
+           // Optionally inform user, but don't block checkout
+        }
       } catch (error) {
-        console.error("Error saving checkout info to profile:", error)
+        console.error("Error saving checkout info to profile (external API):", error);
         // Continue with checkout even if saving to profile fails
       }
     }
@@ -289,7 +310,7 @@ export function CheckoutFlow() {
           weight: item.weight,
           quantity: item.quantity,
         })),
-      )
+      );
       
       // Get destination country
       const destinationCountry = data.shippingAddressSameAsBilling ? data.country : data.shippingCountry || data.country;
@@ -310,10 +331,11 @@ export function CheckoutFlow() {
         shippingCost = calculateShippingCost(totalWeight, destinationCountry);
         console.log(`Calculated international shipping rate: €${shippingCost}`);
       }
-      setShippingCost(shippingCost)
+      setShippingCost(shippingCost);
 
       // Create payment intent with updated total including shipping
-      const response = await fetch("/api/create-payment-intent", {
+      // This likely stays as an internal API route (/api/create-payment-intent)
+      const paymentIntentResponse = await fetch("/api/create-payment-intent", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -332,46 +354,52 @@ export function CheckoutFlow() {
           })),
           shipping: shippingCost,
         }),
-      })
+      });
 
-      if (!response.ok) {
-        throw new Error("Failed to create payment intent")
+      if (!paymentIntentResponse.ok) {
+         const errorBody = await paymentIntentResponse.text();
+         console.error("Payment intent creation failed:", paymentIntentResponse.status, errorBody);
+         throw new Error(`Failed to create payment intent: ${paymentIntentResponse.statusText}`);
       }
 
-      const { clientSecret } = await response.json()
-      setClientSecret(clientSecret)
-      setCurrentStep(1) // Move to payment step
+      const { clientSecret } = await paymentIntentResponse.json();
+      if (!clientSecret) {
+         console.error("Client secret missing from payment intent response");
+         throw new Error("Payment processing setup failed.");
+      }
+      setClientSecret(clientSecret);
+      setCurrentStep(1); // Move to payment step
     } catch (error) {
-      console.error("Error creating payment intent:", error)
+      console.error("Error during checkout details submission:", error);
       toast({
-        title: "Error",
-        description: "Failed to process order. Please try again.",
+        title: "Checkout Error",
+        description: error instanceof Error ? error.message : "Failed to proceed to payment. Please check your details and try again.",
         variant: "destructive",
-      })
+      });
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
 
   const handlePaymentSuccess = () => {
     // Clear checkout-related storage
-    localStorage.removeItem(STORAGE_KEY)
+    localStorage.removeItem(STORAGE_KEY);
     
     // Reset checkout step to ensure a fresh start next time
-    setCurrentStep(0)
+    setCurrentStep(0);
     
     // Don't clear customer info so it can be used next time
     // localStorage.removeItem("checkout_customer_info")
 
     // Clear the cart
-    cartDispatch({ type: "CLEAR_CART" })
+    cartDispatch({ type: "CLEAR_CART" });
 
     // Clear client secret to prevent trying to reuse it
-    setClientSecret(null)
+    setClientSecret(null);
 
     // Redirect to success page - use replace to prevent going back to checkout
-    router.replace("/checkout/success")
-  }
+    router.replace("/checkout/success");
+  };
 
   // If cart is empty and not in payment step, redirect to cart
   // Keep this as a backup to the early check
@@ -445,4 +473,5 @@ export function CheckoutFlow() {
     </div>
   )
 }
+
 

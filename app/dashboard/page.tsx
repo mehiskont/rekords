@@ -1,12 +1,14 @@
 import { getServerSession } from "next-auth/next"
 import { OrderList } from "@/components/dashboard/order-list"
-import { getOrdersByUserId } from "@/lib/orders"
 import { authOptions } from "@/lib/auth"
 import { mockOrders } from "@/lib/mock-data/orders"
+import { log } from "@/lib/logger"
+
+const EXTERNAL_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
 export default async function DashboardPage() {
   const session = await getServerSession(authOptions)
-  console.log("Dashboard page session:", {
+  log("Dashboard page session:", {
     hasSession: !!session,
     sessionData: session ? {
       userId: session.user?.id,
@@ -16,20 +18,54 @@ export default async function DashboardPage() {
   });
   
   let orders = [];
-  let dbError = false;
+  let apiError = false;
 
-  // Try to get user orders, but handle database connection errors gracefully
-  try {
-    if (session?.user?.id) {
-      // Get user orders with a limit of 5 for the dashboard preview
-      orders = await getOrdersByUserId(session.user.id, 5);
+  // Try to get user orders from the external API
+  if (session?.user?.id && EXTERNAL_API_URL) {
+    try {
+      // TODO: Add appropriate Authorization header using session token if required by the external API
+      const response = await fetch(`${EXTERNAL_API_URL}/api/orders?limit=5`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          // Example Authorization header (adjust based on your auth strategy):
+          // 'Authorization': `Bearer ${session.accessToken}`
+        },
+        // Add cache control if needed, e.g., fetch fresh data on every request
+        cache: 'no-store'
+      });
+
+      if (!response.ok) {
+        const errorBody = await response.text();
+        log(`Failed to fetch orders from external API: ${response.status} - ${errorBody}`, "error");
+        throw new Error(`API error: ${response.statusText}`);
+      }
+
+      const fetchedOrders = await response.json();
+      // TODO: Validate the structure of fetchedOrders if necessary
+      // Ensure it's an array and items match OrderList expectations
+      if (Array.isArray(fetchedOrders)) {
+         orders = fetchedOrders;
+         log(`Fetched ${orders.length} orders from external API successfully.`);
+      } else {
+         log(`External API response for orders was not an array: ${JSON.stringify(fetchedOrders)}`, "error");
+         throw new Error("Invalid data format from API");
+      }
+
+    } catch (error) {
+      log(`Error fetching orders from external API: ${error instanceof Error ? error.message : String(error)}`, "error");
+      apiError = true;
+      orders = mockOrders; // Fallback to mock data (which is empty)
     }
-  } catch (error) {
-    console.error("Error fetching orders:", error);
-    dbError = true;
-    
-    // Fallback to mock data (which is empty) if DB connection fails
-    orders = mockOrders;
+  } else {
+     log("Dashboard: Not fetching orders (no session, user ID, or API URL)", "info");
+     // If not logged in, orders remain empty, no error is shown
+     // If API URL is missing, log it and show error state
+     if (!EXTERNAL_API_URL) {
+        log("External API URL is not configured", "error");
+        apiError = true; // Show API error if URL is missing
+        orders = mockOrders; // Use fallback
+     }
   }
 
   return (
@@ -57,13 +93,13 @@ export default async function DashboardPage() {
           )}
         </div>
         
-        {dbError ? (
+        {apiError ? (
           <div className="rounded-lg border border-yellow-200 bg-yellow-50 dark:bg-yellow-950/20 dark:border-yellow-900 p-6 text-center">
             <p className="text-yellow-800 dark:text-yellow-400">
-              We're having trouble connecting to the database right now. Order history is temporarily unavailable.
+              We're having trouble loading your order history right now.
             </p>
             <p className="text-yellow-700 dark:text-yellow-500 text-sm mt-2">
-              Try refreshing the page in a few moments.
+              Please try refreshing the page in a few moments.
             </p>
           </div>
         ) : orders.length > 0 ? (
