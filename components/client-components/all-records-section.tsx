@@ -71,6 +71,7 @@ export function AllRecordsSection() {
         if (genre) params.set("genre", genre)
         if (sort) params.set("sort", sort)
         params.set("page", page.toString())
+        params.set("limit", "18")
         
         const apiUrl = process.env.NEXT_PUBLIC_API_URL; // Get API URL here
         if (!apiUrl) {
@@ -117,9 +118,9 @@ export function AllRecordsSection() {
         );
 
         setRecords(forSaleRecords); // Use filtered records
-        setTotalRecords(data.totalRecords || 0) // Keep original total for pagination (might be inaccurate for display)
-        setTotalPages(data.totalPages || 1)
-        setCurrentPage(data.page || 1)
+        setTotalRecords(data.pagination?.totalRecords || 0) // Correctly access nested pagination object
+        setTotalPages(data.pagination?.totalPages || 1)     // Correctly access nested pagination object
+        setCurrentPage(data.pagination?.currentPage || 1)   // Correctly access nested pagination object
       } catch (err) {
         console.error("[Client Component Log] Error in fetchRecords process:", err) // Log the caught error
         setError(err instanceof Error ? err.message : "An unknown error occurred")
@@ -233,11 +234,11 @@ export function AllRecordsSection() {
     if (newPage < 1 || newPage > totalPages) return;
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", newPage.toString());
-    router.push(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}#all-records-section`);
   };
 
   return (
-    <section className="py-20 bg-background">
+    <section id="all-records-section" className="py-20 bg-background">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center mb-8 flex-wrap gap-4">
           <h2 className="text-3xl font-bold">

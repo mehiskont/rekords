@@ -1,6 +1,6 @@
 "use client"
 
-import type { DiscogsRecord } from "@/types/discogs"
+import type { Record } from "@/types/record"
 import { ClientRecordCard } from "../client-record-card"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
@@ -11,7 +11,7 @@ import Image from "next/image"
 import { useEffect, useState } from "react"
 
 interface RecordListViewProps {
-  records: DiscogsRecord[]
+  records: Record[]
 }
 
 export default function RecordListView({ records }: RecordListViewProps) {
@@ -22,7 +22,7 @@ export default function RecordListView({ records }: RecordListViewProps) {
   const { state, dispatch } = useCart()
   const [sortField, setSortField] = useState<string>('title')
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc')
-  const [sortedRecords, setSortedRecords] = useState(records)
+  const [sortedRecords, setSortedRecords] = useState<Record[]>(records)
 
   useEffect(() => {
     // Sort records by title initially
@@ -34,7 +34,7 @@ export default function RecordListView({ records }: RecordListViewProps) {
     setSortedRecords(initialSorted);
   }, [records])
 
-  const handleAddToCart = (record: DiscogsRecord) => {
+  const handleAddToCart = (record: Record) => {
     dispatch({ type: "ADD_ITEM", payload: record })
   }
 
@@ -55,11 +55,11 @@ export default function RecordListView({ records }: RecordListViewProps) {
         valueA = a.price || 0;
         valueB = b.price || 0;
       } else if (field === 'quantity') {
-        valueA = a.quantity_available || 0;
-        valueB = b.quantity_available || 0;
+        valueA = a.quantity || 0;
+        valueB = b.quantity || 0;
       } else {
-        valueA = a[field as keyof DiscogsRecord] || '';
-        valueB = b[field as keyof DiscogsRecord] || '';
+        valueA = a[field as keyof Record] || '';
+        valueB = b[field as keyof Record] || '';
       }
       
       // String comparison for text fields
@@ -70,9 +70,14 @@ export default function RecordListView({ records }: RecordListViewProps) {
       }
       
       // Numeric comparison
-      return newDirection === 'asc' 
-        ? valueA - valueB 
-        : valueB - valueA;
+      if (typeof valueA === 'number' && typeof valueB === 'number') {
+        return newDirection === 'asc' 
+          ? valueA - valueB 
+          : valueB - valueA;
+      }
+      
+      // Fallback for non-numeric or mixed types (or keep original string logic if preferred)
+      return 0; // Or handle other types if necessary
     });
     
     setSortedRecords(sorted);
@@ -134,7 +139,8 @@ export default function RecordListView({ records }: RecordListViewProps) {
             const labelDisplay = record.label + (record.catalogNumber ? ` [${record.catalogNumber}]` : "")
             const cartItem = state.items?.find((item) => item.id === record.id)
             const currentQuantityInCart = cartItem?.quantity || 0
-            const isMaxQuantity = currentQuantityInCart >= (record.quantity_available || 0)
+            const isMaxQuantity = currentQuantityInCart >= (record.quantity || 0)
+            const isAvailable = record.status === 'FOR_SALE' && (record.quantity || 0) > 0;
 
             return (
               <TableRow key={record.id}>
@@ -165,19 +171,17 @@ export default function RecordListView({ records }: RecordListViewProps) {
                 <TableCell className="max-w-[200px] truncate">{labelDisplay}</TableCell>
                 <TableCell className="text-right font-medium">${(record.price || 0).toFixed(2)}</TableCell>
                 <TableCell className="text-center">
-                  {record.quantity_available > 0 ? record.quantity_available : "0"}
+                  {isAvailable ? record.quantity : "0"}
                 </TableCell>
                 <TableCell>
                   <Button
                     size="sm"
                     variant="outline"
                     onClick={() => handleAddToCart(record)}
-                    disabled={isMaxQuantity || (record.quantity_available || 0) === 0}
+                    disabled={!isAvailable || isMaxQuantity}
                   >
                     <ShoppingCart className="h-3 w-3 mr-1" />
-                    {(record.quantity_available || 0) === 0
-                      ? "Out of Stock"
-                      : "Add"}
+                    {!isAvailable ? "Out of Stock" : "Add"}
                   </Button>
                 </TableCell>
               </TableRow>

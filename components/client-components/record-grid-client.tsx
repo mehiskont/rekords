@@ -1,17 +1,20 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import type { DiscogsRecord } from "@/types/discogs"
+// import type { DiscogsRecord } from "@/types/discogs" // Remove old type
+import type { Record } from "@/types/record" // Import the correct type
 import { ClientRecordCard } from "../client-record-card"
 import RecordListView from "./record-list-view"
 
 interface RecordGridClientProps {
-  records: DiscogsRecord[]
+  // records: DiscogsRecord[] // Use the correct type
+  records: Record[]
   viewMode?: 'grid' | 'list'
 }
 
 export default function RecordGridClient({ records, viewMode = 'grid' }: RecordGridClientProps) {
-  const [sortedRecords, setSortedRecords] = useState<DiscogsRecord[]>(records)
+  // const [sortedRecords, setSortedRecords] = useState<DiscogsRecord[]>(records) // Use the correct type
+  const [sortedRecords, setSortedRecords] = useState<Record[]>(records)
 
   useEffect(() => {
     // Check if we're on a search page by looking for query params in the URL

@@ -2,11 +2,23 @@
 
 import React, { createContext, useContext, useReducer, useEffect, useState, useRef, useCallback } from "react"
 import { useSession } from "next-auth/react"
-import type { DiscogsRecord } from "@/types"
+import type { Record } from "@/types/record"
 
-interface CartItem extends DiscogsRecord {
+interface CartItem extends Record {
   quantity: number
   weight: number
+}
+
+// Define a type for the structure received from the DB /api/cart
+interface DbCartItem {
+  discogsId: number | string;
+  title: string;
+  price: number;
+  quantity: number;
+  weight?: number;
+  condition?: string;
+  images?: any[]; // Or a more specific image type if known
+  // Add other fields expected from the DB if necessary
 }
 
 interface CartState {
@@ -16,7 +28,7 @@ interface CartState {
 }
 
 type CartAction =
-  | { type: "ADD_ITEM"; payload: DiscogsRecord }
+  | { type: "ADD_ITEM"; payload: Record }
   | { type: "REMOVE_ITEM"; payload: number }
   | { type: "UPDATE_QUANTITY"; payload: { id: number; quantity: number } }
   | { type: "TOGGLE_CART" }
@@ -49,7 +61,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
             Number(item.id) === payloadId
               ? {
                   ...item,
-                  quantity: Math.min(item.quantity + 1, item.quantity_available),
+                  quantity: Math.min(item.quantity + 1, item.quantity || 0),
                   weight: action.payload.weight || 180, // Ensure weight is set, default to 180g
                 }
               : item
@@ -85,7 +97,7 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         ...state,
         items: state.items.map((item) =>
           Number(item.id) === Number(action.payload.id)
-            ? { ...item, quantity: Math.min(action.payload.quantity, item.quantity_available) }
+            ? { ...item, quantity: Math.min(action.payload.quantity, item.quantity || 0) }
             : item,
         ),
       }
@@ -385,7 +397,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           
           // Log item details for debugging
           if (dbCartItems.length > 0) {
-            dbCartItems.forEach((item, index) => {
+            dbCartItems.forEach((item: DbCartItem, index: number) => {
               console.log(`DB Cart Item #${index + 1}: ID=${item.discogsId}, Title=${item.title}, Qty=${item.quantity}`);
             });
           }
@@ -395,7 +407,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           
           // Format DB items for the UI
           if (dbCartItems.length > 0) {
-            const formattedItems = dbCartItems.map((item: any) => {
+            const formattedItems: CartItem[] = dbCartItems.map((item: DbCartItem): CartItem => {
               // Extract the first image URL for cover_image or use placeholder
               let cover_image = "/placeholder.svg";
               
@@ -418,11 +430,14 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 title: item.title,
                 price: item.price,
                 quantity: item.quantity,
-                quantity_available: item.quantity_available || 1,
                 weight: item.weight || 180,
                 condition: item.condition,
-                images: item.images || [],
+                status: 'FOR_SALE', // Assuming DB items are for sale, adjust if needed
                 cover_image: cover_image,
+                artist: undefined, // Example: Set undefined if not in DbCartItem
+                format: undefined, // Example: Set undefined if not in DbCartItem
+                label: undefined, // Example: Set undefined if not in DbCartItem
+                catalogNumber: undefined // Example: Set undefined if not in DbCartItem
               };
             });
             

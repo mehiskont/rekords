@@ -77,9 +77,9 @@ export default function RecordGridWrapper({
         const data = await response.json()
         
         setRecords(data.records || [])
-        setTotalRecords(data.totalRecords || 0)
-        setTotalPages(data.totalPages || 1)
-        setCurrentPage(data.page || 1)
+        setTotalRecords(data.pagination?.totalRecords || 0)
+        setTotalPages(data.pagination?.totalPages || 1)
+        setCurrentPage(data.pagination?.currentPage || 1)
       } catch (err) {
         console.error("Error fetching records:", err)
         setError(err instanceof Error ? err.message : "An unknown error occurred")

@@ -8,11 +8,11 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { calculatePriceWithoutFees } from "@/lib/price-calculator"
 import { toast } from "@/components/ui/use-toast"
-import type { DiscogsRecord } from "@/types"
+import type { Record } from "@/types/record"
 import type { CartState, CartAction } from "@/contexts/cart-context"
 
 interface RecordCardProps {
-  record: DiscogsRecord
+  record: Record
   cartState: CartState
   cartDispatch: React.Dispatch<CartAction>
 }
@@ -38,13 +38,13 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
   // Safeguard against undefined cartState
   const cartItem = safeCartState.items?.find((item) => item.id === record.id)
   const currentQuantityInCart = cartItem?.quantity || 0
-  const isMaxQuantity = currentQuantityInCart >= (record.quantity_available || 0)
+  const isMaxQuantity = currentQuantityInCart >= (record.quantity || 0)
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault() // Prevent navigation when clicking the button
 
-    // Ensure quantity_available is a valid number
-    const qtyAvailable = record.quantity_available || 0
+    // Ensure quantity is a valid number
+    const qtyAvailable = record.quantity || 0
 
     if (isMaxQuantity) {
       toast({
@@ -121,10 +121,10 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
           size="sm"
           variant="secondary"
           onClick={handleAddToCart}
-          disabled={isMaxQuantity || (record.quantity_available || 0) === 0 || record.status !== "FOR_SALE"}
+          disabled={isMaxQuantity || (record.quantity || 0) === 0 || record.status !== "FOR_SALE"}
         >
           <ShoppingCart className="mr-1 h-3 w-3" />
-          {(record.quantity_available || 0) === 0 || record.status !== "FOR_SALE"
+          {(record.quantity || 0) === 0 || record.status !== "FOR_SALE"
             ? "Out of Stock"
             : "Add to Cart"}
         </Button>

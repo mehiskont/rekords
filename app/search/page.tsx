@@ -48,7 +48,7 @@ export default function SearchPage({ searchParams = {} }: SearchPageProps) {
         )}
         
         <Suspense fallback={<RecordGridSkeleton />}>
-          <RecordGrid searchParams={searchParams} />
+          <RecordGrid searchParams={searchParams} showFilter={true} />
         </Suspense>
       </div>
     </div>
