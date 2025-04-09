@@ -69,7 +69,8 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
       const cacheBuster = isShortQuery ? `&cacheBuster=${Date.now()}` : "";
 
       console.log("Fetching search results:", `/api/search?${params.toString()}${cacheBuster}`)
-      const response = await fetch(`/api/search?${params.toString()}${cacheBuster}`, {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || ''; // Get base URL
+      const response = await fetch(`${apiUrl}/api/records?${params.toString()}${cacheBuster}`, {
         cache: "no-store",
         headers: {
           "Cache-Control": "no-cache, no-store, must-revalidate",
@@ -92,7 +93,7 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
       // For short queries, especially catalog-number-like searches,
       // prioritize exact and prefix matches in the results
       if (isShortQuery && /^[a-z0-9]{2,3}$/i.test(debouncedQuery.trim())) {
-        const shortQueryMatches = sortResultsByRelevance(data.records, debouncedQuery);
+        const shortQueryMatches = sortResultsByRelevance(data.data, debouncedQuery);
         
         if (shortQueryMatches.length > 0) {
           console.log(`Prioritizing ${shortQueryMatches.length} relevant records for short query`);
@@ -101,7 +102,7 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
         }
       }
 
-      setResults(data.records)
+      setResults(data.data || [])
     } catch (error) {
       console.error("Search error:", error)
       setResults([])

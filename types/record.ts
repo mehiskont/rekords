@@ -6,7 +6,7 @@ export interface Record {
   status: string; // Added: Status field from API
   catalogNumber?: string; // Added: Optional catalog number
   condition?: string;
-  cover_image?: string;
+  coverImage?: string; // Changed to camelCase
   artist?: string;
   // format?: string;
   format?: string | string[]; // Updated: Format can be string or array

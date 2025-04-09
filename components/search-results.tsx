@@ -7,7 +7,7 @@ type Record = {
   id: number | string; // Assuming id can be number or string
   title: string;
   artist?: string; // Assuming artist is optional
-  cover_image?: string; // Optional cover image URL
+  coverImage?: string; // Use camelCase to match API response
   label?: string; // Optional label
   catalogNumber?: string; // Optional catalog number
   price?: number; // Optional price
@@ -58,7 +58,7 @@ export function SearchResults({ results, isLoading, query, category, onClose, is
                 >
                   <div className={`relative flex-shrink-0 ${isCompact ? "w-10 h-10" : "w-12 h-12"}`}>
                     <Image
-                      src={record.cover_image || "/placeholder.svg"}
+                      src={record.coverImage || "/placeholder.svg"}
                       alt={record.title}
                       fill
                       className="object-cover rounded"

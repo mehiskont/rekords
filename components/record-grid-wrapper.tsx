@@ -5,6 +5,8 @@ import RecordGridClient from "./client-components/record-grid-client"
 import { RecordFilter } from "@/components/record-filter"
 import { ApiUnavailable } from "@/components/api-unavailable"
 import { RecordGridSkeleton } from "@/components/record-grid-skeleton"
+import { Button } from "@/components/ui/button"
+import { Rows, Grid } from "lucide-react"
 
 interface RecordGridWrapperProps {
   searchParams?: { [key: string]: string | string[] | undefined }
@@ -23,6 +25,7 @@ export default function RecordGridWrapper({
   const [totalRecords, setTotalRecords] = useState(0)
   const [totalPages, setTotalPages] = useState(1)
   const [currentPage, setCurrentPage] = useState(1)
+  const [currentViewMode, setCurrentViewMode] = useState<'grid' | 'list'>(viewMode)
 
   // Convert searchParams to URL parameters
   useEffect(() => {
@@ -68,7 +71,8 @@ export default function RecordGridWrapper({
         
         console.log("Fetching records with params:", params.toString())
         
-        const response = await fetch(`/api/records?${params.toString()}`)
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || ''; // Add fallback
+        const response = await fetch(`${apiUrl}/api/records?${params.toString()}`)
         
         if (!response.ok) {
           throw new Error("Failed to fetch records")
@@ -76,7 +80,7 @@ export default function RecordGridWrapper({
         
         const data = await response.json()
         
-        setRecords(data.records || [])
+        setRecords(data.data || [])
         setTotalRecords(data.pagination?.totalRecords || 0)
         setTotalPages(data.pagination?.totalPages || 1)
         setCurrentPage(data.pagination?.currentPage || 1)
@@ -96,17 +100,37 @@ export default function RecordGridWrapper({
 
   return (
     <div className="space-y-6">
-      {showFilter && (
+      {/* View Toggle Buttons */}
+      <div className="flex justify-end space-x-2 mb-4">
+        <Button 
+          variant={currentViewMode === 'grid' ? 'default' : 'outline'} 
+          size="icon" 
+          onClick={() => setCurrentViewMode('grid')}
+          aria-label="Grid View"
+        >
+          <Grid className="h-4 w-4" />
+        </Button>
+        <Button 
+          variant={currentViewMode === 'list' ? 'default' : 'outline'} 
+          size="icon" 
+          onClick={() => setCurrentViewMode('list')}
+          aria-label="List View"
+        >
+          <Rows className="h-4 w-4" />
+        </Button>
+      </div>
+      
+      {/* {showFilter && (
         <RecordFilter
           totalRecords={totalRecords}
           currentPage={currentPage}
           totalPages={totalPages}
         />
-      )}
+      )} */}
       
-      <RecordGridClient records={records} viewMode={viewMode} />
+      <RecordGridClient records={records} viewMode={currentViewMode} />
       
-      {showFilter && totalPages > 1 && (
+      {/* {showFilter && totalPages > 1 && (
         <div className="mt-8">
           <RecordFilter
             totalRecords={totalRecords}
@@ -114,7 +138,7 @@ export default function RecordGridWrapper({
             totalPages={totalPages}
           />
         </div>
-      )}
+      )} */}
     </div>
   )
 }

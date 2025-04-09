@@ -147,9 +147,9 @@ export default function RecordListView({ records }: RecordListViewProps) {
                 <TableCell className="p-2">
                   <Link href={`/records/${record.id}`}>
                     <div className="relative h-16 w-16 overflow-hidden rounded-sm bg-muted flex items-center justify-center text-xs text-muted-foreground">
-                      {record.cover_image ? (
+                      {record.coverImage ? (
                         <Image 
-                          src={record.cover_image} 
+                          src={record.coverImage}
                           alt={record.title || 'Record cover'}
                           fill
                           style={{ objectFit: 'cover' }}

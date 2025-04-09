@@ -90,7 +90,7 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
         {/* Cover image with hover effect */}
         <div className="relative aspect-square w-full overflow-hidden bg-black/5 dark:bg-black/20">
           <Image
-            src={record.cover_image || "/placeholder.svg"}
+            src={record.coverImage || "/placeholder.svg"}
             alt={record.title}
             fill
             className="object-cover transition-all duration-300 hover:scale-105"
