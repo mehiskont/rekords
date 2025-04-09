@@ -2,13 +2,26 @@
 
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import { DiscogsTrack, TrackVideo } from "@/types/discogs"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Youtube } from "lucide-react"
 
+// Define placeholder types
+type Track = {
+  position: string;
+  title: string;
+  duration?: string;
+  video?: Video; // Assuming a video object might be part of a track
+};
+
+type Video = {
+  url: string;
+  title: string;
+  duration?: number; // Make duration optional or remove if not consistently available
+};
+
 interface TrackListingProps {
-  tracks: DiscogsTrack[]
-  videos: TrackVideo[]
+  tracks: Track[];
+  videos: Video[];
 }
 
 export function TrackListing({ tracks, videos }: TrackListingProps) {
@@ -20,7 +33,8 @@ export function TrackListing({ tracks, videos }: TrackListingProps) {
   }
   
   // Transform YouTube URLs to embed URLs
-  const getEmbedUrl = (url: string) => {
+  const getEmbedUrl = (url: string | undefined) => {
+    if (!url) return ''; // Handle undefined case
     // Handle youtu.be format
     if (url.includes('youtu.be/')) {
       const videoId = url.split('youtu.be/')[1].split('?')[0]
@@ -38,10 +52,10 @@ export function TrackListing({ tracks, videos }: TrackListingProps) {
   }
   
   // If there are no tracks but we have videos, create synthetic tracks from videos
-  const displayTracks = tracks.length > 0 ? tracks : videos.map((video, index) => ({
+  const displayTracks: Track[] = tracks.length > 0 ? tracks : videos.map((video, index) => ({
     position: `${index + 1}`,
     title: video.title,
-    duration: video.duration,
+    duration: video.duration ? `${Math.floor(video.duration / 60)}:${String(video.duration % 60).padStart(2, '0')}` : undefined,
     video: video
   }))
   
@@ -84,13 +98,13 @@ export function TrackListing({ tracks, videos }: TrackListingProps) {
                     onClick={() => setActiveVideoUrl(track.video?.url || null)}
                   >
                     <Youtube className="h-4 w-4" />
-                    {activeVideoUrl === track.video.url ? "Hide Preview" : "Play Preview"}
+                    {activeVideoUrl === track.video?.url ? "Hide Preview" : "Play Preview"}
                   </Button>
                   
-                  {activeVideoUrl === track.video.url && (
+                  {activeVideoUrl === track.video?.url && (
                     <div className="aspect-video w-full sm:w-3/4 md:w-1/2">
                       <iframe
-                        src={getEmbedUrl(track.video.url)}
+                        src={getEmbedUrl(track.video?.url)}
                         className="w-full h-full rounded-md"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen

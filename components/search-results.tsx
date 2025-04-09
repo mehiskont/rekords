@@ -1,10 +1,22 @@
 import Link from "next/link"
 import Image from "next/image"
 import { Loader2 } from "lucide-react"
-import type { DiscogsRecord } from "@/types/discogs"
+
+// Define placeholder type for Record
+type Record = {
+  id: number | string; // Assuming id can be number or string
+  title: string;
+  artist?: string; // Assuming artist is optional
+  cover_image?: string; // Optional cover image URL
+  label?: string; // Optional label
+  catalogNumber?: string; // Optional catalog number
+  price?: number; // Optional price
+  condition?: string; // Optional condition
+  // Add other fields expected from the API
+};
 
 interface SearchResultsProps {
-  results: DiscogsRecord[]
+  results: Record[];
   isLoading: boolean
   query: string
   category: string
@@ -54,7 +66,7 @@ export function SearchResults({ results, isLoading, query, category, onClose, is
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className={`font-medium truncate ${isCompact ? "text-sm" : "text-base"}`}>{record.title}</h3>
-                    <p className={`text-muted-foreground/70 truncate ${isCompact ? "text-xs" : "text-sm"}`}>{record.artist}</p>
+                    <p className={`text-muted-foreground/70 truncate ${isCompact ? "text-xs" : "text-sm"}`}>{record.artist || "Unknown Artist"}</p>
                     {!isCompact && (
                       <p className="text-xs text-muted-foreground/60 truncate">{labelDisplay}</p>
                     )}
@@ -70,7 +82,7 @@ export function SearchResults({ results, isLoading, query, category, onClose, is
           {results.length > 5 && (
             <div className={isCompact ? "p-3 border-t border-primary/10 dark:border-white/10" : "p-4 border-t border-primary/10 dark:border-white/10"}>
               <Link
-                href={`/search?q=${encodeURIComponent(query)}&category=${category}&refresh=true`}
+                href={`/search?q=${encodeURIComponent(query)}&category=${category}`}
                 className={`block w-full text-center text-muted-foreground/70 hover:text-foreground ${isCompact ? "text-xs" : "text-sm"}`}
                 onClick={onClose}
               >

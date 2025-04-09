@@ -1,34 +1,53 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useCart } from "@/contexts/cart-context"
+import { useCart, type CartState, type CartAction } from "@/contexts/cart-context"
 import { RecordCard } from "./record-card"
-import type { DiscogsRecord } from "@/types/discogs"
-import { SessionProvider } from "next-auth/react"
-import { CartProvider } from "@/contexts/cart-context"
+// Remove import type { DiscogsRecord } from "@/types/discogs" // Should use placeholder type
+// Assuming placeholder Record type is defined globally or imported
+type Record = {
+  id: number | string;
+  title: string;
+  artist?: string;
+  cover_image?: string;
+  label?: string;
+  catalogNumber?: string;
+  price?: number;
+  condition?: string;
+  quantity_available?: number;
+};
 
 interface ClientRecordCardProps {
-  record: DiscogsRecord
+  // record: DiscogsRecord // Use placeholder type
+  record: Record
 }
+
+// Define a dummy initial state that matches CartState structure
+const initialDummyCartState: CartState = {
+  items: [],
+  isOpen: false,
+  isLoading: false,
+};
 
 export function ClientRecordCard({ record }: ClientRecordCardProps) {
   const [isMounted, setIsMounted] = useState(false)
+  // Call useCart unconditionally at the top level
+  const { state, dispatch } = useCart()
   
   useEffect(() => {
     setIsMounted(true)
   }, [])
 
-  if (!isMounted) {
-    return <RecordCard record={record} cartState={{ items: [], isOpen: false }} cartDispatch={() => {}} />
-  }
+  // Determine which props to pass based on mount state
+  const cardProps = isMounted 
+    ? { cartState: state, cartDispatch: dispatch } 
+    : { cartState: initialDummyCartState, cartDispatch: () => {} }; // Use the full dummy state
 
-  const { state, dispatch } = useCart()
-  
+  // Always render RecordCard, but pass different props
   return (
     <RecordCard 
       record={record} 
-      cartState={state} 
-      cartDispatch={dispatch}
+      {...cardProps} // Spread the determined props
     />
   )
 }

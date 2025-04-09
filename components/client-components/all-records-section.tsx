@@ -62,6 +62,7 @@ export function AllRecordsSection() {
       setIsLoading(true)
       setError(null)
       
+      let fetchUrl = ''; // Define outside try block
       try {
         // Create query string from current URL parameters
         const params = new URLSearchParams()
@@ -71,20 +72,51 @@ export function AllRecordsSection() {
         if (sort) params.set("sort", sort)
         params.set("page", page.toString())
         
-        const response = await fetch(`/api/records?${params.toString()}`)
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL; // Get API URL here
+        if (!apiUrl) {
+          throw new Error("API URL is not configured.");
+        }
+        fetchUrl = `${apiUrl}/api/records?${params.toString()}`; // Assign here
+
+        // **** ADDING LOG HERE ****
+        console.log("[Client Component Log] Attempting to fetch all records from:", fetchUrl);
+
+        const response = await fetch(fetchUrl)
         
+        // **** ADDED LOGGING ****
+        const responseStatus = response.status;
+        const responseText = await response.text(); // Get raw text
+        console.log(`[Client Log] Response Status: ${responseStatus}`);
+        console.log("[Client Log] Raw Response Text (first 500 chars):", responseText.substring(0, 500));
+
+        // Check status before parsing
         if (!response.ok) {
-          throw new Error("Failed to fetch records")
+          console.error(`[Client Error] Failed to fetch records. Status: ${responseStatus}. URL: ${fetchUrl}. Response: ${responseText.substring(0, 500)}`);
+          throw new Error(`Failed to fetch records (Status: ${responseStatus})`)
         }
         
-        const data = await response.json()
-        
-        setRecords(data.records || [])
+        let data;
+        try {
+          data = JSON.parse(responseText); // Parse the text
+        } catch (parseError) {
+          console.error("[Client Error] Error parsing JSON response:", { parseError, responseText: responseText.substring(0, 500) });
+          throw new Error("Failed to parse API response");
+        }
+        // **** END ADDED LOGGING ****
+
+        // Map coverImage to cover_image before setting state
+        const rawRecords = data.data || [];
+        const mappedRecords = rawRecords.map((record: any) => ({
+          ...record,
+          cover_image: record.coverImage, // Map the field
+        }));
+
+        setRecords(mappedRecords); // Use mapped records
         setTotalRecords(data.totalRecords || 0)
         setTotalPages(data.totalPages || 1)
         setCurrentPage(data.page || 1)
       } catch (err) {
-        console.error("Error fetching records:", err)
+        console.error("[Client Component Log] Error in fetchRecords process:", err) // Log the caught error
         setError(err instanceof Error ? err.message : "An unknown error occurred")
       } finally {
         setIsLoading(false)

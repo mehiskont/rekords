@@ -5,30 +5,33 @@ import { RecordGridSkeleton } from "@/components/record-grid-skeleton"
 import { AllRecordsSection } from "@/components/client-components/all-records-section"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import Link from "next/link"
-import { getDiscogsInventory } from "@/lib/discogs"
 
 // Force dynamic rendering to prevent stale data from being cached
 export const dynamic = 'force-dynamic'
 export const revalidate = 0 // Do not cache this page
 
 interface HomePageProps {
-  searchParams?: { [key: string]: string | string[] | undefined }
+  searchParams?: Record<string, string | string[] | undefined>
 }
 
 export default async function HomePage({ searchParams = {} }: HomePageProps) {
-  // Fetch all inventory data to sum up the total available quantity
-  const { records } = await getDiscogsInventory(undefined, undefined, 1, 100)
+  // Remove fetching all inventory data just for count
+  // const { records } = await getDiscogsInventory(undefined, undefined, 1, 100)
+  // const recordCount = records.reduce((total, record) => total + (record.quantity_available || 0), 0)
   
-  // Calculate the total quantity by summing all quantity_available fields
-  const recordCount = records.reduce((total, record) => total + (record.quantity_available || 0), 0)
-  
+  // Consider fetching the count from a dedicated API endpoint if needed
+  const recordCount = null; // Placeholder - fetch from API if required
+
   return (
     <div className="min-h-screen">
    
       {/* Hero Section with Search */}
       <section className="relative py-24 bg-background">
         <div className="container max-w-6xl mx-auto px-4 mt-12">
-          {/* <h2 className="text-xl md:text-2xl font-medium text-center mb-8">{recordCount} records currently in our library</h2> */}
+          {/* Optional: Display count if fetched from API */}
+          {/* {recordCount !== null && (
+            <h2 className="text-xl md:text-2xl font-medium text-center mb-8">{recordCount} records currently in our library</h2>
+          )} */}
           <SearchBar preventRedirect={false} />
         </div>
       </section>

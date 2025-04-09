@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { calculatePriceWithoutFees } from "@/lib/price-calculator"
 import { toast } from "@/components/ui/use-toast"
-import type { DiscogsRecord } from "@/types/discogs"
+import type { DiscogsRecord } from "@/types"
 import type { CartState, CartAction } from "@/contexts/cart-context"
 
 interface RecordCardProps {

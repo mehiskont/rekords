@@ -1,19 +1,13 @@
-import { DiscogsAuthButton } from "@/components/discogs-auth-button"
-import { DiscogsConnectionStatus } from "@/components/discogs-connection-status"
-
 export default function SettingsPage() {
   return (
     <div className="space-y-6 py-8">
       <div>
-        <h2 className="text-lg font-medium">Discogs Integration</h2>
-        <p className="text-sm text-muted-foreground">Connect your Discogs account to manage your inventory.</p>
+        <h2 className="text-lg font-medium">Settings</h2>
+        <p className="text-sm text-muted-foreground">Manage your account settings.</p>
       </div>
 
-      <DiscogsConnectionStatus />
+      <p className="text-sm text-muted-foreground">Account settings functionality will be added here.</p>
 
-      <div className="flex justify-start">
-        <DiscogsAuthButton />
-      </div>
     </div>
   )
 }

@@ -1,212 +1,82 @@
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { PrismaClient } from "@prisma/client"
+// import { PrismaAdapter } from "@auth/prisma-adapter"
+// import { PrismaClient } from "@prisma/client"
 import EmailProvider from "next-auth/providers/email"
 import GoogleProvider from "next-auth/providers/google"
 import CredentialsProvider from "next-auth/providers/credentials"
-import { Resend } from "resend"
-import bcrypt from "bcryptjs"
+// import { Resend } from "resend" // Keep if needed for email provider, remove otherwise
+// import bcrypt from "bcryptjs" // Remove if not comparing passwords here
 import { log } from "./logger"
-import { testDatabaseConnection } from "./prisma"
+// import { testDatabaseConnection } from "./prisma" // Remove
+// import { prisma } from "./prisma" // Remove
+// Import necessary types from next-auth
+import type { NextAuthOptions, User, Account, Profile, Session, CallbacksOptions } from "next-auth";
+import type { AdapterUser } from "next-auth/adapters";
+import type { JWT } from "next-auth/jwt";
 
-// Reuse the shared PrismaClient instance
-import { prisma } from "./prisma"
-const resend = new Resend(process.env.RESEND_API_KEY)
+// const resend = new Resend(process.env.RESEND_API_KEY) // Keep if needed
 
-// Track if initialization is successful
-let adapterInitialized = false
-let prismaAdapter
+// Remove all adapter initialization logic
+// let adapterInitialized = false
+// let prismaAdapter
+// async function initPrismaAdapter() { ... }
+// initPrismaAdapter().catch(...) 
 
-async function initPrismaAdapter() {
-  try {
-    // Check if we should force fallback mode
-    if (process.env.AUTH_FORCE_FALLBACK === 'true') {
-      log("AUTH_FORCE_FALLBACK is enabled, skipping database connection", {}, "info")
-      return null
-    }
-    
-    // Test database connection before initializing adapter with a short timeout
-    const dbStatus = await testDatabaseConnection(2000)
-    
-    if (dbStatus.connected && !dbStatus.forceFallback) {
-      // Create and use adapter when connection is verified
-      prismaAdapter = PrismaAdapter(prisma)
-      adapterInitialized = true
-      log("PrismaAdapter initialized successfully", {}, "info")
-      return prismaAdapter
-    } else {
-      log("Database connection test failed, skipping PrismaAdapter", dbStatus.error, "warn")
-      return null
-    }
-  } catch (error) {
-    log("Error initializing PrismaAdapter", error, "error")
-    return null
-  }
-}
+// Remove email provider function if not using email provider
+// function isEmailProviderConfigured() { ... }
 
-// Immediately try to initialize, but don't block startup
-initPrismaAdapter().catch(error => {
-  log("Error during adapter initialization", error, "error")
-})
-
-// Helper to check if email provider is configured
-function isEmailProviderConfigured() {
-  return Boolean(
-    process.env.EMAIL_SERVER_HOST &&
-    process.env.EMAIL_SERVER_PORT &&
-    process.env.EMAIL_SERVER_USER &&
-    process.env.EMAIL_SERVER_PASSWORD &&
-    process.env.EMAIL_FROM
-  )
-}
-
-export const authOptions = {
-  // Use custom PrismaAdapter with better debugging
-  adapter: {
-    ...PrismaAdapter(prisma),
-    async linkAccount(data) {
-      log("Linking account", { provider: data.provider, userId: data.userId }, "info");
-      
-      // Look for placeholder records to update instead of creating new ones
-      try {
-        const existingAccount = await prisma.account.findFirst({
-          where: { 
-            userId: data.userId,
-            provider: data.provider,
-            providerAccountId: 'placeholder-will-be-updated'
-          }
-        });
-        
-        if (existingAccount) {
-          log("Found placeholder account to update", { id: existingAccount.id }, "info");
-          const updated = await prisma.account.update({
-            where: { id: existingAccount.id },
-            data: {
-              providerAccountId: data.providerAccountId,
-              access_token: data.access_token,
-              refresh_token: data.refresh_token,
-              expires_at: data.expires_at,
-              token_type: data.token_type,
-              scope: data.scope,
-              id_token: data.id_token,
-              session_state: data.session_state
-            }
-          });
-          return updated;
-        }
-      } catch (err) {
-        log("Error finding/updating placeholder account", err, "error");
-      }
-      
-      // Default behavior
-      return prisma.account.create({ data });
-    }
-  },
-  debug: true, // Enable debug mode temporarily
+export const authOptions: NextAuthOptions = {
+  // Remove adapter entirely - Frontend will not manage user persistence
+  // adapter: { ... }, 
+  debug: process.env.NODE_ENV === 'development', // Enable debug only in development
   session: {
-    strategy: "jwt", // Use JWT strategy for better reliability
+    strategy: "jwt", // JWT is essential without a database adapter
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   providers: [
-    // Credentials provider for email/password login
+    // Credentials provider - simplified for fallback/testing only
     CredentialsProvider({
       name: "credentials",
       credentials: {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" }
       },
-      async authorize(credentials) {
+      // Explicitly type credentials
+      async authorize(credentials: Record<string, string> | undefined): Promise<User | null> {
+        log("[Credentials Provider] Authorize attempt", { email: credentials?.email }, "info");
         if (!credentials?.email || !credentials?.password) {
           return null;
         }
 
-        try {
-          // Try to authenticate with the database first
-          try {
-            // Find the user
-            const user = await prisma.user.findUnique({
-              where: { email: credentials.email }
-            });
-            
-            // If no user or no password (OAuth user), return null
-            if (!user || !user.hashedPassword) {
-              // For debugging, check if this is our test user
-              const testEmail = process.env.TEST_USER_EMAIL || "test@example.com";
-              const testPassword = process.env.TEST_USER_PASSWORD || "password123";
-              const adminEmail = process.env.ADMIN_USER_EMAIL || "admin@example.com";
-              const adminPassword = process.env.ADMIN_USER_PASSWORD || "admin123";
-              
-              if (credentials.email === testEmail && credentials.password === testPassword) {
-                log("Using test user auth as fallback", {}, "info");
-                return {
-                  id: "temp-user-id-123",
-                  email: testEmail,
-                  name: "Test User"
-                };
-              }
-              
-              // Add admin user fallback
-              if (credentials.email === adminEmail && credentials.password === adminPassword) {
-                log("Using admin user auth", {}, "info");
-                return {
-                  id: "admin-user-id-456",
-                  email: adminEmail,
-                  name: "Admin User" 
-                };
-              }
-              
-              return null;
-            }
-            
-            // Check password
-            const passwordValid = await bcrypt.compare(credentials.password, user.hashedPassword);
-            if (!passwordValid) {
-              return null;
-            }
-            
-            // Return authorized user
-            log("User authenticated successfully from database", { userId: user.id }, "info");
-            return {
-              id: user.id,
-              email: user.email,
-              name: user.name
-            };
-          } catch (dbError) {
-            // Database is unavailable, fallback to test user
-            log("Database error during auth, using fallback", dbError, "warn");
-            
-            // Check if this is our test user
-            const testEmail = process.env.TEST_USER_EMAIL || "test@example.com";
-            const testPassword = process.env.TEST_USER_PASSWORD || "password123";
-            const adminEmail = process.env.ADMIN_USER_EMAIL || "admin@example.com";
-            const adminPassword = process.env.ADMIN_USER_PASSWORD || "admin123";
-            
-            if (credentials.email === testEmail && credentials.password === testPassword) {
-              return {
-                id: "temp-user-id-123",
-                email: testEmail,
-                name: "Test User"
-              };
-            }
-            
-            // Admin fallback
-            if (credentials.email === adminEmail && credentials.password === adminPassword) {
-              log("Using admin user auth in fallback", {}, "info");
-              return {
-                id: "admin-user-id-456",
-                email: adminEmail,
-                name: "Admin User" 
-              };
-            }
-            
-            return null;
-          }
-        } catch (error) {
-          log("Error in credentials authorization:", error, "error");
-          return null;
+        // --- NO DATABASE CHECK --- 
+        // Frontend cannot securely verify passwords against a remote API here.
+        // This provider should ideally be removed or only used for specific
+        // non-standard flows if absolutely necessary.
+        // Keeping the test/admin fallback for potential temporary use.
+
+        const testEmail = process.env.TEST_USER_EMAIL || "test@example.com";
+        const testPassword = process.env.TEST_USER_PASSWORD || "password123";
+        const adminEmail = process.env.ADMIN_USER_EMAIL || "admin@example.com";
+        const adminPassword = process.env.ADMIN_USER_PASSWORD || "admin123";
+
+        if (credentials.email === testEmail && credentials.password === testPassword) {
+          log("Using test user auth as fallback", {}, "info");
+          // Return type must match User
+          return { id: "test-user-id-123", email: testEmail, name: "Test User" };
         }
+        
+        if (credentials.email === adminEmail && credentials.password === adminPassword) {
+          log("Using admin user auth as fallback", {}, "info");
+          // Return type must match User
+          return { id: "admin-user-id-456", email: adminEmail, name: "Admin User" };
+        }
+
+        log("Credentials did not match fallback users", { email: credentials.email }, "warn");
+        // If credentials don't match fallbacks, deny access.
+        // Authentication MUST happen against the backend API for real users.
+        return null;
       }
     }),
-    // Google OAuth provider with proper configuration
+    // Google OAuth provider - remains largely the same
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || "",
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
@@ -217,198 +87,64 @@ export const authOptions = {
           response_type: "code"
         }
       },
-      // Always use the same profile handling regardless of adapter status
-      profile(profile) {
+      // Explicitly type profile
+      profile(profile: Profile & { sub: string; name: string; email: string; picture: string; }): User {
         log("Google auth: processing profile", { email: profile.email }, "info");
+        // We map standard fields, the backend API will handle user creation/linking
         return {
-          id: profile.sub,
+          id: profile.sub, // Use Google's unique ID
           name: profile.name,
           email: profile.email,
-          image: profile.picture
+          image: profile.picture,
+          // Ensure role is not assumed here; backend should manage roles
         }
       }
     })
+    // Add other OAuth providers here (GitHub, etc.) if needed
   ],
   pages: {
     signIn: "/auth/signin",
-    error: "/auth/error",
+    error: "/auth/error", // Error code passed in query string
+    // verifyRequest: '/auth/verify-request', // If using Email provider
+    // newUser: '/auth/new-user' // Optional: Redirect new users
   },
   callbacks: {
-    async jwt({ token, user, account }) {
-      // Initial sign in
+    // Type parameters for JWT callback
+    async jwt({ token, user, account, profile }: { token: JWT; user?: User | AdapterUser; account?: Account | null; profile?: Profile; }): Promise<JWT> {
       if (account && user) {
-        return {
-          ...token,
-          userId: user.id,
-        };
+        token.userId = user.id; 
+        token.provider = account.provider;
       }
-      // Return previous token if the access token has not expired yet
       return token;
     },
-    async session({ session, token }) {
-      // In JWT strategy, we primarily use token, not user
-      // User param may be undefined with JWT strategy
-      
-      if (session?.user && token) {
-        // Set user ID from token (in JWT mode, this is our source of truth)
-        if (token.userId) {
-          session.user.id = token.userId;
-        }
+    // Type parameters for session callback
+    async session({ session, token }: { session: Session; token: JWT; user: User | AdapterUser; }): Promise<Session> {
+      // The default Session type might not have `id` on `session.user`.
+      // We need to extend the Session type or assert the type carefully.
+      if (token && session.user) {
+        // Extend the Session user type inline or define a custom type
+        (session.user as { id: string; name?: string | null; email?: string | null; image?: string | null }).id = token.userId as string;
+        (session as any).provider = token.provider; 
       }
-      
       return session;
     },
-    // Add signIn callback for handling OAuthAccountNotLinked
-    async signIn({ user, account, profile, email }) {
-      log("Sign-in attempt:", {
-        provider: account?.provider,
-        userId: user?.id,
-        userEmail: user?.email || email
-      }, "info");
-      
-      // Special handling for Google OAuth users
-      if (account?.provider === "google" && profile?.email) {
-        try {
-          // Try to find an existing user with this email
-          const existingUser = await prisma.user.findUnique({
-            where: { email: profile.email },
-            include: { accounts: true }
-          });
-          
-          if (existingUser) {
-            log(`Found existing user for email ${profile.email}`, { userId: existingUser.id }, "info");
-            
-            // Check if this Google account is already linked to another user
-            const existingGoogleAccount = await prisma.account.findFirst({
-              where: {
-                provider: "google",
-                providerAccountId: profile.sub,
-              }
-            });
-            
-            if (existingGoogleAccount && existingGoogleAccount.userId !== existingUser.id) {
-              log("Google account linked to different user", { 
-                linkedUserId: existingGoogleAccount.userId,
-                attemptedUserId: existingUser.id 
-              }, "warn");
-              
-              // Special case - try to fix by updating the Account to point to the correct user
-              await prisma.account.update({
-                where: { id: existingGoogleAccount.id },
-                data: { userId: existingUser.id }
-              });
-              
-              log("Updated Google account to link to correct user", {}, "info");
-            }
-            
-            // Check if user has any Google account
-            const hasGoogleAccount = existingUser.accounts?.some(a => a.provider === "google");
-            
-            if (!hasGoogleAccount) {
-              log("Creating Google account link for existing user", { userId: existingUser.id }, "info");
-              
-              // Create the account connection
-              await prisma.account.create({
-                data: {
-                  userId: existingUser.id,
-                  type: "oauth",
-                  provider: "google",
-                  providerAccountId: profile.sub,
-                  access_token: account.access_token,
-                  refresh_token: account.refresh_token,
-                  expires_at: account.expires_at,
-                  token_type: account.token_type,
-                  scope: account.scope,
-                  id_token: account.id_token,
-                  session_state: account.session_state
-                }
-              });
-              
-              log("Successfully linked Google account to existing user", { userId: existingUser.id }, "info");
-            }
-          }
-        } catch (err) {
-          log("Error handling OAuth account linking", err, "error");
-        }
-      }
-      
-      // Attempt to merge guest cart if user has successfully authenticated
-      if (user?.id) {
-        try {
-          // Check if prisma is accessible before attempting cart operations
-          if (!prisma || !prisma.cart) {
-            log("Prisma or cart model not available", {}, "warn");
-            return true; // Continue with sign-in
-          }
-          
-          // Get guest cart ID with error handling
-          let guestCartId;
-          try {
-            const { cookies } = await import("next/headers");
-            const cookieStore = cookies();
-            guestCartId = cookieStore.get("plastik_guest_cart_id")?.value;
-            
-            log("Cookie check result", {
-              hasGuestId: !!guestCartId,
-              guestCartId: guestCartId || "none"
-            }, "info");
-          } catch (cookieError) {
-            log("Error accessing cookies", cookieError, "error");
-            // Continue without guest cart ID
-          }
-          
-          if (guestCartId) {
-            log("Found guest cart ID, attempting to merge", { userId: user.id, guestCartId }, "info");
-            
-            // Look for guest cart
-            const guestCart = await prisma.cart.findUnique({
-              where: { guestId: guestCartId },
-              include: { items: true }
-            });
-            
-            if (guestCart && guestCart.items.length > 0) {
-              // Find or create user cart
-              let userCart = await prisma.cart.findUnique({
-                where: { userId: user.id },
-                include: { items: true }
-              });
-              
-              if (!userCart) {
-                userCart = await prisma.cart.create({
-                  data: { userId: user.id },
-                  include: { items: true }
-                });
-              }
-            
-              // Import cart merging function to ensure consistent logic
-              const { mergeGuestCartToUserCart } = await import("./cart");
-              
-              // Use the dedicated cart merging function to ensure consistent behavior
-              const mergedCart = await mergeGuestCartToUserCart(guestCartId, user.id);
-              
-              if (mergedCart) {
-                log("Successfully merged cart using mergeGuestCartToUserCart function", 
-                  { itemCount: mergedCart.items.length },
-                  "info");
-              } else {
-                log("No items were merged or an error occurred during cart merging", {}, "warn");
-              }
-              
-              // Guest cart deletion is already handled in mergeGuestCartToUserCart function
-              
-              // Don't delete the cookie immediately - let the client handle it
-              // This ensures client-side code can still access the guest cart if needed
-              // cookieStore.delete("plastik_guest_cart_id");
-            }
-          }
-        } catch (error) {
-          log("Error merging guest cart on sign in", error, "error");
-          // Don't block sign-in if cart merging fails
-        }
-      }
-      
-      return true;
+    // Type parameters for signIn callback
+    async signIn({ user, account, profile, email, credentials }: { user: User | AdapterUser; account?: Account | null; profile?: Profile; email?: { verificationRequest?: boolean }; credentials?: Record<string, unknown>; }): Promise<boolean | string> {
+      log("SignIn callback triggered", { userId: user.id, provider: account?.provider }, "info");
+      // Example: Allow only specific providers or check email domain
+      // if (account?.provider === "google" && !profile?.email?.endsWith("@example.com")) {
+      //   return false; // Deny sign-in
+      // }
+      return true; // Allow sign-in
     }
+  },
+  // Add events for logging if needed
+  events: {
+    // Type message parameter for events
+    async signIn(message: { user: User; account: Account | null; isNewUser?: boolean }) { log("Successful sign in", { user: message.user, account: message.account }, "info") },
+    async signOut(message: { session?: Session; token?: JWT }) { log("Sign out", { session: message.session, token: message.token }, "info") },
+    // async createUser(message) { log("Create user event", { user: message.user }, "info") }, // Not applicable without adapter
+    // async linkAccount(message) { log("Link account event", { user: message.user, account: message.account }, "info") }, // Not applicable without adapter
   },
 }
 

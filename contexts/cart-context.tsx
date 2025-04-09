@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useReducer, useEffect, useState, useRef, useCallback } from "react"
 import { useSession } from "next-auth/react"
-import type { DiscogsRecord } from "@/types/discogs"
+import type { DiscogsRecord } from "@/types"
 
 interface CartItem extends DiscogsRecord {
   quantity: number

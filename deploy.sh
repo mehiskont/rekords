@@ -1,39 +1,45 @@
 #!/bin/bash
 
-# Log deployment start
-echo "Deployment started: $(date)"
-
-# Set error handling to stop on any error
+# Exit immediately if a command exits with a non-zero status.
 set -e
 
-# Change to your project directory
-cd /data03/virt136643/domeenid/www.komeh.tech/plastik/rekords
+# Define variables
+APP_NAME="plastik-frontend" # Choose a relevant name
+REGION="fra1" # Example region, change if needed
+PLAN="basic-xxs" # Example plan, change if needed
 
-# Pull the latest changes from GitHub
-echo "Pulling latest code..."
-git pull origin main
+# Navigate to the project directory (optional, if script is run from elsewhere)
+# cd /path/to/your/project
 
-# Install dependencies
+echo "Starting deployment process..."
+
+# 1. Install dependencies
 echo "Installing dependencies..."
-npm install --legacy-peer-deps
+npm install
 
-# Run database migrations (using Supabase schema)
-echo "Running database migrations with Supabase schema..."
-npx prisma db push --schema=./prisma/schema.supabase.prisma
-
-# Build the application
-echo "Building application..."
+# 2. Build the Next.js application
+echo "Building the application..."
 npm run build
 
-# Create lib symlink in the .next directory to fix module resolution
-echo "Creating lib symlinks for module resolution..."
-mkdir -p .next/server/chunks
-ln -sf ../../lib .next/server/chunks/lib
-ln -sf ../../lib .next/server/lib
-ln -sf ../lib .next/lib
+# 3. Database setup (Removed)
+# Remove database migrations step
+# echo "Running database migrations with Supabase schema..."
+# npx prisma db push --schema=./prisma/schema.supabase.prisma
 
-# Restart the PM2 process
-echo "Restarting application..."
-pm2 restart rekords
+echo "Database migrations skipped (handled by backend API deployment)."
 
-echo "Deployment completed: $(date)"
+# 4. Deploy to DigitalOcean App Platform (Example)
+# Replace with your actual deployment command or process
+echo "Deploying to DigitalOcean App Platform..."
+# Example using doctl (ensure doctl is configured)
+# doctl apps create --spec .do/app.yaml 
+# OR update existing app:
+# doctl apps update YOUR_APP_ID --spec .do/app.yaml
+
+echo "Deployment command placeholder. Replace with your actual deployment steps."
+
+# Example: If deploying static site to Netlify/Vercel
+# echo "Deploying to Vercel..."
+# vercel --prod
+
+echo "Deployment process finished."

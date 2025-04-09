@@ -1,10 +1,24 @@
 "use client"
 
-import type { DiscogsRecord } from "@/types/discogs"
 import { ClientRecordCard } from "../client-record-card"
 
+// Define placeholder type (can be imported if centralized)
+type Record = {
+  id: number | string;
+  title: string;
+  artist?: string;
+  cover_image?: string;
+  label?: string;
+  catalogNumber?: string;
+  price?: number;
+  condition?: string;
+  quantity_available?: number; // Keep fields used by ClientRecordCard
+  // Add other fields used by ClientRecordCard if any
+};
+
 interface NewArrivalsClientProps {
-  records: DiscogsRecord[]
+  // records: DiscogsRecord[] // Use the placeholder Record type
+  records: Record[]
 }
 
 export default function NewArrivalsClient({ records }: NewArrivalsClientProps) {
@@ -16,11 +30,13 @@ export default function NewArrivalsClient({ records }: NewArrivalsClientProps) {
     <div>
       <h2 className="text-3xl font-bold mb-8">New Arrivals</h2>
       <div className="flex space-x-4 overflow-x-auto scrollbar-hide pb-4">
-        {records.slice(0, 6).map((record) => (
-          <div 
-            key={record.id} 
+        {/* Slice the records directly here if needed, or ensure the parent passes the correct slice */}
+        {records.map((record) => (
+          <div
+            key={record.id}
             className="w-64 flex-shrink-0"
           >
+            {/* Ensure ClientRecordCard props match the Record type */}
             <ClientRecordCard record={record} />
           </div>
         ))}
