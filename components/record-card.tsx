@@ -86,33 +86,63 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
 
   return (
     <Card className="flex flex-col overflow-hidden hover:shadow-md transition-shadow duration-200 h-full relative">
-      <Link href={`/records/${record.id}`} className="flex flex-col h-full">
-        {/* Cover image with hover effect */}
-        <div className="relative aspect-square w-full overflow-hidden bg-black/5 dark:bg-black/20">
-          <Image
-            src={record.coverImage || "/placeholder.svg"}
-            alt={record.title}
-            fill
-            className="object-cover transition-all duration-300 hover:scale-105"
-            sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
-            quality={90}
-            priority 
-            onError={(e) => {
-              const target = e.target as HTMLImageElement
-              target.src = "/placeholder.svg"
-            }}
-          />
+      {/* Ensure discogsReleaseId is present before creating the link */}
+      {record && record.discogsReleaseId ? (
+        <Link href={`/records/${record.discogsReleaseId}`} className="flex flex-col h-full">
+          {/* Cover image with hover effect */}
+          <div className="relative aspect-square w-full overflow-hidden bg-black/5 dark:bg-black/20">
+            <Image
+              src={record.coverImage || "/placeholder.svg"}
+              alt={record.title}
+              fill
+              className="object-cover transition-all duration-300 hover:scale-105"
+              sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
+              quality={90}
+              priority 
+              onError={(e) => {
+                const target = e.target as HTMLImageElement
+                target.src = "/placeholder.svg"
+              }}
+            />
+          </div>
+          
+          {/* Compact text content */}
+          <CardHeader className="p-3 space-y-0.5">
+            <CardTitle className="text-sm font-medium line-clamp-1">{record.title}</CardTitle>
+            <p className="text-xs line-clamp-1">{record.artist}</p>
+            <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{labelDisplay}</p>
+            <p className="text-xs text-muted-foreground line-clamp-1">{formatDisplay || "Unknown"}</p>
+            <div className="text-sm font-semibold mt-1">${(record.price || 0).toFixed(2)}</div>
+          </CardHeader>
+        </Link>
+      ) : (
+        // Fallback rendering if discogsReleaseId is missing
+        <div className="flex flex-col h-full">
+          {/* Render content without link */}
+          <div className="relative aspect-square w-full overflow-hidden bg-black/5 dark:bg-black/20">
+            <Image
+              src={record?.coverImage || "/placeholder.svg"}
+              alt={record?.title || 'Record'} 
+              fill
+              className="object-cover transition-all duration-300" 
+              sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
+              quality={90}
+              priority 
+              onError={(e) => {
+                const target = e.target as HTMLImageElement
+                target.src = "/placeholder.svg"
+              }}
+            />
+          </div>
+          <CardHeader className="p-3 space-y-0.5">
+            <CardTitle className="text-sm font-medium line-clamp-1">{record?.title}</CardTitle>
+            <p className="text-xs line-clamp-1">{record?.artist}</p>
+            <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{labelDisplay}</p>
+            <p className="text-xs text-muted-foreground line-clamp-1">{formatDisplay || "Unknown"}</p>
+            <div className="text-sm font-semibold mt-1">${(record?.price || 0).toFixed(2)}</div>
+          </CardHeader>
         </div>
-        
-        {/* Compact text content */}
-        <CardHeader className="p-3 space-y-0.5">
-          <CardTitle className="text-sm font-medium line-clamp-1">{record.title}</CardTitle>
-          <p className="text-xs line-clamp-1">{record.artist}</p>
-          <p className="text-xs text-muted-foreground line-clamp-1 mt-0.5">{labelDisplay}</p>
-          <p className="text-xs text-muted-foreground line-clamp-1">{formatDisplay || "Unknown"}</p>
-          <div className="text-sm font-semibold mt-1">${(record.price || 0).toFixed(2)}</div>
-        </CardHeader>
-      </Link>
+      )}
       
       {/* Smaller Add to Cart button at the bottom */}
       <div className="p-2 pt-0">

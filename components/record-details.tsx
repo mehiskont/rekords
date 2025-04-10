@@ -6,11 +6,11 @@ import { ShoppingCart } from "lucide-react"
 import { useCart } from "@/contexts/cart-context"
 import { calculatePriceWithoutFees } from "@/lib/price-calculator"
 import { toast } from "@/components/ui/use-toast"
-import type { DiscogsRecord } from "@/types/discogs"
+import type { Record } from "@/types/record"
 import { TrackListing } from "@/components/track-listing"
 
 interface RecordDetailsProps {
-  record: DiscogsRecord
+  record: Record
 }
 
 export function RecordDetails({ record }: RecordDetailsProps) {
@@ -20,13 +20,15 @@ export function RecordDetails({ record }: RecordDetailsProps) {
 
   const cartItem = state.items.find((item) => item.id === record.id)
   const currentQuantityInCart = cartItem?.quantity || 0
-  const isMaxQuantity = currentQuantityInCart >= record.quantity_available
+  // Provide default value 0 for quantity_available
+  const isMaxQuantity = currentQuantityInCart >= (record.quantity_available || 0)
 
   const handleAddToCart = () => {
     if (isMaxQuantity) {
       toast({
         title: "Maximum quantity reached",
-        description: `Only ${record.quantity_available} unit${record.quantity_available > 1 ? "s" : ""} available`,
+        // Provide default value 0 for quantity_available
+        description: `Only ${record.quantity_available || 0} unit${(record.quantity_available || 0) > 1 ? "s" : ""} available`,
         variant: "destructive",
       })
       return
@@ -56,7 +58,7 @@ export function RecordDetails({ record }: RecordDetailsProps) {
           {/* Image */}
           <div className="relative aspect-square">
             <Image
-              src={record.cover_image || "/placeholder.svg"}
+              src={record.images?.[0]?.uri || "/placeholder.svg"}
               alt={record.title}
               fill
               className="object-contain rounded-md shadow-sm"
@@ -84,14 +86,15 @@ export function RecordDetails({ record }: RecordDetailsProps) {
                   size="sm"
                   variant="secondary"
                   onClick={handleAddToCart}
-                  disabled={isMaxQuantity || record.quantity_available === 0}
+                  // Provide default value 0 for quantity_available
+                  disabled={isMaxQuantity || (record.quantity_available || 0) === 0}
                   className="whitespace-nowrap"
                 >
                   <ShoppingCart className="mr-1 h-4 w-4" />
-                  {record.quantity_available === 0
+                  {(record.quantity_available || 0) === 0
                     ? "Out of Stock"
                     : isMaxQuantity
-                      ? `Max (${record.quantity_available})`
+                      ? `Max (${record.quantity_available || 0})`
                       : "Add to Cart"}
                 </Button>
               </div>
@@ -109,10 +112,12 @@ export function RecordDetails({ record }: RecordDetailsProps) {
                   <span>{record.released}</span>
                 </div>
               )}
-              {record.quantity_available > 0 && (
+              {/* Provide default value 0 for quantity_available */}
+              {(record.quantity_available || 0) > 0 && (
                 <div className="flex gap-2 text-muted-foreground">
                   <span className="font-medium">Stock:</span>
-                  <span>{record.quantity_available} unit{record.quantity_available > 1 ? "s" : ""}</span>
+                  {/* Provide default value 0 for quantity_available */}
+                  <span>{record.quantity_available || 0} unit{(record.quantity_available || 0) > 1 ? "s" : ""}</span>
                 </div>
               )}
               <div className="flex gap-2">
@@ -135,7 +140,7 @@ export function RecordDetails({ record }: RecordDetailsProps) {
           {/* Styles as badges */}
           {record.styles && record.styles.length > 0 && (
             <div className="flex flex-wrap gap-1 mb-4">
-              {record.styles.map((style, index) => (
+              {record.styles.map((style: string, index: number) => (
                 <span key={index} className="px-2 py-0.5 bg-secondary text-secondary-foreground rounded-full text-xs">
                   {style}
                 </span>
@@ -146,6 +151,7 @@ export function RecordDetails({ record }: RecordDetailsProps) {
           {/* Track listing moved here */}
           {hasTracksOrVideos && (
             <div>
+              {/* Ensure tracks/videos are arrays before passing */}
               <TrackListing tracks={record.tracks || []} videos={record.videos || []} />
             </div>
           )}

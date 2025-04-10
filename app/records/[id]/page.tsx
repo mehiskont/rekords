@@ -31,41 +31,41 @@ type Video = { /* ... fields ... */ };
 
 export default async function RecordPage({ params }: { params: { id: string } }) {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const recordId = params.id;
+  const recordId = params.id; // This is now the discogsReleaseId
 
   if (!apiUrl) {
     log("NEXT_PUBLIC_API_URL is not set. Cannot fetch record details.", {}, "error");
-    // Use a generic error component or message
     return <div className="container mx-auto py-10 text-center">API configuration error.</div>;
   }
 
   try {
-    // Fetch record and related records from the backend API
-    // Adjust the endpoint/query params based on your API design
-    // Example: Fetching record and including related records
-    const fetchUrl = `${apiUrl}/api/records/${recordId}?include=related`; // Example query param
-    
-    log(`Fetching record details from API: ${fetchUrl}`, {}, "info");
-    
+    // Now directly use recordId (which is the discogsReleaseId) in the fetch URL
+    const fetchUrl = `${apiUrl}/api/discogs/releases/${recordId}`; 
+
+    log(`Fetching record details from Discogs API: ${fetchUrl}`, {}, "info");
+
     const response = await fetch(fetchUrl, {
-      // Add cache control or revalidation strategy if needed
-      next: { revalidate: 3600 } // Example: revalidate every hour
+      next: { revalidate: 3600 } 
     });
 
     if (!response.ok) {
       if (response.status === 404) {
         log(`Record not found in API for ID: ${recordId}`, { status: 404, url: fetchUrl }, "info");
-        notFound(); // Trigger Next.js 404 page
+        notFound();
       } else {
-        log(`Failed to fetch record from API. Status: ${response.status}`, { url: fetchUrl }, "error");
-        throw new Error(`API request failed with status ${response.status}`);
+        // Get error message from response if possible, otherwise use status text
+        let errorBody = 'Unknown error';
+        try {
+           errorBody = await response.text(); // Try to get response body
+        } catch (_) { /* Ignore if reading body fails */ }
+        log(`Failed to fetch record from API. Status: ${response.status}, Body: ${errorBody}`, { url: fetchUrl }, "error");
+        throw new Error(`API request failed with status ${response.status}: ${errorBody}`);
       }
     }
 
-    // Assuming API returns { record: {...}, relatedRecords: [...] }
-    const data = await response.json();
-    const record: Record | null = data.record; 
-    const relatedRecords: Record[] = data.relatedRecords || [];
+    // Simplify data parsing - assume the API returns the record object directly
+    const record: Record | null = await response.json(); 
+    const relatedRecords: Record[] = []; // Placeholder
 
     if (!record) {
       log(`API returned success but no record data for ID: ${recordId}`, { url: fetchUrl }, "warn");
