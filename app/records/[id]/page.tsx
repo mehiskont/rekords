@@ -3,35 +3,16 @@ import { RecordDetails } from "@/components/record-details"
 import { ClientRecordCard } from "@/components/client-record-card"
 import { log } from "@/lib/logger"
 import { ApiUnavailable } from "@/components/api-unavailable"
+import type { Record } from "@/types/record" // Import the canonical Record type
 
-// Define placeholder type (can be imported if centralized)
-type Record = {
-  id: number | string;
-  title: string;
-  artist?: string;
-  cover_image?: string;
-  label?: string;
-  catalogNumber?: string;
-  price?: number;
-  condition?: string;
-  quantity_available?: number;
-  released?: string;
-  country?: string;
-  format?: string | string[];
-  styles?: string[];
-  tracks?: Track[];
-  videos?: Video[];
-  // Add other fields needed by RecordDetails/ClientRecordCard
-};
-
-// Define placeholder types for Track and Video if not imported
-type Track = { /* ... fields ... */ };
-type Video = { /* ... fields ... */ };
-
+// Remove local type definitions
+// type Record = { ... };
+// type Track = { ... };
+// type Video = { ... };
 
 export default async function RecordPage({ params }: { params: { id: string } }) {
   const apiUrl = process.env.NEXT_PUBLIC_API_URL;
-  const recordId = params.id; // This is now the discogsReleaseId
+  const recordId = params.id; // This is now the internal DB Id
 
   if (!apiUrl) {
     log("NEXT_PUBLIC_API_URL is not set. Cannot fetch record details.", {}, "error");
@@ -39,13 +20,13 @@ export default async function RecordPage({ params }: { params: { id: string } })
   }
 
   try {
-    // Now directly use recordId (which is the discogsReleaseId) in the fetch URL
-    const fetchUrl = `${apiUrl}/api/discogs/releases/${recordId}`; 
+    // Use the internal DB recordId in the fetch URL
+    const fetchUrl = `${apiUrl}/api/records/${recordId}/details`;
 
-    log(`Fetching record details from Discogs API: ${fetchUrl}`, {}, "info");
+    log(`Fetching record details from internal API: ${fetchUrl}`, {}, "info");
 
     const response = await fetch(fetchUrl, {
-      next: { revalidate: 3600 } 
+      next: { revalidate: 3600 }
     });
 
     if (!response.ok) {
@@ -64,8 +45,8 @@ export default async function RecordPage({ params }: { params: { id: string } })
     }
 
     // Simplify data parsing - assume the API returns the record object directly
-    const record: Record | null = await response.json(); 
-    const relatedRecords: Record[] = []; // Placeholder
+    const record: Record | null = await response.json(); // Use imported Record type
+    const relatedRecords: Record[] = []; // Placeholder - Note: This should also use the imported Record type if populated
 
     if (!record) {
       log(`API returned success but no record data for ID: ${recordId}`, { url: fetchUrl }, "warn");

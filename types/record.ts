@@ -7,7 +7,7 @@ interface Track {
 }
 
 interface Video {
-  url: string;
+  uri: string;
   title: string;
   description: string;
   duration: number;
@@ -45,5 +45,6 @@ export interface Record {
   tracks?: Track[]; // Add from API response (maps from tracklist?)
   videos?: Video[]; // Add from API response
   images?: ImageInfo[]; // Added: Images array from Discogs response
+  released_formatted?: string; // Added: Formatted release date from API
   // Add any other fields returned by the external API's /api/records endpoint that the frontend needs
 } 

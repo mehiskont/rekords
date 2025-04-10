@@ -18,22 +18,7 @@ export function RecordDetails({ record }: RecordDetailsProps) {
   // Use the actual price instead of calculating without fees
   const price = record.price
 
-  const cartItem = state.items.find((item) => item.id === record.id)
-  const currentQuantityInCart = cartItem?.quantity || 0
-  // Provide default value 0 for quantity_available
-  const isMaxQuantity = currentQuantityInCart >= (record.quantity_available || 0)
-
   const handleAddToCart = () => {
-    if (isMaxQuantity) {
-      toast({
-        title: "Maximum quantity reached",
-        // Provide default value 0 for quantity_available
-        description: `Only ${record.quantity_available || 0} unit${(record.quantity_available || 0) > 1 ? "s" : ""} available`,
-        variant: "destructive",
-      })
-      return
-    }
-
     dispatch({ type: "ADD_ITEM", payload: record })
     toast({
       title: "Added to cart",
@@ -58,7 +43,7 @@ export function RecordDetails({ record }: RecordDetailsProps) {
           {/* Image */}
           <div className="relative aspect-square">
             <Image
-              src={record.images?.[0]?.uri || "/placeholder.svg"}
+              src={record.coverImage || "/placeholder.svg"}
               alt={record.title}
               fill
               className="object-contain rounded-md shadow-sm"
@@ -84,18 +69,12 @@ export function RecordDetails({ record }: RecordDetailsProps) {
                 <p className="text-xl font-bold">${(record.price || 0).toFixed(2)}</p>
                 <Button
                   size="sm"
-                  variant="secondary"
+                  variant="destructive"
                   onClick={handleAddToCart}
-                  // Provide default value 0 for quantity_available
-                  disabled={isMaxQuantity || (record.quantity_available || 0) === 0}
                   className="whitespace-nowrap"
                 >
                   <ShoppingCart className="mr-1 h-4 w-4" />
-                  {(record.quantity_available || 0) === 0
-                    ? "Out of Stock"
-                    : isMaxQuantity
-                      ? `Max (${record.quantity_available || 0})`
-                      : "Add to Cart"}
+                  Add to Cart
                 </Button>
               </div>
             </div>
@@ -106,18 +85,10 @@ export function RecordDetails({ record }: RecordDetailsProps) {
                 <span className="font-medium">Format:</span>
                 <span>{formatDisplay}</span>
               </div>
-              {record.released && (
+              {(record.released_formatted || record.released) && (
                 <div className="flex gap-2">
                   <span className="font-medium">Released:</span>
-                  <span>{record.released}</span>
-                </div>
-              )}
-              {/* Provide default value 0 for quantity_available */}
-              {(record.quantity_available || 0) > 0 && (
-                <div className="flex gap-2 text-muted-foreground">
-                  <span className="font-medium">Stock:</span>
-                  {/* Provide default value 0 for quantity_available */}
-                  <span>{record.quantity_available || 0} unit{(record.quantity_available || 0) > 1 ? "s" : ""}</span>
+                  <span>{record.released_formatted || record.released}</span>
                 </div>
               )}
               <div className="flex gap-2">
@@ -137,16 +108,16 @@ export function RecordDetails({ record }: RecordDetailsProps) {
             </div>
           </div>
           
-          {/* Styles as badges */}
-          {record.styles && record.styles.length > 0 && (
+          {/* Styles as badges - checking both 'styles' and fallback 'style' */}
+          {(record.styles && record.styles.length > 0) || ((record as any).style && (record as any).style.length > 0) ? (
             <div className="flex flex-wrap gap-1 mb-4">
-              {record.styles.map((style: string, index: number) => (
+              {(record.styles || (record as any).style).map((style: string, index: number) => (
                 <span key={index} className="px-2 py-0.5 bg-secondary text-secondary-foreground rounded-full text-xs">
                   {style}
                 </span>
               ))}
             </div>
-          )}
+          ) : null}
           
           {/* Track listing moved here */}
           {hasTracksOrVideos && (

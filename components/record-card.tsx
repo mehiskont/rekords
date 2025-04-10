@@ -86,9 +86,9 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
 
   return (
     <Card className="flex flex-col overflow-hidden hover:shadow-md transition-shadow duration-200 h-full relative">
-      {/* Ensure discogsReleaseId is present before creating the link */}
-      {record && record.discogsReleaseId ? (
-        <Link href={`/records/${record.discogsReleaseId}`} className="flex flex-col h-full">
+      {/* Ensure internal ID is present before creating the link */}
+      {record && record.id ? (
+        <Link href={`/records/${record.id}`} className="flex flex-col h-full">
           {/* Cover image with hover effect */}
           <div className="relative aspect-square w-full overflow-hidden bg-black/5 dark:bg-black/20">
             <Image
@@ -116,7 +116,7 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
           </CardHeader>
         </Link>
       ) : (
-        // Fallback rendering if discogsReleaseId is missing
+        // Fallback rendering if internal ID is missing
         <div className="flex flex-col h-full">
           {/* Render content without link */}
           <div className="relative aspect-square w-full overflow-hidden bg-black/5 dark:bg-black/20">

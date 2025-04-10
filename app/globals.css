@@ -131,3 +131,9 @@
    min-width: 340px;
 }
 
+/* Custom active state for buttons */
+[data-state="active"],
+[data-state="on"] {
+  @apply bg-accent text-accent-foreground;
+}
+

@@ -18,10 +18,10 @@ export function CartItem({ item }: CartItemProps) {
   const price = item.price
 
   const handleQuantityChange = (newQuantity: number) => {
-    if (newQuantity > item.quantity_available) {
+    if (newQuantity > item.quantity) {
       toast({
         title: "Maximum quantity reached",
-        description: `Only ${item.quantity_available} units available`,
+        description: `Only ${item.quantity} unit${item.quantity === 1 ? '' : 's'} available`,
         variant: "destructive",
       })
       return
@@ -40,7 +40,7 @@ export function CartItem({ item }: CartItemProps) {
   return (
     <div className="flex gap-4">
       <div className="relative w-20 h-20">
-        <Image src={item.cover_image || "/placeholder.svg"} alt={item.title} fill className="object-cover rounded-md" />
+        <Image src={item.coverImage || "/placeholder.svg"} alt={item.title} fill className="object-cover rounded-md" />
       </div>
       <div className="flex-1">
         <h3 className="font-medium line-clamp-1">{item.title}</h3>
@@ -62,7 +62,7 @@ export function CartItem({ item }: CartItemProps) {
             size="icon"
             className="h-8 w-8"
             onClick={() => handleQuantityChange(item.quantity + 1)}
-            disabled={item.quantity >= item.quantity_available}
+            disabled={item.quantity >= item.quantity}
           >
             <Plus className="h-4 w-4" />
           </Button>
@@ -75,7 +75,7 @@ export function CartItem({ item }: CartItemProps) {
             <X className="h-4 w-4" />
           </Button>
         </div>
-        {item.quantity === item.quantity_available && (
+        {item.quantity === item.quantity && (
           <p className="text-xs text-muted-foreground mt-1">Maximum quantity reached</p>
         )}
       </div>
