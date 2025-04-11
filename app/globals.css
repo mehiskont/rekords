@@ -131,9 +131,10 @@
    min-width: 340px;
 }
 
-/* Custom active state for buttons */
-[data-state="active"],
-[data-state="on"] {
-  @apply bg-accent text-accent-foreground;
+@layer components {
+  /* Style for active ToggleGroupItem (used in ViewToggle) */
+  [data-state="on"] {
+     @apply bg-accent text-accent-foreground;
+  }
 }
 

@@ -187,15 +187,7 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
   const handleCategoryChange = (newCategory: string) => {
     setCategory(newCategory)
     
-    // Only navigate to search page when not in compact mode and not prevented
-    if (query && !isCompact && !preventRedirect) {
-      // Add refresh=true parameter to ensure we get fresh results
-      router.push(`/search?q=${encodeURIComponent(query)}&category=${newCategory}&refresh=true`)
-    } else if (preventRedirect) {
-      // When using preventRedirect, keep the results open and show the filtered results
-      setShowResults(true)
-    }
-    // Otherwise just update the category for filtering search results in the dropdown
+    // The useEffect hook listening to [debouncedQuery, category] will trigger fetchResults
   }
 
   return (
@@ -210,16 +202,24 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
       style={{ position: isCompact ? 'relative' : 'relative' }} // Ensure consistent positioning
     >
       <div className={cn(
-        "bg-card overflow-hidden border border-primary/20 dark:bg-black/40 dark:border-white/10",
+        "bg-card overflow-hidden border border-primary/20 dark:bg-secondary dark:border-white/10",
         isCompact 
           ? "rounded-md shadow" 
           : "rounded-xl shadow-xl"
       )}>
         <form onSubmit={handleSubmit} className="relative" action="/search">
-          <Search className={cn(
-            "absolute left-3 top-1/2 -translate-y-1/2 text-primary dark:text-primary",
-            isCompact ? "h-4 w-4" : "h-5 w-5"
-          )} />
+          {/* Wrap Search icon in a submit button */}
+          <button 
+            type="submit" 
+            aria-label="Submit search" 
+            className="absolute left-3 top-1/2 -translate-y-1/2 p-1 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 rounded-sm"
+            style={{ background: 'none', border: 'none' }} // Basic styling to make it look like just an icon
+          >
+            <Search className={cn(
+              "text-primary dark:text-primary", // Removed absolute positioning from icon itself
+              isCompact ? "h-4 w-4" : "h-5 w-5"
+            )} />
+          </button>
           <Input
             type="search"
             name="q"
@@ -232,15 +232,6 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
             onFocus={() => {
               setIsFocused(true)
               setShowResults(true) // Show results when focused
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") {
-                console.log("Enter key pressed! Submitting form");
-                // Manual form submission for Enter key
-                if (!preventRedirect && query) {
-                  window.location.href = `/search?q=${encodeURIComponent(query)}&category=${category}&refresh=true`;
-                }
-              }
             }}
             className={cn(
               "bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0",
@@ -257,7 +248,7 @@ export function SearchBar({ initialQuery = "", initialCategory = "everything", i
       {/* Show categories when input is focused in compact mode or always in full mode */}
       {(!isCompact || (isCompact && showResults)) && (
         <div className={cn(
-          isCompact ? "bg-card dark:bg-[#121318] border border-primary/20 dark:border-white/10" : "bg-transparent", 
+          isCompact ? "bg-card dark:bg-secondary border border-primary/20 dark:border-white/10" : "bg-transparent", 
           isCompact && showResults ? "p-2 border-t-0" : "",
           "rounded-b-md -mt-2"
         )}>

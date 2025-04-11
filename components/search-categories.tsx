@@ -4,6 +4,7 @@ import type React from "react"
 
 import Link from "next/link"
 import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button"
 
 interface SearchCategoriesProps {
   activeCategory: string
@@ -37,38 +38,52 @@ export function SearchCategories({ activeCategory, query, onCategoryChange, isCo
         const isActive = activeCategory === category.id
         const href = `/search?q=${encodeURIComponent(query)}&category=${category.id}`
 
+        const buttonClasses = cn(
+          "rounded-full",
+          isCompact ?
+            "px-1.5 py-0.5 text-[10px] sm:px-2 sm:py-1 sm:text-xs h-auto" :
+            "px-3 py-1 text-xs sm:px-4 sm:py-2 sm:text-sm h-auto",
+        )
+
+        // Define shared props for cleaner code
+        const buttonSharedProps = {
+          key: category.id,
+          variant: "ghost" as const,
+          size: "sm" as const,
+        }
+
+        // Calculate className based on active state and compact mode
+        const buttonComputedClassName = cn(
+          buttonClasses,
+          isActive
+            ? "bg-accent text-accent-foreground hover:bg-accent/90" // Active state style
+            // Non-active state style
+            : cn(
+                "text-muted-foreground", // Default text color for non-active
+                isCompact
+                  ? "hover:bg-transparent hover:text-foreground" // In compact, hover changes text but not bg
+                  : "hover:bg-accent/50 hover:text-foreground" // Default ghost hover otherwise
+              )
+        )
+
         return onCategoryChange ? (
-          <button
-            key={category.id}
+          <Button
+            {...buttonSharedProps}
             onClick={(e) => handleClick(category.id, e)}
-            className={cn(
-              "rounded-full transition-colors hover:bg-muted dark:hover:bg-white/10",
-              isCompact ? 
-                "px-1.5 py-0.5 text-[10px] sm:px-2 sm:py-1 sm:text-xs" : 
-                "px-3 py-1 text-xs sm:px-4 sm:py-2 sm:text-sm",
-              isActive 
-                ? "bg-primary/10 text-primary font-medium dark:bg-primary/20" 
-                : "text-muted-foreground/70 hover:text-foreground dark:text-white/50 dark:hover:text-white/80",
-            )}
+            className={buttonComputedClassName}
           >
             {category.label}
-          </button>
+          </Button>
         ) : (
-          <Link
-            key={category.id}
-            href={href}
-            className={cn(
-              "rounded-full transition-colors hover:bg-muted dark:hover:bg-white/10",
-              isCompact ? 
-                "px-1.5 py-0.5 text-[10px] sm:px-2 sm:py-1 sm:text-xs" : 
-                "px-3 py-1 text-xs sm:px-4 sm:py-2 sm:text-sm",
-              isActive 
-                ? "bg-primary/10 text-primary font-medium dark:bg-primary/20" 
-                : "text-muted-foreground/70 hover:text-foreground dark:text-white/50 dark:hover:text-white/80",
-            )}
+          <Button
+            {...buttonSharedProps}
+            asChild
+            className={buttonComputedClassName}
           >
-            {category.label}
-          </Link>
+            <Link href={href}>
+              {category.label}
+            </Link>
+          </Button>
         )
       })}
     </div>

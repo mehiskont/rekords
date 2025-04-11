@@ -6,6 +6,7 @@ import type { Record } from "@/types/record"
 
 interface CartItem extends Record {
   quantity: number
+  stockQuantity: number
   weight: number
 }
 
@@ -29,8 +30,8 @@ interface CartState {
 
 type CartAction =
   | { type: "ADD_ITEM"; payload: Record }
-  | { type: "REMOVE_ITEM"; payload: number }
-  | { type: "UPDATE_QUANTITY"; payload: { id: number; quantity: number } }
+  | { type: "REMOVE_ITEM"; payload: number | string }
+  | { type: "UPDATE_QUANTITY"; payload: { id: number | string; quantity: number } }
   | { type: "TOGGLE_CART" }
   | { type: "CLEAR_CART" }
   | { type: "CLEAR_UI_CART" } // Only clears UI, doesn't sync to server
@@ -52,54 +53,66 @@ const initialState: CartState = {
 function cartReducer(state: CartState, action: CartAction): CartState {
   switch (action.type) {
     case "ADD_ITEM": {
-      // Ensure ID is a number for consistent comparison
-      const payloadId = Number(action.payload.id);
-      const existingItem = state.items.find((item) => Number(item.id) === payloadId);
-
-      if (existingItem) {
-        const updatedItems = state.items.map((item) =>
-            Number(item.id) === payloadId
-              ? {
-                  ...item,
-                  quantity: Math.min(item.quantity + 1, item.quantity || 0),
-                  weight: action.payload.weight || 180, // Ensure weight is set, default to 180g
-                }
-              : item
-        );
-        
-        console.log(`Updated cart item: ID=${payloadId}, weight: ${action.payload.weight || 180}g`);
-        
-        return {
-          ...state,
-          items: updatedItems,
-        }
+      const payloadDiscogsId = action.payload.discogsReleaseId;
+      
+      // Ensure we have a Discogs ID before proceeding
+      if (payloadDiscogsId === undefined || payloadDiscogsId === null) {
+        console.error("ADD_ITEM failed: discogsReleaseId is missing in payload", action.payload);
+        return state; // Cannot add item without a valid ID
       }
       
-      console.log(`Added new cart item: ID=${payloadId}, weight: ${action.payload.weight || 180}g`);
+      const existingItem = state.items.find((item) => String(item.id) === String(payloadDiscogsId));
+      const availableStock = action.payload.quantity || 0;
 
+      if (existingItem) {
+        const updatedItems = state.items.map((item) => {
+          if (String(item.id) === String(payloadDiscogsId)) {
+            const newQuantity = Math.min(item.quantity + 1, availableStock);
+            console.log(`Updating item DiscogsID=${payloadDiscogsId}. Current: ${item.quantity}, Available: ${availableStock}, New: ${newQuantity}`);
+            return {
+              ...item,
+              quantity: newQuantity,
+              stockQuantity: availableStock,
+              weight: action.payload.weight || 180,
+            };
+          } else {
+            return item;
+          }
+        });
+        return { ...state, items: updatedItems };
+      }
+      
+      console.log(`Adding new cart item DiscogsID=${payloadDiscogsId}, weight: ${action.payload.weight || 180}g`);
       return {
         ...state,
         items: [...state.items, { 
           ...action.payload, 
-          id: payloadId, // Make sure ID is a number in the state
-          quantity: 1, 
+          id: payloadDiscogsId,
+          quantity: 1,
+          stockQuantity: availableStock,
           weight: action.payload.weight || 180
         }],
       }
     }
     case "REMOVE_ITEM":
+      const idToRemove = String(action.payload);
       return {
         ...state,
-        items: state.items.filter((item) => Number(item.id) !== Number(action.payload)),
+        items: state.items.filter((item) => String(item.id) !== idToRemove),
       }
     case "UPDATE_QUANTITY":
+      const idToUpdate = String(action.payload.id);
       return {
         ...state,
-        items: state.items.map((item) =>
-          Number(item.id) === Number(action.payload.id)
-            ? { ...item, quantity: Math.min(action.payload.quantity, item.quantity || 0) }
-            : item,
-        ),
+        items: state.items.map((item) => {
+          if (String(item.id) === idToUpdate) {
+            const newQuantity = Math.max(1, Math.min(action.payload.quantity, item.stockQuantity || 0));
+            console.log(`Updating quantity via UPDATE_QUANTITY for DiscogsID=${item.id}. Requested: ${action.payload.quantity}, Stock: ${item.stockQuantity}, New: ${newQuantity}`);
+            return { ...item, quantity: newQuantity };
+          } else {
+            return item;
+          }
+        }),
       }
     case "TOGGLE_CART":
       return {
@@ -112,7 +125,6 @@ function cartReducer(state: CartState, action: CartAction): CartState {
         items: [],
       }
     case "CLEAR_UI_CART":
-      // Just clear the UI state without syncing to server
       return {
         ...state,
         items: [],
@@ -171,322 +183,205 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     return null;
   }, []);
   
-  // Update the refs whenever values change
+  // **** Define fetchCart *before* the effect that uses it ****
+  const fetchCart = useCallback(async () => {
+    // Only run on client-side and if not already loading
+    if (typeof window === 'undefined' || state.isLoading) return;
+
+    dispatch({ type: "SET_LOADING", payload: true });
+    console.log('Fetching cart data...');
+
+    try {
+      if (status === 'authenticated') {
+        // Fetch cart for authenticated user
+        const fetchUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/cart`;
+        const response = await fetch(fetchUrl);
+        if (!response.ok) throw new Error(`API error: ${response.status}`);
+        const cartData = await response.json();
+        const dbCartItems = cartData.items && Array.isArray(cartData.items) ? cartData.items : [];
+        console.log(`Received ${dbCartItems.length} items from database cart`);
+        dispatch({ type: "CLEAR_UI_CART" }); // Clear UI first
+        if (dbCartItems.length > 0) {
+          const formattedItems: CartItem[] = dbCartItems.map((item: DbCartItem): CartItem => {
+            let cover_image = item.images?.[0]?.uri || item.images?.[0]?.resource_url || "/placeholder.svg"; // Simplified image extraction
+            return {
+              id: String(item.discogsId), // Ensure ID is string
+              title: item.title,
+              price: item.price,
+              quantity: item.quantity,
+              stockQuantity: item.quantity, // Assuming DB quantity is max stock
+              weight: item.weight || 180,
+              condition: item.condition,
+              status: 'FOR_SALE',
+              coverImage: cover_image,
+              discogsReleaseId: String(item.discogsId), // Ensure this is added and is a string
+              artist: undefined,
+              label: undefined,
+              catalogNumber: undefined,
+              format: undefined,
+            };
+          });
+          console.log(`Loading ${formattedItems.length} items from database to UI`);
+          dispatch({ type: "LOAD_CART", payload: formattedItems });
+        } else {
+          console.log('No items in database cart');
+          dispatch({ type: "LOAD_CART", payload: [] });
+        }
+      } else if (status === 'unauthenticated') {
+        // Load cart from localStorage for unauthenticated user
+        console.log('Loading cart for unauthenticated user from localStorage');
+        const localCart = getFromLocalStorage('plastik-cart');
+        if (localCart?.items && Array.isArray(localCart.items)) {
+          console.log(`Found ${localCart.items.length} items in localStorage cart`);
+          dispatch({ type: "LOAD_CART", payload: localCart.items });
+        } else {
+          console.log('No items in localStorage cart');
+          dispatch({ type: "LOAD_CART", payload: [] });
+        }
+      }
+    } catch (error) {
+      console.error("Error loading cart:", error);
+      // Fallback logic remains the same
+      try {
+        const localCart = getFromLocalStorage('plastik-cart');
+        if (localCart?.items) dispatch({ type: "LOAD_CART", payload: localCart.items });
+      } catch (fallbackError) {
+        console.error('Fallback cart loading also failed:', fallbackError);
+      }
+    } finally {
+      dispatch({ type: "SET_LOADING", payload: false });
+    }
+  }, [status, getFromLocalStorage]);
+
+  // Update the dispatch ref whenever dispatch changes
   useEffect(() => {
     dispatchRef.current = dispatch;
   }, [dispatch]);
   
+  // Effect for handling authentication transition and merge
   useEffect(() => {
-    // Store the previous status before updating
     const previousStatus = sessionRef.current;
     sessionRef.current = status;
-    
     console.log(`Session status changed from ${previousStatus} to ${status}`);
-    
-    // If we're going from unauthenticated to authenticated, 
-    // save the guest cart for merging later
+
+    // If we're going from unauthenticated to authenticated, handle merge BEFORE fetching
     if (previousStatus === 'unauthenticated' && status === 'authenticated') {
-      console.log('Authentication transition detected - preserving guest cart');
+      console.log('Authentication transition detected - attempting guest cart merge...');
       
-      // Clear the merge flag when user logs in so we can merge guest cart items
-      try {
-        // Read current localStorage cart before doing anything else
-        const localCart = getFromLocalStorage('plastik-cart');
-        
-        // The OAuth flow involves page navigation, so we need to be very careful about
-        // saving guest cart items for merging. We'll write to sessionStorage as well
-        // which persists during page navigation within the same tab.
-        if (localCart?.items && Array.isArray(localCart.items) && localCart.items.length > 0) {
-          console.log(`Preserving ${localCart.items.length} guest cart items for merge`);
-          
-          // Save to session storage for OAuth flows
-          if (typeof window !== 'undefined' && window.sessionStorage) {
-            window.sessionStorage.setItem('plastik-guest-cart-for-merge', 
-              JSON.stringify(localCart.items));
+      const attemptMerge = async () => {
+        let guestItemsToMerge: CartItem[] = [];
+        let foundSource: string | null = null;
+
+        // 1. Check sessionStorage
+        if (typeof window !== 'undefined' && window.sessionStorage) {
+          try {
+            const sessionItems = window.sessionStorage.getItem('plastik-guest-cart-for-merge');
+            if (sessionItems) {
+              const parsedItems = JSON.parse(sessionItems);
+              if (Array.isArray(parsedItems) && parsedItems.length > 0) {
+                guestItemsToMerge = parsedItems;
+                foundSource = 'sessionStorage';
+              }
+            }
+          } catch (e) { console.error('Error reading sessionStorage for merge:', e); }
+        }
+
+        // 2. Check localStorage backup if nothing in sessionStorage
+        if (!foundSource) {
+          const guestCartBackup = getFromLocalStorage('plastik-guest-cart-backup');
+          if (guestCartBackup?.items && Array.isArray(guestCartBackup.items) && 
+              guestCartBackup.items.length > 0 && guestCartBackup.needsMerge === true) {
+            guestItemsToMerge = guestCartBackup.items;
+            foundSource = 'localStorageBackup';
           }
+        }
+        
+        // 3. Check current localStorage cart if still nothing
+        // This is less likely needed if the preservation logic works, but acts as a fallback
+        if (!foundSource) {
+           const localCart = getFromLocalStorage('plastik-cart');
+           if (localCart?.items && Array.isArray(localCart.items) && localCart.items.length > 0) {
+              guestItemsToMerge = localCart.items;
+              foundSource = 'localStorageCurrent';
+           }
+        }
+
+        if (guestItemsToMerge.length > 0) {
+          console.log(`Found ${guestItemsToMerge.length} guest items in ${foundSource} to merge.`);
+          try {
+            // Call the merge API endpoint (assuming PATCH /api/cart)
+            const mergeResponse = await fetch('/api/cart', {
+              method: 'PATCH', // Use PATCH for merging
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ items: guestItemsToMerge })
+            });
+
+            if (!mergeResponse.ok) {
+              throw new Error(`Failed to merge carts: ${mergeResponse.status}`);
+            }
+            console.log('Successfully called merge API endpoint.');
+
+            // Clear storage AFTER successful merge call
+            if (typeof window !== 'undefined') {
+              if (window.sessionStorage) window.sessionStorage.removeItem('plastik-guest-cart-for-merge');
+              saveToLocalStorage('plastik-guest-cart-backup', { items: [], timestamp: Date.now(), needsMerge: false });
+              // Also clear the main local storage cart to avoid stale data
+              saveToLocalStorage('plastik-cart', { items: [], isOpen: state.isOpen, isLoading: true, timestamp: Date.now() }); 
+            }
+            guestCartRef.current = []; // Clear memory ref
+            console.log('Cleared guest cart storage after merge call.');
+
+          } catch (mergeError) {
+            console.error('Failed to merge carts:', mergeError);
+            // Decide if we should still clear storage even if merge API failed? Maybe not.
+          }
+        } else {
+          console.log('No guest cart items found needing merge.');
+        }
+
+        // **After merge attempt (success or fail), fetch the definitive cart state**
+        console.log('Proceeding to fetch final cart state after merge attempt...');
+        await fetchCart(); // Fetch cart AFTER merge attempt
+      };
+
+      attemptMerge(); // Run the async merge logic
+    } else if (status !== 'loading') {
+      // For other status changes (e.g., initial load, logout), just fetch the cart
+      fetchCart();
+    }
+  // Ensure correct dependencies
+  }, [status, fetchCart, getFromLocalStorage, saveToLocalStorage, state.isOpen]); 
+
+  // Initialize cart from localStorage on first render (GUEST ONLY or initial load)
+  useEffect(() => {
+    // Only run on initial mount for guest or loading states
+    if (typeof window !== 'undefined' && (status === 'unauthenticated' || status === 'loading')) {
+      dispatch({ type: "SET_LOADING", payload: true });
+      try {
+        const localCart = getFromLocalStorage('plastik-cart');
+        if (localCart && localCart.items && Array.isArray(localCart.items) && localCart.items.length > 0) {
+          console.log('Initial load: Found cart in localStorage with', localCart.items.length, 'items for guest/loading user');
+          dispatch({ type: "LOAD_CART", payload: localCart.items });
           
-          // Keep in memory
+          // Preserve potentially mergeable items
           guestCartRef.current = localCart.items;
-          
-          // Save to localStorage as backup
           saveToLocalStorage('plastik-guest-cart-backup', {
             items: localCart.items,
             timestamp: Date.now(),
-            needsMerge: true
+            needsMerge: true // Assume it might need merge if user logs in later
           });
-        }
-      } catch (err) {
-        console.error('Failed to preserve guest cart:', err);
-      }
-    }
-  }, [status, getFromLocalStorage, saveToLocalStorage]);
-  
-  // Initialize cart from localStorage on first render (client-side only)
-  // For unauthenticated users OR on initial load
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      dispatch({ type: "SET_LOADING", payload: true });
-      
-      try {
-        const localCart = getFromLocalStorage('plastik-cart');
-        if (localCart && localCart.items && Array.isArray(localCart.items)) {
-          console.log('Found cart in localStorage with', localCart.items.length, 'items');
           
-          // Load the cart only for unauthenticated users
-          // Or when the authentication status is still loading
-          if (status === 'unauthenticated' || status === 'loading') {
-            console.log('Loading localStorage cart for unauthenticated/loading user');
-            dispatch({ type: "LOAD_CART", payload: localCart.items });
-            
-            // Save guest cart items for potential merge later
-            // This is crucial to handle OAuth login flows
-            if (localCart.items.length > 0) {
-              console.log(`Preserving ${localCart.items.length} initial cart items for potential merge`);
-              guestCartRef.current = localCart.items;
-              
-              // Copy to a special key for backup that persists across page reloads
-              localStorage.removeItem('plastik-cart-merged-flag');
-              saveToLocalStorage('plastik-guest-cart-backup', {
-                items: localCart.items,
-                timestamp: Date.now()
-              });
-            }
-          } else {
-            console.log('Skipping localStorage cart load for authenticated user');
-          }
         } else {
-          console.log('No cart found in localStorage');
+          console.log('Initial load: No cart found in localStorage');
         }
       } catch (error) {
-        console.error('Error loading cart from localStorage', error);
+        console.error('Initial load: Error loading cart from localStorage', error);
       } finally {
         dispatch({ type: "SET_LOADING", payload: false });
       }
     }
-  }, [getFromLocalStorage, status]);
-  
-  // Load cart from API when session changes
-  useEffect(() => {
-    async function fetchCart() {
-      console.log('Session status changed to:', status);
-      dispatch({ type: "SET_LOADING", payload: true });
-      
-      try {
-        // If authenticated, try to get the cart from API and handle merge
-        if (status === 'authenticated' && session?.user) {
-          console.log('Authenticated user, fetching cart from API');
-          
-          // CRITICAL: We need to check ALL possible sources for guest cart items
-          // that might need to be merged after OAuth flow which involves page navigation
-          
-          // 1. Check sessionStorage first (best for OAuth flows)
-          let guestItemsToMerge = [];
-          let foundGuestItems = false;
-          
-          if (typeof window !== 'undefined' && window.sessionStorage) {
-            try {
-              const sessionItems = window.sessionStorage.getItem('plastik-guest-cart-for-merge');
-              if (sessionItems) {
-                const parsedItems = JSON.parse(sessionItems);
-                if (Array.isArray(parsedItems) && parsedItems.length > 0) {
-                  guestItemsToMerge = parsedItems;
-                  foundGuestItems = true;
-                  console.log(`Found ${parsedItems.length} guest items in sessionStorage`);
-                }
-              }
-            } catch (e) {
-              console.error('Error reading from sessionStorage:', e);
-            }
-          }
-          
-          // 2. Check backup in localStorage if nothing in sessionStorage
-          if (!foundGuestItems) {
-            const guestCartBackup = getFromLocalStorage('plastik-guest-cart-backup');
-            if (guestCartBackup?.items && Array.isArray(guestCartBackup.items) && 
-                guestCartBackup.items.length > 0 && guestCartBackup.needsMerge === true) {
-              guestItemsToMerge = guestCartBackup.items;
-              foundGuestItems = true;
-              console.log(`Found ${guestCartBackup.items.length} guest items in localStorage backup`);
-            }
-          }
-          
-          // 3. Check current localStorage cart
-          if (!foundGuestItems) {
-            const localCart = getFromLocalStorage('plastik-cart');
-            if (localCart?.items && Array.isArray(localCart.items) && localCart.items.length > 0) {
-              guestItemsToMerge = localCart.items;
-              foundGuestItems = true;
-              console.log(`Found ${localCart.items.length} guest items in current localStorage cart`);
-            }
-          }
-          
-          // 4. Check in-memory reference
-          if (!foundGuestItems && guestCartRef.current && Array.isArray(guestCartRef.current) && 
-              guestCartRef.current.length > 0) {
-            guestItemsToMerge = guestCartRef.current;
-            foundGuestItems = true;
-            console.log(`Found ${guestCartRef.current.length} guest items in memory reference`);
-          }
-          
-          // Attempt to merge guest items if found
-          if (guestItemsToMerge.length > 0) {
-            console.log(`Attempting to merge ${guestItemsToMerge.length} guest items into user cart`);
-            
-            try {
-              // Call the merge API endpoint
-              const mergeResponse = await fetch('/api/cart', {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  items: guestItemsToMerge
-                })
-              });
-              
-              if (!mergeResponse.ok) {
-                throw new Error(`Failed to merge carts: ${mergeResponse.status}`);
-              }
-              
-              console.log('Successfully merged guest cart items into user cart');
-              
-              // Clean up all storage to prevent duplicate merges
-              if (typeof window !== 'undefined') {
-                // Clear sessionStorage
-                if (window.sessionStorage) {
-                  window.sessionStorage.removeItem('plastik-guest-cart-for-merge');
-                }
-                
-                // Clear localStorage backup by marking as already merged
-                saveToLocalStorage('plastik-guest-cart-backup', { 
-                  items: [], 
-                  timestamp: Date.now(),
-                  needsMerge: false
-                });
-                
-                // Clear current localStorage cart
-                saveToLocalStorage('plastik-cart', {
-                  items: [],
-                  isOpen: state.isOpen,
-                  isLoading: state.isLoading,
-                  timestamp: Date.now()
-                });
-              }
-              
-              // Clear memory reference
-              guestCartRef.current = [];
-              
-              console.log('Cleared all guest cart storage after successful merge');
-            } catch (mergeError) {
-              console.error('Failed to merge carts after login:', mergeError);
-            }
-          } else {
-            console.log('No guest cart items found to merge');
-          }
-          
-          // Now fetch user's cart from the database
-          const response = await fetch('/api/cart');
-          
-          if (!response.ok) {
-            throw new Error(`Failed to load cart: ${response.status}`);
-          }
-          
-          const cartData = await response.json();
-          console.log('API cart response:', cartData);
-          const dbCartItems = cartData.items && Array.isArray(cartData.items) ? cartData.items : [];
-          
-          console.log(`Received ${dbCartItems.length} items from database cart`);
-          
-          // Log item details for debugging
-          if (dbCartItems.length > 0) {
-            dbCartItems.forEach((item: DbCartItem, index: number) => {
-              console.log(`DB Cart Item #${index + 1}: ID=${item.discogsId}, Title=${item.title}, Qty=${item.quantity}`);
-            });
-          }
-          
-          // Clear UI state first to prevent duplicates when loading from server
-          dispatch({ type: "CLEAR_UI_CART" });
-          
-          // Format DB items for the UI
-          if (dbCartItems.length > 0) {
-            const formattedItems: CartItem[] = dbCartItems.map((item: DbCartItem): CartItem => {
-              // Extract the first image URL for cover_image or use placeholder
-              let cover_image = "/placeholder.svg";
-              
-              if (item.images && Array.isArray(item.images) && item.images.length > 0) {
-                const firstImage = item.images[0];
-                
-                // Handle different possible image object structures
-                if (typeof firstImage === 'string') {
-                  cover_image = firstImage;
-                } else if (typeof firstImage === 'object') {
-                  // Try various properties that might contain the image URL
-                  cover_image = firstImage.uri || firstImage.resource_url || 
-                    firstImage.url || firstImage.image || firstImage.src || 
-                    "/placeholder.svg";
-                }
-              }
-                
-              return {
-                id: Number(item.discogsId),
-                title: item.title,
-                price: item.price,
-                quantity: item.quantity,
-                weight: item.weight || 180,
-                condition: item.condition,
-                status: 'FOR_SALE', // Assuming DB items are for sale, adjust if needed
-                cover_image: cover_image,
-                artist: undefined, // Example: Set undefined if not in DbCartItem
-                format: undefined, // Example: Set undefined if not in DbCartItem
-                label: undefined, // Example: Set undefined if not in DbCartItem
-                catalogNumber: undefined // Example: Set undefined if not in DbCartItem
-              };
-            });
-            
-            console.log(`Loading ${formattedItems.length} items from database to UI`);
-            dispatch({ type: "LOAD_CART", payload: formattedItems });
-          } else {
-            console.log('No items in database cart');
-            dispatch({ type: "LOAD_CART", payload: [] });
-          }
-        } else if (status === 'unauthenticated') {
-          // For unauthenticated users, load cart from localStorage
-          console.log('Loading cart for unauthenticated user from localStorage');
-          
-          const localCart = getFromLocalStorage('plastik-cart');
-          if (localCart?.items && Array.isArray(localCart.items)) {
-            console.log(`Found ${localCart.items.length} items in localStorage cart`);
-            dispatch({ type: "LOAD_CART", payload: localCart.items });
-          } else {
-            console.log('No items in localStorage cart');
-            dispatch({ type: "LOAD_CART", payload: [] });
-          }
-        }
-      } catch (error) {
-        console.error("Error loading cart:", error);
-        
-        // If API fails, try to load from localStorage as fallback
-        try {
-          console.log('Loading cart from localStorage as fallback after error');
-          const localCart = getFromLocalStorage('plastik-cart');
-          if (localCart?.items && Array.isArray(localCart.items)) {
-            dispatch({ type: "LOAD_CART", payload: localCart.items });
-          }
-        } catch (fallbackError) {
-          console.error('Fallback cart loading also failed:', fallbackError);
-        }
-      } finally {
-        dispatch({ type: "SET_LOADING", payload: false });
-      }
-    }
-    
-    // Run this effect whenever auth status changes or session changes
-    // This covers login, logout, and initial page load
-    fetchCart();
-    
-    // Create a cleanup function to prevent memory leaks
-    return () => {
-      console.log('Cart effect cleanup');
-    };
-  }, [status, session, getFromLocalStorage, saveToLocalStorage, state.isOpen]);
+  // Run only once on mount or if getFromLocalStorage changes (unlikely)
+  }, [getFromLocalStorage, saveToLocalStorage, status]); 
 
   // Save cart to localStorage whenever it changes for unauthenticated users
   useEffect(() => {
@@ -530,8 +425,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
     
     try {
-      // For authenticated users, sync directly with the API
       if (status === 'authenticated') {
+        // API call logic remains the same
         let endpoint = '/api/cart';
         let method = 'POST';
         let body: any = null;
@@ -560,9 +455,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
             return;
         }
         
-        // Log status before API call
         console.log(`Syncing action ${action.type} to database for authenticated user`);
-        
         const response = await fetch(endpoint, {
           method,
           headers: body ? { 'Content-Type': 'application/json' } : undefined,
@@ -572,14 +465,21 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         if (!response.ok) {
           throw new Error(`API error: ${response.status}`);
         }
+        
+        // **** Re-fetch cart after successful API call ****
+        console.log(`Action ${action.type} synced successfully, re-fetching cart...`);
+        await fetchCart(); // Call fetchCart here
+
       } else {
         console.log(`Not syncing action ${action.type} to database - user not authenticated`);
+        // For unauthenticated users, the localStorage useEffect handles saving
       }
     } catch (error) {
       console.error(`Error syncing cart action ${action.type}:`, error);
-      // Continue without failing - localStorage backup is still working
+      // Optionally trigger a fetchCart even on error to try and reconcile?
+      // await fetchCart(); 
     }
-  }, [state, status, saveToLocalStorage]);
+  }, [status, saveToLocalStorage, fetchCart]);
   
   // Create a wrapped version of dispatch that syncs with the API or localStorage
   const syncedDispatch = useCallback((action: CartAction) => {

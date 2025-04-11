@@ -1,5 +1,6 @@
 "use client"
 
+import React, { useState } from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { ShoppingCart } from "lucide-react"
@@ -15,21 +16,49 @@ interface RecordDetailsProps {
 
 export function RecordDetails({ record }: RecordDetailsProps) {
   const { state, dispatch } = useCart()
-  // Use the actual price instead of calculating without fees
+  const [isAdding, setIsAdding] = useState(false)
+
   const price = record.price
 
+  const safeCartState = state || { items: [], isOpen: false }
+  const cartItem = safeCartState.items?.find((item) => 
+    item.discogsReleaseId !== undefined && 
+    String(item.discogsReleaseId) === String(record.discogsReleaseId)
+  )
+  const currentQuantityInCart = cartItem?.quantity || 0
+  const availableQuantity = record.quantity || 0
+  const isOutOfStock = availableQuantity === 0 || record.status !== "FOR_SALE"
+  const isAlreadyInCart = cartItem !== undefined && currentQuantityInCart > 0
+
   const handleAddToCart = () => {
-    dispatch({ type: "ADD_ITEM", payload: record })
-    toast({
-      title: "Added to cart",
-      description: "Item has been added to your cart",
-    })
+    if (isAdding || isOutOfStock || isAlreadyInCart) {
+      return
+    }
+    
+    setIsAdding(true)
+
+    try {
+      if (typeof dispatch === 'function') {
+        dispatch({ type: "ADD_ITEM", payload: record })
+        toast({
+          title: "Added to cart",
+          description: "Item has been added to your cart",
+        })
+      } else {
+        console.warn("Cart dispatch function not available")
+        toast({ title: "Could not add to cart", variant: "destructive" })
+        setIsAdding(false)
+      }
+    } catch (error) {
+      console.error("Error adding item to cart:", error)
+      toast({ title: "Error", description: "Could not add item to cart", variant: "destructive" })
+      setIsAdding(false)
+    }
   }
 
   const labelDisplay = record.catalogNumber ? `${record.label} [${record.catalogNumber}]` : record.label
   const formatDisplay = Array.isArray(record.format) ? record.format.join(", ") : record.format
   
-  // Calculate if there are any tracks or videos available
   const hasTracksOrVideos = Boolean(
     (record.tracks && record.tracks.length > 0) || 
     (record.videos && record.videos.length > 0)
@@ -38,9 +67,7 @@ export function RecordDetails({ record }: RecordDetailsProps) {
   return (
     <>
       <div className="flex flex-col md:flex-row gap-6 mb-8">
-        {/* Image column */}
-        <div className="md:w-2/5 lg:w-1/3">
-          {/* Image */}
+        <div className="md:w-2/5 lg:w-1/3 sticky top-[0px] self-start">
           <div className="relative aspect-square">
             <Image
               src={record.coverImage || "/placeholder.svg"}
@@ -55,11 +82,8 @@ export function RecordDetails({ record }: RecordDetailsProps) {
           </div>
         </div>
         
-        {/* Content column - now with tracklist */}
         <div className="flex-1 flex flex-col">
-          {/* Record details section */}
           <div className="flex flex-col mb-6">
-            {/* Title, artist, price section */}
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
               <div>
                 <h1 className="text-2xl font-bold">{record.title}</h1>
@@ -71,15 +95,21 @@ export function RecordDetails({ record }: RecordDetailsProps) {
                   size="sm"
                   variant="destructive"
                   onClick={handleAddToCart}
+                  disabled={isOutOfStock || isAlreadyInCart || isAdding}
                   className="whitespace-nowrap"
                 >
                   <ShoppingCart className="mr-1 h-4 w-4" />
-                  Add to Cart
+                  {isOutOfStock
+                    ? "Out of Stock"
+                    : isAdding 
+                    ? "Adding..." 
+                    : isAlreadyInCart 
+                    ? "In Cart"
+                    : "Add to Cart"}
                 </Button>
               </div>
             </div>
 
-            {/* All details in one grid - Format, Released, Stock now at the top */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-sm mt-4">
               <div className="flex gap-2">
                 <span className="font-medium">Format:</span>
@@ -108,7 +138,6 @@ export function RecordDetails({ record }: RecordDetailsProps) {
             </div>
           </div>
           
-          {/* Styles as badges - checking both 'styles' and fallback 'style' */}
           {(record.styles && record.styles.length > 0) || ((record as any).style && (record as any).style.length > 0) ? (
             <div className="flex flex-wrap gap-1 mb-4">
               {(record.styles || (record as any).style).map((style: string, index: number) => (
@@ -119,15 +148,12 @@ export function RecordDetails({ record }: RecordDetailsProps) {
             </div>
           ) : null}
           
-          {/* Track listing moved here */}
           {hasTracksOrVideos && (
             <div>
-              {/* Ensure tracks/videos are arrays before passing */}
               <TrackListing tracks={record.tracks || []} videos={record.videos || []} />
             </div>
           )}
           
-          {/* No-tracks message */}
           {!hasTracksOrVideos && (
             <div className="mt-2 p-3 border border-dashed rounded-md text-center bg-secondary/10">
               <p className="text-sm text-muted-foreground">No audio previews available for this release</p>

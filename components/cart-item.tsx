@@ -14,25 +14,32 @@ interface CartItemProps {
 
 export function CartItem({ item }: CartItemProps) {
   const { dispatch } = useCart()
-  // Use the actual price instead of calculating without fees
   const price = item.price
+  const maxQuantity = item.stockQuantity || 0
 
   const handleQuantityChange = (newQuantity: number) => {
-    if (newQuantity > item.quantity) {
+    const releaseId = item.discogsReleaseId;
+    if (releaseId === undefined || releaseId === null) {
+      console.error("Cannot update quantity: discogsReleaseId is missing", item);
+      toast({ title: "Error", description: "Cannot update item quantity.", variant: "destructive" });
+      return;
+    }
+
+    if (newQuantity > maxQuantity) {
       toast({
         title: "Maximum quantity reached",
-        description: `Only ${item.quantity} unit${item.quantity === 1 ? '' : 's'} available`,
+        description: `Only ${maxQuantity} unit${maxQuantity === 1 ? '' : 's'} available`,
         variant: "destructive",
       })
       return
     }
 
     if (newQuantity < 1) {
-      dispatch({ type: "REMOVE_ITEM", payload: item.id })
+      dispatch({ type: "REMOVE_ITEM", payload: releaseId })
     } else {
       dispatch({
         type: "UPDATE_QUANTITY",
-        payload: { id: item.id, quantity: newQuantity },
+        payload: { id: releaseId, quantity: newQuantity },
       })
     }
   }
@@ -42,42 +49,33 @@ export function CartItem({ item }: CartItemProps) {
       <div className="relative w-20 h-20">
         <Image src={item.coverImage || "/placeholder.svg"} alt={item.title} fill className="object-cover rounded-md" />
       </div>
-      <div className="flex-1">
-        <h3 className="font-medium line-clamp-1">{item.title}</h3>
-        <div className="text-sm space-y-1">
-          <p className="text-muted-foreground">Price: ${price.toFixed(2)}</p>
+      <div className="flex-1 flex">
+        <div className="flex-1">
+          <h3 className="font-medium line-clamp-1">{item.title}</h3>
+          <div className="text-sm space-y-1">
+            <p className="text-muted-foreground">Price: ${price.toFixed(2)}</p>
+          </div>
         </div>
-        <div className="flex items-center gap-2 mt-2">
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-8 w-8"
-            onClick={() => handleQuantityChange(item.quantity - 1)}
-          >
-            <Minus className="h-4 w-4" />
-          </Button>
-          <span className="w-8 text-center">{item.quantity}</span>
-          <Button
-            variant="outline"
-            size="icon"
-            className="h-8 w-8"
-            onClick={() => handleQuantityChange(item.quantity + 1)}
-            disabled={item.quantity >= item.quantity}
-          >
-            <Plus className="h-4 w-4" />
-          </Button>
+       
+        <div className="flex items-center gap-2">
+         
           <Button
             variant="ghost"
             size="icon"
             className="h-8 w-8 ml-auto"
-            onClick={() => dispatch({ type: "REMOVE_ITEM", payload: item.id })}
+            onClick={() => {
+              const releaseId = item.discogsReleaseId;
+              if (releaseId === undefined || releaseId === null) {
+                console.error("Cannot remove item: discogsReleaseId is missing", item);
+                toast({ title: "Error", description: "Cannot remove item.", variant: "destructive" });
+                return;
+              }
+              dispatch({ type: "REMOVE_ITEM", payload: releaseId })
+            }}
           >
             <X className="h-4 w-4" />
           </Button>
         </div>
-        {item.quantity === item.quantity && (
-          <p className="text-xs text-muted-foreground mt-1">Maximum quantity reached</p>
-        )}
       </div>
     </div>
   )

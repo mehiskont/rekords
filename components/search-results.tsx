@@ -31,7 +31,7 @@ export function SearchResults({ results, isLoading, query, category, onClose, is
   const displayResults = results.slice(0, 5)
 
   return (
-    <div className={`absolute z-[100] mt-2 ${isCompact ? "bg-card dark:bg-black/40" : "bg-background/90"} backdrop-blur supports-[backdrop-filter]:${isCompact ? "bg-card/95 dark:bg-black/40" : "bg-background/90"} border border-primary/10 dark:border-white/10 rounded-lg shadow-lg overflow-hidden ${isCompact ? "w-80 sm:w-96" : "left-0 right-0"}`} 
+    <div className={`absolute z-[100] mt-2 ${isCompact ? "bg-card dark:bg-secondary" : "bg-background/90"} backdrop-blur supports-[backdrop-filter]:${isCompact ? "bg-card/95 dark:bg-secondary" : "bg-background/90"} border border-primary/10 dark:border-white/10 rounded-lg shadow-lg overflow-hidden ${isCompact ? "w-80 sm:w-96" : "left-0 right-0"}`} 
       style={{ 
         position: 'absolute', 
         top: '100%', 

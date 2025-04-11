@@ -24,7 +24,7 @@ interface ImageInfo {
 }
 
 export interface Record {
-  id: number; // Or string, depending on API response
+  id: number | string; // Allow ID to be number or string
   title: string;
   price: number;
   quantity: number;
@@ -37,7 +37,8 @@ export interface Record {
   format?: string | string[]; // Updated: Format can be string or array
   label?: string;
   weight?: number; // Added: Optional weight for cart/shipping
-  discogsReleaseId?: number; // Added: Numeric ID from Discogs
+  discogsReleaseId?: number | string; // Add Discogs ID explicitly if not already there
+  discogsListingId?: number | string;
   thumb?: string; // Added: Thumbnail URL from Discogs response
   country?: string; // Add from API response
   released?: string; // Add from API response

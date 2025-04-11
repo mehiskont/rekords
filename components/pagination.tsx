@@ -2,7 +2,17 @@
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { useTransition } from "react"
-import { Button } from "@/components/ui/button"
+// import { Button } from "@/components/ui/button" // No longer using direct Button here
+import { cn } from "@/lib/utils"
+import { 
+  Pagination as UIPagination,
+  PaginationContent,
+  PaginationItem, 
+  PaginationLink, 
+  PaginationPrevious, 
+  PaginationNext, 
+  PaginationEllipsis 
+} from "@/components/ui/pagination"
 
 interface PaginationProps {
   currentPage: number
@@ -31,70 +41,118 @@ export function Pagination({ currentPage, totalPages }: PaginationProps) {
     })
   }
 
-  // Generate page numbers to display
-  const getPageNumbers = () => {
-    const pages: number[] = []
-    
-    if (totalPages <= 5) {
-      // If 5 or fewer pages, show all
+  // Generate page numbers with ellipsis handling (more robust)
+  const getPaginationItems = () => {
+    const items: (number | 'ellipsis')[] = []
+    const pageRangeDisplayed = 5 // Number of pages to show around current
+    const marginPagesDisplayed = 1 // Number of pages to show at start/end
+
+    if (totalPages <= pageRangeDisplayed + marginPagesDisplayed * 2) {
+      // Show all pages if total is small enough
       for (let i = 1; i <= totalPages; i++) {
-        pages.push(i)
-      }
-    } else if (currentPage <= 3) {
-      // Near start: show 1-5
-      for (let i = 1; i <= 5; i++) {
-        pages.push(i)
-      }
-    } else if (currentPage >= totalPages - 2) {
-      // Near end: show last 5
-      for (let i = totalPages - 4; i <= totalPages; i++) {
-        pages.push(i)
+        items.push(i)
       }
     } else {
-      // In middle: show current and 2 on each side
-      for (let i = currentPage - 2; i <= currentPage + 2; i++) {
-        pages.push(i)
+      // Add first page(s)
+      for (let i = 1; i <= marginPagesDisplayed; i++) {
+        items.push(i)
+      }
+
+      // Add leading ellipsis if needed
+      if (currentPage > marginPagesDisplayed + Math.ceil(pageRangeDisplayed / 2)) {
+        items.push('ellipsis')
+      }
+
+      // Add pages around current page
+      const startPage = Math.max(marginPagesDisplayed + 1, currentPage - Math.floor((pageRangeDisplayed - 1) / 2));
+      const endPage = Math.min(totalPages - marginPagesDisplayed, currentPage + Math.ceil((pageRangeDisplayed - 1) / 2));
+
+      for (let i = startPage; i <= endPage; i++) {
+         // Avoid duplicates if start/end overlap with margin pages
+         if (!items.includes(i)) { 
+            items.push(i);
+         }
+      }
+
+      // Add trailing ellipsis if needed
+      if (currentPage < totalPages - marginPagesDisplayed - Math.floor(pageRangeDisplayed / 2)) {
+         // Check if ellipsis already exists just before the last margin pages
+         if (!items.includes('ellipsis')) {
+             items.push('ellipsis');
+         }
+      }
+
+      // Add last page(s)
+      for (let i = totalPages - marginPagesDisplayed + 1; i <= totalPages; i++) {
+         // Avoid duplicates
+         if (!items.includes(i)) {
+            items.push(i);
+         }
       }
     }
-    
-    return pages
+    return items
   }
 
   // Only show pagination if there are multiple pages
   if (totalPages <= 1) return null
 
   return (
-    <div className="flex justify-center items-center gap-2 mt-8">
-      <Button
-        variant="outline"
-        size="sm"
-        disabled={currentPage <= 1 || isPending}
-        onClick={() => handlePageChange(currentPage - 1)}
-      >
-        Previous
-      </Button>
+    <UIPagination>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious 
+            href={`${pathname}?${createQueryString(currentPage - 1)}`}
+            onClick={(e) => {
+              if (currentPage <= 1 || isPending) {
+                e.preventDefault();
+                return;
+              }
+              e.preventDefault();
+              handlePageChange(currentPage - 1);
+            }}
+            className={cn(currentPage <= 1 && "pointer-events-none opacity-50")}
+          />
+        </PaginationItem>
 
-      {getPageNumbers().map((page) => (
-        <Button
-          key={page}
-          variant={page === currentPage ? "secondary" : "outline"}
-          size="icon"
-          className="w-8 h-8"
-          disabled={isPending}
-          onClick={() => handlePageChange(page)}
-        >
-          {page}
-        </Button>
-      ))}
+        {getPaginationItems().map((item, index) => (
+          <PaginationItem key={index}>
+            {item === 'ellipsis' ? (
+              <PaginationEllipsis />
+            ) : (
+              <PaginationLink 
+                href={`${pathname}?${createQueryString(item)}`}
+                isActive={item === currentPage}
+                onClick={(e) => {
+                  if (item === currentPage || isPending) {
+                    e.preventDefault();
+                    return;
+                  }
+                  e.preventDefault();
+                  handlePageChange(item);
+                }}
+                className={cn(item === currentPage && "pointer-events-none")}
+              >
+                {item}
+              </PaginationLink>
+            )}
+          </PaginationItem>
+        ))}
 
-      <Button
-        variant="outline"
-        size="sm"
-        disabled={currentPage >= totalPages || isPending}
-        onClick={() => handlePageChange(currentPage + 1)}
-      >
-        Next
-      </Button>
-    </div>
+        <PaginationItem>
+          <PaginationNext 
+            href={`${pathname}?${createQueryString(currentPage + 1)}`}
+            onClick={(e) => {
+              if (currentPage >= totalPages || isPending) {
+                e.preventDefault();
+                return;
+              }
+              e.preventDefault();
+              handlePageChange(currentPage + 1);
+            }}
+            className={cn(currentPage >= totalPages && "pointer-events-none opacity-50")}
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </UIPagination>
   )
 }

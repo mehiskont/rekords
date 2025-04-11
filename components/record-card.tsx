@@ -1,6 +1,6 @@
 "use client"
 
-import type React from "react"
+import React, { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { ShoppingCart } from "lucide-react"
@@ -18,6 +18,9 @@ interface RecordCardProps {
 }
 
 export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps) {
+  // Local state to track adding process
+  const [isAdding, setIsAdding] = useState(false);
+
   // Safeguard against undefined record
   if (!record) {
     return null
@@ -35,34 +38,39 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
   // Ensure we have a valid cart state
   const safeCartState = cartState || { items: [], isOpen: false }
   
-  // Safeguard against undefined cartState
-  const cartItem = safeCartState.items?.find((item) => item.id === record.id)
+  // Find item in cart using discogsReleaseId for consistency
+  const cartItem = safeCartState.items?.find((item) => 
+    item.discogsReleaseId !== undefined && 
+    String(item.discogsReleaseId) === String(record.discogsReleaseId)
+  );
   const currentQuantityInCart = cartItem?.quantity || 0
-  const isMaxQuantity = currentQuantityInCart >= (record.quantity || 0)
+  const availableQuantity = record.quantity || 0
+  const isOutOfStock = availableQuantity === 0 || record.status !== "FOR_SALE"
+  const isAlreadyInCart = cartItem !== undefined && currentQuantityInCart > 0
 
   const handleAddToCart = (e: React.MouseEvent) => {
-    e.preventDefault() // Prevent navigation when clicking the button
+    e.preventDefault()
 
-    // Ensure quantity is a valid number
-    const qtyAvailable = record.quantity || 0
-
-    if (isMaxQuantity) {
-      toast({
-        title: "Maximum quantity reached",
-        description: `Only ${qtyAvailable} unit${qtyAvailable > 1 ? "s" : ""} available`,
-        variant: "destructive",
-      })
-      return
+    // Prevent adding if already adding, out of stock, or already in cart
+    if (isAdding || isOutOfStock || isAlreadyInCart) {
+      // Optionally show a toast if needed, but button disable should suffice
+      return;
     }
 
+    // Immediately set state to indicate adding process started
+    setIsAdding(true);
+
     try {
-      // Only dispatch if the function is available
       if (typeof cartDispatch === 'function') {
+        // Use Discogs ID in payload for consistency with reducer
         cartDispatch({ type: "ADD_ITEM", payload: record })
         toast({
           title: "Added to cart",
           description: "Item has been added to your cart",
         })
+        // Note: We don't set isAdding back to false here.
+        // The button state will rely on isAlreadyInCart becoming true 
+        // when the cartState prop updates.
       } else {
         console.warn("Cart dispatch function not available")
         toast({
@@ -70,6 +78,7 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
           description: "Cart functionality is unavailable",
           variant: "destructive",
         })
+        setIsAdding(false); // Reset if dispatch failed
       }
     } catch (error) {
       console.error("Error adding item to cart:", error)
@@ -78,6 +87,7 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
         description: "Could not add item to cart",
         variant: "destructive",
       })
+      setIsAdding(false); // Reset on error
     }
   }
 
@@ -151,11 +161,17 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
           size="sm"
           variant="secondary"
           onClick={handleAddToCart}
-          disabled={isMaxQuantity || (record.quantity || 0) === 0 || record.status !== "FOR_SALE"}
+          // Disable if out of stock, already in cart, OR currently being added
+          disabled={isOutOfStock || isAlreadyInCart || isAdding}
         >
           <ShoppingCart className="mr-1 h-3 w-3" />
-          {(record.quantity || 0) === 0 || record.status !== "FOR_SALE"
+          {/* Update button text based on states */}
+          {isOutOfStock
             ? "Out of Stock"
+            : isAdding 
+            ? "Adding..." 
+            : isAlreadyInCart 
+            ? "In Cart"
             : "Add to Cart"}
         </Button>
       </div>

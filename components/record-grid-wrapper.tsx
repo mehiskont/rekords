@@ -5,8 +5,8 @@ import RecordGridClient from "./client-components/record-grid-client"
 import { RecordFilter } from "@/components/record-filter"
 import { ApiUnavailable } from "@/components/api-unavailable"
 import { RecordGridSkeleton } from "@/components/record-grid-skeleton"
-import { Button } from "@/components/ui/button"
-import { Rows, Grid } from "lucide-react"
+import { ViewToggle } from "@/components/view-toggle"
+import { cn } from "@/lib/utils"
 
 interface RecordGridWrapperProps {
   searchParams?: { [key: string]: string | string[] | undefined }
@@ -26,6 +26,13 @@ export default function RecordGridWrapper({
   const [totalPages, setTotalPages] = useState(1)
   const [currentPage, setCurrentPage] = useState(1)
   const [currentViewMode, setCurrentViewMode] = useState<'grid' | 'list'>(viewMode)
+
+  // Handler for ViewToggle
+  const handleViewModeChange = (value: string) => {
+    if (value === 'grid' || value === 'list') {
+      setCurrentViewMode(value)
+    }
+  }
 
   // Convert searchParams to URL parameters
   useEffect(() => {
@@ -100,24 +107,12 @@ export default function RecordGridWrapper({
 
   return (
     <div className="space-y-6">
-      {/* View Toggle Buttons */}
-      <div className="flex justify-end space-x-2 mb-4">
-        <Button 
-          variant={currentViewMode === 'grid' ? 'default' : 'outline'} 
-          size="icon" 
-          onClick={() => setCurrentViewMode('grid')}
-          aria-label="Grid View"
-        >
-          <Grid className="h-4 w-4" />
-        </Button>
-        <Button 
-          variant={currentViewMode === 'list' ? 'default' : 'outline'} 
-          size="icon" 
-          onClick={() => setCurrentViewMode('list')}
-          aria-label="List View"
-        >
-          <Rows className="h-4 w-4" />
-        </Button>
+      {/* View Toggle Buttons - Use ViewToggle component */}
+      <div className="flex justify-end mb-4">
+        <ViewToggle 
+          viewMode={currentViewMode} 
+          onViewModeChange={handleViewModeChange}
+        />
       </div>
       
       {/* {showFilter && (
