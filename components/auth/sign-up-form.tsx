@@ -44,9 +44,12 @@ export function SignUpForm() {
   const onSubmit = async (data: FormValues) => {
     setIsLoading(true)
     
+    // Construct the API URL using the environment variable
+    // const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`; // Reverted for now
+    
     try {
       // Register the user
-      const response = await fetch("/api/auth/register", {
+      const response = await fetch("http://localhost:3001/api/auth/register", { // Use hardcoded development URL
         method: "POST",
         headers: {
           "Content-Type": "application/json"
