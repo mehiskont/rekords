@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import { SignUpForm } from "@/components/auth/sign-up-form"
 import dynamic from 'next/dynamic'
 
-// Dynamically import the Background component with SSR disabled
 const Background = dynamic(() => import('@/components/auth/background-animation'), {
   ssr: false,
   loading: () => <div className="h-full w-full animate-pulse bg-zinc-700" />
@@ -16,10 +15,10 @@ export const metadata: Metadata = {
 export default function SignUpPage() {
   return (
     <div className="container relative min-h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
-      <div className="relative hidden h-full flex-col bg-muted p-10 text-white dark:border-r lg:flex">
+      <div className="relative hidden h-full flex-col bg-muted p-10 text-white lg:flex">
         <div className="absolute inset-0 bg-background" />
         <div className="relative z-20 flex h-full w-full items-center justify-center">
-          <Background />
+         <Background />
         </div>
       </div>
       <div className="lg:p-8">

@@ -5,8 +5,9 @@ import { Canvas, useFrame } from "@react-three/fiber"
 import { OrbitControls, Float, Environment } from "@react-three/drei"
 import * as THREE from "three"
 import { useTheme } from "next-themes"
+import React from "react"
 
-export default function Background() {
+export const Background: React.FC = () => {
   const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
@@ -31,7 +32,7 @@ export default function Background() {
   )
 }
 
-function SingleVinylRecord() {
+const SingleVinylRecord: React.FC = () => {
   const groupRef = useRef<THREE.Group>(null) // Added type annotation
 
   useFrame(({ clock }) => {
@@ -57,7 +58,7 @@ interface VinylRecordProps {
   labelColor: string;
 }
 
-function VinylRecord({ position, labelColor }: VinylRecordProps) { // Added type annotation
+const VinylRecord: React.FC<VinylRecordProps> = ({ position, labelColor }) => { // Added React.FC type
   const recordRef = useRef<THREE.Group>(null) // Added type annotation
   const { resolvedTheme } = useTheme() // Get the resolved theme
 
@@ -131,11 +132,34 @@ function VinylRecord({ position, labelColor }: VinylRecordProps) { // Added type
           />
         </mesh>
 
-        {/* The center label with logo */}
+        {/* The center label - Top Side */}
         {labelTexture && (
-          <mesh position={[0, THICKNESS / 2 + 0.001, 0]}>
+          <mesh position={[0, THICKNESS / 2 + 0.001, 0]}> {/* Position slightly above top face */}
             <cylinderGeometry args={[LABEL_DIAMETER, LABEL_DIAMETER, 0.01, 32]} />
-            <meshStandardMaterial color={labelColor} roughness={0.5} map={labelTexture} transparent={true} />
+            <meshStandardMaterial 
+              color={labelColor} 
+              roughness={0.5} 
+              map={labelTexture} 
+              transparent={true} 
+              side={THREE.FrontSide} // Explicitly render front side
+            />
+          </mesh>
+        )}
+
+        {/* The center label - Bottom Side */}
+        {labelTexture && (
+          <mesh 
+            position={[0, -THICKNESS / 2 - 0.001, 0]}
+            rotation={[Math.PI, 0, 0]} // Rotate 180 degrees on X-axis to flip texture
+          >
+            <cylinderGeometry args={[LABEL_DIAMETER, LABEL_DIAMETER, 0.01, 32]} />
+            <meshStandardMaterial 
+              color={labelColor} 
+              roughness={0.5} 
+              map={labelTexture} 
+              transparent={true} 
+              side={THREE.FrontSide} // Render front side (which is now facing down due to rotation)
+            />
           </mesh>
         )}
 
@@ -147,4 +171,7 @@ function VinylRecord({ position, labelColor }: VinylRecordProps) { // Added type
       </group>
     </group>
   )
-} 
+}
+
+// Add default export at the end if needed by the calling pages
+export default Background; 
