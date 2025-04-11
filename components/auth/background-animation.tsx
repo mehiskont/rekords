@@ -127,8 +127,8 @@ const VinylRecord: React.FC<VinylRecordProps> = ({ position, labelColor }) => { 
           <cylinderGeometry args={[RECORD_DIAMETER, RECORD_DIAMETER, THICKNESS, 64]} />
           <meshStandardMaterial 
             color={recordColor} // Use the dynamic recordColor
-            roughness={0.6} 
-            metalness={0.2} 
+            roughness={0.2} // Decreased for more gloss
+            metalness={0.6} // Increased for more reflection
           />
         </mesh>
 
