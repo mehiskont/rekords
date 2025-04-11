@@ -68,14 +68,6 @@ export function SignUpForm() {
           title: "Account created!",
           description: "Your account has been created successfully. You can now sign in.",
         });
-        
-        // Automatically sign in the user after successful registration
-        await signIn("credentials", {
-          email: data.email,
-          password: data.password,
-          callbackUrl: "/dashboard",
-          redirect: true
-        });
       } else {
         // Handle specific errors
         if (response.status === 409) {

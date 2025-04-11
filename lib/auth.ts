@@ -43,37 +43,63 @@ export const authOptions: NextAuthOptions = {
       // Explicitly type credentials
       async authorize(credentials: Record<string, string> | undefined): Promise<User | null> {
         log("[Credentials Provider] Authorize attempt", { email: credentials?.email }, "info");
+        
         if (!credentials?.email || !credentials?.password) {
+          log("[Credentials Provider] Missing email or password", {}, "warn");
           return null;
         }
 
-        // --- NO DATABASE CHECK --- 
-        // Frontend cannot securely verify passwords against a remote API here.
-        // This provider should ideally be removed or only used for specific
-        // non-standard flows if absolutely necessary.
-        // Keeping the test/admin fallback for potential temporary use.
+        const { email, password } = credentials;
+        const loginApiUrl = "http://localhost:3001/api/auth/login"; // Use the actual backend login URL
 
-        const testEmail = process.env.TEST_USER_EMAIL || "test@example.com";
-        const testPassword = process.env.TEST_USER_PASSWORD || "password123";
-        const adminEmail = process.env.ADMIN_USER_EMAIL || "admin@example.com";
-        const adminPassword = process.env.ADMIN_USER_PASSWORD || "admin123";
+        try {
+          log(`[Credentials Provider] Calling backend login API: ${loginApiUrl}`, { email }, "info");
+          const response = await fetch(loginApiUrl, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
+          });
 
-        if (credentials.email === testEmail && credentials.password === testPassword) {
-          log("Using test user auth as fallback", {}, "info");
-          // Return type must match User
-          return { id: "test-user-id-123", email: testEmail, name: "Test User" };
+          if (response.ok) {
+            const userData = await response.json();
+            log("[Credentials Provider] Backend login successful", { email, userId: userData.user?.id }, "info");
+            // Ensure the returned object matches the NextAuth User type
+            // Expecting backend to return { user: { id: '...', name: '...', email: '...' } } on success
+            if (userData && userData.user) {
+              return {
+                id: userData.user.id,
+                name: userData.user.name,
+                email: userData.user.email,
+                // image: userData.user.image, // Add if your backend provides it
+              };
+            } else {
+              log("[Credentials Provider] Backend login response missing user data", { email }, "error");
+              return null; // Malformed success response from backend
+            }
+          } else {
+            log(`[Credentials Provider] Backend login failed with status: ${response.status}`, { email }, "warn");
+            // For 401 or other errors, authentication fails
+            return null;
+          }
+        } catch (error) {
+          log("[Credentials Provider] Error calling backend login API", { error }, "error");
+          console.error("Credentials Provider Error:", error);
+          return null; // Network error or other exception
         }
-        
-        if (credentials.email === adminEmail && credentials.password === adminPassword) {
-          log("Using admin user auth as fallback", {}, "info");
-          // Return type must match User
-          return { id: "admin-user-id-456", email: adminEmail, name: "Admin User" };
-        }
 
-        log("Credentials did not match fallback users", { email: credentials.email }, "warn");
-        // If credentials don't match fallbacks, deny access.
-        // Authentication MUST happen against the backend API for real users.
-        return null;
+        // --- OLD HARDCODED LOGIC REMOVED ---
+        // const testEmail = process.env.TEST_USER_EMAIL || "test@example.com";
+        // const testPassword = process.env.TEST_USER_PASSWORD || "password123";
+        // const adminEmail = process.env.ADMIN_USER_EMAIL || "admin@example.com";
+        // const adminPassword = process.env.ADMIN_USER_PASSWORD || "admin123";
+        // 
+        // if (credentials.email === testEmail && credentials.password === testPassword) { ... }
+        // if (credentials.email === adminEmail && credentials.password === adminPassword) { ... }
+        // log("Credentials did not match fallback users", { email: credentials.email }, "warn");
+        // return null;
+        // --- END OLD HARDCODED LOGIC ---
       }
     }),
     // Google OAuth provider - remains largely the same
