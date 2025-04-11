@@ -4,6 +4,7 @@ import { useRef, useMemo, useState, useEffect } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { OrbitControls, Float, Environment } from "@react-three/drei"
 import * as THREE from "three"
+import { useTheme } from "next-themes"
 
 export default function Background() {
   const [isClient, setIsClient] = useState(false)
@@ -58,9 +59,14 @@ interface VinylRecordProps {
 
 function VinylRecord({ position, labelColor }: VinylRecordProps) { // Added type annotation
   const recordRef = useRef<THREE.Group>(null) // Added type annotation
+  const { resolvedTheme } = useTheme() // Get the resolved theme
+
   const RECORD_DIAMETER = 3.5
   const LABEL_DIAMETER = 1.2
   const THICKNESS = 0.08
+
+  // Determine record color based on theme
+  const recordColor = resolvedTheme === 'dark' ? '#ffffff' : '#111111'
 
   // Create a canvas texture for the label with the logo
   const labelTexture = useMemo(() => {
@@ -115,10 +121,14 @@ function VinylRecord({ position, labelColor }: VinylRecordProps) { // Added type
   return (
     <group position={position} rotation={[Math.PI / 2, 0, 0]}>
       <group ref={recordRef}>
-        {/* The main vinyl record (black disc) */}
+        {/* The main vinyl record (use dynamic color) */}
         <mesh>
           <cylinderGeometry args={[RECORD_DIAMETER, RECORD_DIAMETER, THICKNESS, 64]} />
-          <meshStandardMaterial color="#111111" roughness={0.6} metalness={0.2} />
+          <meshStandardMaterial 
+            color={recordColor} // Use the dynamic recordColor
+            roughness={0.6} 
+            metalness={0.2} 
+          />
         </mesh>
 
         {/* The center label with logo */}
