@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 
 const Background = dynamic(() => import('@/components/auth/background-animation'), {
   ssr: false,
-  loading: () => <div className="h-full w-full animate-pulse bg-zinc-700" />
+  loading: () => <div className="h-full w-full bg-background" />
 })
 
 export const metadata: Metadata = {
