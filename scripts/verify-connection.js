@@ -56,12 +56,11 @@ async function verifyConnections() {
   console.log('Direct Connection:', directResult ? '✓ SUCCESS' : '✕ FAILED')
   
   if (!pooledResult && !directResult) {
-    console.log('\nTroubleshooting steps:')
-    console.log('1. Verify your database is running in Supabase dashboard')
-    console.log('2. Check if your IP is allowed in Supabase dashboard')
-    console.log('3. Verify your connection strings are correct:')
-    console.log('   - DATABASE_URL should use port 6543 with ?pgbouncer=true')
-    console.log('   - DIRECT_URL should use port 5432 without ?pgbouncer=true')
+    console.error('\nTroubleshooting:');
+    console.error('1. Verify your database is running and accessible from this environment.');
+    console.error('2. Check DATABASE_URL in your .env.local file.');
+    console.error('3. Ensure firewalls or security groups allow connections.');
+    process.exit(1);
   }
 }
 

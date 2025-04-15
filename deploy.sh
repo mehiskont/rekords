@@ -21,10 +21,9 @@ npm install
 echo "Building the application..."
 npm run build
 
-# 3. Database setup (Removed)
-# Remove database migrations step
-# echo "Running database migrations with Supabase schema..."
-# npx prisma db push --schema=./prisma/schema.supabase.prisma
+# 3. Database setup
+echo "Applying database migrations..."
+npx prisma db push
 
 echo "Database migrations skipped (handled by backend API deployment)."
 

@@ -1,4 +1,4 @@
-supabase is postreSQL
+plastik is postreSQL
 resend emails
 
 
