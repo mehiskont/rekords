@@ -5,12 +5,20 @@ export async function GET(request: NextRequest) {
   try {
     log('Proxying session check to backend API', {}, 'info')
     
-    const apiUrl = process.env.API_BASE_URL || 'http://localhost:3001'
+    // Make sure we have a properly formatted URL
+    let apiUrl = process.env.API_BASE_URL || 'http://localhost:3001'
+    
+    // Remove trailing slash if present
+    if (apiUrl.endsWith('/')) {
+      apiUrl = apiUrl.slice(0, -1)
+    }
+    
     const cookies = request.headers.get('cookie') || ''
+    const fullUrl = `${apiUrl}/api/auth/session`
     
-    log(`Forwarding session check to ${apiUrl}/api/auth/session`, {}, 'info')
+    log(`Forwarding session check to ${fullUrl}`, {}, 'info')
     
-    const response = await fetch(`${apiUrl}/api/auth/session`, {
+    const response = await fetch(fullUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

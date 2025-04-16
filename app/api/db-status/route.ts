@@ -5,8 +5,18 @@ export async function GET() {
   try {
     log('Forwarding DB status check to backend API', {}, 'info')
     
-    const apiUrl = process.env.API_BASE_URL || 'http://localhost:3001'
-    const response = await fetch(`${apiUrl}/api/db-status`, {
+    // Make sure we have a properly formatted URL
+    let apiUrl = process.env.API_BASE_URL || 'http://localhost:3001'
+    
+    // Remove trailing slash if present
+    if (apiUrl.endsWith('/')) {
+      apiUrl = apiUrl.slice(0, -1)
+    }
+    
+    const fullUrl = `${apiUrl}/api/db-status`
+    log(`Forwarding DB status check to ${fullUrl}`, {}, 'debug')
+    
+    const response = await fetch(fullUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

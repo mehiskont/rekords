@@ -6,13 +6,21 @@ export async function POST(request: NextRequest) {
     log('Proxying credentials login to backend API', {}, 'info')
     
     const body = await request.json()
-    const apiUrl = process.env.API_BASE_URL || 'http://localhost:3001'
+    // Make sure we have a properly formatted URL
+    let apiUrl = process.env.API_BASE_URL || 'http://localhost:3001'
     
-    log(`Forwarding credentials to ${apiUrl}/api/auth/callback/credentials`, { 
+    // Remove trailing slash if present
+    if (apiUrl.endsWith('/')) {
+      apiUrl = apiUrl.slice(0, -1)
+    }
+    
+    const fullUrl = `${apiUrl}/api/auth/login`
+    
+    log(`Forwarding credentials to ${fullUrl}`, { 
       email: body.email 
     }, 'info')
     
-    const response = await fetch(`${apiUrl}/api/auth/callback/credentials`, {
+    const response = await fetch(fullUrl, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

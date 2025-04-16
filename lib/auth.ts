@@ -27,7 +27,7 @@ import type { JWT } from "next-auth/jwt";
 export const authOptions: NextAuthOptions = {
   // Remove adapter entirely - Frontend will not manage user persistence
   // adapter: { ... }, 
-  debug: process.env.NODE_ENV === 'development', // Enable debug only in development
+  debug: true, // Always enable debug for troubleshooting
   session: {
     strategy: "jwt", // JWT is essential without a database adapter
     maxAge: 30 * 24 * 60 * 60, // 30 days
