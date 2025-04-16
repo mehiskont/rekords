@@ -60,12 +60,53 @@ export const authOptions: NextAuthOptions = {
           return null;
         }
 
+        // TEMPORARY FALLBACK: Check if using test accounts for local development
+        const testEmail = process.env.TEST_USER_EMAIL || "test@example.com";
+        const testPassword = process.env.TEST_USER_PASSWORD || "password123";
+        const adminEmail = process.env.ADMIN_USER_EMAIL || "admin@example.com";
+        const adminPassword = process.env.ADMIN_USER_PASSWORD || "admin123";
+        const useFallback = process.env.AUTH_FORCE_FALLBACK === "true";
+        
+        // For development with test accounts
+        if (useFallback) {
+          log("[Credentials Provider] Using fallback authentication", { email }, "info");
+          
+          if (email === testEmail && password === testPassword) {
+            return {
+              id: "test-user-id-123",
+              name: "Test User",
+              email: testEmail,
+            };
+          }
+          
+          if (email === adminEmail && password === adminPassword) {
+            return {
+              id: "admin-user-id-456",
+              name: "Admin User",
+              email: adminEmail,
+              role: "admin"
+            };
+          }
+          
+          log("[Credentials Provider] Fallback authentication failed", { email }, "warn");
+          return null;
+        }
+        
+        // Normal API-based authentication
         try {
           log(`[Credentials Provider] Calling backend login API: ${loginApiUrl}`, { email }, "info");
+          // Add log to show actual request details
+          log(`[Credentials Provider] Request details for ${loginApiUrl}`, {
+            method: 'POST',
+            headers: { contentType: 'application/json' },
+            body: { email, passwordLength: password?.length || 0 }
+          }, "info");
+          
           const response = await fetch(loginApiUrl, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
+              'Accept': 'application/json',
             },
             body: JSON.stringify({ email, password }),
           });
@@ -93,7 +134,21 @@ export const authOptions: NextAuthOptions = {
               return null; // Malformed success response from backend
             }
           } else {
-            log(`[Credentials Provider] Backend login failed with status: ${response.status}`, { email }, "warn");
+            try {
+              // Try to get the error response body to see what went wrong
+              const errorData = await response.text();
+              log(`[Credentials Provider] Backend login failed with status: ${response.status}`, { 
+                email, 
+                errorBody: errorData,
+                url: loginApiUrl
+              }, "warn");
+            } catch (e) {
+              log(`[Credentials Provider] Backend login failed with status: ${response.status}`, { 
+                email,
+                responseError: String(e),
+                url: loginApiUrl
+              }, "warn");
+            }
             // For 401 or other errors, authentication fails
             return null;
           }
