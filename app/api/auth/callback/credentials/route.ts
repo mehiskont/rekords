@@ -3,65 +3,24 @@ import { log } from '@/lib/logger'
 
 export async function POST(request: NextRequest) {
   try {
-    // Check if we should use fallback authentication
-    const useFallback = process.env.AUTH_FORCE_FALLBACK === "true";
-    log('Credentials login attempt', { useFallback }, 'info')
+    log('Proxying credentials login to backend API', {}, 'info')
     
-    if (useFallback) {
-      log('Using fallback auth credentials endpoint', {}, 'info')
-      
-      try {
-        const body = await request.json();
-        const { email, password } = body || {};
-        
-        if (!email || !password) {
-          log('Missing email or password in fallback auth', {}, 'warn')
-          return NextResponse.json({ error: 'CredentialsSignin' }, { status: 401 })
-        }
-        
-        const testEmail = process.env.TEST_USER_EMAIL || "test@example.com";
-        const testPassword = process.env.TEST_USER_PASSWORD || "password123";
-        const adminEmail = process.env.ADMIN_USER_EMAIL || "admin@example.com";
-        const adminPassword = process.env.ADMIN_USER_PASSWORD || "admin123";
-        
-        // Check credentials
-        if (email === testEmail && password === testPassword) {
-          log('Fallback auth successful for test user', { email }, 'info')
-          return NextResponse.json({
-            user: {
-              id: "test-user-id-123",
-              name: "Test User",
-              email: testEmail,
-            }
-          })
-        }
-        
-        if (email === adminEmail && password === adminPassword) {
-          log('Fallback auth successful for admin user', { email }, 'info')
-          return NextResponse.json({
-            user: {
-              id: "admin-user-id-456",
-              name: "Admin User",
-              email: adminEmail,
-              role: "admin"
-            }
-          })
-        }
-        
-        // Invalid credentials
-        log('Fallback auth failed - invalid credentials', { email }, 'warn')
-        return NextResponse.json({ error: 'CredentialsSignin' }, { status: 401 })
-      } catch (error) {
-        log('Error in fallback auth handler', { error: String(error) }, 'error')
-        return NextResponse.json({ error: 'CredentialsSignin' }, { status: 401 })
-      }
+    // Get the request body
+    let body;
+    try {
+      body = await request.json();
+      log('Received login request', { email: body.email }, 'info')
+    } catch (error) {
+      log('Failed to parse request body', { error: String(error) }, 'error')
+      return NextResponse.json({ error: 'InvalidRequest' }, { status: 400 })
     }
     
-    // If not in fallback mode, use the API
-    const body = await request.json()
-    
     // Make sure we have a properly formatted URL
-    let apiUrl = process.env.API_BASE_URL || 'http://localhost:3001'
+    let apiUrl = process.env.API_BASE_URL
+    if (!apiUrl) {
+      log('API_BASE_URL not configured', {}, 'error')
+      return NextResponse.json({ error: 'ServerConfigurationError' }, { status: 500 })
+    }
     
     // Remove trailing slash if present
     if (apiUrl.endsWith('/')) {
@@ -70,86 +29,76 @@ export async function POST(request: NextRequest) {
     
     const fullUrl = `${apiUrl}/api/auth/login`
     
-    log(`Forwarding credentials to ${fullUrl}`, { 
-      email: body.email 
-    }, 'info')
+    log(`Forwarding credentials to ${fullUrl}`, { email: body.email }, 'info')
     
+    // Forward the request to the backend API
     try {
       const response = await fetch(fullUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
-        body: JSON.stringify(body),
-        credentials: 'include'
+        body: JSON.stringify(body)
       })
 
-      // Get response data
-      let responseData
+      // Get the response data
+      let responseText = '';
       try {
-        responseData = await response.json()
-      } catch (e) {
-        log('Failed to parse response from backend', { error: String(e) }, 'error')
-        responseData = { error: 'InvalidResponse' }
+        responseText = await response.text();
+        log('Received API response', { 
+          status: response.status, 
+          textLength: responseText.length 
+        }, 'info');
+      } catch (error) {
+        log('Failed to read response text', { error: String(error) }, 'error')
+        return NextResponse.json({ error: 'CredentialsSignin' }, { status: 401 })
       }
 
-      // Create response with same status
-      const nextResponse = NextResponse.json(
-        responseData,
-        { status: response.status }
-      )
+      // Try to parse JSON response if available
+      let responseData;
+      try {
+        responseData = responseText ? JSON.parse(responseText) : {};
+      } catch (error) {
+        log('Failed to parse JSON response', { 
+          error: String(error), 
+          responseText: responseText.substring(0, 100) + '...' 
+        }, 'error')
+        responseData = { error: 'InvalidResponse' };
+      }
 
-      // Forward cookies from backend to browser
-      response.headers.forEach((value, key) => {
-        if (key.toLowerCase() === 'set-cookie') {
-          nextResponse.headers.set(key, value)
-        }
-      })
+      if (response.ok) {
+        log('Login successful via API', { email: body.email }, 'info')
+        
+        // Create the response
+        const nextResponse = NextResponse.json(responseData)
 
-      return nextResponse
+        // Forward cookies from backend to browser
+        response.headers.forEach((value, key) => {
+          if (key.toLowerCase() === 'set-cookie') {
+            nextResponse.headers.set(key, value)
+          }
+        })
+
+        return nextResponse
+      } else {
+        log('Login failed via API', { 
+          status: response.status, 
+          email: body.email,
+          errorMessage: responseData.error || 'Unknown error' 
+        }, 'warn')
+        
+        return NextResponse.json(
+          { error: 'CredentialsSignin' },
+          { status: 401 }
+        )
+      }
     } catch (error) {
-      log('API credentials proxy error', { error: String(error) }, 'error')
-      
-      // If API is down, fallback to test users
-      const { email, password } = body || {};
-      const testEmail = process.env.TEST_USER_EMAIL || "test@example.com";
-      const testPassword = process.env.TEST_USER_PASSWORD || "password123";
-      const adminEmail = process.env.ADMIN_USER_EMAIL || "admin@example.com";
-      const adminPassword = process.env.ADMIN_USER_PASSWORD || "admin123";
-      
-      if (email === testEmail && password === testPassword) {
-        log('API down - using emergency fallback for test user', { email }, 'warn')
-        return NextResponse.json({
-          user: {
-            id: "test-user-id-123",
-            name: "Test User",
-            email: testEmail,
-          }
-        })
-      }
-      
-      if (email === adminEmail && password === adminPassword) {
-        log('API down - using emergency fallback for admin user', { email }, 'warn')
-        return NextResponse.json({
-          user: {
-            id: "admin-user-id-456",
-            name: "Admin User",
-            email: adminEmail,
-            role: "admin"
-          }
-        })
-      }
-      
-      return NextResponse.json(
-        { error: 'CredentialsSignin' },
-        { status: 401 }
-      )
+      log('API request failed', { error: String(error), url: fullUrl }, 'error')
+      return NextResponse.json({ error: 'CredentialsSignin' }, { status: 401 })
     }
   } catch (error) {
-    log('Credentials route error', { error: String(error) }, 'error')
-    return NextResponse.json(
-      { error: 'CredentialsSignin' },
-      { status: 401 }
-    )
+    log('Credentials proxy handler error', { error: String(error) }, 'error')
+    return NextResponse.json({ error: 'CredentialsSignin' }, { status: 401 })
   }
 }

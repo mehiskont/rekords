@@ -51,40 +51,7 @@ export const authOptions: NextAuthOptions = {
 
         const { email, password } = credentials;
         
-        // Check if we should use fallback authentication
-        const useFallback = process.env.AUTH_FORCE_FALLBACK === "true";
-        
-        // Fallback authentication for development/testing
-        if (useFallback) {
-          log("[Credentials Provider] Using fallback authentication mode", { email }, "info");
-          
-          const testEmail = process.env.TEST_USER_EMAIL || "test@example.com";
-          const testPassword = process.env.TEST_USER_PASSWORD || "password123";
-          const adminEmail = process.env.ADMIN_USER_EMAIL || "admin@example.com";
-          const adminPassword = process.env.ADMIN_USER_PASSWORD || "admin123";
-          
-          if (email === testEmail && password === testPassword) {
-            log("[Credentials Provider] Test user login successful", { email }, "info");
-            return {
-              id: "test-user-id-123",
-              name: "Test User",
-              email: testEmail
-            };
-          }
-          
-          if (email === adminEmail && password === adminPassword) {
-            log("[Credentials Provider] Admin user login successful", { email }, "info");
-            return {
-              id: "admin-user-id-456",
-              name: "Admin User",
-              email: adminEmail,
-              role: "admin"
-            };
-          }
-          
-          log("[Credentials Provider] Fallback auth failed - invalid credentials", { email }, "warn");
-          return null;
-        }
+        // No fallback authentication - rely on the API for all auth
         
         // Regular API authentication
         // Use the environment variable for the backend API URL (SERVER-SIDE)
