@@ -215,7 +215,7 @@ export function SignUpForm() {
         disabled={isLoading}
         onClick={() => {
           setIsLoading(true)
-          signIn("google", { callbackUrl: process.env.NEXT_PUBLIC_APP_URL ? `${process.env.NEXT_PUBLIC_APP_URL}/dashboard` : "/dashboard" })
+          signIn("google", { callbackUrl: "/dashboard" })
             .catch(error => {
               console.error("Google sign in error:", error);
               setIsLoading(false);

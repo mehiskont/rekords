@@ -3,15 +3,38 @@ import { log } from '@/lib/logger'
 
 export async function POST(request: NextRequest) {
   try {
-    log('Proxying credentials login to backend API', {}, 'info')
+    log('Processing credentials login request', {}, 'info')
     
     // Get the request body
     let body;
+    let contentType = request.headers.get('content-type') || '';
+    
     try {
-      body = await request.json();
-      log('Received login request', { email: body.email }, 'info')
+      if (contentType.includes('application/json')) {
+        body = await request.json();
+      } else if (contentType.includes('application/x-www-form-urlencoded')) {
+        // Handle form data
+        const formData = await request.formData();
+        body = Object.fromEntries(formData);
+      } else {
+        // Try to parse as URL encoded (fallback)
+        const text = await request.text();
+        const urlParams = new URLSearchParams(text);
+        body = {};
+        for (const [key, value] of urlParams.entries()) {
+          body[key] = value;
+        }
+      }
+      
+      log('Received login request', { 
+        contentType,
+        hasEmail: !!body.email 
+      }, 'info')
     } catch (error) {
-      log('Failed to parse request body', { error: String(error) }, 'error')
+      log('Failed to parse request body', { 
+        error: String(error),
+        contentType
+      }, 'error')
       return NextResponse.json({ error: 'InvalidRequest' }, { status: 400 })
     }
     
@@ -29,7 +52,10 @@ export async function POST(request: NextRequest) {
     
     const fullUrl = `${apiUrl}/api/auth/login`
     
-    log(`Forwarding credentials to ${fullUrl}`, { email: body.email }, 'info')
+    log(`Forwarding credentials to ${fullUrl}`, { 
+      email: body.email,
+      contentType
+    }, 'info')
     
     // Forward the request to the backend API
     try {
@@ -39,7 +65,10 @@ export async function POST(request: NextRequest) {
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        body: JSON.stringify(body)
+        body: JSON.stringify({
+          email: body.email,
+          password: body.password
+        })
       })
 
       // Get the response data
@@ -70,8 +99,16 @@ export async function POST(request: NextRequest) {
       if (response.ok) {
         log('Login successful via API', { email: body.email }, 'info')
         
-        // Create the response
-        const nextResponse = NextResponse.json(responseData)
+        // Create the response with our standard format
+        const userData = {
+          user: {
+            id: responseData.id || responseData.user?.id || `user-${Date.now()}`,
+            name: responseData.name || responseData.user?.name || body.email.split('@')[0],
+            email: responseData.email || responseData.user?.email || body.email,
+          }
+        };
+        
+        const nextResponse = NextResponse.json(userData)
 
         // Forward cookies from backend to browser
         response.headers.forEach((value, key) => {
@@ -85,20 +122,29 @@ export async function POST(request: NextRequest) {
         log('Login failed via API', { 
           status: response.status, 
           email: body.email,
-          errorMessage: responseData.error || 'Unknown error' 
+          errorMessage: responseData.error || responseData.message || 'Unknown error' 
         }, 'warn')
         
-        return NextResponse.json(
-          { error: 'CredentialsSignin' },
-          { status: 401 }
-        )
+        // Check for specific error messages
+        const errorMsg = responseData.error || responseData.message || '';
+        if (errorMsg.toLowerCase().includes('invalid') || response.status === 401) {
+          return NextResponse.json(
+            { error: 'CredentialsSignin' },
+            { status: 401 }
+          )
+        } else {
+          return NextResponse.json(
+            { error: 'ServerError', message: errorMsg },
+            { status: response.status || 500 }
+          )
+        }
       }
     } catch (error) {
       log('API request failed', { error: String(error), url: fullUrl }, 'error')
-      return NextResponse.json({ error: 'CredentialsSignin' }, { status: 401 })
+      return NextResponse.json({ error: 'ServerError' }, { status: 500 })
     }
   } catch (error) {
     log('Credentials proxy handler error', { error: String(error) }, 'error')
-    return NextResponse.json({ error: 'CredentialsSignin' }, { status: 401 })
+    return NextResponse.json({ error: 'ServerError' }, { status: 500 })
   }
 }

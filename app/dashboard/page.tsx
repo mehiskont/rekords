@@ -1,27 +1,57 @@
-import { getServerSession } from "next-auth/next"
+import { getServerSession } from "next-auth"
 import { OrderList } from "@/components/dashboard/order-list"
 import { authOptions } from "@/lib/auth"
 import { mockOrders } from "@/lib/mock-data/orders"
 import { log } from "@/lib/logger"
+import { cookies } from "next/headers"
+import { decode } from "jsonwebtoken"
 
 const EXTERNAL_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL
 
 export default async function DashboardPage() {
+  // First try to get NextAuth session
   const session = await getServerSession(authOptions)
-  log("Dashboard page session:", {
-    hasSession: !!session,
-    sessionData: session ? {
-      userId: session.user?.id,
-      name: session.user?.name,
-      email: session.user?.email ? `${session.user.email.substring(0, 3)}...` : null,
-    } : null
+  
+  // Get user info from either NextAuth session or from our custom token
+  let userId = session?.user?.id
+  let userName = session?.user?.name
+  let userEmail = session?.user?.email
+  
+  // If we don't have a NextAuth session, try our custom tokens
+  if (!session) {
+    const cookieStore = cookies()
+    const customToken = cookieStore.get('auth-token')?.value
+    const localStorageToken = cookieStore.get('ls-auth-token')?.value
+    
+    // If we have a custom token, decode it to get user info
+    if (customToken || localStorageToken) {
+      try {
+        const token = customToken || localStorageToken
+        const decoded = decode(token!)
+        
+        if (decoded && typeof decoded === 'object') {
+          userId = decoded.id as string || decoded.userId as string
+          userName = decoded.name as string
+          userEmail = decoded.email as string
+        }
+      } catch (error) {
+        log("Failed to decode custom token", { error: String(error) }, "error")
+      }
+    }
+  }
+  
+  log("Dashboard page user data:", {
+    hasNextAuthSession: !!session,
+    userId,
+    userName,
+    userEmail: userEmail ? `${userEmail.substring(0, 3)}...` : null,
   });
   
   let orders = [];
   let apiError = false;
 
   // Try to get user orders from the external API
-  if (session?.user?.id && EXTERNAL_API_URL) {
+  if (userId && EXTERNAL_API_URL) {
     try {
       // TODO: Add appropriate Authorization header using session token if required by the external API
       const response = await fetch(`${EXTERNAL_API_URL}/api/orders?limit=5`, {
@@ -58,7 +88,7 @@ export default async function DashboardPage() {
       orders = mockOrders; // Fallback to mock data (which is empty)
     }
   } else {
-     log("Dashboard: Not fetching orders (no session, user ID, or API URL)", "info");
+     log("Dashboard: Not fetching orders (no user ID or API URL)", "info");
      // If not logged in, orders remain empty, no error is shown
      // If API URL is missing, log it and show error state
      if (!EXTERNAL_API_URL) {
@@ -76,7 +106,7 @@ export default async function DashboardPage() {
       
       {/* Welcome section */}
       <div className="rounded-lg border p-6 shadow-sm">
-        <h3 className="text-xl font-semibold mb-4">Welcome, {session?.user?.name || 'Vinyl Enthusiast'}!</h3>
+        <h3 className="text-xl font-semibold mb-4">Welcome, {userName || 'Vinyl Enthusiast'}!</h3>
         <p className="text-muted-foreground mb-2">
           From your dashboard, you can view your order history and manage your profile.
         </p>

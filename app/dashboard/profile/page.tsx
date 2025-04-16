@@ -1,4 +1,4 @@
-import { getServerSession } from "next-auth/next"
+import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { ProfileForm } from "@/components/dashboard/profile-form"
 import { log } from "@/lib/logger"

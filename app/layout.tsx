@@ -10,7 +10,13 @@ import NextAuthProvider from "@/components/next-auth-provider"
 import { CartProvider } from "@/contexts/cart-context"
 import { authOptions } from "@/lib/auth"
 import Script from "next/script"
+import dynamic from "next/dynamic"
 import "./globals.css"
+
+// Dynamically import cart merging logic to ensure it only runs client-side
+const CartMergeHandler = dynamic(() => import('@/components/cart-merge-handler'), { 
+  ssr: false 
+})
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -38,6 +44,8 @@ export default async function RootLayout({
                 <main className="flex-1">{children}</main>
                 <Footer />
                 <Toaster />
+                {/* Cart merge handler for session-based cart management */}
+                <CartMergeHandler />
               </div>
             </CartProvider>
           </ThemeProvider>

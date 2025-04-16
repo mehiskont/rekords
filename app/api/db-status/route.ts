@@ -5,6 +5,14 @@ export async function GET() {
   try {
     log('DB status check requested', {}, 'info')
     
+    // We're now in API mode, but check config for informational purposes
+    const useStandaloneMode = process.env.NEXTAUTH_STANDALONE === "true" || 
+                              process.env.AUTH_FORCE_FALLBACK === "true";
+    
+    if (useStandaloneMode) {
+      log('API mode is active despite standalone settings', {}, 'warn')
+    }
+    
     // Make sure we have a properly formatted URL
     let apiUrl = process.env.API_BASE_URL
     if (!apiUrl) {
@@ -13,7 +21,8 @@ export async function GET() {
         status: 'error', 
         connected: false,
         error: 'API_BASE_URL not configured',
-        message: 'Backend API URL is not properly configured'
+        message: 'Backend API URL is not properly configured',
+        forceFallback: true
       }, { status: 500 })
     }
     
@@ -46,7 +55,8 @@ export async function GET() {
           status: 'error',
           connected: false,
           error: `Backend returned ${response.status}`,
-          message: 'Failed to connect to backend API'
+          message: 'Failed to connect to backend API',
+          forceFallback: true
         }, { status: response.status })
       }
       
@@ -60,7 +70,8 @@ export async function GET() {
         status: 'error',
         connected: false,
         error: String(error),
-        message: 'Failed to connect to backend API'
+        message: 'Failed to connect to backend API',
+        forceFallback: true
       }, { status: 500 })
     }
   } catch (error) {

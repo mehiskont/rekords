@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useSession, signOut } from "next-auth/react"
 import { Menu, ShoppingCart, User, X, LogOut, Home, Info, Phone } from "lucide-react"
+import { useAuth } from "@/hooks/use-auth" // Import our custom auth hook
 import { Button } from "@/components/ui/button"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { useCart } from "@/contexts/cart-context"
@@ -20,7 +21,8 @@ import {
 
 export function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { data: session, status } = useSession()
+  const { data: session, status: nextAuthStatus } = useSession()
+  const { user, status } = useAuth() // Use our custom hook
   const { state, dispatch } = useCart()
   const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
@@ -90,7 +92,7 @@ export function NavBar() {
               <Button variant="ghost" size="icon" disabled>
                 <User className="h-5 w-5 opacity-50" />
               </Button>
-            ) : session ? (
+            ) : status === "authenticated" && user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="relative">
@@ -100,10 +102,10 @@ export function NavBar() {
                 <DropdownMenuContent align="end" className="w-56">
                   <div className="flex items-center justify-start gap-2 p-2">
                     <div className="flex flex-col space-y-1 leading-none">
-                      {session.user.name && <p className="font-medium">{session.user.name}</p>}
-                      {session.user.email && (
+                      {user.name && <p className="font-medium">{user.name}</p>}
+                      {user.email && (
                         <p className="w-[200px] truncate text-sm text-muted-foreground">
-                          {session.user.email}
+                          {user.email}
                         </p>
                       )}
                     </div>
@@ -128,8 +130,11 @@ export function NavBar() {
                       // Remove cart from localStorage
                       if (typeof window !== 'undefined') {
                         localStorage.removeItem('plastik-cart');
+                        localStorage.removeItem('auth-token');
+                        localStorage.removeItem('user');
                       }
-                      signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL || '/' });
+                      // For NextAuth sessions
+                      signOut({ callbackUrl: '/auth/signin' });
                     }}
                   >
                     <LogOut className="mr-2 h-4 w-4" />
@@ -207,13 +212,13 @@ export function NavBar() {
                       <span>Loading...</span>
                     </Button>
                   </div>
-                ) : session ? (
+                ) : status === "authenticated" && user ? (
                   <div className="flex flex-col gap-4">
                     <div className="flex items-center gap-3 py-2">
                       <User className="h-5 w-5" />
                       <div className="flex flex-col">
-                        <span className="font-medium">{session.user.name}</span>
-                        <span className="text-sm text-muted-foreground truncate max-w-[250px]">{session.user.email}</span>
+                        <span className="font-medium">{user.name}</span>
+                        <span className="text-sm text-muted-foreground truncate max-w-[250px]">{user.email}</span>
                       </div>
                     </div>
                     
@@ -255,8 +260,10 @@ export function NavBar() {
                           // Remove cart from localStorage
                           if (typeof window !== 'undefined') {
                             localStorage.removeItem('plastik-cart');
+                            localStorage.removeItem('auth-token');
+                            localStorage.removeItem('user');
                           }
-                          signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL || '/' });
+                          signOut({ callbackUrl: '/auth/signin' });
                         }}
                       >
                         <LogOut className="h-4 w-4 mr-2" />

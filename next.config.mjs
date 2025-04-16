@@ -38,6 +38,16 @@ const nextConfig = {
     // Add fallback for build process
     BUILD_DATABASE_FALLBACK: 'true'
   },
+  // Add API rewrites to proxy requests to the backend
+  async rewrites() {
+    return [
+      // Proxy API requests to backend
+      {
+        source: '/api/proxy/:path*',
+        destination: `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/:path*`
+      }
+    ]
+  },
 }
 
 mergeConfig(nextConfig, userConfig)

@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { getToken } from 'next-auth/jwt'
+import { jwtVerify } from 'jose'
 
 // This middleware ensures proper navigation to protected routes
 export async function middleware(request: NextRequest) {
@@ -13,28 +14,70 @@ export async function middleware(request: NextRequest) {
   // Skip if not a protected route
   if (!isProtectedRoute) return NextResponse.next()
   
-  // Verify session/token existence
-  const token = await getToken({
-    req: request,
-    secret: process.env.NEXTAUTH_SECRET,
-  })
-  
-  // Only log middleware checks occasionally to reduce console spam
-  if (Math.random() < 0.1) { // Only log ~10% of checks
-    console.log(`Middleware check for ${path}:`, { 
-      hasToken: !!token,
-      userId: token?.userId || token?.sub
+  try {
+    console.log(`[Auth] Checking auth for protected route: ${path}`)
+    
+    // First try NextAuth token
+    const nextAuthToken = await getToken({
+      req: request,
+      secret: process.env.NEXTAUTH_SECRET,
     })
-  }
-  
-  // Redirect to login if no token exists and page is protected
-  if (!token && isProtectedRoute) {
-    console.log(`Redirecting unauthenticated user from ${path} to login`)
+    
+    // If we have a NextAuth token, allow the request
+    if (nextAuthToken) {
+      console.log(`[Auth] NextAuth token found, allowing access to ${path}`)
+      return NextResponse.next()
+    }
+    
+    // Otherwise, check for our custom token
+    const customToken = request.cookies.get('auth-token')?.value
+    console.log(`[Auth] NextAuth token not found, checking for custom token. Has token: ${!!customToken}`)
+    
+    if (customToken) {
+      try {
+        // Verify the custom token
+        const secret = new TextEncoder().encode(
+          process.env.NEXTAUTH_SECRET || 'temporarysecret'
+        )
+        
+        await jwtVerify(customToken, secret)
+        
+        // If we get here, the token is valid
+        console.log(`[Auth] Custom token verified, allowing access to ${path}`)
+        return NextResponse.next()
+      } catch (error) {
+        console.error('[Auth] Invalid custom token:', error)
+      }
+    }
+    
+    // Also check for auth-token in localStorage via a cookie we'll set in the sign-in form
+    const localStorageToken = request.cookies.get('ls-auth-token')?.value
+    console.log(`[Auth] Checking for localStorage token cookie. Has token: ${!!localStorageToken}`)
+    
+    if (localStorageToken) {
+      try {
+        // Verify the localStorage token
+        const secret = new TextEncoder().encode(
+          process.env.NEXTAUTH_SECRET || 'temporarysecret'
+        )
+        
+        await jwtVerify(localStorageToken, secret)
+        
+        // If we get here, the token is valid
+        console.log(`[Auth] localStorage token verified, allowing access to ${path}`)
+        return NextResponse.next()
+      } catch (error) {
+        console.error('[Auth] Invalid localStorage token:', error)
+      }
+    }
+    
+    // If we get here, no valid token exists
+    console.log(`[Auth] No valid token exists, redirecting to login from ${path}`)
+    return NextResponse.redirect(new URL('/auth/signin', request.url))
+  } catch (error) {
+    console.error('[Auth] Auth middleware error:', error)
     return NextResponse.redirect(new URL('/auth/signin', request.url))
   }
-  
-  // Allow the request to proceed
-  return NextResponse.next()
 }
 
 // Only apply this middleware to specific paths

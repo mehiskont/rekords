@@ -1,4 +1,4 @@
-import { getServerSession } from "next-auth/next"
+import { getServerSession } from "next-auth"
 import { NextResponse } from "next/server"
 import { authOptions } from "@/lib/auth"
 import { log } from "@/lib/logger"
@@ -34,6 +34,9 @@ export async function GET() {
         hasNextAuthSecret: !!process.env.NEXTAUTH_SECRET,
         hasGoogleClientId: !!process.env.GOOGLE_CLIENT_ID,
         hasGoogleClientSecret: !!process.env.GOOGLE_CLIENT_SECRET,
+        apiBaseUrl: process.env.API_BASE_URL,
+        publicApiBaseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
+        useStandaloneMode: process.env.NEXTAUTH_STANDALONE === "true" || process.env.AUTH_FORCE_FALLBACK === "true",
       },
       session: {
         exists: !!session,
