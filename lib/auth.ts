@@ -50,36 +50,30 @@ export const authOptions: NextAuthOptions = {
         }
 
         const { email, password } = credentials;
-        // Use the environment variable for the backend API URL (SERVER-SIDE)
-        const loginApiUrl = process.env.API_BASE_URL
-          ? `${process.env.API_BASE_URL}/api/auth/login`
-          : null; 
-
-        if (!loginApiUrl) {
-          log("[Credentials Provider] API base URL not configured (API_BASE_URL missing)", {}, "error");
-          return null;
-        }
-
-        // TEMPORARY FALLBACK: Check if using test accounts for local development
-        const testEmail = process.env.TEST_USER_EMAIL || "test@example.com";
-        const testPassword = process.env.TEST_USER_PASSWORD || "password123";
-        const adminEmail = process.env.ADMIN_USER_EMAIL || "admin@example.com";
-        const adminPassword = process.env.ADMIN_USER_PASSWORD || "admin123";
+        
+        // Check if we should use fallback authentication
         const useFallback = process.env.AUTH_FORCE_FALLBACK === "true";
         
-        // For development with test accounts
+        // Fallback authentication for development/testing
         if (useFallback) {
-          log("[Credentials Provider] Using fallback authentication", { email }, "info");
+          log("[Credentials Provider] Using fallback authentication mode", { email }, "info");
+          
+          const testEmail = process.env.TEST_USER_EMAIL || "test@example.com";
+          const testPassword = process.env.TEST_USER_PASSWORD || "password123";
+          const adminEmail = process.env.ADMIN_USER_EMAIL || "admin@example.com";
+          const adminPassword = process.env.ADMIN_USER_PASSWORD || "admin123";
           
           if (email === testEmail && password === testPassword) {
+            log("[Credentials Provider] Test user login successful", { email }, "info");
             return {
               id: "test-user-id-123",
               name: "Test User",
-              email: testEmail,
+              email: testEmail
             };
           }
           
           if (email === adminEmail && password === adminPassword) {
+            log("[Credentials Provider] Admin user login successful", { email }, "info");
             return {
               id: "admin-user-id-456",
               name: "Admin User",
@@ -88,7 +82,18 @@ export const authOptions: NextAuthOptions = {
             };
           }
           
-          log("[Credentials Provider] Fallback authentication failed", { email }, "warn");
+          log("[Credentials Provider] Fallback auth failed - invalid credentials", { email }, "warn");
+          return null;
+        }
+        
+        // Regular API authentication
+        // Use the environment variable for the backend API URL (SERVER-SIDE)
+        const loginApiUrl = process.env.API_BASE_URL
+          ? `${process.env.API_BASE_URL}/api/auth/login`
+          : null; 
+
+        if (!loginApiUrl) {
+          log("[Credentials Provider] API base URL not configured (API_BASE_URL missing)", {}, "error");
           return null;
         }
         
