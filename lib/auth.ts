@@ -50,7 +50,15 @@ export const authOptions: NextAuthOptions = {
         }
 
         const { email, password } = credentials;
-        const loginApiUrl = "http://localhost:3001/api/auth/login"; // Use the actual backend login URL
+        // Use the environment variable for the backend API URL (SERVER-SIDE)
+        const loginApiUrl = process.env.API_BASE_URL
+          ? `${process.env.API_BASE_URL}/api/auth/login`
+          : null; 
+
+        if (!loginApiUrl) {
+          log("[Credentials Provider] API base URL not configured (API_BASE_URL missing)", {}, "error");
+          return null;
+        }
 
         try {
           log(`[Credentials Provider] Calling backend login API: ${loginApiUrl}`, { email }, "info");
@@ -63,7 +71,13 @@ export const authOptions: NextAuthOptions = {
           });
 
           if (response.ok) {
-            const userData = await response.json();
+            let userData;
+            try {
+              userData = await response.json();
+            } catch (error) {
+              log("[Credentials Provider] Failed to parse response JSON", { error }, "error");
+              return null;
+            }
             log("[Credentials Provider] Backend login successful", { email, userId: userData.user?.id }, "info");
             // Ensure the returned object matches the NextAuth User type
             // Expecting backend to return { user: { id: '...', name: '...', email: '...' } } on success
@@ -114,14 +128,20 @@ export const authOptions: NextAuthOptions = {
         }
       },
       // Explicitly type profile
-      profile(profile: Profile & { sub: string; name: string; email: string; picture: string; }): User {
+      profile(profile: Profile & { sub: string; name?: string; email?: string; picture?: string; }): User {
         log("Google auth: processing profile", { email: profile.email }, "info");
+        
+        // Validate required fields
+        if (!profile.sub || !profile.email) {
+          throw new Error("Missing required Google profile information");
+        }
+        
         // We map standard fields, the backend API will handle user creation/linking
         return {
           id: profile.sub, // Use Google's unique ID
-          name: profile.name,
+          name: profile.name || "",
           email: profile.email,
-          image: profile.picture,
+          image: profile.picture || null,
           // Ensure role is not assumed here; backend should manage roles
         }
       }
@@ -144,13 +164,20 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     // Type parameters for session callback
-    async session({ session, token }: { session: Session; token: JWT; user: User | AdapterUser; }): Promise<Session> {
+    async session({ session, token }: { session: Session; token: JWT; }): Promise<Session> {
       // The default Session type might not have `id` on `session.user`.
-      // We need to extend the Session type or assert the type carefully.
-      if (token && session.user) {
-        // Extend the Session user type inline or define a custom type
-        (session.user as { id: string; name?: string | null; email?: string | null; image?: string | null }).id = token.userId as string;
-        (session as any).provider = token.provider; 
+      if (token && session.user && typeof token.userId === 'string') {
+        // Add user ID to session safely
+        session.user = {
+          ...session.user,
+          id: token.userId
+        };
+        
+        // Add provider info if available
+        if (token.provider) {
+          // Use type assertion since we're extending the Session type
+          (session as any).provider = token.provider;
+        }
       }
       return session;
     },

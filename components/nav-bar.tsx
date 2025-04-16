@@ -129,7 +129,7 @@ export function NavBar() {
                       if (typeof window !== 'undefined') {
                         localStorage.removeItem('plastik-cart');
                       }
-                      signOut({ callbackUrl: '/' });
+                      signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL || '/' });
                     }}
                   >
                     <LogOut className="mr-2 h-4 w-4" />
@@ -256,7 +256,7 @@ export function NavBar() {
                           if (typeof window !== 'undefined') {
                             localStorage.removeItem('plastik-cart');
                           }
-                          signOut({ callbackUrl: '/' });
+                          signOut({ callbackUrl: process.env.NEXT_PUBLIC_APP_URL || '/' });
                         }}
                       >
                         <LogOut className="h-4 w-4 mr-2" />

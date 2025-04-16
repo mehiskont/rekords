@@ -44,15 +44,20 @@ export function SignUpForm() {
   const onSubmit = async (data: FormValues) => {
     setIsLoading(true)
     
-    // Construct the API URL using the environment variable
-    // const apiUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/auth/register`; // Reverted for now
-    
     try {
-      // Register the user
-      const response = await fetch("http://localhost:3001/api/auth/register", { // Use hardcoded development URL
-        method: "POST",
+      // Use the external API URL environment variable for registration
+      const registerApiUrl = process.env.NEXT_PUBLIC_API_BASE_URL
+        ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/auth/register`
+        : null;
+      
+      if (!registerApiUrl) {
+        throw new Error("API base URL is not configured - NEXT_PUBLIC_API_BASE_URL missing");
+      }
+      
+      const response = await fetch(registerApiUrl, {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json"
+          'Content-Type': 'application/json',
         },
         body: JSON.stringify({
           name: data.name,
@@ -61,7 +66,13 @@ export function SignUpForm() {
         })
       });
       
-      const result = await response.json();
+      let result;
+      try {
+        result = await response.json();
+      } catch (error) {
+        console.error("Failed to parse response JSON:", error);
+        throw new Error("Invalid response from server");
+      }
       
       if (response.ok) {
         toast({
@@ -79,7 +90,7 @@ export function SignUpForm() {
         } else if (response.status === 503) {
           toast({
             title: "Service unavailable",
-            description: "Registration is temporarily unavailable. Please try again later or use the test account: test@example.com / password123",
+            description: "Registration is temporarily unavailable. Please try again later.",
             variant: "destructive"
           });
           // Redirect to sign in page after a short delay
@@ -204,7 +215,7 @@ export function SignUpForm() {
         disabled={isLoading}
         onClick={() => {
           setIsLoading(true)
-          signIn("google", { callbackUrl: "/dashboard" })
+          signIn("google", { callbackUrl: process.env.NEXT_PUBLIC_APP_URL ? `${process.env.NEXT_PUBLIC_APP_URL}/dashboard` : "/dashboard" })
             .catch(error => {
               console.error("Google sign in error:", error);
               setIsLoading(false);
