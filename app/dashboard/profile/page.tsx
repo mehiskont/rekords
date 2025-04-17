@@ -2,16 +2,56 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth"
 import { ProfileForm } from "@/components/dashboard/profile-form"
 import { log } from "@/lib/logger"
+import { cookies } from "next/headers"
+import { jwtVerify } from "jose"
 
 const EXTERNAL_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default async function ProfilePage() {
+  // Check all possible authentication methods
   const session = await getServerSession(authOptions)
   let userProfile = null;
   let apiError = false;
+  let userId = session?.user?.id;
+  let userEmail = session?.user?.email;
+  let userName = session?.user?.name;
 
-  if (!session?.user?.id) {
-    log("Profile page: No session or user ID found.", "warn");
+  // If no NextAuth session, check custom tokens
+  if (!userId) {
+    const cookieStore = cookies()
+    const customToken = cookieStore.get('auth-token')?.value
+    const localStorageToken = cookieStore.get('ls-auth-token')?.value
+    
+    log("Profile page: No NextAuth session, checking custom tokens", { 
+      hasCustomToken: !!customToken, 
+      hasLocalStorageToken: !!localStorageToken 
+    }, "info");
+    
+    // Verify either token if available
+    if (customToken || localStorageToken) {
+      try {
+        const token = customToken || localStorageToken
+        const secret = new TextEncoder().encode(
+          process.env.NEXTAUTH_SECRET || 'temporarysecret'
+        )
+        
+        const { payload } = await jwtVerify(token!, secret)
+        
+        // Extract user info from token
+        userId = payload.sub || payload.userId || 'unknown-id';
+        userEmail = payload.email as string || null;
+        userName = payload.name as string || 'User';
+        
+        log("Profile page: Authenticated via custom token", { userId, userEmail }, "info");
+      } catch (error) {
+        log("Profile page: Invalid custom token", { error: String(error) }, "error")
+      }
+    }
+  }
+
+  // Still no valid authentication
+  if (!userId) {
+    log("Profile page: No valid authentication found.", "warn");
     return (
        <div className="space-y-6 pb-8 pt-6">
          <h2 className="text-3xl font-bold tracking-tight">Your Profile</h2>
@@ -22,11 +62,23 @@ export default async function ProfilePage() {
 
   if (EXTERNAL_API_URL) {
      try {
+       // Prepare headers with authentication if available
+       const headers: HeadersInit = {
+         'Content-Type': 'application/json',
+       };
+       
+       // Add token to API request if we have a custom token
+       const cookieStore = cookies();
+       const customToken = cookieStore.get('auth-token')?.value;
+       if (customToken) {
+         headers['Authorization'] = `Bearer ${customToken}`;
+       }
+       
+       log("Profile page: Fetching user profile from API", { userId, hasToken: !!customToken }, "info");
+       
        const response = await fetch(`${EXTERNAL_API_URL}/api/users/me/profile`, {
          method: 'GET',
-         headers: {
-           'Content-Type': 'application/json',
-         },
+         headers,
          cache: 'no-store'
        });
 
@@ -60,8 +112,8 @@ export default async function ProfilePage() {
   }
 
   const initialFormData = userProfile || {
-     name: session.user.name || '',
-     email: session.user.email || '',
+     name: userName || '',
+     email: userEmail || '',
      phone: '',
      address: '',
      city: '',

@@ -6,18 +6,17 @@ import Link from "next/link"
 import { ShoppingCart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { calculatePriceWithoutFees } from "@/lib/price-calculator"
 import { toast } from "@/components/ui/use-toast"
 import type { Record } from "@/types/record"
-import type { CartState, CartAction } from "@/contexts/cart-context"
 
 interface RecordCardProps {
   record: Record
-  cartState: CartState
-  cartDispatch: React.Dispatch<CartAction>
+  inCart?: boolean
+  isLoading?: boolean
+  onAddToCart?: () => void
 }
 
-export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps) {
+export function RecordCard({ record, inCart = false, isLoading = false, onAddToCart }: RecordCardProps) {
   // Local state to track adding process
   const [isAdding, setIsAdding] = useState(false);
 
@@ -32,28 +31,15 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
     record.price = 0
   }
 
-  // No need to adjust price - use actual price from API
-  // const price = calculatePriceWithoutFees(record.price)
-
-  // Ensure we have a valid cart state
-  const safeCartState = cartState || { items: [], isOpen: false }
-  
-  // Find item in cart using discogsReleaseId for consistency
-  const cartItem = safeCartState.items?.find((item) => 
-    item.discogsReleaseId !== undefined && 
-    String(item.discogsReleaseId) === String(record.discogsReleaseId)
-  );
-  const currentQuantityInCart = cartItem?.quantity || 0
   const availableQuantity = record.quantity || 0
   const isOutOfStock = availableQuantity === 0 || record.status !== "FOR_SALE"
-  const isAlreadyInCart = cartItem !== undefined && currentQuantityInCart > 0
+  const isAlreadyInCart = inCart
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault()
 
     // Prevent adding if already adding, out of stock, or already in cart
-    if (isAdding || isOutOfStock || isAlreadyInCart) {
-      // Optionally show a toast if needed, but button disable should suffice
+    if (isAdding || isOutOfStock || isAlreadyInCart || isLoading) {
       return;
     }
 
@@ -61,24 +47,25 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
     setIsAdding(true);
 
     try {
-      if (typeof cartDispatch === 'function') {
-        // Use Discogs ID in payload for consistency with reducer
-        cartDispatch({ type: "ADD_ITEM", payload: record })
+      if (typeof onAddToCart === 'function') {
+        onAddToCart()
         toast({
           title: "Added to cart",
           description: "Item has been added to your cart",
         })
-        // Note: We don't set isAdding back to false here.
-        // The button state will rely on isAlreadyInCart becoming true 
-        // when the cartState prop updates.
+        
+        // Reset adding state after a short delay to allow for visual feedback
+        setTimeout(() => {
+          setIsAdding(false);
+        }, 500);
       } else {
-        console.warn("Cart dispatch function not available")
+        console.warn("Add to cart function not available")
         toast({
           title: "Could not add to cart",
           description: "Cart functionality is unavailable",
           variant: "destructive",
         })
-        setIsAdding(false); // Reset if dispatch failed
+        setIsAdding(false);
       }
     } catch (error) {
       console.error("Error adding item to cart:", error)
@@ -87,7 +74,7 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
         description: "Could not add item to cart",
         variant: "destructive",
       })
-      setIsAdding(false); // Reset on error
+      setIsAdding(false);
     }
   }
 
@@ -161,14 +148,14 @@ export function RecordCard({ record, cartState, cartDispatch }: RecordCardProps)
           size="sm"
           variant="secondary"
           onClick={handleAddToCart}
-          // Disable if out of stock, already in cart, OR currently being added
-          disabled={isOutOfStock || isAlreadyInCart || isAdding}
+          // Disable if out of stock, already in cart, or currently being added
+          disabled={isOutOfStock || isAlreadyInCart || isAdding || isLoading}
         >
           <ShoppingCart className="mr-1 h-3 w-3" />
           {/* Update button text based on states */}
           {isOutOfStock
             ? "Out of Stock"
-            : isAdding 
+            : isAdding || isLoading
             ? "Adding..." 
             : isAlreadyInCart 
             ? "In Cart"

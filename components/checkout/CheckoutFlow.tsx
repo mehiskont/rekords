@@ -24,13 +24,13 @@ export function CheckoutFlow() {
   const [initialCheckDone, setInitialCheckDone] = useState(false)
   const [paymentInitTime] = useState(() => new Date().getTime()) // Track when payment form was first loaded
   const router = useRouter()
-  const { state: cartState, dispatch: cartDispatch } = useCart()
+  const { cart: cartState, clearCart } = useCart()
   const { data: session, status } = useSession()
   const EXTERNAL_API_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
   // Early check for empty cart - redirect immediately if cart is empty and not in payment step
   // Only do this if we've completed initial loading (otherwise cart may appear empty before loading)
-  if (cartState.items.length === 0 && currentStep !== 1 && !cartState.isLoading && initialCheckDone) {
+  if (cartState.items.length === 0 && currentStep !== 1 && initialCheckDone) {
     // Use a useEffect for the redirect to avoid state updates during render
     useEffect(() => {
       console.log('CheckoutFlow: Empty cart detected at render time, redirecting immediately');
@@ -392,7 +392,7 @@ export function CheckoutFlow() {
     // localStorage.removeItem("checkout_customer_info")
 
     // Clear the cart
-    cartDispatch({ type: "CLEAR_CART" });
+    clearCart();
 
     // Clear client secret to prevent trying to reuse it
     setClientSecret(null);
@@ -405,18 +405,18 @@ export function CheckoutFlow() {
   // Keep this as a backup to the early check
   useEffect(() => {
     // Only redirect if not loading (to prevent redirect during initial cart loading)
-    if (cartState.items.length === 0 && currentStep !== 1 && !cartState.isLoading) {
-      console.log('Cart is empty and not loading, redirecting to cart page via useEffect');
+    if (cartState.items.length === 0 && currentStep !== 1) {
+      console.log('Cart is empty, redirecting to cart page via useEffect');
       localStorage.removeItem(STORAGE_KEY); // Clear checkout-related storage on redirect
       router.replace("/cart"); // Use replace to prevent going back to empty form
     } else {
-      console.log('Cart has items or is loading:', cartState.items.length, cartState.isLoading);
+      console.log('Cart has items:', cartState.items.length);
     }
     setInitialCheckDone(true);
-  }, [cartState.items.length, cartState.isLoading, currentStep, router])
+  }, [cartState.items.length, currentStep, router])
 
   // Show loading indicator while cart is being loaded
-  if (cartState.isLoading || (!initialCheckDone && cartState.items.length === 0)) {
+  if (!initialCheckDone && cartState.items.length === 0) {
     return <div className="flex justify-center items-center min-h-[50vh]">
       <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
       <p className="ml-3">Loading cart...</p>

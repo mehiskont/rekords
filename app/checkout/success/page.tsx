@@ -21,9 +21,9 @@ export default function CheckoutSuccessPage() {
   useEffect(() => {
     // Handle cart clearing
     try {
-      if (cartContext && cartContext.dispatch) {
+      if (cartContext && cartContext.clearCart) {
         // Clear cart UI state on success page load
-        cartContext.dispatch({ type: "CLEAR_UI_CART" })
+        cartContext.clearCart()
         console.log("Cart UI cleared on success page")
       }
     } catch (error) {

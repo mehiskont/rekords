@@ -15,13 +15,12 @@ interface RecordDetailsProps {
 }
 
 export function RecordDetails({ record }: RecordDetailsProps) {
-  const { state, dispatch } = useCart()
+  const { cart, addToCart } = useCart()
   const [isAdding, setIsAdding] = useState(false)
 
   const price = record.price
 
-  const safeCartState = state || { items: [], isOpen: false }
-  const cartItem = safeCartState.items?.find((item) => 
+  const cartItem = cart.items?.find((item) => 
     item.discogsReleaseId !== undefined && 
     String(item.discogsReleaseId) === String(record.discogsReleaseId)
   )
@@ -38,17 +37,8 @@ export function RecordDetails({ record }: RecordDetailsProps) {
     setIsAdding(true)
 
     try {
-      if (typeof dispatch === 'function') {
-        dispatch({ type: "ADD_ITEM", payload: record })
-        toast({
-          title: "Added to cart",
-          description: "Item has been added to your cart",
-        })
-      } else {
-        console.warn("Cart dispatch function not available")
-        toast({ title: "Could not add to cart", variant: "destructive" })
-        setIsAdding(false)
-      }
+      addToCart(record)
+      setIsAdding(false)
     } catch (error) {
       console.error("Error adding item to cart:", error)
       toast({ title: "Error", description: "Could not add item to cart", variant: "destructive" })

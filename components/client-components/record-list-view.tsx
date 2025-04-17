@@ -6,7 +6,7 @@ import type { Record } from "@/types/record"
 import { Table, TableHeader, TableRow, TableHead, TableBody, TableCell } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { ShoppingCart } from "lucide-react"
-import { useCart, type CartState } from "@/contexts/cart-context" // Import CartState
+import { useCart } from "@/contexts/cart-context"
 import Link from "next/link"
 import Image from "next/image"
 import React, { useEffect, useState } from "react" // Import React
@@ -14,17 +14,15 @@ import { toast } from "../ui/use-toast" // Import toast
 
 interface RecordListItemProps {
   record: Record;
-  cartState: CartState; // Pass cart state
-  cartDispatch: React.Dispatch<any>; // Pass dispatch
 }
 
 // Sub-component for rendering each row with its own state
-function RecordListItem({ record, cartState, cartDispatch }: RecordListItemProps) {
+function RecordListItem({ record }: RecordListItemProps) {
+  const { cart, addToCart } = useCart();
   const [isAdding, setIsAdding] = useState(false);
 
   // Cart state checks (using discogsReleaseId)
-  const safeCartState = cartState || { items: [], isOpen: false };
-  const cartItem = safeCartState.items?.find((item) => 
+  const cartItem = cart.items?.find((item) => 
     item.discogsReleaseId !== undefined && 
     String(item.discogsReleaseId) === String(record.discogsReleaseId)
   );
@@ -39,14 +37,8 @@ function RecordListItem({ record, cartState, cartDispatch }: RecordListItemProps
     }
     setIsAdding(true);
     try {
-      if (typeof cartDispatch === 'function') {
-        cartDispatch({ type: "ADD_ITEM", payload: record });
-        toast({ title: "Added to cart", description: "Item has been added to your cart" });
-      } else {
-        console.warn("Cart dispatch function not available");
-        toast({ title: "Could not add to cart", variant: "destructive" });
-        setIsAdding(false);
-      }
+      addToCart(record);
+      setIsAdding(false);
     } catch (error) {
       console.error("Error adding item to cart:", error);
       toast({ title: "Error", description: "Could not add item to cart", variant: "destructive" });
@@ -120,7 +112,6 @@ export default function RecordListView({ records }: RecordListViewProps) {
     return <p className="text-center text-lg">No records found.</p>;
   }
 
-  const { state, dispatch } = useCart(); // Get state and dispatch here
   const [sortField, setSortField] = useState<string>('title');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
   const [sortedRecords, setSortedRecords] = useState<Record[]>(records);
@@ -193,8 +184,6 @@ export default function RecordListView({ records }: RecordListViewProps) {
             <RecordListItem 
               key={record.id} // Use unique record ID for key
               record={record} 
-              cartState={state} // Pass down cart state
-              cartDispatch={dispatch} // Pass down dispatch function
             />
           ))}
         </TableBody>

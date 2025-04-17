@@ -23,7 +23,7 @@ export function NavBar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const { data: session, status: nextAuthStatus } = useSession()
   const { user, status } = useAuth() // Use our custom hook
-  const { state, dispatch } = useCart()
+  const { cart, toggleCart, clearCart } = useCart()
   const [mounted, setMounted] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
@@ -43,10 +43,10 @@ export function NavBar() {
     setIsMenuOpen(false)
   }, [pathname])
 
-  const cartItemCount = state.items.reduce((sum, item) => sum + item.quantity, 0)
+  const cartItemCount = cart.items.reduce((sum, item) => sum + item.quantity, 0)
 
   const handleCartClick = () => {
-    dispatch({ type: "TOGGLE_CART" })
+    toggleCart()
   }
 
   return (
@@ -125,11 +125,11 @@ export function NavBar() {
                     className="cursor-pointer"
                     onSelect={(event) => {
                       event.preventDefault();
-                      // Clear UI cart only without syncing to server
-                      dispatch({ type: "CLEAR_UI_CART" });
+                      // Clear cart
+                      clearCart();
                       // Remove cart from localStorage
                       if (typeof window !== 'undefined') {
-                        localStorage.removeItem('plastik-cart');
+                        localStorage.removeItem('cart');
                         localStorage.removeItem('auth-token');
                         localStorage.removeItem('user');
                       }
@@ -255,11 +255,11 @@ export function NavBar() {
                         variant="destructive"
                         className="w-full justify-start mt-3"
                         onClick={() => {
-                          // Clear UI cart only without syncing to server
-                          dispatch({ type: "CLEAR_UI_CART" });
+                          // Clear cart
+                          clearCart();
                           // Remove cart from localStorage
                           if (typeof window !== 'undefined') {
-                            localStorage.removeItem('plastik-cart');
+                            localStorage.removeItem('cart');
                             localStorage.removeItem('auth-token');
                             localStorage.removeItem('user');
                           }
